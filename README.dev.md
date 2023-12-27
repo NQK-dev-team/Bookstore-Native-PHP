@@ -8,18 +8,18 @@
 
 ### Install mkcert (for Windows OS):
 
-**Step 1:** Open window powershell as administrator<br>
-**Step 2:** Type `choco install mkcert`<br>
-**Step 3:** Type `mkcert -install`<br>
+**Step 1:** Open window powershell as administrator<br><br>
+**Step 2:** Type `choco install mkcert`<br><br>
+**Step 3:** Type `mkcert -install`<br><br>
 
 ### Install all required packages using Composer: `composer install`
 
 ### Steps to config apache server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
 
-**Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).<br>
-**Step 2:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [<your ip address>]?` (only use for development, production must not use this step)<br>
-**Step 3:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`<br>
-**Step 4:** Locate the apache server installation directory (for example `C:\xampp\apache`)<br>
+**Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).<br><br>
+**Step 2:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [<your ip address>]?` (only use for development, production must not use this step)<br><br>
+**Step 3:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`<br><br>
+**Step 4:** Locate the apache server installation directory (for example `C:\xampp\apache`)<br><br>
 **Step 5:** Check for modules and includes, open `httpd.conf` file from the `conf` directory of your apache installation directory, and uncomment these groups if they are commented
 
 ```
@@ -182,5 +182,5 @@ Replace `C:\example_path` with the directory of this project in your machine to 
 ```
 
 This only apply for development stage, production stage should skip this<br>
-**Step 8:** Restart apache server (by using XAMPP for example)<br>
+**Step 8:** Restart apache server (by using XAMPP for example)<br><br>
 **Step 9:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]
