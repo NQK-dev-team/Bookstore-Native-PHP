@@ -181,6 +181,6 @@ Replace `C:\example_path` with the directory of this project in your machine to 
 ::1 www.test.bookstore.com
 ```
 
-This only apply for development stage, production stage should skip this<br>
+This only apply for development stage, production stage should skip this<br><br>
 **Step 8:** Restart apache server (by using XAMPP for example)<br><br>
 **Step 9:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]
