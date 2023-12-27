@@ -1,0 +1,28 @@
+.login_form {
+      width: 95%;
+      max-width: 30rem;
+      min-height: 400px;
+}
+
+.error_message {
+      background-color: rgb(255, 238, 221);
+      border: 1px dashed red;
+      max-width: 400px;
+      display: none;
+}
+
+.error_message svg {
+      width: 32px;
+      height: 32px;
+}
+
+@media only screen and (max-width:330px) {
+      .error_message svg {
+            width: 20px;
+            height: 20px;
+      }
+
+      .error_message p {
+            font-size: 12px;
+      }
+}

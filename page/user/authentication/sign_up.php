@@ -1,5 +1,5 @@
 <?php
-require('../../../tool/role_check.php');
+if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) header('Location: /');
 ?>
 
 <!DOCTYPE html>
@@ -7,10 +7,11 @@ require('../../../tool/role_check.php');
 
 <head>
       <?php
-      include('../../../head_element/cdn.php');
-      include('../../../head_element/meta.php');
+      include "../../../head_element/cdn.php";
+      include "../../../head_element/meta.php";
       ?>
       <link rel="stylesheet" href="/css/preset_style.css">
+
 
 </head>
 
@@ -19,6 +20,7 @@ require('../../../tool/role_check.php');
       include('../../../layout/user/header.php');
       ?>
       <section id="page">
+
       </section>
       <?php
       include('../../../layout/footer.php');

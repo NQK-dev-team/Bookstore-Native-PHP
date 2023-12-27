@@ -1,5 +1,5 @@
 <?php
-require('../../../tool/role_check.php');
+if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) header('Location: /admin/');
 ?>
 
 <!DOCTYPE html>
@@ -7,14 +7,12 @@ require('../../../tool/role_check.php');
 
 <head>
       <?php
-      include('../../../head_element/cdn.php');
-      include('../../../head_element/meta.php');
+      include "../../../head_element/cdn.php";
+      include "../../../head_element/meta.php";
       ?>
       <link rel="stylesheet" href="/css/preset_style.css">
 
-      <meta name="author" content="Nghia Duong">
-      <meta name="description" content="Home page of NQK bookstore">
-      <title>NQK Shop</title>
+
 </head>
 
 <body>
@@ -22,6 +20,7 @@ require('../../../tool/role_check.php');
       include('../../../layout/admin/header.php');
       ?>
       <section id="page">
+
       </section>
       <?php
       include('../../../layout/footer.php');

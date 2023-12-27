@@ -1,9 +1,8 @@
 $(document).ready(() =>
 {
       const location = window.location.href;
-      if (location.includes('/'))
-            $('#home_nav').addClass('text-primary');
-      else if (location.includes('/book'))
+
+      if (location.includes('/book'))
             $('#book_nav').addClass('text-primary');
       else if (location.includes('/wishlist'))
             $('#wishlist_nav').addClass('text-primary');
@@ -11,4 +10,8 @@ $(document).ready(() =>
             $('#cart_nav').addClass('text-primary');
       else if (location.includes('/account'))
             $('#profile_nav').addClass('text-primary');
+      else if (location.includes('/authentication'))
+            $('#signin_nav').addClass('text-primary');
+      else if (location.includes('/'))
+            $('#home_nav').addClass('text-primary');
 });

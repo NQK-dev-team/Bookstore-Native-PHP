@@ -3,7 +3,8 @@
             <nav class="navbar navbar-expand-lg py-auto w-100">
                   <div class="container-fluid px-0">
                         <a class="navbar-brand d-flex align-items-center ms-2" href="/">
-                              <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" id="logo_img"></img>
+                              <!-- <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" id="logo_img"></img> -->
+                              <img src="/image/logo.png" id="logo_img"></img>
                               <p class="mb-0 ms-2">NQK Bookstore</p>
                         </a>
                         <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,9 +24,9 @@
                                           <a class="nav-link fs-5" href="/book/" id="book_nav">Books</a>
                                     </li>
                                     <?php
-                                    if (!isset($_SESSION['id']) || !isset($_SESSION['type']))
+                                    if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type']))
                                           echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5" href="/login" id="wishlist_nav">Wishlist</a>
+                                                      <a class="nav-link fs-5" href="/authentication/" id="wishlist_nav">Wishlist</a>
                                                 </li>';
                                     else
                                           echo '<li class="nav-item mx-2">
@@ -33,9 +34,9 @@
                                                 </li>';
                                     ?>
                                     <?php
-                                    if (!isset($_SESSION['id']) || !isset($_SESSION['type']))
+                                    if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type']))
                                           echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5" href="/login" id="cart_nav">Cart</a>
+                                                      <a class="nav-link fs-5" href="/authentication/" id="cart_nav">Cart</a>
                                                 </li>';
                                     else
                                           echo '<li class="nav-item mx-2">
@@ -43,9 +44,9 @@
                                                 </li>';
                                     ?>
                                     <?php
-                                    if (!isset($_SESSION['id']) || !isset($_SESSION['type']))
+                                    if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type']))
                                           echo '<li class="nav-item ms-2">
-                                                      <a class="nav-link fs-5" href="/login">Sign in</a>
+                                                      <a class="nav-link fs-5" href="/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
                                     else
                                           echo "<li class=\"nav-item ms-2\">

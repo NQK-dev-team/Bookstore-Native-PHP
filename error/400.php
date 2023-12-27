@@ -9,8 +9,8 @@
       <link rel="stylesheet" href="/css/preset_style.css">
 
       <meta name="author" content="Nghia Duong">
-      <meta name="description" content="Server Internal Error!">
-      <title>Error 500</title>
+      <meta name="description" content="Resource forbidden!">
+      <title>Error 400</title>
 </head>
 
 <body>
@@ -29,8 +29,8 @@
       ?>
       <section id="page">
             <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-                  <h1>Error 500</h1>
-                  <h5 class="text-center">The server has encountered an unexpected error!</h5>
+                  <h1>Error 400</h1>
+                  <h5 class="text-center">Bad request!</h5>
             </div>
       </section>
       <?php

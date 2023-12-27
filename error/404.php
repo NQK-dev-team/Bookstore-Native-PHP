@@ -3,21 +3,39 @@
 
 <head>
       <?php
-      include "../head_element/cdn.php";
-      include "../head_element/meta.php";
+      include __DIR__ . "/../head_element/cdn.php";
+      include __DIR__ . "/../head_element/meta.php";
       ?>
+      <link rel="stylesheet" href="/css/preset_style.css">
+
       <meta name="author" content="Nghia Duong">
       <meta name="description" content="Page not found!">
       <title>Error 404</title>
-      <link rel="stylesheet" href="/css/error_page.css">
-      <link rel="stylesheet" href="/css/preset_style.css">
 </head>
 
 <body>
-      <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center error404 text-white">
-            <h1>Error 404</h1>
-            <h5 class="text-center">The page you are looking for is not found</h5>
-      </div>
+      <?php
+      if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) {
+            if ($_SESSION['type'] === 'admin')
+                  include __DIR__ . '/../layout/admin/header.php';
+            else if ($_SESSION['type'] === 'user')
+                  include __DIR__ . '/../layout/user/header.php';
+      } else {
+            if (str_contains($_SERVER['REQUEST_URI'], '/admin'))
+                  include __DIR__ . '/../layout/admin/header.php';
+            else
+                  include __DIR__ . '/../layout/user/header.php';
+      }
+      ?>
+      <section id="page">
+            <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+                  <h1>Error 404</h1>
+                  <h5 class="text-center">The page you are looking for is not found!</h5>
+            </div>
+      </section>
+      <?php
+      include __DIR__ . '/../layout/footer.php';
+      ?>
 </body>
 
 </html>
