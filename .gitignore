@@ -1,0 +1,14 @@
+.vscode
+
+# Do not change the order of these groups
+log/*
+!log/.gitkeep
+
+cert/*
+!cert/.gitkeep
+
+session/*
+!session/.gitkeep
+
+# Ignore packages
+/vendor/

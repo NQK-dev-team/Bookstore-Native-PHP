@@ -1,0 +1,13 @@
+{
+    "name": "nqk/bookstore",
+    "description": "A simple website to sell books online using PHP native",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "authors": [
+        {
+            "name": "nghia.duong272919136",
+            "email": "nghia.duong272919136@hcmut.edu.vn"
+        }
+    ]
+}

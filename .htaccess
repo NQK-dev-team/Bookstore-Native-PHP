@@ -1,0 +1,32 @@
+RewriteEngine On
+
+## Routing URLs
+# Base URLs (for authentication related features) for both admin and normal user
+# RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session)/ [NC]
+# RewriteRule ^(/?|recovery|sign_up)$ /page/$1 [NC,L]   
+# URLs for authentication related features
+RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session)/ [NC]
+RewriteRule ^login$ /page/authentication/ [NC,L]   
+RewriteRule ^(recovery|sign_up)$ /page/authentication/$1 [NC,L]   
+# URLs for admin
+RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session)/ [NC]
+RewriteRule ^admin(/.*)*$ /page/admin/$1 [NC,L]   
+# URLs for normal user
+RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session)/ [NC]
+#RewriteCond %{REQUEST_URI} !^/page/(recovery|sign_up|admin|/|) [NC]
+RewriteRule ^(.*)$ /page/user/$1 [NC,L]   
+
+# Remove .html extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f   
+RewriteRule ^([^\.]+)$ $1.html [NC,L]     
+
+# Remove .php extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+# Error pages
+ErrorDocument 403 /error/403
+ErrorDocument 404 /error/404
+ErrorDocument 500 /error/500
