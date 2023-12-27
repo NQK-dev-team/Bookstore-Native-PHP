@@ -8,18 +8,18 @@
 
 ### Install mkcert (for Windows OS):
 
-**Step 1:** Open window powershell as administrator
-**Step 2:** Type `choco install mkcert`
-**Step 3:** Type `mkcert -install`
+**Step 1:** Open window powershell as administrator<br>
+**Step 2:** Type `choco install mkcert`<br>
+**Step 3:** Type `mkcert -install`<br>
 
 ### Install all required packages using Composer: `composer install`
 
 ### Steps to config apache server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
 
-**Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).
-**Step 2:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [<your ip address>]?` (only use for development, production must not use this step)
-**Step 3:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`
-**Step 4:** Locate the apache server installation directory (for example `C:\xampp\apache`)
+**Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).<br>
+**Step 2:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [<your ip address>]?` (only use for development, production must not use this step)<br>
+**Step 3:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`<br>
+**Step 4:** Locate the apache server installation directory (for example `C:\xampp\apache`)<br>
 **Step 5:** Check for modules and includes, open `httpd.conf` file from the `conf` directory of your apache installation directory, and uncomment these groups if they are commented
 
 ```
@@ -36,6 +36,8 @@ SSLRandomSeed startup builtin
 SSLRandomSeed connect builtin
 </IfModule>
 ```
+
+<br>
 
 **Step 6:** Add virtual host, open `httpd-vhosts.conf` file from the `conf\extra` directory of your apache installation directory, add the following lines
 
@@ -109,11 +111,6 @@ ServerAlias https://www.test.bookstore.com
         Require all denied
     </Directory>
 
-    <Directory "C:\example_path\ajax_service">
-        AllowOverride none
-        Require all denied
-    </Directory>
-
     <Directory "C:\example_path\database">
         AllowOverride none
         Require all denied
@@ -171,9 +168,9 @@ ServerAlias https://www.test.bookstore.com
 </VirtualHost>
 ```
 
-Replace `C:\example_path` with the directory of this project in your machine to finish setting up this step.
+Replace `C:\example_path` with the directory of this project in your machine to finish setting up this step.<br>
 
-**Step 7:** Update Hosts File, go to this file `C:\Windows\System32\drivers\etc\hosts` (usually the case) and add these lines at the near bottom
+**Step 7:** Update Hosts File, open this file as an administrator `C:\Windows\System32\drivers\etc\hosts` (usually the case) and add these lines at the near bottom
 
 ```
 # Map www.demo.bookstore.com to localhost
@@ -184,7 +181,6 @@ Replace `C:\example_path` with the directory of this project in your machine to 
 ::1 www.test.bookstore.com
 ```
 
-You will need to be an administrator to apply these changes
-This only apply for development stage, production stage should skip this
-**Step 8:** Restart apache server (by using XAMPP for example)
+This only apply for development stage, production stage should skip this<br>
+**Step 8:** Restart apache server (by using XAMPP for example)<br>
 **Step 9:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]

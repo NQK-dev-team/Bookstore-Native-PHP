@@ -6,8 +6,8 @@ RewriteEngine On
 # RewriteRule ^(/?|recovery|sign_up)$ /page/$1 [NC,L]   
 # URLs for authentication related features
 RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session)/ [NC]
-RewriteRule ^login$ /page/authentication/ [NC,L]   
-RewriteRule ^(recovery|sign_up)$ /page/authentication/$1 [NC,L]   
+RewriteRule ^login(/|)$ /page/authentication/ [NC,L]   
+RewriteRule ^(recovery|sign_up)(/|)$ /page/authentication/$1 [NC,L]   
 # URLs for admin
 RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session)/ [NC]
 RewriteRule ^admin(/.*)*$ /page/admin/$1 [NC,L]   

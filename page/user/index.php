@@ -14,49 +14,14 @@
 
 <body>
       <?php
-      include('../../layout/header.php');
+      include('../../layout/user/header.php');
       ?>
       <section id="page">
-            <!-- <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p>
-            <p>NQK Shop</p> -->
       </section>
       <?php
       include('../../layout/footer.php');
       ?>
-      <script src="/javascript/menu.after_load.js"></script>
-</body>
+      <script src="/javascript/user/menu_after_load.user.js"></script>
+      </body>
 
 </html>
