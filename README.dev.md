@@ -179,7 +179,7 @@ ServerAlias https://www.test.bookstore.com
 
 Replace `C:\example_path` with the directory of this project in your machine to finish setting up this step.<br>
 
-**Step 7:** Update Hosts File, open this file as an administrator `C:\Windows\System32\drivers\etc\hosts` (usually the case) and add these lines at the near bottom
+**Step 7:** Update Hosts File, open this file at this path `C:\Windows\System32\drivers\etc\hosts` (usually the case) as an administrator and add these lines at the near bottom
 
 ```
 # Map www.demo.bookstore.com to localhost
