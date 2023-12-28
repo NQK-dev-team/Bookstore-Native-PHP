@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($
       <?php
       include('../../../layout/footer.php');
       ?>
-      <script src="/javascript/admin/menu_after_load.admin.js"></script>
+      <script src="/javascript/admin/menu_after_load.js"></script>
 </body>
 
 </html>

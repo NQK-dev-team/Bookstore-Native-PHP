@@ -67,7 +67,8 @@ if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset
       <?php
       include('../../../layout/footer.php');
       ?>
-      <script src="/javascript/user/menu_after_load.user.js"></script>
+      <script src="/javascript/user/menu_after_load.js"></script>
+      <script src="/tool/js/sanitizer.js"></script>
       <script src="/javascript/authentication/login.js"></script>
 </body>
 

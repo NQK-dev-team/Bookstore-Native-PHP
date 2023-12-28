@@ -4,8 +4,8 @@ function loginHandler(e)
 {
       e.preventDefault();
 
-      const email = document.getElementById('inputEmail').value;
-      const password = document.getElementById('inputPassword').value;
+      const email = sanitize(document.getElementById('inputEmail').value);
+      const password = sanitize(document.getElementById('inputPassword').value);
       $.ajax({
             url: '/ajax_service/login_handler.php',
             method: 'POST',

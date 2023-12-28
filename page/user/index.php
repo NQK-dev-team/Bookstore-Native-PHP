@@ -1,5 +1,5 @@
 <?php
-require('../../tool/role_check.php');
+require('../../tool/php/role_check.php');
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@ require('../../tool/role_check.php');
       <?php
       include('../../layout/footer.php');
       ?>
-      <script src="/javascript/user/menu_after_load.user.js"></script>
+      <script src="/javascript/user/menu_after_load.js"></script>
 </body>
 
 </html>

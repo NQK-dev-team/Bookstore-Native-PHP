@@ -1,6 +1,6 @@
-### Apache version: 2.4.54 (PHP: 8.2.0)
+### XAMPP version: 8.0.30 (Apache: 2.4.58, PHP: 8.0.30)
 
-### MySQL version: 8.0.31
+### MySQL version: 8.0.35
 
 ### PHP version (for Composer package manager installation): 8.3.0
 
