@@ -1,5 +1,5 @@
 <?php
-require('../../../tool/php/role_check.php');
+require __DIR__ . '/../../../tool/php/role_check.php';
 ?>
 
 <!DOCTYPE html>
@@ -7,8 +7,8 @@ require('../../../tool/php/role_check.php');
 
 <head>
       <?php
-      include('../../../head_element/cdn.php');
-      include('../../../head_element/meta.php');
+      require __DIR__ . '/../../../head_element/cdn.php';
+      require __DIR__ . '/../../../head_element/meta.php';
       ?>
       <link rel="stylesheet" href="/css/preset_style.css">
 
@@ -16,12 +16,12 @@ require('../../../tool/php/role_check.php');
 
 <body>
       <?php
-      include('../../../layout/user/header.php');
+      require __DIR__ . '/../../../layout/user/header.php';
       ?>
       <section id="page">
       </section>
       <?php
-      include('../../../layout/footer.php');
+      require __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/user/menu_after_load.js"></script>
 </body>

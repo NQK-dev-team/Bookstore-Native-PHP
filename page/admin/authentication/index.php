@@ -14,8 +14,8 @@ if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset
 
 <head>
       <?php
-      include "../../../head_element/cdn.php";
-      include "../../../head_element/meta.php";
+      require __DIR__ . "/../../../head_element/cdn.php";
+      require __DIR__ . "/../../../head_element/meta.php";
       ?>
       <link rel="stylesheet" href="/css/preset_style.css">
 
@@ -27,7 +27,7 @@ if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset
 
 <body>
       <?php
-      include('../../../layout/admin/header.php');
+      require __DIR__ . '/../../../layout/admin/header.php';
       ?>
       <section id="page">
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
@@ -65,7 +65,7 @@ if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset
             </div>
       </section>
       <?php
-      include('../../../layout/footer.php');
+      require __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/admin/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>

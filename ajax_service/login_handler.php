@@ -1,7 +1,7 @@
 
 <?php
-require('../tool/sanitizer.php');
-require('../config/db_connection.php');
+require __DIR__ . '/../tool/sanitizer.php';
+require __DIR__ . '/../config/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'])) {
