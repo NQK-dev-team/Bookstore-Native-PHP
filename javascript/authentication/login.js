@@ -7,7 +7,7 @@ function loginHandler(e)
       const email = sanitize(document.getElementById('inputEmail').value);
       const password = sanitize(document.getElementById('inputPassword').value);
       $.ajax({
-            url: '/ajax_service/login_handler.php',
+            url: '/ajax_service/authentication/login_handler.php',
             method: 'POST',
             data: { email: email, password: password },
             dataType: 'json',

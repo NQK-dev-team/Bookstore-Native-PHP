@@ -1,4 +1,5 @@
 <?php
+require __DIR__ . '/../../../tool/php/login_check.php';
 require __DIR__ . '/../../../tool/php/role_check.php';
 ?>
 
