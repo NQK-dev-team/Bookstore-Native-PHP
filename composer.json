@@ -2,7 +2,8 @@
     "name": "nqk/bookstore",
     "description": "A simple website to sell books online using PHP native",
     "require": {
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "vlucas/phpdotenv": "^5.6"
     },
     "authors": [
         {

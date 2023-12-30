@@ -6,13 +6,20 @@
 
 ### Composer version: 2.6.6
 
+### Install all required packages using Composer: `composer install`
+
 ### Install mkcert (for Windows OS):
 
 **Step 1:** Open window powershell as administrator<br><br>
 **Step 2:** Type `choco install mkcert`<br><br>
 **Step 3:** Type `mkcert -install`<br><br>
 
-### Install all required packages using Composer: `composer install`
+### Set up SMTP Gmail server
+
+**Step 1:** Go to `https://myaccount.google.com`<br><br>
+**Step 2:** Go to `Security` tab<br><br>
+**Step 3:** Click on 2-Step Verification and enable it if you haven't. Then choose `App passwords`
+**Step 4:** Enter `App name` and click `Create`. You will receive an app password (this will be use in the `.env` file later on, so save it).
 
 ### Steps to config apache server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
 
@@ -191,5 +198,6 @@ Replace `C:\example_path` with the directory of this project in your machine to 
 ```
 
 This only apply for development stage, production stage should skip this<br><br>
-**Step 8:** Restart apache server (by using XAMPP for example)<br><br>
-**Step 9:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]
+**Step 8:** Create a `.env` file at the root directory of the project and add environment variables to it (based on `.env.example` file)<br><br>
+**Step 9:** Restart apache server (by using XAMPP for example)<br><br>
+**Step 10:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]

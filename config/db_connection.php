@@ -1,9 +1,17 @@
 
 <?php
-$host = "localhost";
-$database = "bookstore";
-$user = "bookstore";
-$password = "bookstore123";
-$port = "3306";
+
+// Include Composer's autoloader
+require __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+$host = $_ENV['DB_HOST'] ? $_ENV['DB_HOST'] : "localhost";
+$database = $_ENV['DB_SCHEMA'] ? $_ENV['DB_SCHEMA'] : "bookstore";
+$user = $_ENV['DB_USER'] ? $_ENV['DB_USER'] : "bookstore";
+$password = $_ENV['DB_PASSWORD'] ? $_ENV['DB_PASSWORD'] : "bookstore123";
+$port = $_ENV['DB_PORT'] ? $_ENV['DB_PORT'] : "3306";
 
 ?>

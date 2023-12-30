@@ -12,3 +12,6 @@ session/*
 
 # Ignore packages
 /vendor/
+
+# Ignore .env file
+.env
