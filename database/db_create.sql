@@ -45,6 +45,7 @@ create table book(
     ageRestriction int check(ageRestriction>0 and ageRestriction<=30),
     avgRating double check(avgRating>=0 and avgRating<=5),
     publisher varchar(100) not null,
+    publisherLink text,
     publishDate date not null,
     status boolean not null default true -- true means the book is purchasable, false means not
 );
