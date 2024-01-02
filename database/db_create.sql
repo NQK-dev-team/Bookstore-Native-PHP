@@ -14,16 +14,24 @@ create table category(
 	name varchar(100) primary key
 );
 
-create table customer(
+create table user(
 	id varchar(20) primary key,
     name varchar(100) not null,
     dob date not null,
     address text,
-    phone varchar(10) unique not null,
+    phone varchar(10) unique,
+    email varchar(100) unique,
+    password varchar(20) not null check(length(password)>=8)
+);
+
+create table admin(
+	id varchar(20) primary key references user(id) on delete cascade on update cascade
+);
+
+create table customer(
+	id varchar(20) primary key references user(id) on delete cascade on update cascade,
     cardNumber varchar(16),
     point double default 0 check(point>=0),
-    email varchar(100) unique not null,
-    password varchar(20) not null check(length(password)>=8),
     referrer varchar(20) references customer(id) on delete set null on update cascade,
     status boolean not null default true
 );
@@ -37,7 +45,8 @@ create table book(
     ageRestriction int check(ageRestriction>0 and ageRestriction<=30),
     avgRating double check(avgRating>=0 and avgRating<=5),
     publisher varchar(100) not null,
-    publishDate date not null
+    publishDate date not null,
+    status boolean not null default true -- true means the book is purchasable, false means not
 );
 
 create table author(
