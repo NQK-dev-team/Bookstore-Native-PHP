@@ -2,13 +2,13 @@ use bookstore;
 
 -- **** Data constraints ****
 
--- ** Begin of user **=
-drop trigger if exists userDataConstraintUpdateTrigger;
+-- ** Begin of appUser **
+-- Note: if need to update both `customer` and `appUser` table, update the `customer` table first, then `appUser` table in order to make sure the triggers work as intended
+drop trigger if exists appUserDataConstraintUpdateTrigger;
 delimiter //
-create trigger userDataConstraintUpdateTrigger
-before update on user
+create trigger appUserDataConstraintUpdateTrigger
+before update on appUser
 for each row
-follows customerDataConstraintUpdateTrigger
 begin
 	if exists(select * from admin where admin.id=new.id) then
 		if new.email is null then
@@ -43,7 +43,7 @@ begin
     end if;
 end//
 delimiter ;
--- ** End of user **
+-- ** End of appUser **
 
 -- ** Begin of admin **
 drop trigger if exists adminDataConstraintInsertTrigger;
@@ -52,18 +52,18 @@ create trigger adminDataConstraintInsertTrigger
 before insert on admin
 for each row
 begin
-	if (select email from user where user.id=new.id) is null then
+	if (select email from appUser where appUser.id=new.id) is null then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s email is null!';
     else
-		if not (select email from user where user.id=new.id) REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,4}$' then
+		if not (select email from appUser where appUser.id=new.id) REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,4}$' then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s email format is not valid!';
         end if;
     end if;
     
-	if (select phone from user where user.id=new.id) is null then
+	if (select phone from appUser where appUser.id=new.id) is null then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number is null!';
     else
-		if not (select phone from user where user.id=new.id) REGEXP '^[0-9]{10}$' then
+		if not (select phone from appUser where appUser.id=new.id) REGEXP '^[0-9]{10}$' then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number contain non-numeric character!';
         end if;
     end if;
@@ -83,25 +83,26 @@ begin
     end if;
     
     if new.status then
-		if (select email from user where user.id=new.id) is null then
+		if (select email from appUser where appUser.id=new.id) is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s email is null!';
         end if;
         
-        if (select phone from user where user.id=new.id) is null then
+        if (select phone from appUser where appUser.id=new.id) is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number is null!';
         end if;
     end if;
     
-    if (select email from user where user.id=new.id) is not null and not (select email from user where user.id=new.id) REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,4}$' then
+    if (select email from appUser where appUser.id=new.id) is not null and not (select email from appUser where appUser.id=new.id) REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,4}$' then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s email format is not valid!';
 	end if;
         
-	if (select phone from user where user.id=new.id) is not null and not (select phone from user where user.id=new.id) REGEXP '^[0-9]{10}$' then
+	if (select phone from appUser where appUser.id=new.id) is not null and not (select phone from appUser where appUser.id=new.id) REGEXP '^[0-9]{10}$' then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number contain non-numeric character!';
 	end if;
 end//
 delimiter ;
 
+-- Note: if need to update both `customer` and `appUser` table, update the `customer` table first, then `appUser` table in order to make sure the triggers work as intended
 drop trigger if exists customerDataConstraintUpdateTrigger;
 delimiter //
 create trigger customerDataConstraintUpdateTrigger
@@ -148,7 +149,7 @@ delimiter ;
 
 -- **** Specialization/Generalization constraints ****
 
--- *** User super class ***
+-- *** appUser super class ***
 -- ** Begin of customer **
 drop trigger if exists customerSGConstraintInsertTrigger;
 delimiter //
@@ -202,7 +203,7 @@ begin
 end//
 delimiter ;
 -- ** End of admin **
--- *** User super class ***
+-- *** appUser super class ***
 
 -- *** Discount super class ***
 -- ** Begin of customerDiscount **
@@ -444,12 +445,12 @@ end//
 delimiter ;
 -- ** End of physicalOrderContain **
 
--- ** Begin of user **
--- This trigger forbid any delete statement to any row of `user` table that is a customer and has purchase an order
-drop trigger if exists userBusinessConstraintDeleteTrigger;
+-- ** Begin of appUser **
+-- This trigger forbid any delete statement to any row of `appUser` table that is a customer and has purchase an order
+drop trigger if exists appUserBusinessConstraintDeleteTrigger;
 delimiter //
-create trigger userBusinessConstraintDeleteTrigger
-before delete on user
+create trigger appUserBusinessConstraintDeleteTrigger
+before delete on appUser
 for each row
 begin
     if exists(select * from customer where customer.id=old.id) and exists(select * from customerOrder where customerID=old.id and customerOrder.status=true) then
@@ -457,7 +458,7 @@ begin
     end if;
 end//
 delimiter ;
--- ** End of user **
+-- ** End of appUser **
 
 -- ** Begin of customer **
 -- This trigger forbid any delete statement to any row of `customer` table that has purchase an order
@@ -597,7 +598,7 @@ begin
 	if not (select eventDiscount.applyForAll from eventDiscount where eventDiscount.id=old.eventID) and exists(
 		select customerOrder.id from customerOrder 
         join discountApply on discountApply.orderID=customerOrder.id
-        where customerOrder.status=true and discountApply.discountID=old.discountID and customerOrder.id in (
+        where customerOrder.status=true and discountApply.discountID=old.eventID and customerOrder.id in (
 			select customerOrder.id from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=old.bookID
             union
 			select customerOrder.id from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=old.bookID
