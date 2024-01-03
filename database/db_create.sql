@@ -22,7 +22,7 @@ create table appUser(
     address text,
     phone varchar(10) unique,
     email varchar(100) unique,
-    password varchar(20) not null,
+    password text not null,
     check(length(password)>=8)
 );
 
