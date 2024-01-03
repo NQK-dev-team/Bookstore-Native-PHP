@@ -1,6 +1,9 @@
 
 <?php
-if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) {
+
+require __DIR__ . '/session_check.php';
+
+if (check_session()) {
       if ($_SESSION['type'] === 'admin') {
             if (!str_contains($_SERVER['REQUEST_URI'], '/admin')) {
                   http_response_code(400);

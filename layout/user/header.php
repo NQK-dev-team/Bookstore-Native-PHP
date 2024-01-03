@@ -1,3 +1,7 @@
+<?php
+require __DIR__ . '../../../tool/php/session_check.php';
+?>
+
 <section id="header">
       <header class="w-100 h-100">
             <nav class="navbar navbar-expand-lg py-auto w-100">
@@ -24,7 +28,7 @@
                                           <a class="nav-link fs-5" href="/book/" id="book_nav">Books</a>
                                     </li>
                                     <?php
-                                    if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type']))
+                                    if (!check_session())
                                           echo '<li class="nav-item mx-2">
                                                       <a class="nav-link fs-5" href="/authentication/" id="wishlist_nav">Wishlist</a>
                                                 </li>';
@@ -34,7 +38,7 @@
                                                 </li>';
                                     ?>
                                     <?php
-                                    if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type']))
+                                    if (!check_session())
                                           echo '<li class="nav-item mx-2">
                                                       <a class="nav-link fs-5" href="/authentication/" id="cart_nav">Cart</a>
                                                 </li>';
@@ -44,7 +48,7 @@
                                                 </li>';
                                     ?>
                                     <?php
-                                    if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type']))
+                                    if (!check_session())
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';

@@ -1,5 +1,7 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE || !isset($_SESSION['id']) || !isset($_SESSION['type'])) {
+require __DIR__ . '../../../../tool/php/session_check.php';
+
+if (!check_session()) {
       // Set the session cookie's attributes: expires - path - domain - secure - httpOnly
       session_set_cookie_params(3 * 24 * 60 * 60, "/", "", true, true);
       // Start session

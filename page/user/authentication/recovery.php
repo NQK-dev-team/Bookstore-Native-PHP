@@ -1,5 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) header('Location: /');
+require __DIR__ . '../../../../tool/php/session_check.php';
+
+if (check_session()) header('Location: /');
 ?>
 
 <!DOCTYPE html>
