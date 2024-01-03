@@ -23,6 +23,9 @@ create table user(
     email varchar(100) unique,
     password varchar(20) not null check(length(password)>=8)
 );
+INSERT INTO `bookstore`.`user` (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('1', 'khoa', '2000-12-12', '211 Ly Thuong Kiet', '0932758467', 'khoa.liang.business@gmail.com', '12345678');
+INSERT INTO `bookstore`.`user` (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('2', 'quang', '2002-12-12', '211 Ly Thuong Kiet', '0932758489', 'quang.liang.business@gmail.com', '12345678');
+INSERT INTO `bookstore`.`user` (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('3', 'nghia', '2002-6-12', '211 Ly Thuong Kiet', '0932758421', 'nghia.liang.business@gmail.com', '12345678');
 
 create table admin(
 	id varchar(20) primary key references user(id) on delete cascade on update cascade
@@ -35,6 +38,8 @@ create table customer(
     referrer varchar(20) references customer(id) on delete set null on update cascade,
     status boolean not null default true
 );
+INSERT INTO `bookstore`.`admin` (`id`) VALUES ('1');
+INSERT INTO `bookstore`.`admin` (`id`) VALUES ('2');
 
 create table book(
 	id varchar(20) primary key,
@@ -49,7 +54,11 @@ create table book(
     publishDate date not null,
     status boolean not null default true -- true means the book is purchasable, false means not
 );
+INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('3', 'Lord of Goblins, Vol. 1 Definitive Edition (Lord of Goblins', '1', ' 979889930075', '3', '4.5', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2023-6-8', '1');
 
+INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('2', 'Models: Attract Women Through Honesty', '3', ' B00C93Q5KK', '13', '4.7', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-30', '1');
+
+INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('1', 'The Joy of PHP', '1', ' 978494267353', '3', '4', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-13', '1');
 create table author(
 	bookID varchar(20),
     authorIdx int check(authorIdx>=0) default 0, -- This only used to combine with `bookID` to form a primary key, no further usage other than that.
@@ -57,6 +66,7 @@ create table author(
     wikiLink text,
     primary key(bookID,authorIdx)
 );
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('3', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
 
 create table belong(
 	bookID varchar(20) references book(id) on delete cascade on update cascade,
