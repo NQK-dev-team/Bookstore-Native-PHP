@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../../tool/php/role_check.php';
+require_once __DIR__ . '/../../tool/php/role_check.php';
 ?>
 
 <!DOCTYPE html>

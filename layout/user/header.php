@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '../../../tool/php/session_check.php';
+require_once __DIR__ . '../../../tool/php/session_check.php';
 ?>
 
 <section id="header">

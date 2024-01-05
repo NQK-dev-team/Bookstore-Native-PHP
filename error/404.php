@@ -3,8 +3,8 @@
 
 <head>
       <?php
-      include __DIR__ . "/../head_element/cdn.php";
-      include __DIR__ . "/../head_element/meta.php";
+      require_once __DIR__ . "/../head_element/cdn.php";
+      require_once __DIR__ . "/../head_element/meta.php";
       ?>
       <link rel="stylesheet" href="/css/preset_style.css">
 
@@ -17,14 +17,14 @@
       <?php
       if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) {
             if ($_SESSION['type'] === 'admin')
-                  include __DIR__ . '/../layout/admin/header.php';
+                  require_once __DIR__ . '/../layout/admin/header.php';
             else if ($_SESSION['type'] === 'user')
-                  include __DIR__ . '/../layout/user/header.php';
+                  require_once __DIR__ . '/../layout/user/header.php';
       } else {
             if (str_contains($_SERVER['REQUEST_URI'], '/admin'))
-                  include __DIR__ . '/../layout/admin/header.php';
+                  require_once __DIR__ . '/../layout/admin/header.php';
             else
-                  include __DIR__ . '/../layout/user/header.php';
+                  require_once __DIR__ . '/../layout/user/header.php';
       }
       ?>
       <section id="page">
@@ -34,7 +34,7 @@
             </div>
       </section>
       <?php
-      include __DIR__ . '/../layout/footer.php';
+      require_once __DIR__ . '/../layout/footer.php';
       ?>
 </body>
 

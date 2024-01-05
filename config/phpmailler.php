@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 //Load Composer's autoloader
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Load environment variables from .env file
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
@@ -35,7 +35,7 @@ try {
 } catch (Exception $e) {
       $GLOBALS['error_message'] = "Mailer configuration step failed. Error: {$mail->ErrorInfo}";
       http_response_code(500);
-      require __DIR__ . '/../error/500.php';
+      require_once __DIR__ . '/../error/500.php';
       // echo "Mailer configuration step failed. Error: {$mail->ErrorInfo}";
 }
 ?>

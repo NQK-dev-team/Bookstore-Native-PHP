@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '../../../../tool/php/session_check.php';
+require_once __DIR__ . '../../../../tool/php/session_check.php';
 
 if (!check_session()) {
       // Set the session cookie's attributes: expires - path - domain - secure - httpOnly
@@ -16,8 +16,8 @@ if (!check_session()) {
 
 <head>
       <?php
-      require __DIR__ . "/../../../head_element/cdn.php";
-      require __DIR__ . "/../../../head_element/meta.php";
+      require_once __DIR__ . "/../../../head_element/cdn.php";
+      require_once __DIR__ . "/../../../head_element/meta.php";
       ?>
       <link rel="stylesheet" href="/css/preset_style.css">
 
@@ -29,7 +29,7 @@ if (!check_session()) {
 
 <body>
       <?php
-      require __DIR__ . '/../../../layout/user/header.php';
+      require_once __DIR__ . '/../../../layout/user/header.php';
       ?>
       <section id="page">
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
@@ -67,7 +67,7 @@ if (!check_session()) {
             </div>
       </section>
       <?php
-      require __DIR__ . '/../../../layout/footer.php';
+      require_once __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/user/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>
