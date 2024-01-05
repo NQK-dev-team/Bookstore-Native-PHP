@@ -106,3 +106,13 @@ INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction
 
 -- insert author
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('AUTHOR3', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+
+
+-- insert customer order
+INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) VALUES ('ORDER1', '2024-06-15 09:30:00', '1', '300000.546', '10', 'CUSTOMER1');
+
+--insert eventdiscount
+INSERT INTO `bookstore`.`eventdiscount` (`id`, `discount`, `startDate`, `endDate`, `applyForAll`) VALUES ('EVENT1', '10', '2023-12-31', '2024-1-31', '1');
+
+-- insert event apply
+INSERT INTO `bookstore`.`eventapply` (`eventID`, `bookID`) VALUES ('EVENT1', 'BOOK1');
