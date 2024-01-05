@@ -16,5 +16,6 @@ function return_navigate_error()
                   }
             }
       }
+      return 0;
 }
 ?>

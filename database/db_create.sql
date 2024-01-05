@@ -185,6 +185,7 @@ create table eventDiscount(
     check(discount>0 and discount<=100),
     startDate date not null,
     endDate date not null,
+    check(startDate<=endDate),
     applyForAll boolean default false -- true means all the books are discounted by applying this coupon, false means only a number of books are discounted
 );
 
