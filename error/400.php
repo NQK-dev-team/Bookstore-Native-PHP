@@ -18,13 +18,13 @@
       if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) {
             if ($_SESSION['type'] === 'admin')
                   require_once __DIR__ . '/../layout/admin/header.php';
-            else if ($_SESSION['type'] === 'user')
-                  require_once __DIR__ . '/../layout/user/header.php';
+            else if ($_SESSION['type'] === 'customer')
+                  require_once __DIR__ . '/../layout/customer/header.php';
       } else {
             if (str_contains($_SERVER['REQUEST_URI'], '/admin'))
                   require_once __DIR__ . '/../layout/admin/header.php';
             else
-                  require_once __DIR__ . '/../layout/user/header.php';
+                  require_once __DIR__ . '/../layout/customer/header.php';
       }
       ?>
       <section id="page">

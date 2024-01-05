@@ -29,11 +29,11 @@ if (!check_session()) {
 
 <body>
       <?php
-      require_once __DIR__ . '/../../../layout/user/header.php';
+      require_once __DIR__ . '/../../../layout/customer/header.php';
       ?>
       <section id="page">
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
-                  <form class="bg-white border border-black rounded login_form my-auto d-flex flex-column px-3" id="login_form">
+                  <form onsubmit="loginHandler(event,'customer')" class="bg-white border border-black rounded login_form my-auto d-flex flex-column px-3" id="login_form">
                         <div class='w-100 d-flex flex-column'>
                               <h2 class="mx-auto mb-0 mt-1">Login</h2>
                               <div class="align-items-center justify-content-center w-100 error_message mt-2 mx-auto" id="login_fail">
@@ -53,11 +53,11 @@ if (!check_session()) {
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
                                     <a href="sign_up" class="text-decoration-none ms-auto py-1">Sign up?</a>
                               </div>
-                              <input type=" email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'>
+                              <input autocomplete="on" type=" email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'>
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputPassword" class="fs-4 fw-medium">Password</label>
-                              <input type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password" minlength="8">
+                              <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password" minlength="8">
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none" href="recovery">Forgot password?</a>
                         <div class="mt-auto my-3 mx-auto">
@@ -69,7 +69,7 @@ if (!check_session()) {
       <?php
       require_once __DIR__ . '/../../../layout/footer.php';
       ?>
-      <script src="/javascript/user/menu_after_load.js"></script>
+      <script src="/javascript/customer/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>
       <script src="/javascript/authentication/login.js"></script>
 </body>

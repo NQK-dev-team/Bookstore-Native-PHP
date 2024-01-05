@@ -1,11 +1,14 @@
 const form = document.getElementById('login_form');
 
-function loginHandler(e)
+function loginHandler(e, type)
 {
       e.preventDefault();
 
+      console.log(type);      
+
       const email = sanitize(document.getElementById('inputEmail').value);
       const password = sanitize(document.getElementById('inputPassword').value);
+      console.log(email);
       $.ajax({
             url: '/ajax_service/authentication/login_handler.php',
             method: 'POST',

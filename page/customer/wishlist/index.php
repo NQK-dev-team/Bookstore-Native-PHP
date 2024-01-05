@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ .'/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 ?>
 
@@ -16,14 +17,14 @@ require_once __DIR__ . '/../../../tool/php/role_check.php';
 
 <body>
       <?php
-      require_once __DIR__ . '/../../../layout/user/header.php';
+      require_once __DIR__ . '/../../../layout/customer/header.php';
       ?>
       <section id="page">
       </section>
       <?php
       require_once __DIR__ . '/../../../layout/footer.php';
       ?>
-      <script src="/javascript/user/menu_after_load.js"></script>
+      <script src="/javascript/customer/menu_after_load.js"></script>
 </body>
 
 </html>
