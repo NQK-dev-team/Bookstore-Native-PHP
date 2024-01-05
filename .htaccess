@@ -4,9 +4,9 @@ RewriteEngine On
 # URLs for admin
 RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session|image|tool)/ [NC]  
 RewriteRule ^admin(/.*)*$ /page/admin/$1 [NC,L]   
-# URLs for normal user
+# URLs for normal customer
 RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session|image|tool)/ [NC]
-RewriteRule ^(.*)$ /page/user/$1 [NC,L]   
+RewriteRule ^(.*)$ /page/customer/$1 [NC,L]   
 
 # Remove .html extension
 RewriteCond %{REQUEST_FILENAME} !-d
