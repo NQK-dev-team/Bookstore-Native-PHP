@@ -57,8 +57,8 @@ create table book(
 
 create table author(
 	bookID varchar(20),
-    authorIdx int default 0, -- This only used to combine with `bookID` to form a primary key, no further usage other than that.
-    check(authorIdx>=0),
+    authorIdx int default 1, -- This only used to combine with `bookID` to form a primary key, no further usage other than that.
+    check(authorIdx>=1),
     authorName varchar(100) not null,
     wikiLink text,
     primary key(bookID,authorIdx)
@@ -109,8 +109,8 @@ create table comment(
 create table commentContent(
 	customerID varchar(20) references comment(customerID) on delete cascade on update cascade,
     bookID varchar(20) references comment(bookID) on delete cascade on update cascade,
-    commentIdx int default 0, -- This only used to form a primary key, no further usage other than that.
-	check(commentIdx>=0),
+    commentIdx int default 1, -- This only used to form a primary key, no further usage other than that.
+	check(commentIdx>=1),
     primary key(customerID,bookID,commentIdx),
     commentTime datetime not null,
     content text not null

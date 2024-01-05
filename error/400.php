@@ -15,7 +15,9 @@
 
 <body>
       <?php
-      if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type'])) {
+      require_once __DIR__.'/../tool/php/session_check.php';
+
+      if (check_session()) {
             if ($_SESSION['type'] === 'admin')
                   require_once __DIR__ . '/../layout/admin/header.php';
             else if ($_SESSION['type'] === 'customer')

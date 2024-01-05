@@ -6,6 +6,6 @@ function sanitize(input)
       sanitizedInput = sanitizedInput.replace(/\\/g, '');
       // Encode special characters
       sanitizedInput = encodeURIComponent(sanitizedInput);
-      
+
       return sanitizedInput;
 }

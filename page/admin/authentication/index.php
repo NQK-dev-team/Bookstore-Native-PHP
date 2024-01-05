@@ -1,12 +1,7 @@
 <?php
 require_once __DIR__ . '../../../../tool/php/session_check.php';
 
-if (!check_session()) {
-      // Set the session cookie's attributes: expires - path - domain - secure - httpOnly
-      session_set_cookie_params(3 * 24 * 60 * 60, "/", "", true, true);
-      // Start session
-      session_start();
-} else {
+if (check_session()) {
       header('Location: /admin/');
 }
 ?>
@@ -33,7 +28,7 @@ if (!check_session()) {
       ?>
       <section id="page">
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
-                  <form class="bg-white border border-black rounded login_form my-auto d-flex flex-column px-3" id="login_form">
+                  <form onsubmit="loginHandler(event,'admin')" class="bg-white border border-black rounded login_form my-auto d-flex flex-column px-3" id="login_form">
                         <div class='w-100 d-flex flex-column'>
                               <h2 class="mx-auto mb-0 mt-1">Login</h2>
                               <div class="align-items-center justify-content-center w-100 error_message mt-2 mx-auto" id="login_fail">
@@ -49,15 +44,12 @@ if (!check_session()) {
                               <hr>
                         </div>
                         <div class="form-group">
-                              <div class="d-flex">
-                                    <label for="inputEmail" class="fs-4 fw-medium">Email</label>
-                                    <a href="sign_up" class="text-decoration-none ms-auto py-1">Sign up?</a>
-                              </div>
-                              <input type=" email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'>
+                              <label for="inputEmail" class="fs-4 fw-medium">Email</label>
+                              <input autocomplete="on" type=" email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$'>
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputPassword" class="fs-4 fw-medium">Password</label>
-                              <input type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password" minlength="8">
+                              <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password" minlength="8">
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none" href="recovery">Forgot password?</a>
                         <div class="mt-auto my-3 mx-auto">
