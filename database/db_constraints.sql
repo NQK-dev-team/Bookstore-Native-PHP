@@ -22,6 +22,10 @@ begin
         elseif not new.phone REGEXP '^[0-9]{10}$' then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number contain non-numeric character!';
         end if;
+        
+        if date_add(new.dob,interval 18 year)>curdate() then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
+		end if;
     else
 		if (select status from customer where customer.id=new.id) then
 			if new.email is null then
@@ -39,6 +43,10 @@ begin
         
 		if new.phone is not null and not new.phone REGEXP '^[0-9]{10}$' then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number contain non-numeric character!';
+		end if;
+        
+        if date_add(new.dob,interval 18 year)>curdate() then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
 		end if;
     end if;
 end//
@@ -66,6 +74,10 @@ begin
 		if not (select phone from appUser where appUser.id=new.id) REGEXP '^[0-9]{10}$' then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number contain non-numeric character!';
         end if;
+    end if;
+    
+    if date_add((select dob from appUser where appUser.id=new.id),interval 18 year)>curdate() then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
     end if;
 end//
 delimiter ;
@@ -99,6 +111,10 @@ begin
 	if (select phone from appUser where appUser.id=new.id) is not null and not (select phone from appUser where appUser.id=new.id) REGEXP '^[0-9]{10}$' then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number contain non-numeric character!';
 	end if;
+    
+    if date_add((select dob from appUser where appUser.id=new.id),interval 18 year)>curdate() then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
+    end if;
 end//
 delimiter ;
 
