@@ -15,6 +15,19 @@ function create_new_account_mail($email)
       $mail->send();
 }
 
+function referrer_mail($refEmail, $email)
+{
+      global $mail;
+
+      $mail->addAddress($refEmail);
+
+      $mail->Subject = 'Referrer acknowledge';
+      $mail->Body    = "You account has been set to be the referrer of user <strong>{$email}</strong>!";
+      $mail->AltBody = "You account has been set to be the referrer of user {$email}!";
+
+      $mail->send();
+}
+
 function recovery_mail($email, $code)
 {
       global $mail;

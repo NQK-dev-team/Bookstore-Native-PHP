@@ -1,11 +1,11 @@
 use bookstore;
 
 -- Inser `appUser` table
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER1', 'khoa', '2000-12-12', '211 Ly Thuong Kiet', '0932758467', 'khoa.liang@gmail.com', '$2y$10$RVvjZE3RGQlrr4QM5vF4QeHBANTrhVBIYKP1WME4PAcomIJ9dMQeK'); -- password: #Khoa123456789
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER2', 'quang', '2002-12-12', '211 Ly Thuong Kiet', '0932758489', 'quang.nguyen@gmail.com', '$2y$10$HMYqIozNiGv7fmHgbxnIZuVbFIfvFe19mvAxEpWQMMFBzzA/aI/gy'); -- password: #Quang123456789
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER3', 'nghia', '2002-6-12', '211 Ly Thuong Kiet', '0932758421', 'nghia.duong@gmail.com', '$2y$10$LLhbLuUhQ/65f8TadF.NQ.JuXVi8jlZ7nrx8QTweTszftUYB1Edey'); -- password: #Nghia123456789
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('ADMIN1', 'admin1', '2002-6-12', '211 Ly Thuong Kiet', '0932758512', 'admin1.manager@gmail.com', '$2y$10$tOMD/PUTxMu7bqSGSRi41OJL6JmxEpm2jRA0UKIaa8pjst1LbYPEu'); -- password: #Admin123456789
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('ADMIN2', 'admin2', '2002-6-12', '211 Ly Thuong Kiet', '0932758874', 'admin2.manager@gmail.com', '$2y$10$/2v7r2nbfTH31p1byCussuNUrV.T3AXCPwXrifQr3/ABAbsdKRuwe'); -- password: #Admin123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER1', 'khoa', '2000-12-12', '211 Ly Thuong Kiet', '0932758467', 'khoa.liang.nqk.demo@gmail.com', '$2y$10$RVvjZE3RGQlrr4QM5vF4QeHBANTrhVBIYKP1WME4PAcomIJ9dMQeK'); -- password: #Khoa123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER2', 'quang', '2002-12-12', '211 Ly Thuong Kiet', '0932758489', 'quang.nguyen.nqk.demo@gmail.com', '$2y$10$HMYqIozNiGv7fmHgbxnIZuVbFIfvFe19mvAxEpWQMMFBzzA/aI/gy'); -- password: #Quang123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER3', 'nghia', '2002-6-12', '211 Ly Thuong Kiet', '0932758421', 'nghia.duong.nqk.demo@gmail.com', '$2y$10$LLhbLuUhQ/65f8TadF.NQ.JuXVi8jlZ7nrx8QTweTszftUYB1Edey'); -- password: #Nghia123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('ADMIN1', 'admin1', '2002-6-12', '211 Ly Thuong Kiet', '0932758512', 'admin1.manager.nqk.demo@gmail.com', '$2y$10$tOMD/PUTxMu7bqSGSRi41OJL6JmxEpm2jRA0UKIaa8pjst1LbYPEu'); -- password: #Admin123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('ADMIN2', 'admin2', '2002-6-12', '211 Ly Thuong Kiet', '0932758874', 'admin2.manager.nqk.demo@gmail.com', '$2y$10$/2v7r2nbfTH31p1byCussuNUrV.T3AXCPwXrifQr3/ABAbsdKRuwe'); -- password: #Admin123456789
 
 -- Insert `admin` table
 INSERT INTO admin (`id`) VALUES ('ADMIN1');

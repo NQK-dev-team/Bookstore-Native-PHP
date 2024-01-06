@@ -134,6 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else {
                         echo json_encode(['query_result' => true]);
                         create_new_account_mail($email);
+                        if ($refEmail)
+                              referrer_mail($refEmail, $email);
                   }
 
                   // Close statement
