@@ -6,44 +6,30 @@ use PHPMailer\PHPMailer\Exception;
 
 require_once __DIR__ . '/../../config/phpmailler.php';
 
-function create_new_mail($email, $code)
+function create_new_account_mail($email)
 {
       global $mail;
 
-      try {
-            $mail->addAddress($email);
+      $mail->addAddress($email);
 
-            $mail->Subject = 'Confirmation code (No Reply)';
-            $mail->Body    = "This is your confirmation code <b>$code</b>";
-            $mail->AltBody = "This is your confirmation code: $code";
+      $mail->Subject = 'Account created!';
+      $mail->Body    = "You account has been created successfully, you can now use this email address to login NQK Bookstore website!";
+      $mail->AltBody = "You account has been created successfully, you can now use this email address to login NQK Bookstore website!";
 
-            $mail->send();
-      } catch (Exception $e) {
-            $GLOBALS['error_message'] = "Message could not be sent. Error: {$mail->ErrorInfo}";
-            http_response_code(500);
-            require_once __DIR__ . '/../../error/500.php';
-            // echo "Message could not be sent. Error: {$mail->ErrorInfo}";
-      }
+      $mail->send();
 }
 
 function recovery_mail($email, $code)
 {
       global $mail;
 
-      try {
-            $mail->addAddress($email);
+      $mail->addAddress($email);
 
-            $mail->Subject = 'Recovery code (No Reply)';
-            $mail->Body    = "This is your recovery code <b>$code</b>";
-            $mail->AltBody = "This is your recovery code: $code";
+      $mail->Subject = 'Recovery code (No Reply)';
+      $mail->Body    = "This is your recovery code <b>$code</b>";
+      $mail->AltBody = "This is your recovery code: $code";
 
-            $mail->send();
-      } catch (Exception $e) {
-            $GLOBALS['error_message'] = "Message could not be sent. Error: {$mail->ErrorInfo}";
-            http_response_code(500);
-            require_once __DIR__ . '/../../error/500.php';
-            // echo "Message could not be sent. Error: {$mail->ErrorInfo}";
-      }
+      $mail->send();
 }
 
 ?>
