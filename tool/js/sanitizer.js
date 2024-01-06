@@ -1,13 +1,15 @@
-function sanitize(input)
+function sanitize(param)
 {
-      if (!input) return '';
-
       // Remove leading and trailing whitespaces
-      let sanitizedInput = input.trim();
+      param = param.trim();
       // Remove backslashes
-      sanitizedInput = sanitizedInput.replace(/\\/g, '');
-      // Encode special characters
-      sanitizedInput = encodeURIComponent(sanitizedInput);
+      param = param.replace(/\\/g, '');
+      // Convert special characters to HTML entities
+      param = param.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
 
-      return sanitizedInput;
+      return param;
 }
