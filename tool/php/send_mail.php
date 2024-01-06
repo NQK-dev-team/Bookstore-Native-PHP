@@ -1,9 +1,5 @@
 
 <?php
-//Import PHPMailer classes into the global namespace
-//These must be at the top of your script, not inside a function
-use PHPMailer\PHPMailer\Exception;
-
 require_once __DIR__ . '/../../config/phpmailler.php';
 
 function create_new_account_mail($email)

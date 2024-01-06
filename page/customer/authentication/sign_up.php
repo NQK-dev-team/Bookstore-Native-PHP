@@ -54,6 +54,16 @@ if (check_session()) header('Location: /');
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
                               <input onchange="checkAge()" autocomplete="on" type="date" required class="form-control" id="inputDate" name="date">
+                              <div class="mt-2 align-items-center used_error" id="invalid_dob">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                          <g id="SVGRepo_iconCarrier">
+                                                <path d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                          </g>
+                                    </svg>
+                                    <p class="ms-1 text-danger mb-0 fw-medium">Invalid date of birth!</p>
+                              </div>
                               <div class="mt-2 align-items-center used_error" id="invalid_age">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -89,11 +99,17 @@ if (check_session()) header('Location: /');
                               <input autocomplete="on" type="text" class="form-control" id="inputAddress" placeholder="Enter address" name="address">
                         </div>
                         <div class="form-group mt-3">
+                              <label for="inputCard" class="fs-4 fw-medium">Card number</label>
+                              <p class="mb-1">(You can enter this later on)</p>
+
+                              <input autocomplete="on" type="text" class="form-control" id="inputCard" placeholder="Enter card number" name="card" pattern="[0-9]{8,16}">
+                        </div>
+                        <div class="form-group mt-3">
                               <div class="d-flex">
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input onchange="checkEmailUsed()" autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'>
+                              <input onchange="checkEmailUsed(false)" autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'>
                               <div class="mt-2 align-items-center used_error" id="email_used_error">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -111,6 +127,20 @@ if (check_session()) header('Location: /');
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
                               <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$">
+                        </div>
+                        <div class="form-group mt-3">
+                              <label for="inputRefEmail" class="fs-4 fw-medium">Refferer email</label>
+                              <input onchange="checkEmailUsed(true)" autocomplete="on" type="email" class="form-control" id="inputRefEmail" placeholder="Enter email" name="refEmail" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'>
+                              <div class="mt-2 align-items-center used_error" id="ref_email_error">
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                          <g id="SVGRepo_iconCarrier">
+                                                <path d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                          </g>
+                                    </svg>
+                                    <p class="ms-1 text-danger mb-0 fw-medium">Referrer email not found or invalid!</p>
+                              </div>
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
                         <div class="mt-auto my-3 mx-auto">

@@ -5,8 +5,10 @@ function signUpHandler(event)
       const date = sanitize(document.getElementById('inputDate').value);
       const phone = sanitize(document.getElementById('inputPhone').value);
       const address = sanitize(document.getElementById('inputAddress').value);
-      const email = (sanitize(document.getElementById('inputEmail').value)).replace(/%40/g, '@');
+      const email = sanitize(document.getElementById('inputEmail').value);
       const password = sanitize(document.getElementById('inputPassword').value);
+      const card = sanitize(document.getElementById('inputCard').value);
+      const refEmail = sanitize(document.getElementById('inputRefEmail').value);
 
       let isOK = true;
 
@@ -24,6 +26,14 @@ function signUpHandler(event)
             isOK = false;
             const p_elem = document.getElementById('error_message_content');
             p_elem.innerHTML = 'Date of birth field is empty!';
+            const error_message = document.getElementById('signup_fail');
+            error_message.style.display = 'flex';
+      }
+      else if (!isDobValid(date) && isOK)
+      {
+            isOK = false;
+            const p_elem = document.getElementById('error_message_content');
+            p_elem.innerHTML = 'Date of birth invalid!';
             const error_message = document.getElementById('signup_fail');
             error_message.style.display = 'flex';
       }
@@ -52,6 +62,19 @@ function signUpHandler(event)
                   isOK = false;
                   const p_elem = document.getElementById('error_message_content');
                   p_elem.innerHTML = 'Phone number format invalid!';
+                  const error_message = document.getElementById('signup_fail');
+                  error_message.style.display = 'flex';
+            }
+      }
+
+      if (card !== '' && isOK)
+      {
+            const regex = /^[0-9]{8,16}$/;
+            if (!regex.test(card) && isOK)
+            {
+                  isOK = false;
+                  const p_elem = document.getElementById('error_message_content');
+                  p_elem.innerHTML = 'Card number format invalid!';
                   const error_message = document.getElementById('signup_fail');
                   error_message.style.display = 'flex';
             }
@@ -107,15 +130,27 @@ function signUpHandler(event)
             }
       }
 
+      if (refEmail !== '' && isOK)
+      {
+            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+            if (!regex.test(refEmail) && isOK)
+            {
+                  isOK = false;
+                  const p_elem = document.getElementById('error_message_content');
+                  p_elem.innerHTML = 'Referrer email format invalid!';
+                  const error_message = document.getElementById('signup_fail');
+                  error_message.style.display = 'flex';
+            }
+      }
+
       if (isOK)
             $.ajax({
                   url: '/ajax_service/authentication/signup_handler.php',
                   method: 'POST',
-                  data: { name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, email: email, password: password },
-                  //dataType: 'json',
+                  data: { name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+                  dataType: 'json',
                   success: function (data)
                   {
-                        console.log(data);
                         if (data.error)
                         {
                               const p_elem = document.getElementById('error_message_content');
@@ -123,17 +158,16 @@ function signUpHandler(event)
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         }
-                        // else if (data.query_result)
-                        // {
-                        //       if (user_type === 'customer')
-                        //             window.location.href = '/';
-                        //       if (user_type === 'admin')
-                        //             window.location.href = '/admin/';
-                        // }
+                        else if (data.query_result)
+                        {
+                              const p_elem = document.getElementById('error_message_content');
+                              p_elem.innerHTML = '';
+                              const error_message = document.getElementById('signup_fail');
+                              error_message.style.display = 'none';
+                        }
                   },
                   error: function (err)
                   {
-                        console.error(err);
                         if (err.status === 500)
                         {
                               const p_elem = document.getElementById('error_message_content');
@@ -178,48 +212,102 @@ function checkPhoneUsed()
       });
 }
 
-function checkEmailUsed()
+function checkEmailUsed(isRefEmail)
 {
-      const email = (sanitize(document.getElementById('inputEmail').value)).replace(/%40/g, '@');
+      if (!isRefEmail)
+      {
+            const email = sanitize(document.getElementById('inputEmail').value);
 
-      const data = { email: email };
+            const data = { email: email };
 
-      const queryString = $.param(data);
+            const queryString = $.param(data);
 
-      $.ajax({
-            url: `/ajax_service/authentication/check_email.php?${ queryString }`,
-            method: 'GET',
-            dataType: 'json',
-            success: function (data)
+            $.ajax({
+                  url: `/ajax_service/authentication/check_email.php?${ queryString }`,
+                  method: 'GET',
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        const elem = document.getElementById('email_used_error');
+                        if (data.query_result)
+                              elem.style.display = 'flex';
+                        else
+                              elem.style.display = 'none';
+                  },
+                  error: function (err)
+                  {
+                        console.error(err);
+                  }
+            });
+      }
+      else
+      {
+            const email = sanitize(document.getElementById('inputRefEmail').value);
+
+            if (email === '')
             {
-                  const elem = document.getElementById('email_used_error');
-                  if (data.query_result)
-                        elem.style.display = 'flex';
-                  else
-                        elem.style.display = 'none';
-            },
-            error: function (err)
-            {
-                  console.error(err);
+                  const elem = document.getElementById('ref_email_error');
+                  elem.style.display = 'none';
+                  return;
             }
-      });
+
+            const data = { email: email };
+
+            const queryString = $.param(data);
+
+            $.ajax({
+                  url: `/ajax_service/authentication/check_email.php?${ queryString }`,
+                  method: 'GET',
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        const elem = document.getElementById('ref_email_error');
+                        if (data.query_result)
+                              elem.style.display = 'none';
+                        else
+                              elem.style.display = 'flex';
+                  },
+                  error: function (err)
+                  {
+                        console.error(err);
+                  }
+            });
+      }
 }
 
 function checkAge()
 {
-      const dobInput = document.getElementById("inputDate").value;
+      const dobInput = sanitize(document.getElementById("inputDate").value);
 
-      const elem = document.getElementById('invalid_age');
+      const elem1 = document.getElementById('invalid_dob');
+      const elem2 = document.getElementById('invalid_age');
 
       if (dobInput === '')
-            elem.style.display = 'none';
-      else
       {
-            if (isAgeValid(dobInput))
-                  elem.style.display = 'none';
-            else
-                  elem.style.display = 'flex';
+            elem1.style.display = 'none';
+            elem2.style.display = 'none';
+            return;
       }
+
+      if (isDobValid(dobInput))
+      {
+            elem1.style.display = 'none';
+
+            if (isAgeValid(dobInput))
+                  elem2.style.display = 'none';
+            else
+                  elem2.style.display = 'flex';
+      }
+      else
+            elem1.style.display = 'flex';
+}
+
+function isDobValid(input)
+{
+      const dob = new Date(input);
+      const today = new Date();
+
+      return today >= dob;
 }
 
 function isAgeValid(input)
