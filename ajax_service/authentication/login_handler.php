@@ -6,32 +6,32 @@ require_once __DIR__ . '/../../tool/php/password.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
-            $email = sanitize($_POST['email']);
-            $password = sanitize($_POST['password']);
-            $user_type = sanitize($_POST['type']);
-
-            // Validate email
-            if (!$email) {
-                  echo json_encode(['error' => 'No email address provided!']);
-                  exit;
-            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                  echo json_encode(['error' => 'Invalid email format!']);
-                  exit;
-            }
-
-            // Validate password
-            if (!$password) {
-                  echo json_encode(['error' => 'No password provided!']);
-                  exit;
-            } else if (strlen($password) < 8) {
-                  echo json_encode(['error' => 'Password must be at least 8 characters!']);
-                  exit;
-            } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password)) {
-                  echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
-                  exit;
-            }
-
             try {
+                  $email = sanitize($_POST['email']);
+                  $password = sanitize($_POST['password']);
+                  $user_type = sanitize($_POST['type']);
+
+                  // Validate email
+                  if (!$email) {
+                        echo json_encode(['error' => 'No email address provided!']);
+                        exit;
+                  } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        echo json_encode(['error' => 'Invalid email format!']);
+                        exit;
+                  }
+
+                  // Validate password
+                  if (!$password) {
+                        echo json_encode(['error' => 'No password provided!']);
+                        exit;
+                  } else if (strlen($password) < 8) {
+                        echo json_encode(['error' => 'Password must be at least 8 characters!']);
+                        exit;
+                  } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password)) {
+                        echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
+                        exit;
+                  }
+
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
