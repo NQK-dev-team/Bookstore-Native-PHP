@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../tool/php/password.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
-            $email = sanitize(str_replace('%40', '@', $_POST['email']));
+            $email = sanitize($_POST['email']);
             $password = sanitize($_POST['password']);
             $user_type = sanitize($_POST['type']);
 
@@ -19,6 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Validate password
             if (strlen($password) < 8) {
                   echo json_encode(['error' => 'Password must be at least 8 characters!']);
+                  exit;
+            } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password)) {
+                  echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
                   exit;
             }
 

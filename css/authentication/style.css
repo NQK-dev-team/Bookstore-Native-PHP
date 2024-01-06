@@ -1,4 +1,4 @@
-.login_form {
+.form {
       width: 95%;
       max-width: 30rem;
       min-height: 400px;
@@ -7,7 +7,7 @@
 .error_message {
       background-color: rgb(255, 238, 221);
       border: 1px dashed red;
-      max-width: 300px;
+      max-width: 100%;
       display: none;
 }
 
