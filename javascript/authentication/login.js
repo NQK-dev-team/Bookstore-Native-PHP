@@ -74,6 +74,11 @@ function loginHandler(e, user_type)
                         }
                         else if (data.query_result)
                         {
+                              const p_elem = document.getElementById('error_message_content');
+                              p_elem.innerHTML = '';
+                              const error_message = document.getElementById('login_fail');
+                              error_message.style.display = 'none';
+
                               if (user_type === 'customer')
                                     window.location.href = '/';
                               if (user_type === 'admin')
