@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
-                  echo json_encode(['error' => $e]);
+                  echo json_encode(['error' => $e->getMessage()]);
             }
       } else {
             http_response_code(400);
