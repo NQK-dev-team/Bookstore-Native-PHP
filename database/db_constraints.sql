@@ -341,11 +341,17 @@ begin
         if new.phone is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number is null!';
         elseif not new.phone REGEXP '^[0-9]{10}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number contain non-numeric character!';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number format is not valid!';
         end if;
         
-        if new.dob is not null and date_add(new.dob,interval 18 year)>curdate() then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
+        if new.dob is not null then
+			if new.dob>curdate() then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin date of birth is not valid!';
+            end if;
+            
+			if date_add(new.dob,interval 18 year)>curdate() then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
+            end if;
 		end if;
     else
 		if (select status from customer where customer.id=new.id) then
@@ -363,11 +369,17 @@ begin
 		end if;
         
 		if new.phone is not null and not new.phone REGEXP '^[0-9]{10}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number contain non-numeric character!';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number format is not valid!';
 		end if;
         
-        if new.dob is not null and date_add(new.dob,interval 18 year)>curdate() then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
+        if new.dob is not null then
+			if new.dob>curdate() then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer date of birth is not valid!';
+            end if;
+            
+			if date_add(new.dob,interval 18 year)>curdate() then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
+            end if;
 		end if;
     end if;
 end//
@@ -393,12 +405,18 @@ begin
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number is null!';
     else
 		if not (select phone from appUser where appUser.id=new.id) REGEXP '^[0-9]{10}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number contain non-numeric character!';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s phone number format is not valid!';
         end if;
     end if;
     
-    if (select dob from appUser where appUser.id=new.id) is not null and date_add((select dob from appUser where appUser.id=new.id),interval 18 year)>curdate() then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
+    if (select dob from appUser where appUser.id=new.id) is not null then
+		if (select dob from appUser where appUser.id=new.id)>curdate() then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin date of birth is not valid!';
+        end if;
+        
+		if date_add((select dob from appUser where appUser.id=new.id),interval 18 year)>curdate() then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
+        end if;
     end if;
 end//
 delimiter ;
@@ -412,7 +430,7 @@ before insert on customer
 for each row
 begin
 	if new.cardNumber is not null and not new.cardNumber REGEXP '^[0-9]{8,16}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number contain non-numeric character!';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number format is not valid!';
     end if;
     
     if new.status then
@@ -430,11 +448,17 @@ begin
 	end if;
         
 	if (select phone from appUser where appUser.id=new.id) is not null and not (select phone from appUser where appUser.id=new.id) REGEXP '^[0-9]{10}$' then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number contain non-numeric character!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number format is not valid!';
 	end if;
     
-    if (select dob from appUser where appUser.id=new.id) is not null and date_add((select dob from appUser where appUser.id=new.id),interval 18 year)>curdate() then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
+    if (select dob from appUser where appUser.id=new.id) is not null then
+		if (select dob from appUser where appUser.id=new.id)>curdate() then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer date of birth is not valid!';
+        end if;
+        
+		if date_add((select dob from appUser where appUser.id=new.id),interval 18 year)>curdate() then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
+        end if;
     end if;
 end//
 delimiter ;
@@ -447,7 +471,7 @@ before update on customer
 for each row
 begin	
 	if new.cardNumber is not null and not new.cardNumber REGEXP '^[0-9]{8,16}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number contain non-numeric character!';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number format is not valid!';
     end if;
 end//
 delimiter ;
@@ -461,7 +485,7 @@ before insert on book
 for each row
 begin
 	if new.isbn is not null and not new.isbn REGEXP '^[0-9]{10,13}$' then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book ISBN number contain non-numeric character!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book ISBN number format is not valid!';
     end if;
     
     if new.publishDate is not null and new.publishDate>now() then
@@ -477,7 +501,7 @@ before update on book
 for each row
 begin	
 	if new.isbn is not null and not new.isbn REGEXP '^[0-9]{10,13}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book ISBN number contain non-numeric character!';
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Book ISBN number format is not valid!';
     end if;
     
     if new.publishDate is not null and new.publishDate>now() then
