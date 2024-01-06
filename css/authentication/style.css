@@ -16,13 +16,28 @@
       height: 32px;
 }
 
+.used_error svg {
+      width: 16px;
+      height: 16px;
+}
+
+.used_error {
+      display: none;
+}
+
 @media only screen and (max-width:330px) {
       .error_message svg {
             width: 20px;
             height: 20px;
       }
 
-      .error_message p {
+      .error_message p,
+      .used_error p {
             font-size: 12px;
+      }
+
+      .used_error svg {
+            width: 12px;
+            height: 12px;
       }
 }
