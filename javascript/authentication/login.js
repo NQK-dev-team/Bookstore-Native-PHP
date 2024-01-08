@@ -30,7 +30,7 @@ function loginHandler(e, user_type)
       {
             isOK = false;
             const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password format invalid!");
+            elem.setCustomValidity("Password field is empty!");
             elem.reportValidity();
       }
       else if (password.length < 8 && isOK)

@@ -46,14 +46,14 @@ if (check_session()) header('Location: /');
                                     <label for="inputName" class="fs-4 fw-medium">Name</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input autocomplete="on" type="text" required class="form-control" id="inputName" placeholder="Enter name" name="name" title="Test">
+                              <input autocomplete="on" type="text" class="form-control" id="inputName" placeholder="Enter name" name="name" title="Test">
                         </div>
                         <div class="form-group mt-3">
                               <div class="d-flex">
                                     <label for="inputDate" class="fs-4 fw-medium">Date of birth</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input onchange="checkAge()" autocomplete="on" type="date" required class="form-control" id="inputDate" name="date">
+                              <input onchange="checkAge()" autocomplete="on" type="date" class="form-control" id="inputDate" name="date">
                               <div class="mt-2 align-items-center used_error" id="invalid_dob">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -80,7 +80,7 @@ if (check_session()) header('Location: /');
                                     <label for="inputPhone" class="fs-4 fw-medium">Phone number</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input onchange="checkPhoneUsed()" autocomplete="on" type="tel" required class="form-control" id="inputPhone" placeholder="Enter phone number" name="phone">
+                              <input onchange="checkPhoneUsed()" autocomplete="on" type="tel" class="form-control" id="inputPhone" placeholder="Enter phone number" name="phone">
                               <div class="mt-2 align-items-center used_error" id="phone_used_error">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -109,7 +109,7 @@ if (check_session()) header('Location: /');
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input onchange="checkEmailUsed(false)" autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email">
+                              <input onchange="checkEmailUsed(false)" autocomplete="on" type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email">
                               <div class="mt-2 align-items-center used_error" id="email_used_error">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -126,7 +126,7 @@ if (check_session()) header('Location: /');
                                     <label for="inputPassword" class="fs-4 fw-medium">Password</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password">
+                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputRefEmail" class="fs-4 fw-medium">Refferer email</label>

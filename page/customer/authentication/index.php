@@ -48,11 +48,11 @@ if (check_session()) {
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
                                     <a href="sign_up" class="text-decoration-none ms-auto py-1">Sign up?</a>
                               </div>
-                              <input autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email">
+                              <input autocomplete="on" type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputPassword" class="fs-4 fw-medium">Password</label>
-                              <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password">
+                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password">
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="recovery">Forgot password?</a>
                         <div class="mt-auto my-3 mx-auto">
