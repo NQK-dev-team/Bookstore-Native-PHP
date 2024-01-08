@@ -32,6 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
+                  // Valid user type
+                  if(!$user_type)
+                  {
+                        echo json_encode(['error' => 'No user type provided!']);
+                        exit;
+                  }
+                  else if($user_type!=='admin'|| $user_type!=='customer')
+                  {
+                        echo json_encode(['error' => 'Invalid user type!']);
+                        exit;
+                  }
+
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
