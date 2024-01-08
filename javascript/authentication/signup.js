@@ -5,7 +5,7 @@ $(document).ready(function ()
       {
             window.location.href = "/authentication/";
       });
-})
+});
 
 function signUpHandler(event)
 {
