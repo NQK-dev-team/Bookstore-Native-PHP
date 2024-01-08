@@ -81,7 +81,7 @@ if (check_session()) header('Location: /');
                         </div>
                   </form>
 
-                  <form onsubmit="changePassword(event)" class="bg-white border border-black rounded form my-auto flex-column px-3" id="recovery_password_form">
+                  <form onsubmit="changePassword(event,'customer')" class="bg-white border border-black rounded form my-auto flex-column px-3" id="recovery_password_form">
                         <div class='w-100 d-flex flex-column'>
                               <h2 class="mx-auto mb-0 mt-1">Change password</h2>
                               <div class="align-items-center justify-content-center error_message mt-2 mx-auto" id="recovery_fail_3">
@@ -110,6 +110,23 @@ if (check_session()) header('Location: /');
                               <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                   </form>
+            </div>
+
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                              <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="modalLabel">Password changed!</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body d-flex flex-column">
+                                    <p>Your password has been changed successfully!</p>
+                              </div>
+                              <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                              </div>
+                        </div>
+                  </div>
             </div>
       </section>
       <?php

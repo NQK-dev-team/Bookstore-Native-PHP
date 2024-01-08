@@ -25,19 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'Invalid recovery code format!']);
                         exit;
                   }
-var_dump($_SESSION['recovery_code'], $_SESSION['recovery_code_send_time']);
+                  session_start();
                   if (isset($_SESSION['recovery_code'], $_SESSION['recovery_code_send_time']) && $_SESSION['recovery_code'] && $_SESSION['recovery_code_send_time']) {
-                        $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                        $interval = $current_time->getTimestamp() - $_SESSION['recovery_code_send_time']->getTimestamp();
-
-                        if (abs($interval) <= 120) {
-                              if ($code === $_SESSION['recovery_code']) {
+                        if ($code === $_SESSION['recovery_code']) {
+                              $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $interval = $current_time->getTimestamp() - $_SESSION['recovery_code_send_time']->getTimestamp();
+                              if (abs($interval) <= 120) {
                                     echo json_encode(['query_result' => true]);
                               } else {
-                                    echo json_encode(['error' => 'Recovery code incorrect!']);
+                                    echo json_encode(['error' => 'Recovery code expired!']);
                               }
                         } else {
-                              echo json_encode(['error' => 'Recovery code expired!']);
+                              echo json_encode(['error' => 'Recovery code incorrect!']);
                         }
                   } else {
                         http_response_code(500);
