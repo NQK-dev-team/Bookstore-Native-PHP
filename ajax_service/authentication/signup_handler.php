@@ -5,6 +5,21 @@ require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 
+function isAgeValid($input)
+{
+      // Assuming $input is the date of birth in 'Y-m-d' format
+      $dob = new DateTime($input, new DateTimeZone('Asia/Ho_Chi_Minh'));
+      $today = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+      $age = $today->format('Y') - $dob->format('Y');
+
+      // Check if the birthday has occurred this year
+      if ($today->format('m') < $dob->format('m') || ($today->format('m') == $dob->format('m') && $today->format('d') < $dob->format('d'))) {
+            $age--;
+      }
+
+      return $age >= 18;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['name'], $_POST['date'], $_POST['phone'], $_POST['address'])) {
             try {
@@ -27,13 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else {
                         // Create a DateTime object for the date of birth
-                        $dobDate = new DateTime($date);
+                        $dobDate = new DateTime($date, new DateTimeZone('Asia/Ho_Chi_Minh'));
 
                         // Get the current date
-                        $currentDate = new DateTime();
+                        $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
 
                         if ($dobDate > $currentDate) {
                               echo json_encode(['error' => 'Date of birth invalid!']);
+                              exit;
+                        } else if (!isAgeValid($date)) {
+
+                              echo json_encode(['error' => 'You must be at least 18 years old to sign up!']);
                               exit;
                         }
                   }

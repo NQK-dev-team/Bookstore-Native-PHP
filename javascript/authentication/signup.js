@@ -50,7 +50,7 @@ function signUpHandler(event)
       {
             isOK = false;
             const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'You must be at least 18 years old!';
+            p_elem.innerHTML = 'You must be at least 18 years old to sign up!';
             const error_message = document.getElementById('signup_fail');
             error_message.style.display = 'flex';
       }
