@@ -76,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['id'] = $result['id'];
 
                         echo json_encode(['query_result' => true]);
+
+                        // Missing a procedure to set status=1 when status=0 and send an email to the customer
                   }
                   // Close statement
                   $stmt->close();
