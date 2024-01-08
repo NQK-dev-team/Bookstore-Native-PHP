@@ -147,6 +147,24 @@ if (check_session()) header('Location: /');
                               <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                   </form>
+
+                  <div class="modal fade" id="signUpSuccessModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5" id="modalLabel">Sign up success</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>You now can use all the services that NQK Bookstore has to offer</p>
+                                          <p class="mx-auto mb-0">Happy shopping!</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
             </div>
       </section>
       <?php

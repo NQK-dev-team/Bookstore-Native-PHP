@@ -1,3 +1,12 @@
+$(document).ready(function ()
+{
+      // Attach a function to execute when the modal is fully hidden
+      $('#signUpSuccessModal').on('hidden.bs.modal', function ()
+      {
+            window.location.href = "/authentication/";
+      });
+})
+
 function signUpHandler(event)
 {
       event.preventDefault();
@@ -144,6 +153,8 @@ function signUpHandler(event)
       }
 
       if (isOK)
+      {
+            $('*').addClass('wait');
             $.ajax({
                   url: '/ajax_service/authentication/signup_handler.php',
                   method: 'POST',
@@ -151,6 +162,7 @@ function signUpHandler(event)
                   dataType: 'json',
                   success: function (data)
                   {
+                        $('*').removeClass('wait');
                         if (data.error)
                         {
                               const p_elem = document.getElementById('error_message_content');
@@ -164,10 +176,13 @@ function signUpHandler(event)
                               p_elem.innerHTML = '';
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'none';
+
+                              $('#signUpSuccessModal').modal('show');
                         }
                   },
                   error: function (err)
                   {
+                        $('*').removeClass('wait');
                         if (err.status === 500)
                         {
                               const p_elem = document.getElementById('error_message_content');
@@ -183,6 +198,7 @@ function signUpHandler(event)
                         }
                   }
             });
+      }
 }
 
 function checkPhoneUsed()

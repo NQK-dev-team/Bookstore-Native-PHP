@@ -25,6 +25,22 @@
       display: none;
 }
 
+#recovery_email_form {
+      display: flex;
+}
+
+#recovery_code_form {
+      display: none;
+}
+
+#recovery_password_form {
+      display: none;
+}
+
+.wait {
+      cursor: wait !important;
+}
+
 @media only screen and (max-width:330px) {
       .error_message svg {
             width: 20px;

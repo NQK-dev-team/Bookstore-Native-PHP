@@ -35,8 +35,11 @@ function recovery_mail($email, $code)
       $mail->addAddress($email);
 
       $mail->Subject = 'Recovery code (No Reply)';
-      $mail->Body    = "This is your recovery code <b>$code</b>";
-      $mail->AltBody = "This is your recovery code: $code";
+      $mail->Body    = "This is your recovery code <b>$code</b>
+      <br>
+      This code will only be valid for 2 minutes";
+      $mail->AltBody = "This is your recovery code: $code\n
+      This code will only be valid for 2 minutes";
 
       $mail->send();
 }

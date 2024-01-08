@@ -7,13 +7,16 @@ INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password
 INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('ADMIN1', 'admin1', '2002-6-12', '211 Ly Thuong Kiet', '0932758512', 'admin1.manager.nqk.demo@gmail.com', '$2y$10$tOMD/PUTxMu7bqSGSRi41OJL6JmxEpm2jRA0UKIaa8pjst1LbYPEu'); -- password: #Admin123456789
 INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('ADMIN2', 'admin2', '2002-6-12', '211 Ly Thuong Kiet', '0932758874', 'admin2.manager.nqk.demo@gmail.com', '$2y$10$/2v7r2nbfTH31p1byCussuNUrV.T3AXCPwXrifQr3/ABAbsdKRuwe'); -- password: #Admin123456789
 
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`) VALUES ('CUSTOMER4', 'nghia', '2002-6-12', '211 Ly Thuong Kiet', '0932758420', 'nghia369ty@gmail.com', 'test123456789'); -- password: test
+
 -- Insert `admin` table
 INSERT INTO admin (`id`) VALUES ('ADMIN1');
 INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
-insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,0,1142369875),('CUSTOMER2','CUSTOMER1',0,1245369870),('CUSTOMER3','CUSTOMER1',0,4100335874);
+insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,0,1142369875),('CUSTOMER2','CUSTOMER1',0,1245369870),('CUSTOMER3','CUSTOMER1',0,4100335874),('CUSTOMER4',null,0,null);
 
+select appUser.id from appUser join customer on customer.id=appUser.id where appUser.email='nghia.duong.nqk.demo@gmail.com';
 -- Insert `book` table
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK1', 'The Joy of PHP', '1', ' 978494267353', '3', '4', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-13', '1');
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK2', 'Models: Attract Women Through Honesty', '3', ' B00C93Q5KK', '13', '4.7', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-30', '1');

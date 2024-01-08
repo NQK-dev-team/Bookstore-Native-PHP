@@ -10,7 +10,7 @@ $(document).ready(() =>
             $('#cart_nav').addClass('text-primary');
       else if (location.includes('/account'))
             $('#profile_nav').addClass('text-primary');
-      else if (location.includes('/authentication'))
+      else if (location.includes('/authentication') && !location.includes('recovery') && !location.includes('sign_up'))
             $('#signin_nav').addClass('text-primary');
       else if (location.includes('/'))
             $('#home_nav').addClass('text-primary');
