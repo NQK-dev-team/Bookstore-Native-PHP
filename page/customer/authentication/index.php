@@ -17,7 +17,7 @@ if (check_session()) {
       <link rel="stylesheet" href="/css/preset_style.css">
 
       <meta name="author" content="Nghia Duong">
-      <meta name="description" content="Login to NQK bookstore">
+      <meta name="description" content="Login to NQK bookstore as a customer">
       <title>Login</title>
       <link rel="stylesheet" href="/css/authentication/style.css">
 </head>
