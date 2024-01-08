@@ -43,7 +43,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group">
                               <label for="inputEmail" class="fs-4 fw-medium">Email</label>
-                              <input autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'>
+                              <input autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email">
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
                         <div class="mt-auto my-3 mx-auto">
@@ -68,7 +68,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <strong class="mb-3" id="user_recovery_email">A recovery code has been sent to your email</strong>
                         <div class="form-group">
-                              <input autocomplete="on" type="text" required class="form-control" id="inputRecoveryCode" placeholder="Enter recovery code" name="recoveryCode" length="8" pattern="[a-z0-9A-Z]{8}">
+                              <input autocomplete="on" type="text" required class="form-control" id="inputRecoveryCode" placeholder="Enter recovery code" name="recoveryCode">
                         </div>
                         <div class="d-flex align-items-center mt-3">
                               <p class="mb-0">Didn't receive the code?</p>
@@ -98,11 +98,11 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group">
                               <label for="inputNewPassword" class="fs-4 fw-medium">New password</label>
-                              <input autocomplete="on" type="password" required class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$">
+                              <input autocomplete="on" type="password" required class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputConfirmNewPassword" class="fs-4 fw-medium">Confirm new password</label>
-                              <input autocomplete="on" type="password" required class="form-control" id="inputConfirmNewPassword" placeholder="Confirm new password" name="confirmNewPassword" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$">
+                              <input autocomplete="on" type="password" required class="form-control" id="inputConfirmNewPassword" placeholder="Confirm new password" name="confirmNewPassword">
                         </div>
                         <button type="button" class="btn btn-secondary btn-sm mx-auto mt-3" onclick="changeEmail()">Change email</button>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>

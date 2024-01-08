@@ -24,44 +24,39 @@ function signUpHandler(event)
       if (name === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Name field is empty!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputName');
+            elem.setCustomValidity("Name field is empty!");
+            elem.reportValidity();
       }
 
       if (date === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Date of birth field is empty!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputDate');
+            elem.setCustomValidity("Date of birth field is empty!");
+            elem.reportValidity();
       }
       else if (!isDobValid(date) && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Date of birth invalid!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputDate');
+            elem.setCustomValidity("Date of birth invalid!");
+            elem.reportValidity();
       }
       else if (!isAgeValid(date) && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'You must be at least 18 years old to sign up!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputDate');
+            elem.setCustomValidity("You must be at least 18 years old to sign up!");
+            elem.reportValidity();
       }
 
       if (phone === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Phone number field is empty!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputPhone');
+            elem.setCustomValidity("Phone number field is empty!");
+            elem.reportValidity();
       }
       else
       {
@@ -69,10 +64,9 @@ function signUpHandler(event)
             if (!regex.test(phone) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Phone number format invalid!';
-                  const error_message = document.getElementById('signup_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputPhone');
+                  elem.setCustomValidity("Phone number format invalid!");
+                  elem.reportValidity();
             }
       }
 
@@ -82,20 +76,18 @@ function signUpHandler(event)
             if (!regex.test(card) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Card number format invalid!';
-                  const error_message = document.getElementById('signup_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputCard');
+                  elem.setCustomValidity("Card number format invalid!");
+                  elem.reportValidity();
             }
       }
 
       if (email === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Email field is empty!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputEmail');
+            elem.setCustomValidity("Email field is empty!");
+            elem.reportValidity();
       }
       else
       {
@@ -103,28 +95,25 @@ function signUpHandler(event)
             if (!regex.test(email) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Email format invalid!';
-                  const error_message = document.getElementById('signup_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputEmail');
+                  elem.setCustomValidity("Email format invalid!");
+                  elem.reportValidity();
             }
       }
 
       if (password === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Password field is empty!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputPassword');
+            elem.setCustomValidity("Password field is empty!");
+            elem.reportValidity();
       }
       else if (password.length < 8 && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Password must be at least 8 characters!';
-            const error_message = document.getElementById('signup_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputPassword');
+            elem.setCustomValidity("Password must be at least 8 characters!");
+            elem.reportValidity();
       }
       else
       {
@@ -132,10 +121,9 @@ function signUpHandler(event)
             if (!regex.test(password) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!';
-                  const error_message = document.getElementById('signup_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputPassword');
+                  elem.setCustomValidity("Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  elem.reportValidity();
             }
       }
 
@@ -145,10 +133,9 @@ function signUpHandler(event)
             if (!regex.test(refEmail) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Referrer email format invalid!';
-                  const error_message = document.getElementById('signup_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputRefEmail');
+                  elem.setCustomValidity("Referrer email format invalid!");
+                  elem.reportValidity();
             }
       }
 

@@ -45,11 +45,11 @@ if (check_session()) {
                         </div>
                         <div class="form-group">
                               <label for="inputEmail" class="fs-4 fw-medium">Email</label>
-                              <input autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email" pattern='[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}'>
+                              <input autocomplete="on" type="email" required class="form-control" id="inputEmail" placeholder="Enter email" name="email">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputPassword" class="fs-4 fw-medium">Password</label>
-                              <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password" minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$">
+                              <input autocomplete="on" type="password" required class="form-control" id="inputPassword" placeholder="Enter password" name="password">
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="recovery">Forgot password?</a>
                         <div class="mt-auto my-3 mx-auto">

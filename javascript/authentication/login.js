@@ -10,10 +10,9 @@ function loginHandler(e, user_type)
       if (email === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Email field is empty!';
-            const error_message = document.getElementById('login_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputEmail');
+            elem.setCustomValidity("Email field is empty!");
+            elem.reportValidity();
       }
       else
       {
@@ -21,28 +20,25 @@ function loginHandler(e, user_type)
             if (!regex.test(email) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Email format invalid!';
-                  const error_message = document.getElementById('login_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputEmail');
+                  elem.setCustomValidity("Email format invalid!");
+                  elem.reportValidity();
             }
       }
 
       if (password === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Password field is empty!';
-            const error_message = document.getElementById('login_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputPassword');
+            elem.setCustomValidity("Password format invalid!");
+            elem.reportValidity();
       }
       else if (password.length < 8 && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content');
-            p_elem.innerHTML = 'Password must be at least 8 characters!';
-            const error_message = document.getElementById('login_fail');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputPassword');
+            elem.setCustomValidity("Password must be at least 8 characters!");
+            elem.reportValidity();
       }
       else
       {
@@ -50,10 +46,9 @@ function loginHandler(e, user_type)
             if (!regex.test(password) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!';
-                  const error_message = document.getElementById('login_fail');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputPassword');
+                  elem.setCustomValidity("Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  elem.reportValidity();
             }
       }
 

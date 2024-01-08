@@ -20,10 +20,9 @@ function enterEmail(e, user_type)
       if (email === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content_1');
-            p_elem.innerHTML = 'Email field is empty!';
-            const error_message = document.getElementById('recovery_fail_1');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputEmail');
+            elem.setCustomValidity("Email field is empty!");
+            elem.reportValidity();
       }
       else
       {
@@ -31,10 +30,9 @@ function enterEmail(e, user_type)
             if (!regex.test(email) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content_1');
-                  p_elem.innerHTML = 'Email format invalid!';
-                  const error_message = document.getElementById('recovery_fail_1');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputEmail');
+                  elem.setCustomValidity("Email format invalid!");
+                  elem.reportValidity();
             }
       }
 
@@ -197,10 +195,9 @@ function enterCode(e)
       if (code === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'Recovery code field is empty!';
-            const error_message = document.getElementById('recovery_fail_2');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputRecoveryCode');
+            elem.setCustomValidity("Recovery code field is empty!");
+            elem.reportValidity();
       }
       else
       {
@@ -208,10 +205,9 @@ function enterCode(e)
             if (!regex.test(code) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Recovery code format invalid!';
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputRecoveryCode');
+                  elem.setCustomValidity("Recovery code format invalid!");
+                  elem.reportValidity();
             }
       }
 
@@ -295,18 +291,16 @@ function changePassword(e, user_type)
       if (password === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = 'New password field is empty!';
-            const error_message = document.getElementById('recovery_fail_3');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputNewPassword');
+            elem.setCustomValidity("New password field is empty!");
+            elem.reportValidity();
       }
       else if (password.length < 8 && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = 'New password must be at least 8 characters!';
-            const error_message = document.getElementById('recovery_fail_3');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputNewPassword');
+            elem.setCustomValidity("New password must be at least 8 characters!");
+            elem.reportValidity();
       }
       else
       {
@@ -314,28 +308,25 @@ function changePassword(e, user_type)
             if (!regex.test(password) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content_3');
-                  p_elem.innerHTML = 'New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!';
-                  const error_message = document.getElementById('recovery_fail_3');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputNewPassword');
+                  elem.setCustomValidity("New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  elem.reportValidity();
             }
       }
 
       if (confirmPassword === '' && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = 'Confirm new password field is empty!';
-            const error_message = document.getElementById('recovery_fail_3');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputConfirmNewPassword');
+            elem.setCustomValidity("Confirm new password field is empty!");
+            elem.reportValidity();
       }
       else if (confirmPassword.length < 8 && isOK)
       {
             isOK = false;
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = 'Confirm password must be at least 8 characters!';
-            const error_message = document.getElementById('recovery_fail_3');
-            error_message.style.display = 'flex';
+            const elem = document.getElementById('inputConfirmNewPassword');
+            elem.setCustomValidity("Confirm password must be at least 8 characters!");
+            elem.reportValidity();
       }
       else
       {
@@ -343,10 +334,9 @@ function changePassword(e, user_type)
             if (!regex.test(confirmPassword) && isOK)
             {
                   isOK = false;
-                  const p_elem = document.getElementById('error_message_content_3');
-                  p_elem.innerHTML = 'Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!';
-                  const error_message = document.getElementById('recovery_fail_3');
-                  error_message.style.display = 'flex';
+                  const elem = document.getElementById('inputConfirmNewPassword');
+                  elem.setCustomValidity("Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  elem.reportValidity();
             }
       }
 
