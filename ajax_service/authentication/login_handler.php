@@ -33,13 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   // Valid user type
-                  if(!$user_type)
-                  {
+                  if (!$user_type) {
                         echo json_encode(['error' => 'No user type provided!']);
                         exit;
-                  }
-                  else if($user_type!=='admin'|| $user_type!=='customer')
-                  {
+                  } else if ($user_type !== 'admin' && $user_type !== 'customer') {
                         echo json_encode(['error' => 'Invalid user type!']);
                         exit;
                   }
