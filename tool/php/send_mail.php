@@ -52,8 +52,8 @@ function change_password_mail($email, $user_type)
 
       $mail->Subject = 'Password changed!';
       if ($user_type === 'customer') {
-            $mail->Body    = "Your password has been changed successfully. If you did not perform this action, contact support immediately!";
-            $mail->AltBody = "Your password has been changed successfully. If you did not perform this action, contact support immediately!";
+            $mail->Body    = "Your password has been changed successfully. If you did not perform this action, contact an admin immediately!";
+            $mail->AltBody = "Your password has been changed successfully. If you did not perform this action, contact an admin immediately!";
       } else if ($user_type === 'admin') {
             $mail->Body    = "Your password has been changed successfully. If you did not perform this action, contact the database administrator immediately!";
             $mail->AltBody = "Your password has been changed successfully. If you did not perform this action, contact the database administrator immediately!";
