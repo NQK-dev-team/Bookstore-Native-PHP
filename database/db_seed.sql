@@ -15,9 +15,9 @@ INSERT INTO admin (`id`) VALUES ('ADMIN2');
 insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,0,1142369875),('CUSTOMER2','CUSTOMER1',0,1245369870),('CUSTOMER3','CUSTOMER1',0,4100335874);
 
 -- Insert `book` table
-INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK1', 'The Joy of PHP', '1', ' 978494267353', '3', '4', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-13', '1');
-INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK2', 'Models: Attract Women Through Honesty', '3', ' B00C93Q5KK', '13', '4.7', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-30', '1');
-INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK3', 'Lord of Goblins, Vol. 1 Definitive Edition (Lord of Goblins', '1', ' 979889930075', '3', '4.5', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2023-6-8', '1');
+INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK1', 'The Joy of PHP', '1', '978494267353', '3', '4', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-13', '1');
+INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK2', 'Models: Attract Women Through Honesty', '3', '978494268253', '13', '4.7', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2012-12-30', '1');
+INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK3', 'Lord of Goblins, Vol. 1 Definitive Edition (Lord of Goblins', '1', '979889930075', '3', '4.5', 'CreateSpace Independent Publishing Platform', 'https://en.wikipedia.org/wiki/CreateSpace', '2023-6-8', '1');
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK4', 'The Hitchhiker`s Guide to the Galaxy', '50', '9780575096925', '3', '4.2', 'Pan Macmillan', 'https://www.panmacmillan.com/', '1979-10-12', '1');
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK5', 'The Time Machine', 1, '9780141975863', '12', 4.3, 'Penguin Classics', 'https://www.penguin.com/', '1895-01-01', '1');
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publisherLink`, `publishDate`, `status`) VALUES ('BOOK6', 'Pride and Prejudice', 3, '9780143424680', '12', 4.6, 'Penguin Classics', 'https://www.penguin.com/', '1813-01-01', '1');
@@ -50,7 +50,7 @@ INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('AUTHOR3', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
 
 -- Insert `customerorder` table
-INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) VALUES ('ORDER1', '2024-06-15 09:30:00', '1', '300000.546', '10', 'CUSTOMER1');
+INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) VALUES ('ORDER1', '2023-06-15 09:30:00', '1', '300000.546', '10', 'CUSTOMER1');
 
 -- Insert `eventdiscount` table
 INSERT INTO `bookstore`.`eventdiscount` (`id`, `discount`, `startDate`, `endDate`, `applyForAll`) VALUES ('EVENT1', '10', '2023-12-31', '2024-1-31', '1');
