@@ -64,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
-                  echo $result['password'];
                   if (!verify_password($password, $result['password']))
                         echo json_encode(['error' => 'Email or password incorrect!']);
                   else {
