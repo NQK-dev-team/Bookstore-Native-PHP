@@ -23,7 +23,8 @@ create table appUser(
     phone varchar(10) unique,
     email varchar(100) unique,
     password varchar(255) not null,
-    check(length(password)>=8)
+    check(length(password)>=8),
+    imagePath text
 );
 
 create table admin(
@@ -52,7 +53,8 @@ create table book(
     publisher varchar(100) not null,
     publisherLink text,
     publishDate date not null,
-    status boolean not null default true -- true means the book is purchasable, false means not
+    status boolean not null default true, -- true means the book is purchasable, false means not
+    imagePath text
 );
 
 create table author(

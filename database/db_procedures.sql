@@ -17,7 +17,7 @@ begin
     declare refID varchar(20) default null;
     select cast(substr(id,9) as unsigned) into counter from customer ORDER BY cast(substr(id,9) as unsigned) DESC LIMIT 1;
     set counter:=counter+1;
-    insert into appUser values(concat('CUSTOMER',counter),name,dob,address,phone,email,password);
+    insert into appUser values(concat('CUSTOMER',counter),name,dob,address,phone,email,password,null);
     if refEmail is not null then
 		select customer.id into refID from customer join appUser on appUser.id=customer.id where appUser.email=refEmail;
     end if;
