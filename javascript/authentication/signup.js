@@ -302,5 +302,8 @@ function checkAge()
                   elem2.style.display = 'flex';
       }
       else
+      {
+            elem2.style.display = 'none';
             elem1.style.display = 'flex';
+      }
 }
