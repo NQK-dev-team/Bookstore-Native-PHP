@@ -142,6 +142,8 @@ function signUpHandler(event)
       if (isOK)
       {
             $('*').addClass('wait');
+            $('button, input').prop('disabled', true);
+            $('a').addClass('disable_link');
             $.ajax({
                   url: '/ajax_service/authentication/signup_handler.php',
                   method: 'POST',
@@ -150,6 +152,8 @@ function signUpHandler(event)
                   success: function (data)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
                         if (data.error)
                         {
                               const p_elem = document.getElementById('error_message_content');
@@ -170,6 +174,8 @@ function signUpHandler(event)
                   error: function (err)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
                         if (err.status === 500)
                         {
                               const p_elem = document.getElementById('error_message_content');

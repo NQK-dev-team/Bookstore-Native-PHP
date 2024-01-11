@@ -39,6 +39,9 @@ function enterEmail(e, user_type)
       if (isOK)
       {
             $('*').addClass('wait');
+            $('button, input').prop('disabled', true);
+            $('a').addClass('disable_link');
+
             $.ajax({
                   url: '/ajax_service/authentication/get_recovery_code.php',
                   method: 'POST',
@@ -47,6 +50,9 @@ function enterEmail(e, user_type)
                   success: function (data)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
+
                         if (data.error)
                         {
                               const p_elem = document.getElementById('error_message_content_1');
@@ -70,6 +76,9 @@ function enterEmail(e, user_type)
                   error: function (err)
                   {
                         $('*').removeClass('wait');
+                        $('button, a, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
+
                         console.error(err);
                         if (err.status === 500)
                         {
@@ -117,6 +126,8 @@ function requestRecoveryCode()
       if (isOK)
       {
             $('*').addClass('wait');
+            $('button, input').prop('disabled', true);
+            $('a').addClass('disable_link');
 
             $.ajax({
                   url: '/ajax_service/authentication/request_recovery_code.php',
@@ -126,6 +137,8 @@ function requestRecoveryCode()
                   success: function (data)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
                         if (data.error)
                         {
                               const p_elem = document.getElementById('error_message_content_2');
@@ -144,6 +157,8 @@ function requestRecoveryCode()
                   error: function (err)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
                         console.error(err);
                         if (err.status === 500)
                         {
@@ -352,6 +367,8 @@ function changePassword(e, user_type)
       if (isOK)
       {
             $('*').addClass('wait');
+            $('button, input').prop('disabled', true);
+            $('a').addClass('disable_link');
 
             $.ajax({
                   url: '/ajax_service/authentication/change_password.php',
@@ -361,6 +378,9 @@ function changePassword(e, user_type)
                   success: function (data)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
+
                         if (data.error)
                         {
                               const p_elem = document.getElementById('error_message_content_3');
@@ -381,6 +401,9 @@ function changePassword(e, user_type)
                   error: function (err)
                   {
                         $('*').removeClass('wait');
+                        $('button, input').prop('disabled', false);
+                        $('a').removeClass('disable_link');
+
                         console.error(err);
                         if (err.status === 500)
                         {
