@@ -63,6 +63,7 @@ if (check_session()) {
       ?>
       <script src="/javascript/admin/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/input_validity.js"></script>
       <script src="/javascript/authentication/login.js"></script>
 </body>
 

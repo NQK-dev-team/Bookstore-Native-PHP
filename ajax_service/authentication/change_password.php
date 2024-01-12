@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $email = sanitize($_POST['email']);
                   $password = sanitize($_POST['password']);
                   $confirmPassword = sanitize($_POST['confirmPassword']);
-                  $user_type= sanitize($_POST['type']);
+                  $user_type = sanitize($_POST['type']);
 
                   if (!$email) {
                         echo json_encode(['error' => 'No email address provided!']);
@@ -54,6 +54,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if ($user_type !== 'admin' && $user_type !== 'customer') {
                         echo json_encode(['error' => 'Invalid user type!']);
+                        exit;
+                  }
+
+                  if (!isset($_SESSION['recovery_email'], $_SESSION['recovery_state'], $_SESSION['recovery_state_set_time']) || !$_SESSION['recovery_email'] || !$_SESSION['recovery_state'] || !$_SESSION['recovery_state_set_time']) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Server can\'t find information about client\'s recovery request!']);
+                        exit;
+                  } else if ($_SESSION['recovery_state']) {
+                        if ($email !== $_SESSION['recovery_email']) {
+                              echo json_encode(['error' => 'Recovery email not matched!']);
+                              exit;
+                        }
+
+                        $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
+
+                        if (abs($interval) > 300) {
+                              echo json_encode(['error' => 'Password changing time exceeds 5 minutes time limit, please refresh the page and try again!']);
+                              exit;
+                        }
+                  } else {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Server encountered an unexpected error!']);
                         exit;
                   }
 

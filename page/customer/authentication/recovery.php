@@ -134,6 +134,7 @@ if (check_session()) header('Location: /');
       ?>
       <script src="/javascript/customer/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/input_validity.js"></script>
       <script src="/javascript/authentication/recovery.js"></script>
 </body>
 
