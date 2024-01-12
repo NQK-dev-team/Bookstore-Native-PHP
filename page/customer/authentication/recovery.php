@@ -104,7 +104,7 @@ if (check_session()) header('Location: /');
                               <label for="inputConfirmNewPassword" class="fs-4 fw-medium">Confirm new password</label>
                               <input autocomplete="on" type="password" class="form-control" id="inputConfirmNewPassword" placeholder="Confirm new password" name="confirmNewPassword">
                         </div>
-                        <button type="button" class="btn btn-secondary btn-sm mx-auto mt-3" onclick="changeEmail()">Change email</button>
+                        <button type="button" class="btn btn-secondary btn-sm mx-auto mt-3" onclick="backToGetCode()">Back to recovery code</button>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
                         <div class="mt-auto my-3 mx-auto">
                               <button type="submit" class="btn btn-primary">Submit</button>

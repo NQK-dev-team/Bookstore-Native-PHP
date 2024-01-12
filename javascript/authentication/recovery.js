@@ -436,3 +436,34 @@ function changeEmail()
 
       $('input').val('');
 }
+
+function backToGetCode()
+{
+      {
+            const p_elem = document.getElementById('error_message_content_1');
+            p_elem.innerHTML = '';
+            const error_message = document.getElementById('recovery_fail_1');
+            error_message.style.display = 'none';
+            $('#recovery_email_form').css('display', 'none');
+      }
+
+      {
+            const p_elem = document.getElementById('error_message_content_3');
+            p_elem.innerHTML = '';
+            const error_message = document.getElementById('recovery_fail_3');
+            error_message.style.display = 'none';
+            $('#recovery_password_form').css('display', 'none');
+            $('#recovery_password_form :input').val('');
+      }
+
+      {
+            const p_elem = document.getElementById('error_message_content_2');
+            p_elem.innerHTML = '';
+            const error_message = document.getElementById('recovery_fail_2');
+            error_message.style.display = 'none';
+            $('#recovery_code_form').css('display', 'flex');
+            $('#recovery_code_form :input').val('');
+      }
+
+      requestRecoveryCode();
+}
