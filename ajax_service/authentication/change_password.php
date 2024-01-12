@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'No new password provided!']);
                         exit;
                   } else if (strlen($password) < 8) {
-                        echo json_encode(['error' => 'New password must be at least 8 characters!']);
+                        echo json_encode(['error' => 'New password must be at least 8 characters long!']);
                         exit;
                   } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password)) {
                         echo json_encode(['error' => 'New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'No confirm password provided!']);
                         exit;
                   } else if (strlen($confirmPassword) < 8) {
-                        echo json_encode(['error' => 'Confirm password must be at least 8 characters!']);
+                        echo json_encode(['error' => 'Confirm password must be at least 8 characters long!']);
                         exit;
                   } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $confirmPassword)) {
                         echo json_encode(['error' => 'Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);

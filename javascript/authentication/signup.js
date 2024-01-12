@@ -22,39 +22,29 @@ function signUpHandler(event)
 
       if (name === '')
       {
-            const elem = document.getElementById('inputName');
-            elem.setCustomValidity("Name field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputName'), "Name field is empty!");
             return;
       }
 
       if (date === '')
       {
-            const elem = document.getElementById('inputDate');
-            elem.setCustomValidity("Date of birth field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputDate'), "Date of birth field is empty!");
             return;
       }
       else if (!isDobValid(date))
       {
-            const elem = document.getElementById('inputDate');
-            elem.setCustomValidity("Date of birth invalid!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputDate'), "Date of birth invalid!");
             return;
       }
       else if (!isAgeValid(date))
       {
-            const elem = document.getElementById('inputDate');
-            elem.setCustomValidity("You must be at least 18 years old to sign up!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputDate'), "You must be at least 18 years old to sign up!");
             return;
       }
 
       if (phone === '')
       {
-            const elem = document.getElementById('inputPhone');
-            elem.setCustomValidity("Phone number field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputPhone'), "Phone number field is empty!");
             return;
       }
       else
@@ -62,9 +52,7 @@ function signUpHandler(event)
             const regex = /^[0-9]{10}$/;
             if (!regex.test(phone))
             {
-                  const elem = document.getElementById('inputPhone');
-                  elem.setCustomValidity("Phone number format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputPhone'), "Phone number format invalid!");
                   return;
             }
       }
@@ -74,18 +62,14 @@ function signUpHandler(event)
             const regex = /^[0-9]{8,16}$/;
             if (!regex.test(card))
             {
-                  const elem = document.getElementById('inputCard');
-                  elem.setCustomValidity("Card number format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputCard'), "Card number format invalid!");
                   return;
             }
       }
 
       if (email === '')
       {
-            const elem = document.getElementById('inputEmail');
-            elem.setCustomValidity("Email field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputEmail'), "Email field is empty!");
             return;
       }
       else
@@ -93,25 +77,19 @@ function signUpHandler(event)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(email))
             {
-                  const elem = document.getElementById('inputEmail');
-                  elem.setCustomValidity("Email format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputEmail'), "Email format invalid!");
                   return;
             }
       }
 
       if (password === '')
       {
-            const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputPassword'), "Password field is empty!");
             return;
       }
       else if (password.length < 8)
       {
-            const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password must be at least 8 characters!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputPassword'), "Password must be at least 8 characters long!");
             return;
       }
       else
@@ -119,9 +97,7 @@ function signUpHandler(event)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(password))
             {
-                  const elem = document.getElementById('inputPassword');
-                  elem.setCustomValidity("Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputPassword'), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }
@@ -131,9 +107,7 @@ function signUpHandler(event)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(refEmail))
             {
-                  const elem = document.getElementById('inputRefEmail');
-                  elem.setCustomValidity("Referrer email format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputRefEmail'), "Referrer email format invalid!");
                   return;
             }
       }

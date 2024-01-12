@@ -17,9 +17,7 @@ function enterEmail(e, user_type)
 
       if (email === '')
       {
-            const elem = document.getElementById('inputEmail');
-            elem.setCustomValidity("Email field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputEmail'), "Email field is empty!");
             return;
       }
       else
@@ -27,9 +25,7 @@ function enterEmail(e, user_type)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(email))
             {
-                  const elem = document.getElementById('inputEmail');
-                  elem.setCustomValidity("Email format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputEmail'), "Email format invalid!");
                   return;
             }
       }
@@ -198,9 +194,7 @@ function enterCode(e)
 
       if (code === '')
       {
-            const elem = document.getElementById('inputRecoveryCode');
-            elem.setCustomValidity("Recovery code field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputRecoveryCode'), "Recovery code field is empty!");
             return;
       }
       else
@@ -208,9 +202,7 @@ function enterCode(e)
             const regex = /^[a-zA-Z0-9]{8}$/;
             if (!regex.test(code))
             {
-                  const elem = document.getElementById('inputRecoveryCode');
-                  elem.setCustomValidity("Recovery code format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputRecoveryCode'), "Recovery code format invalid!");
                   return;
             }
       }
@@ -291,16 +283,12 @@ function changePassword(e, user_type)
 
       if (password === '')
       {
-            const elem = document.getElementById('inputNewPassword');
-            elem.setCustomValidity("New password field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputNewPassword'), "New password field is empty!");
             return;
       }
       else if (password.length < 8)
       {
-            const elem = document.getElementById('inputNewPassword');
-            elem.setCustomValidity("New password must be at least 8 characters!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputNewPassword'), "New password must be at least 8 characters long!");
             return;
       }
       else
@@ -308,25 +296,19 @@ function changePassword(e, user_type)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(password))
             {
-                  const elem = document.getElementById('inputNewPassword');
-                  elem.setCustomValidity("New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputNewPassword'), "New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }
 
       if (confirmPassword === '')
       {
-            const elem = document.getElementById('inputConfirmNewPassword');
-            elem.setCustomValidity("Confirm new password field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputConfirmNewPassword'), "Confirm new password field is empty!");
             return;
       }
       else if (confirmPassword.length < 8)
       {
-            const elem = document.getElementById('inputConfirmNewPassword');
-            elem.setCustomValidity("Confirm password must be at least 8 characters!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputConfirmNewPassword'), "Confirm password must be at least 8 characters long!");
             return;
       }
       else
@@ -334,9 +316,7 @@ function changePassword(e, user_type)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(confirmPassword))
             {
-                  const elem = document.getElementById('inputConfirmNewPassword');
-                  elem.setCustomValidity("Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputConfirmNewPassword'), "Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }

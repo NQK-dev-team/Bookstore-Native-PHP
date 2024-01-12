@@ -1,7 +1,14 @@
-function clearCustomValidity(elem)
+function clearAllCustomValidity()
 {
-      setTimeout(() =>
+      console.log('called');
+      $('input').each(function (index, element)
       {
-            elem.setCustomValidity('');
-      }, 1000);
+            element.setCustomValidity('');
+      });
+}
+
+function reportCustomValidity(elem, message)
+{
+      elem.setCustomValidity(message);
+      elem.reportValidity();
 }

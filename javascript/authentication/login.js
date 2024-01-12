@@ -1,5 +1,6 @@
 function loginHandler(e, user_type)
 {
+      console.log(user_type);
       e.preventDefault();
 
       const email = sanitize(document.getElementById('inputEmail').value);
@@ -7,9 +8,7 @@ function loginHandler(e, user_type)
 
       if (email === '')
       {
-            const elem = document.getElementById('inputEmail');
-            elem.setCustomValidity("Email field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputEmail'), "Email field is empty!");
             return;
       }
       else
@@ -17,25 +16,19 @@ function loginHandler(e, user_type)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(email))
             {
-                  const elem = document.getElementById('inputEmail');
-                  elem.setCustomValidity("Email format invalid!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputEmail'), "Email format invalid!");
                   return;
             }
       }
 
       if (password === '')
       {
-            const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password field is empty!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputPassword'), "Password field is empty!");
             return;
       }
       else if (password.length < 8)
       {
-            const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password must be at least 8 characters!");
-            clearCustomValidity(elem);
+            reportCustomValidity($('#inputPassword'), "Password must be at least 8 characters long!");
             return;
       }
       else
@@ -43,9 +36,7 @@ function loginHandler(e, user_type)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(password))
             {
-                  const elem = document.getElementById('inputPassword');
-                  elem.setCustomValidity("Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  clearCustomValidity(elem);
+                  reportCustomValidity($('#inputPassword'), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }
