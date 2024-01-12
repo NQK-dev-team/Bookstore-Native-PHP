@@ -1,6 +1,5 @@
 function loginHandler(e, user_type)
 {
-      console.log(user_type);
       e.preventDefault();
 
       const email = sanitize(document.getElementById('inputEmail').value);
