@@ -12,6 +12,6 @@ $(document).ready(() =>
             $('#profile_nav').addClass('text-primary');
       else if (location.includes('/authentication') && !location.includes('recovery') && !location.includes('sign_up'))
             $('#signin_nav').addClass('text-primary');
-      else if (location.includes('/'))
+      else if (location.includes('/') && !location.includes('recovery') && !location.includes('sign_up'))
             $('#home_nav').addClass('text-primary');
 });
