@@ -7,7 +7,7 @@ function loginHandler(e, user_type)
 
       if (email === '')
       {
-            reportCustomValidity($('#inputEmail'), "Email field is empty!");
+            reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
       }
       else
@@ -15,19 +15,19 @@ function loginHandler(e, user_type)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(email))
             {
-                  reportCustomValidity($('#inputEmail'), "Email format invalid!");
+                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
             }
       }
 
       if (password === '')
       {
-            reportCustomValidity($('#inputPassword'), "Password field is empty!");
+            reportCustomValidity($('#inputPassword').get(0), "Password field is empty!");
             return;
       }
       else if (password.length < 8)
       {
-            reportCustomValidity($('#inputPassword'), "Password must be at least 8 characters long!");
+            reportCustomValidity($('#inputPassword').get(0), "Password must be at least 8 characters long!");
             return;
       }
       else
@@ -35,7 +35,7 @@ function loginHandler(e, user_type)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(password))
             {
-                  reportCustomValidity($('#inputPassword'), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }

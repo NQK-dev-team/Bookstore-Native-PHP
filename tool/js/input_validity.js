@@ -1,6 +1,5 @@
 function clearAllCustomValidity()
 {
-      console.log('called');
       $('input').each(function (index, element)
       {
             element.setCustomValidity('');

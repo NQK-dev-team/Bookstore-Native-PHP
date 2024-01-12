@@ -22,29 +22,29 @@ function signUpHandler(event)
 
       if (name === '')
       {
-            reportCustomValidity($('#inputName'), "Name field is empty!");
+            reportCustomValidity($('#inputName').get(0), "Name field is empty!");
             return;
       }
 
       if (date === '')
       {
-            reportCustomValidity($('#inputDate'), "Date of birth field is empty!");
+            reportCustomValidity($('#inputDate').get(0), "Date of birth field is empty!");
             return;
       }
       else if (!isDobValid(date))
       {
-            reportCustomValidity($('#inputDate'), "Date of birth invalid!");
+            reportCustomValidity($('#inputDate').get(0), "Date of birth invalid!");
             return;
       }
       else if (!isAgeValid(date))
       {
-            reportCustomValidity($('#inputDate'), "You must be at least 18 years old to sign up!");
+            reportCustomValidity($('#inputDate').get(0), "You must be at least 18 years old to sign up!");
             return;
       }
 
       if (phone === '')
       {
-            reportCustomValidity($('#inputPhone'), "Phone number field is empty!");
+            reportCustomValidity($('#inputPhone').get(0), "Phone number field is empty!");
             return;
       }
       else
@@ -52,7 +52,7 @@ function signUpHandler(event)
             const regex = /^[0-9]{10}$/;
             if (!regex.test(phone))
             {
-                  reportCustomValidity($('#inputPhone'), "Phone number format invalid!");
+                  reportCustomValidity($('#inputPhone').get(0), "Phone number format invalid!");
                   return;
             }
       }
@@ -62,14 +62,14 @@ function signUpHandler(event)
             const regex = /^[0-9]{8,16}$/;
             if (!regex.test(card))
             {
-                  reportCustomValidity($('#inputCard'), "Card number format invalid!");
+                  reportCustomValidity($('#inputCard').get(0), "Card number format invalid!");
                   return;
             }
       }
 
       if (email === '')
       {
-            reportCustomValidity($('#inputEmail'), "Email field is empty!");
+            reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
       }
       else
@@ -77,19 +77,19 @@ function signUpHandler(event)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(email))
             {
-                  reportCustomValidity($('#inputEmail'), "Email format invalid!");
+                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
             }
       }
 
       if (password === '')
       {
-            reportCustomValidity($('#inputPassword'), "Password field is empty!");
+            reportCustomValidity($('#inputPassword').get(0), "Password field is empty!");
             return;
       }
       else if (password.length < 8)
       {
-            reportCustomValidity($('#inputPassword'), "Password must be at least 8 characters long!");
+            reportCustomValidity($('#inputPassword').get(0), "Password must be at least 8 characters long!");
             return;
       }
       else
@@ -97,7 +97,7 @@ function signUpHandler(event)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(password))
             {
-                  reportCustomValidity($('#inputPassword'), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }
@@ -107,7 +107,7 @@ function signUpHandler(event)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(refEmail))
             {
-                  reportCustomValidity($('#inputRefEmail'), "Referrer email format invalid!");
+                  reportCustomValidity($('#inputRefEmail').get(0), "Referrer email format invalid!");
                   return;
             }
       }

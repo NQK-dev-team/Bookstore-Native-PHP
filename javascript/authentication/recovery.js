@@ -17,7 +17,7 @@ function enterEmail(e, user_type)
 
       if (email === '')
       {
-            reportCustomValidity($('#inputEmail'), "Email field is empty!");
+            reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
       }
       else
@@ -25,7 +25,7 @@ function enterEmail(e, user_type)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(email))
             {
-                  reportCustomValidity($('#inputEmail'), "Email format invalid!");
+                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
             }
       }
@@ -194,7 +194,7 @@ function enterCode(e)
 
       if (code === '')
       {
-            reportCustomValidity($('#inputRecoveryCode'), "Recovery code field is empty!");
+            reportCustomValidity($('#inputRecoveryCode').get(0), "Recovery code field is empty!");
             return;
       }
       else
@@ -202,7 +202,7 @@ function enterCode(e)
             const regex = /^[a-zA-Z0-9]{8}$/;
             if (!regex.test(code))
             {
-                  reportCustomValidity($('#inputRecoveryCode'), "Recovery code format invalid!");
+                  reportCustomValidity($('#inputRecoveryCode').get(0), "Recovery code format invalid!");
                   return;
             }
       }
@@ -283,12 +283,12 @@ function changePassword(e, user_type)
 
       if (password === '')
       {
-            reportCustomValidity($('#inputNewPassword'), "New password field is empty!");
+            reportCustomValidity($('#inputNewPassword').get(0), "New password field is empty!");
             return;
       }
       else if (password.length < 8)
       {
-            reportCustomValidity($('#inputNewPassword'), "New password must be at least 8 characters long!");
+            reportCustomValidity($('#inputNewPassword').get(0), "New password must be at least 8 characters long!");
             return;
       }
       else
@@ -296,19 +296,19 @@ function changePassword(e, user_type)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(password))
             {
-                  reportCustomValidity($('#inputNewPassword'), "New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  reportCustomValidity($('#inputNewPassword').get(0), "New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }
 
       if (confirmPassword === '')
       {
-            reportCustomValidity($('#inputConfirmNewPassword'), "Confirm new password field is empty!");
+            reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm new password field is empty!");
             return;
       }
       else if (confirmPassword.length < 8)
       {
-            reportCustomValidity($('#inputConfirmNewPassword'), "Confirm password must be at least 8 characters long!");
+            reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm password must be at least 8 characters long!");
             return;
       }
       else
@@ -316,7 +316,7 @@ function changePassword(e, user_type)
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
             if (!regex.test(confirmPassword))
             {
-                  reportCustomValidity($('#inputConfirmNewPassword'), "Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
                   return;
             }
       }
