@@ -15,7 +15,7 @@ if (check_session()) header('Location: /');
       <link rel="stylesheet" href="/css/preset_style.css">
 
       <meta name="author" content="Nghia Duong">
-      <meta name="description" content="Sign up as a customer to use NQK bookstore's services">
+      <meta name="description" content="Sign up as a new customer to use NQK bookstore's services">
       <title>Sign up</title>
       <link rel="stylesheet" href="/css/authentication/style.css">
 </head>
