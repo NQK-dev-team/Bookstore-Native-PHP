@@ -2,10 +2,10 @@ RewriteEngine On
 
 ## Routing URLs
 # URLs for admin
-RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session|image|tool)/ [NC]  
+RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session|image|tool|data|vendor)/ [NC]  
 RewriteRule ^admin(/.*)*$ /page/admin/$1 [NC,L]   
 # URLs for normal customer
-RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session|image|tool)/ [NC]
+RewriteCond %{REQUEST_URI} !^/(page|config|ajax_service|css|error|javascript|layout|cert|head_element|log|database|session|image|tool|data|vendor)/ [NC]
 RewriteRule ^(.*)$ /page/customer/$1 [NC,L]   
 
 # Remove .html extension

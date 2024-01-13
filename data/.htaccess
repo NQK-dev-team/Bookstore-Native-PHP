@@ -1,0 +1,14 @@
+RewriteEngine On
+
+RewriteBase /data/
+
+# If the request is not for an existing file or directory, send a 404 response
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ - [R=404,L]
+
+# Rewrite the request to index.php for existing files or directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ index.php [L]
+RewriteRule ^ index.php [L]

@@ -8,7 +8,7 @@ function check_session()
             // Start or resume session
             session_start();
       }
-      return session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']);
+      return session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']) && ($_SESSION['type'] === 'admin' || $_SESSION['type'] === 'customer');
 }
 
 ?>

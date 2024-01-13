@@ -128,11 +128,6 @@ ServerAlias https://www.test.bookstore.com
         Require all denied
     </Directory>
 
-    <Directory "C:\example_path\data">
-        AllowOverride none
-        Require all denied
-    </Directory>
-
     <Files "composer.*">
         Require all denied
     </Files>
