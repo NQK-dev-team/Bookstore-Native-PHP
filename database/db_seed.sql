@@ -118,3 +118,22 @@ INSERT INTO `bookstore`.`eventdiscount` (`id`, `discount`, `startDate`, `endDate
 
 -- Insert `eventapply` table
 INSERT INTO `bookstore`.`eventapply` (`eventID`, `bookID`) VALUES ('EVENT1', 'BOOK1');
+
+-- Insert `category`
+INSERT INTO `bookstore`.`category` (`name`) VALUES
+  ('fiction'),
+  ('fantasy'),
+  ('mystery'),
+  ('thriller'),
+  ('romance'),
+  ('historical fiction'),
+  ('science fiction'),
+  ('nonfiction'),
+  ('biography'),
+  ('memoir'),
+  ('history'),
+  ('self-help'),
+  ('business'),
+  ('children`s books');
+
+
