@@ -25,7 +25,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           </p>
                                           <ul class="dropdown-menu">
                                                 <?php
-                                                if (check_session())
+                                                if (!check_session())
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/authentication/">Book</a></li>
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/authentication/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
@@ -44,7 +44,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           </p>
                                           <ul class="dropdown-menu">
                                                 <?php
-                                                if (check_session())
+                                                if (!check_session())
                                                       echo '<li><a id="statistic_dropdown_1" class="dropdown-item" href="/admin/authentication/">Book</a></li>
                                                 <li><a id="statistic_dropdown_2" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
                                                 <li><a id="statistic_dropdown_3" class="dropdown-item" href="/admin/authentication/">Revenue</a></li>';
