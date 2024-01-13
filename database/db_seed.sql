@@ -100,7 +100,6 @@ INSERT INTO `bookstore`.`category` (`id`, `name`) VALUES
   ('CATEGORY14','Children`s books'),
   ('CATEGORY15','Tutorial');
 
--- Insert `belong1`
 -- Insert `belong`
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK1', 'CATEGORY15');
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK1', 'CATEGORY8');
