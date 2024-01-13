@@ -81,17 +81,9 @@ INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK24', '1', 'George Orwell', 'https://en.wikipedia.org/wiki/George_Orwell');
 
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK25', '1', 'Arundhati Roy', 'https://en.wikipedia.org/wiki/Arundhati_Roy');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK26', '1', 'Gaia Sol', 'https://www.goodreads.com/author/show/17085302.Gaia_Sol');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK27', '1', 'Laurence Kotlikoff', 'https://www.hachettebookgroup.com/contributor/laurence-kotlikoff/?lens=little-brown-and-company');
-
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK28', '1', 'Kyle Mills', 'https://www.amazon.com/stores/Kyle-Mills/author/B000APXUH0?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK29', '1', 'Adam Shoalts', 'https://www.goodreads.com/author/show/6523990.Adam_Shoalts');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK30', '1', 'Mitch Albom', 'https://en.wikipedia.org/wiki/Mitch_Albom');
-
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK31', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
 
 -- Insert `category`
-INSERT INTO `bookstore`.`category` (`name`) VALUES
+INSERT INTO `bookstore`.`category` (`id`, `name`) VALUES
   ('CATEGORY1','Fiction'),
   ('CATEGORY2','Fantasy'),
   ('CATEGORY3','Mystery'),
@@ -109,50 +101,36 @@ INSERT INTO `bookstore`.`category` (`name`) VALUES
   ('CATEGORY15','Tutorial');
 
 -- Insert `belong1`
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK1', 'Tutorial');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK1', 'Nonfiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK2', 'Nonfiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK2', 'Self-help');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK2', 'Romance');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK3', 'Fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK3', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK4', 'Science fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK4', 'Thriller');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK5', 'Science fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK5', 'Children`s books');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK6', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK7', 'Science fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK8', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK9', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK10', 'History');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK11', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK12', 'Science fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK13', 'Science fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK14', 'Nonfiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK15', 'Mystery');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK16', 'Fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK17', 'Science fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK18', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK19', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK20', 'History');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK21', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK22', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK23', 'Fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK24', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK25', 'Mystery');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK26', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK27', 'Biography');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK28', 'Memoir');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK29', 'Fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK30', 'Romance');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK31', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK11', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK13', 'Thriller');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK14', 'Fantasy');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK17', 'Historical fiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK17', 'Mystery');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK25', 'Thriller');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK27', 'Business');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK27', 'Nonfiction');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK28', 'Biography');
-INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK28', 'Nonfiction');
+-- Insert `belong`
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK1', 'CATEGORY15');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK1', 'CATEGORY8');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK2', 'CATEGORY8');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK2', 'CATEGORY12');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK2', 'CATEGORY5');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK3', 'CATEGORY1');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK3', 'CATEGORY2');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK4', 'CATEGORY7');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK4', 'CATEGORY4');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK5', 'CATEGORY7');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK5', 'CATEGORY14');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK6', 'CATEGORY6');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK7', 'CATEGORY7');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK8', 'CATEGORY2');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK9', 'CATEGORY6');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK10', 'CATEGORY11');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK11', 'CATEGORY6');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK12', 'CATEGORY7');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK13', 'CATEGORY7');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK14', 'CATEGORY8');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK15', 'CATEGORY3');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK16', 'CATEGORY1');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK17', 'CATEGORY7');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK18', 'CATEGORY2');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK19', 'CATEGORY6');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK20', 'CATEGORY11');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK21', 'CATEGORY6');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK22', 'CATEGORY2');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK23', 'CATEGORY1');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK24', 'CATEGORY6');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK25', 'CATEGORY3');
+
