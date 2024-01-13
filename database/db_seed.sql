@@ -123,19 +123,19 @@ INSERT INTO `bookstore`.`eventapply` (`eventID`, `bookID`) VALUES ('EVENT1', 'BO
 
 -- Insert `category`
 INSERT INTO `bookstore`.`category` (`name`) VALUES
-  ('fiction'),
-  ('fantasy'),
-  ('mystery'),
-  ('thriller'),
-  ('romance'),
-  ('historical fiction'),
-  ('science fiction'),
-  ('nonfiction'),
-  ('biography'),
-  ('memoir'),
-  ('history'),
-  ('self-help'),
-  ('business'),
-  ('children`s books');
+  ('Fiction'),
+  ('Fantasy'),
+  ('Mystery'),
+  ('Thriller'),
+  ('Romance'),
+  ('Historical fiction'),
+  ('Science fiction'),
+  ('Nonfiction'),
+  ('Biography'),
+  ('Memoir'),
+  ('History'),
+  ('Self-help'),
+  ('Business'),
+  ('Children`s books');
 
 
