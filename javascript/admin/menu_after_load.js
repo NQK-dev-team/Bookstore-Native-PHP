@@ -2,7 +2,7 @@ $(document).ready(() =>
 {
       const location = window.location.href;
 
-      if (location.includes('/admin/book') || location.includes('/admin/customer') || location.includes('/admin/discount'))
+      if (location.includes('/admin/book') || location.includes('/admin/customer') || location.includes('/admin/discount') || location.includes('/admin/category'))
       {
             $('#manage_dropdown_0').addClass('text-primary');
             if (location.includes('/admin/book')) $('#manage_dropdown_1').addClass('text-primary');
