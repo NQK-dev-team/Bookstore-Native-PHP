@@ -18,6 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
+                  if ($_SESSION['recovery_email'] !== $email) {
+                        echo json_encode(['error' => 'Recovery email not matched!']);
+                        exit;
+                  }
+
                   $code = generateRandomString();
                   recovery_mail($email, $code);
                   session_start();

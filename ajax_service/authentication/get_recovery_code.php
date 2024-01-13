@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         session_start();
                         $_SESSION['recovery_code'] = $code;
                         $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $_SESSION['recovery_email'] = $email;
                   } else {
                         http_response_code(500);
                         echo json_encode(['error' => 'Query returns unexpected result!']);

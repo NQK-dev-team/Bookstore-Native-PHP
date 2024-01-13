@@ -21,8 +21,8 @@ if (return_navigate_error() === 400) {
             <link rel="stylesheet" href="/css/preset_style.css">
 
             <meta name="author" content="Nghia Duong">
-            <meta name="description" content="Manage books of NQK Bookstore">
-            <title>Manage books</title>
+            <meta name="description" content="Manage customers of NQK Bookstore">
+            <title>Manage customers</title>
       </head>
 
       <body>

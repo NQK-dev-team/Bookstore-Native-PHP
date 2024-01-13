@@ -26,21 +26,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
                   session_start();
-                  if (isset($_SESSION['recovery_code'], $_SESSION['recovery_code_send_time']) && $_SESSION['recovery_code'] && $_SESSION['recovery_code_send_time']) {
-                        if ($code === $_SESSION['recovery_code']) {
-                              $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                              $interval = $current_time->getTimestamp() - $_SESSION['recovery_code_send_time']->getTimestamp();
-                              if (abs($interval) <= 120) {
-                                    echo json_encode(['query_result' => true]);
+                  if (isset($_SESSION['recovery_code'], $_SESSION['recovery_code_send_time'], $_SESSION['recovery_email']) && $_SESSION['recovery_code'] && $_SESSION['recovery_code_send_time'] && $_SESSION['recovery_email']) {
+                        if ($email === $_SESSION['recovery_email']) {
+                              if ($code === $_SESSION['recovery_code']) {
+                                    $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                                    $interval = $current_time->getTimestamp() - $_SESSION['recovery_code_send_time']->getTimestamp();
+                                    if (abs($interval) <= 120) {
+                                          echo json_encode(['query_result' => true]);
+                                          $_SESSION['recovery_state'] = true;
+                                          $_SESSION['recovery_state_set_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                                    } else {
+                                          echo json_encode(['error' => 'Recovery code expired!']);
+                                    }
                               } else {
-                                    echo json_encode(['error' => 'Recovery code expired!']);
+                                    echo json_encode(['error' => 'Recovery code incorrect!']);
                               }
                         } else {
-                              echo json_encode(['error' => 'Recovery code incorrect!']);
+                              echo json_encode(['error' => 'Recovery email not matched!']);
                         }
                   } else {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Server can\'t find recovery code sent to client!']);
+                        echo json_encode(['error' => 'Server can\'t find information about client\'s recovery request!']);
                   }
             } catch (Exception $e) {
                   http_response_code(500);

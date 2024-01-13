@@ -53,7 +53,7 @@ if (check_session()) {
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="recovery">Forgot password?</a>
                         <div class="mt-auto my-3 mx-auto">
-                              <button type="submit" class="btn btn-primary">Submit</button>
+                              <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Submit</button>
                         </div>
                   </form>
             </div>
@@ -63,6 +63,7 @@ if (check_session()) {
       ?>
       <script src="/javascript/admin/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/input_validity.js"></script>
       <script src="/javascript/authentication/login.js"></script>
 </body>
 

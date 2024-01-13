@@ -15,7 +15,7 @@ if (check_session()) header('Location: /');
       <link rel="stylesheet" href="/css/preset_style.css">
 
       <meta name="author" content="Nghia Duong">
-      <meta name="description" content="Sign up as a customer to use NQK bookstore's services">
+      <meta name="description" content="Sign up as a new customer to use NQK bookstore's services">
       <title>Sign up</title>
       <link rel="stylesheet" href="/css/authentication/style.css">
 </head>
@@ -144,7 +144,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
                         <div class="mt-auto my-3 mx-auto">
-                              <button type="submit" class="btn btn-primary">Submit</button>
+                              <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Submit</button>
                         </div>
                   </form>
             </div>
@@ -172,6 +172,7 @@ if (check_session()) header('Location: /');
       ?>
       <script src="/javascript/customer/menu_after_load.js"></script>
       <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/input_validity.js"></script>
       <script src="/tool/js/dob_checker.js"></script>
       <script src="/javascript/authentication/signup.js"></script>
 </body>

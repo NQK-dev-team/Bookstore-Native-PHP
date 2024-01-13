@@ -10,6 +10,7 @@ $(document).ready(function ()
 function signUpHandler(event)
 {
       event.preventDefault();
+
       const name = sanitize(document.getElementById('inputName').value);
       const date = sanitize(document.getElementById('inputDate').value);
       const phone = sanitize(document.getElementById('inputPhone').value);
@@ -19,173 +20,148 @@ function signUpHandler(event)
       const card = sanitize(document.getElementById('inputCard').value);
       const refEmail = sanitize(document.getElementById('inputRefEmail').value);
 
-      let isOK = true;
-
-      if (name === '' && isOK)
+      if (name === '')
       {
-            isOK = false;
-            const elem = document.getElementById('inputName');
-            elem.setCustomValidity("Name field is empty!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputName').get(0), "Name field is empty!");
+            return;
       }
 
-      if (date === '' && isOK)
+      if (date === '')
       {
-            isOK = false;
-            const elem = document.getElementById('inputDate');
-            elem.setCustomValidity("Date of birth field is empty!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputDate').get(0), "Date of birth field is empty!");
+            return;
       }
-      else if (!isDobValid(date) && isOK)
+      else if (!isDobValid(date))
       {
-            isOK = false;
-            const elem = document.getElementById('inputDate');
-            elem.setCustomValidity("Date of birth invalid!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputDate').get(0), "Date of birth invalid!");
+            return;
       }
-      else if (!isAgeValid(date) && isOK)
+      else if (!isAgeValid(date))
       {
-            isOK = false;
-            const elem = document.getElementById('inputDate');
-            elem.setCustomValidity("You must be at least 18 years old to sign up!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputDate').get(0), "You must be at least 18 years old to sign up!");
+            return;
       }
 
-      if (phone === '' && isOK)
+      if (phone === '')
       {
-            isOK = false;
-            const elem = document.getElementById('inputPhone');
-            elem.setCustomValidity("Phone number field is empty!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputPhone').get(0), "Phone number field is empty!");
+            return;
       }
       else
       {
             const regex = /^[0-9]{10}$/;
-            if (!regex.test(phone) && isOK)
+            if (!regex.test(phone))
             {
-                  isOK = false;
-                  const elem = document.getElementById('inputPhone');
-                  elem.setCustomValidity("Phone number format invalid!");
-                  elem.reportValidity();
+                  reportCustomValidity($('#inputPhone').get(0), "Phone number format invalid!");
+                  return;
             }
       }
 
-      if (card !== '' && isOK)
+      if (card !== '')
       {
             const regex = /^[0-9]{8,16}$/;
-            if (!regex.test(card) && isOK)
+            if (!regex.test(card))
             {
-                  isOK = false;
-                  const elem = document.getElementById('inputCard');
-                  elem.setCustomValidity("Card number format invalid!");
-                  elem.reportValidity();
+                  reportCustomValidity($('#inputCard').get(0), "Card number format invalid!");
+                  return;
             }
       }
 
-      if (email === '' && isOK)
+      if (email === '')
       {
-            isOK = false;
-            const elem = document.getElementById('inputEmail');
-            elem.setCustomValidity("Email field is empty!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
+            return;
       }
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(email) && isOK)
+            if (!regex.test(email))
             {
-                  isOK = false;
-                  const elem = document.getElementById('inputEmail');
-                  elem.setCustomValidity("Email format invalid!");
-                  elem.reportValidity();
+                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
+                  return;
             }
       }
 
-      if (password === '' && isOK)
+      if (password === '')
       {
-            isOK = false;
-            const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password field is empty!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputPassword').get(0), "Password field is empty!");
+            return;
       }
-      else if (password.length < 8 && isOK)
+      else if (password.length < 8)
       {
-            isOK = false;
-            const elem = document.getElementById('inputPassword');
-            elem.setCustomValidity("Password must be at least 8 characters!");
-            elem.reportValidity();
+            reportCustomValidity($('#inputPassword').get(0), "Password must be at least 8 characters long!");
+            return;
       }
       else
       {
             const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
-            if (!regex.test(password) && isOK)
+            if (!regex.test(password))
             {
-                  isOK = false;
-                  const elem = document.getElementById('inputPassword');
-                  elem.setCustomValidity("Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  elem.reportValidity();
+                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  return;
             }
       }
 
-      if (refEmail !== '' && isOK)
+      if (refEmail !== '')
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(refEmail) && isOK)
+            if (!regex.test(refEmail))
             {
-                  isOK = false;
-                  const elem = document.getElementById('inputRefEmail');
-                  elem.setCustomValidity("Referrer email format invalid!");
-                  elem.reportValidity();
+                  reportCustomValidity($('#inputRefEmail').get(0), "Referrer email format invalid!");
+                  return;
             }
       }
 
-      if (isOK)
-      {
-            $('*').addClass('wait');
-            $.ajax({
-                  url: '/ajax_service/authentication/signup_handler.php',
-                  method: 'POST',
-                  data: { name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
-                  dataType: 'json',
-                  success: function (data)
+      $('*').addClass('wait');
+      $('button, input').prop('disabled', true);
+      $('a').addClass('disable_link');
+      $.ajax({
+            url: '/ajax_service/authentication/signup_handler.php',
+            method: 'POST',
+            data: { name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+            dataType: 'json',
+            success: function (data)
+            {
+                  $('*').removeClass('wait');
+                  $('button, input').prop('disabled', false);
+                  $('a').removeClass('disable_link');
+                  if (data.error)
                   {
-                        $('*').removeClass('wait');
-                        if (data.error)
-                        {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = data.error;
-                              const error_message = document.getElementById('signup_fail');
-                              error_message.style.display = 'flex';
-                        }
-                        else if (data.query_result)
-                        {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = '';
-                              const error_message = document.getElementById('signup_fail');
-                              error_message.style.display = 'none';
-
-                              $('#signUpSuccessModal').modal('show');
-                        }
-                  },
-                  error: function (err)
-                  {
-                        $('*').removeClass('wait');
-                        if (err.status === 500)
-                        {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = 'Server encountered error!';
-                              const error_message = document.getElementById('signup_fail');
-                              error_message.style.display = 'flex';
-                        } else if (err.status === 400)
-                        {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = 'Server request error!';
-                              const error_message = document.getElementById('signup_fail');
-                              error_message.style.display = 'flex';
-                        }
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = data.error;
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'flex';
                   }
-            });
-      }
+                  else if (data.query_result)
+                  {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = '';
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'none';
+
+                        $('#signUpSuccessModal').modal('show');
+                  }
+            },
+            error: function (err)
+            {
+                  $('*').removeClass('wait');
+                  $('button, input').prop('disabled', false);
+                  $('a').removeClass('disable_link');
+                  if (err.status === 500)
+                  {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = 'Server encountered error!';
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'flex';
+                  } else if (err.status === 400)
+                  {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = 'Server request error!';
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'flex';
+                  }
+            }
+      });
 }
 
 function checkPhoneUsed()
