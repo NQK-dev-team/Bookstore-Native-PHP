@@ -27,12 +27,14 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                 <?php
                                                 if (check_session())
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/authentication/">Book</a></li>
-                                                <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
-                                                <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/authentication/">Discount</a></li>';
+                                                <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/authentication/">Category</a></li>
+                                                <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
+                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/authentication/">Discount</a></li>';
                                                 else
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/book/">Book</a></li>
-                                                <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/customer/">Customer</a></li>
-                                                <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/discount/">Discount</a></li>';
+                                                li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/category/">Category</a></li>
+                                                <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/customer/">Customer</a></li>
+                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/discount/">Discount</a></li>';
                                                 ?>
                                           </ul>
                                     </li>
