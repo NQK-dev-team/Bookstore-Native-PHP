@@ -91,6 +91,27 @@ INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink
 
 -- Insert `customerorder` table
 INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) VALUES ('ORDER1', '2023-06-15 09:30:00', '1', '300000.546', '10', 'CUSTOMER1');
+INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
+VALUES ('ORDER2', '2023-08-22 15:45:00', '0', '1254687.321', '15', 'CUSTOMER2');
+INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
+VALUES ('ORDER3', '2023-11-10 08:12:00', '1', '897546.123', '20', 'CUSTOMER3');
+INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
+VALUES 
+    ('ORDER4', '2023-05-21 16:32:00', '1', '1546897.432', '10', 'CUSTOMER2'),
+    ('ORDER5', '2023-09-07 10:55:00', '0', '468521.987', '15', 'CUSTOMER3'),
+    ('ORDER6', '2023-12-23 22:10:00', '1', '1875469.213', '20', 'CUSTOMER1');
+INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
+VALUES 
+    ('ORDER7', '2023-03-18 13:45:00', '0', '1456846.543', '15', 'CUSTOMER3'),
+    ('ORDER8', '2023-07-05 19:22:00', '1', '1235468.754', '10', 'CUSTOMER1'),
+    ('ORDER9', '2023-10-20 07:30:00', '1', '1854697.231', '20', 'CUSTOMER2'),
+    ('ORDER10', '2023-01-12 21:45:00', '0', '754689.123', '15', 'CUSTOMER3'),
+    ('ORDER11', '2023-05-01 15:05:00', '1', '1589754.632', '10', 'CUSTOMER1'),
+    ('ORDER12', '2023-08-20 09:20:00', '1', '1468521.987', '20', 'CUSTOMER2'),
+    ('ORDER13', '2023-11-28 17:40:00', '0', '1254687.321', '15', 'CUSTOMER3'),
+    ('ORDER14', '2023-02-15 11:55:00', '1', '1897465.231', '10', 'CUSTOMER1'),
+    ('ORDER15', '2023-06-05 23:10:00', '1', '1468521.987', '20', 'CUSTOMER2');
+
 
 -- Insert `eventdiscount` table
 INSERT INTO `bookstore`.`eventdiscount` (`id`, `discount`, `startDate`, `endDate`, `applyForAll`) VALUES ('EVENT1', '10', '2023-12-31', '2024-1-31', '1');
