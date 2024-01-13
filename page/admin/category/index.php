@@ -22,7 +22,7 @@ if (return_navigate_error() === 400) {
 
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Manage book categories of NQK Bookstore">
-            <title>Manage categories</title>
+            <title>Manage Categories</title>
       </head>
 
       <body>

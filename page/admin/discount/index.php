@@ -22,7 +22,7 @@ if (return_navigate_error() === 400) {
 
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Manage discount coupons of NQK Bookstore">
-            <title>Manage coupons</title>
+            <title>Manage Coupons</title>
       </head>
 
       <body>
