@@ -105,4 +105,5 @@ INSERT INTO `bookstore`.`category` (`name`) VALUES
   ('History'),
   ('Self-help'),
   ('Business'),
-  ('Children`s books');
+  ('Children`s books'),
+  ('Tutorial');
