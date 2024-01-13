@@ -10,6 +10,22 @@ cert/*
 session/*
 !session/.gitkeep
 
+data/file/*
+!data/file/.gitkeep
+!data/file/demo/
+
+data/image/book/*
+!data/image/book/.gitkeep
+!data/image/book/demo/
+
+data/image/user/admin/*
+!data/image/user/admin/.gitkeep
+!data/image/user/admin/demo/
+
+data/image/user/customer/*
+data/image/user/customer/.gitkeep
+!data/image/user/customer/demo/
+
 # Ignore packages
 /vendor/
 
