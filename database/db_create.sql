@@ -14,7 +14,7 @@ insert into pointConfig values(5);
 create table category(
     id varchar(20) primary key,
 	name varchar(100) not null unique,
-    description varchar(255)
+    description text
 );
 
 create table appUser(
@@ -56,7 +56,8 @@ create table book(
     publisherLink text,
     publishDate date not null,
     status boolean not null default true, -- true means the book is purchasable, false means not
-    imagePath text
+    imagePath text,
+    description text
 );
 
 create table author(
