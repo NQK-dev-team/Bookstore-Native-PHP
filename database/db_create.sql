@@ -12,7 +12,8 @@ insert into pointConfig values(5);
 -- Important --
 
 create table category(
-	name varchar(100) primary key
+    id varchar(20) primary key,
+	name varchar(100) not null unique
 );
 
 create table appUser(

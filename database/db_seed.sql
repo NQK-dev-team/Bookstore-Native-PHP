@@ -92,24 +92,24 @@ INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink
 
 -- Insert `category`
 INSERT INTO `bookstore`.`category` (`name`) VALUES
-  ('Fiction'),
-  ('Fantasy'),
-  ('Mystery'),
-  ('Thriller'),
-  ('Romance'),
-  ('Historical fiction'),
-  ('Science fiction'),
-  ('Nonfiction'),
-  ('Biography'),
-  ('Memoir'),
-  ('History'),
-  ('Self-help'),
-  ('Business'),
-  ('Children`s books'),
-  ('Tutorial');
+  ('CATEGORY1','Fiction'),
+  ('CATEGORY2','Fantasy'),
+  ('CATEGORY3','Mystery'),
+  ('CATEGORY4','Thriller'),
+  ('CATEGORY5','Romance'),
+  ('CATEGORY6','Historical fiction'),
+  ('CATEGORY7','Science fiction'),
+  ('CATEGORY8','Nonfiction'),
+  ('CATEGORY9','Biography'),
+  ('CATEGORY10','Memoir'),
+  ('CATEGORY11','History'),
+  ('CATEGORY12','Self-help'),
+  ('CATEGORY13','Business'),
+  ('CATEGORY14','Children`s books'),
+  ('CATEGORY15','Tutorial');
 
 -- Insert `belong1`
-  INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK1', 'Tutorial');
+INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK1', 'Tutorial');
 INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK1', 'Nonfiction');
 INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK2', 'Nonfiction');
 INSERT INTO `bookstore`.`belong` (`bookID`, `category`) VALUES ('BOOK2', 'Self-help');
