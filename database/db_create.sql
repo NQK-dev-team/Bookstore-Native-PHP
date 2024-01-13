@@ -70,7 +70,7 @@ create table author(
 create table belong(
 	bookID varchar(20) references book(id) on delete cascade on update cascade,
     categoryID varchar(20) references category(id) on delete cascade on update cascade,
-    primary key(bookID,category)
+    primary key(bookID,categoryID)
 );
 
 create table fileCopy(
