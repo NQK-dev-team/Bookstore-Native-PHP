@@ -49,66 +49,66 @@ INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction
 
 -- Insert `author` table
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK31', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK1', '2', 'Alan Forbes', 'https://www.amazon.com/stores/Alan-Forbes/author/B00BBPOUOA?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK2', '3', 'Mark Manson', 'https://www.amazon.com/stores/Mark-Manson/author/B00BIJOMOC?pd_rd_w=gDj3A&content-id=amzn1.sym.a36c3969-f821-4d5b-a8e8-be129cf4aa4a:amzn1.sym.a36c3969-f821-4d5b-a8e8-be129cf4aa4a&pf_rd_p=a36c3969-f821-4d5b-a8e8-be129cf4aa4a&pf_rd_r=P3DX4X44GWKJKTMDDC5V&pd_rd_wg=AkX2N&pd_rd_r=8bb4709a-dace-44fd-a155-559d1fc185ee&qid=1705117035&cv_ct_cx=mark+manson&ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK1', '1', 'Alan Forbes', 'https://www.amazon.com/stores/Alan-Forbes/author/B00BBPOUOA?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK2', '1', 'Mark Manson', 'https://www.amazon.com/stores/Mark-Manson/author/B00BIJOMOC?pd_rd_w=gDj3A&content-id=amzn1.sym.a36c3969-f821-4d5b-a8e8-be129cf4aa4a:amzn1.sym.a36c3969-f821-4d5b-a8e8-be129cf4aa4a&pf_rd_p=a36c3969-f821-4d5b-a8e8-be129cf4aa4a&pf_rd_r=P3DX4X44GWKJKTMDDC5V&pd_rd_wg=AkX2N&pd_rd_r=8bb4709a-dace-44fd-a155-559d1fc185ee&qid=1705117035&cv_ct_cx=mark+manson&ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK3', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK4', '4', 'Douglas Adams', 'https://www.amazon.com/stores/Douglas-Adams/author/B000AQ2A84?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK5', '5', 'Herbert George Wells', 'https://en.wikipedia.org/wiki/H._G._Wells');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK6', '6', 'Jane Austen', 'https://en.wikipedia.org/wiki/Jane_Austen');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK4', '1', 'Douglas Adams', 'https://www.amazon.com/stores/Douglas-Adams/author/B000AQ2A84?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK5', '1', 'Herbert George Wells', 'https://en.wikipedia.org/wiki/H._G._Wells');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK6', '1', 'Jane Austen', 'https://en.wikipedia.org/wiki/Jane_Austen');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK7', '7', 'Harper Lee', 'https://en.wikipedia.org/wiki/Harper_Lee');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK8', '8', 'Paulo Coelho', 'https://en.wikipedia.org/wiki/Paulo_Coelho');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK9', '9', 'Margaret Atwood', 'https://en.wikipedia.org/wiki/Margaret_Atwood');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK7', '1', 'Harper Lee', 'https://en.wikipedia.org/wiki/Harper_Lee');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK8', '1', 'Paulo Coelho', 'https://en.wikipedia.org/wiki/Paulo_Coelho');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK9', '1', 'Margaret Atwood', 'https://en.wikipedia.org/wiki/Margaret_Atwood');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK10', '10', 'Yuval Noah Harari', 'https://en.wikipedia.org/wiki/Yuval_Noah_Harari');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK11', '11', 'Bram Stoker', 'https://en.wikipedia.org/wiki/Bram_Stoker');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK12', '12', 'Gabriel García Márquez', 'https://en.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK10', '1', 'Yuval Noah Harari', 'https://en.wikipedia.org/wiki/Yuval_Noah_Harari');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK11', '1', 'Bram Stoker', 'https://en.wikipedia.org/wiki/Bram_Stoker');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK12', '1', 'Gabriel García Márquez', 'https://en.wikipedia.org/wiki/Gabriel_Garc%C3%ADa_M%C3%A1rquez');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK13', '13', 'Andy Weir', 'https://en.wikipedia.org/wiki/Andy_Weir');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK14', '14', 'John Green', 'https://en.wikipedia.org/wiki/John_Green');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK15', '15', 'Chinua Achebe', 'https://en.wikipedia.org/wiki/Chinua_Achebe');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK13', '1', 'Andy Weir', 'https://en.wikipedia.org/wiki/Andy_Weir');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK14', '1', 'John Green', 'https://en.wikipedia.org/wiki/John_Green');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK15', '1', 'Chinua Achebe', 'https://en.wikipedia.org/wiki/Chinua_Achebe');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK16', '16', 'Agatha Christie', 'https://en.wikipedia.org/wiki/Agatha_Christie');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK17', '17', 'Frank Herbert', 'https://en.wikipedia.org/wiki/Frank_Herbert');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK18', '18', 'John Ronald Reuel Tolkien', 'https://en.wikipedia.org/wiki/J._R._R._Tolkien');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK16', '1', 'Agatha Christie', 'https://en.wikipedia.org/wiki/Agatha_Christie');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK17', '1', 'Frank Herbert', 'https://en.wikipedia.org/wiki/Frank_Herbert');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK18', '1', 'John Ronald Reuel Tolkien', 'https://en.wikipedia.org/wiki/J._R._R._Tolkien');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK19', '9', 'Margaret Atwood', 'https://en.wikipedia.org/wiki/Margaret_Atwood');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK20', '10', 'Yuval Noah Harari', 'https://en.wikipedia.org/wiki/Yuval_Noah_Harari');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK21', '19', 'Alexandre Dumas', 'https://en.wikipedia.org/wiki/Alexandre_Dumas');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK19', '1', 'Margaret Atwood', 'https://en.wikipedia.org/wiki/Margaret_Atwood');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK20', '1', 'Yuval Noah Harari', 'https://en.wikipedia.org/wiki/Yuval_Noah_Harari');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK21', '1', 'Alexandre Dumas', 'https://en.wikipedia.org/wiki/Alexandre_Dumas');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK22', '20', 'Mary Shelley', 'https://en.wikipedia.org/wiki/Mary_Shelley');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK23', '4', 'Douglas Adams', 'https://www.amazon.com/stores/Douglas-Adams/author/B000AQ2A84?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK24', '21', 'George Orwell', 'https://en.wikipedia.org/wiki/George_Orwell');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK22', '1', 'Mary Shelley', 'https://en.wikipedia.org/wiki/Mary_Shelley');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK23', '1', 'Douglas Adams', 'https://www.amazon.com/stores/Douglas-Adams/author/B000AQ2A84?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK24', '1', 'George Orwell', 'https://en.wikipedia.org/wiki/George_Orwell');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK25', '22', 'Arundhati Roy', 'https://en.wikipedia.org/wiki/Arundhati_Roy');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK26', '23', 'Gaia Sol', 'https://www.goodreads.com/author/show/17085302.Gaia_Sol');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK27', '24', 'Laurence Kotlikoff', 'https://www.hachettebookgroup.com/contributor/laurence-kotlikoff/?lens=little-brown-and-company');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK25', '1', 'Arundhati Roy', 'https://en.wikipedia.org/wiki/Arundhati_Roy');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK26', '1', 'Gaia Sol', 'https://www.goodreads.com/author/show/17085302.Gaia_Sol');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK27', '1', 'Laurence Kotlikoff', 'https://www.hachettebookgroup.com/contributor/laurence-kotlikoff/?lens=little-brown-and-company');
 
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK28', '25', 'Kyle Mills', 'https://www.amazon.com/stores/Kyle-Mills/author/B000APXUH0?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK29', '26', 'Adam Shoalts', 'https://www.goodreads.com/author/show/6523990.Adam_Shoalts');
-INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK30', '27', 'Mitch Albom', 'https://en.wikipedia.org/wiki/Mitch_Albom');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK28', '1', 'Kyle Mills', 'https://www.amazon.com/stores/Kyle-Mills/author/B000APXUH0?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK29', '1', 'Adam Shoalts', 'https://www.goodreads.com/author/show/6523990.Adam_Shoalts');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK30', '1', 'Mitch Albom', 'https://en.wikipedia.org/wiki/Mitch_Albom');
 
 -- Insert `customerorder` table
 INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) VALUES ('ORDER1', '2023-06-15 09:30:00', '1', '300000.546', '10', 'CUSTOMER1');
 INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
-VALUES ('ORDER2', '2023-08-22 15:45:00', '0', '1254687.321', '15', 'CUSTOMER2');
+VALUES ('ORDER2', '2023-08-22 15:45:00', '1', '1254687.321', '15', 'CUSTOMER2');
 INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
 VALUES ('ORDER3', '2023-11-10 08:12:00', '1', '897546.123', '20', 'CUSTOMER3');
 INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
 VALUES 
     ('ORDER4', '2023-05-21 16:32:00', '1', '1546897.432', '10', 'CUSTOMER2'),
-    ('ORDER5', '2023-09-07 10:55:00', '0', '468521.987', '15', 'CUSTOMER3'),
+    ('ORDER5', '2023-09-07 10:55:00', '1', '468521.987', '15', 'CUSTOMER3'),
     ('ORDER6', '2023-12-23 22:10:00', '1', '1875469.213', '20', 'CUSTOMER1');
 INSERT INTO `bookstore`.`customerorder` (`id`, `time`, `status`, `totalCost`, `totalDiscount`, `customerID`) 
 VALUES 
     ('ORDER7', '2023-03-18 13:45:00', '0', '1456846.543', '15', 'CUSTOMER3'),
     ('ORDER8', '2023-07-05 19:22:00', '1', '1235468.754', '10', 'CUSTOMER1'),
     ('ORDER9', '2023-10-20 07:30:00', '1', '1854697.231', '20', 'CUSTOMER2'),
-    ('ORDER10', '2023-01-12 21:45:00', '0', '754689.123', '15', 'CUSTOMER3'),
+    ('ORDER10', '2023-01-12 21:45:00', '1', '754689.123', '15', 'CUSTOMER3'),
     ('ORDER11', '2023-05-01 15:05:00', '1', '1589754.632', '10', 'CUSTOMER1'),
     ('ORDER12', '2023-08-20 09:20:00', '1', '1468521.987', '20', 'CUSTOMER2'),
-    ('ORDER13', '2023-11-28 17:40:00', '0', '1254687.321', '15', 'CUSTOMER3'),
+    ('ORDER13', '2023-11-28 17:40:00', '1', '1254687.321', '15', 'CUSTOMER3'),
     ('ORDER14', '2023-02-15 11:55:00', '1', '1897465.231', '10', 'CUSTOMER1'),
     ('ORDER15', '2023-06-05 23:10:00', '1', '1468521.987', '20', 'CUSTOMER2');
 
