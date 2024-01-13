@@ -31,6 +31,3 @@ data/image/user/customer/.gitkeep
 
 # Ignore .env file
 .env
-
-# Ignore 
-data/file/demo
