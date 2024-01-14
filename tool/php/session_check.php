@@ -1,5 +1,7 @@
 
 <?php
+require_once __DIR__ . '/verify_user_id.php';
+
 function check_session()
 {
       if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -8,7 +10,9 @@ function check_session()
             // Start or resume session
             session_start();
       }
-      return session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']) && ($_SESSION['type'] === 'admin' || $_SESSION['type'] === 'customer');
+
+      if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']) && ($_SESSION['type'] === 'admin' || $_SESSION['type'] === 'customer')) return verifyUserID($_SESSION['id']);
+      else return false;
 }
 
 ?>
