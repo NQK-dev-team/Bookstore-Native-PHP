@@ -8,10 +8,18 @@
 
 .book_image {
       width: 100%;
-      max-width: 150px;
+      max-width: 125px;
       height: auto;
-      display: block;
+      /* display: block;
       margin-left: auto;
       margin-right: auto;
-      min-width: 60px
+      min-width: 60px */
+}
+
+.group_button {
+      max-width: 180px;
+}
+
+.pointer:hover {
+      cursor: pointer;
 }

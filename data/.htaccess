@@ -11,4 +11,3 @@ RewriteRule ^ - [R=404,L]
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ index.php [L]
-RewriteRule ^ index.php [L]

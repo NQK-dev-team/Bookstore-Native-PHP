@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
 if (return_navigate_error() === 400) {
