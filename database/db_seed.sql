@@ -182,3 +182,38 @@ INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK30', '546546.546', '15');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK31', '654465.468', '18');
 
+
+-- Insert file copy
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK1', '139999.000', 'demo/BOOK1/The Joy of PHP.pdf');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK2', '139999.000', 'demo/BOOK2/Models Attract Women Through Honesty.pdf');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK3', '139999.000', 'demo/BOOK3/Lord of Goblins, Vol. 1 Definitive Edition (Lord of Goblins)');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK4', '139999.000', 'demo/BOOK4/The Hitchhiker`s Guide to the Galaxy');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK5', '139999.000', 'demo/BOOK5/The Time Machine');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK6', '139999.000', 'demo/BOOK6/Pride and Prejudice');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK7', '139999.000', 'demo/BOOK7/To Kill a Mockingbird');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK8', '139999.000', 'demo/BOOK8/The Alchemist');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK9', '139999.000', 'demo/BOOK9/The Handmaid`s Tale');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK10', '139999.000', 'demo/BOOK10/Sapiens A Brief History of Humankind');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK11', '139999.000', 'demo/BOOK11/Dracula');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK12', '139999.000', 'demo/BOOK12/One Hundred Years of Solitude');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK13', '139999.000', 'demo/BOOK13/The Martian');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK14', '139999.000', 'demo/BOOK14/The Fault in Our Stars');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK15', '139999.000', 'demo/BOOK15/Things Fall Apart');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK16', '139999.000', 'demo/BOOK16/Murder on the Orient Express');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK17', '139999.000', 'demo/BOOK17/Dune');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK18', '139999.000', 'demo/BOOK18/The Lord of the Rings');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK19', '139999.000', 'demo/BOOK19/The Handmaid`s Tale');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK20', '139999.000', 'demo/BOOK20/Sapiens A Brief History of Humankind');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK21', '139999.000', 'demo/BOOK21/The Count of Monte Cristo');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK22', '139999.000', 'demo/BOOK22/Frankenstein');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK23', '139999.000', 'demo/BOOK23/The Hitchhiker`s Guide to the Galaxy');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK24', '139999.000', 'demo/BOOK24/1984');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK25', '139999.000', 'demo/BOOK25/The God of Small Things');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK26', '139999.000', 'demo/BOOK26/Echoes of Asgard');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK27', '139999.000', 'demo/BOOK27/Money Magic');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK28', '139999.000', 'demo/BOOK28/Code Red');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK29', '139999.000', 'demo/BOOK29/Whisper in the Wilds');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK30', '139999.000', 'demo/BOOK30/The Girl with the Timekeeper`s Heart');
+INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK31', '139999.000', 'demo/BOOK31/Lord of Goblins, Vol. 2');
+
+
