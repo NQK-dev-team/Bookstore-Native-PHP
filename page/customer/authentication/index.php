@@ -46,7 +46,7 @@ if (check_session()) {
                         <div class="form-group">
                               <div class="d-flex">
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
-                                    <a href="sign_up" class="text-decoration-none ms-auto py-1">Sign up?</a>
+                                    <a href="sign-up" class="text-decoration-none ms-auto py-1">Sign up?</a>
                               </div>
                               <input autocomplete="on" type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email">
                         </div>
