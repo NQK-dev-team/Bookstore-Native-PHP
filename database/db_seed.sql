@@ -150,37 +150,39 @@ INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK31', 'CAT
 
 
 -- Insert `physical copy`
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '199999.500', '0');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2', '546553.461', '14');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK3', '685466.460', '14');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK4', '745468.154', '12');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK5', '852546.546', '15');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK6', '525468.451', '0');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK7', '754665.254', '15');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK8', '846515.456', '18');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK9', '654654.854', '11');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK10', '465456.456', '0');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK11', '854651.546', '25');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK12', '654645.546', '19');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK13', '465145.485', '4');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK14', '548546.546', '15');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK15', '654468.546', '20');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK16', '254685.546', '17');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK17', '754645.468', '21');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK18', '654658.465', '14');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK19', '854645.454', '10');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK20', '456454.546', '7');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK21', '465465.546', '15');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK22', '754654.456', '25');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK23', '654654.456', '14');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK24', '546854.546', '12');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK25', '465854.546', '17');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK26', '465485.546', '24');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK27', '854648.468', '14');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK28', '654654.468', '19');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK29', '546546.845', '0');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK30', '546546.546', '15');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK31', '654465.468', '18');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '200000.000', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2', '300000.000', '14');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK3', '400000.000', '14');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK4', '500000.000', '12');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK5', '150000.000', '15');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK6', '200000.000', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK7', '300000.000', '15');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK8', '400000.000', '18');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK9', '500000.000', '11');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK10', '150000.000', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK11', '200000.000', '25');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK12', '300000.000', '19');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK13', '400000.000', '4');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK14', '500000.000', '15');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK15', '150000.000', '20');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK16', '200000.000', '17');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK17', '300000.000', '21');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK18', '400000.000', '14');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK19', '500000.000', '10');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK20', '150000.000', '7');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK21', '200000.000', '15');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK22', '300000.000', '25');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK23', '400000.000', '14');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK24', '500000.000', '12');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK25', '150000.000', '17');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK26', '200000.000', '24');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK27', '300000.000', '14');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK28', '400000.000', '19');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK29', '500000.000', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK30', '150000.000', '15');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK31', '200000.000', '18');
+
+
 
 
 -- Insert file copy
