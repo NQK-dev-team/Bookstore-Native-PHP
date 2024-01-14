@@ -43,7 +43,7 @@ function loginHandler(e, user_type)
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
       $('a').addClass('disable_link');
-      
+
       $.ajax({
             url: '/ajax_service/authentication/login_handler.php',
             method: 'POST',
@@ -54,7 +54,7 @@ function loginHandler(e, user_type)
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  
+
                   if (data.error)
                   {
                         const p_elem = document.getElementById('error_message_content');
@@ -80,7 +80,7 @@ function loginHandler(e, user_type)
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  
+
                   console.error(err);
                   if (err.status === 500)
                   {
