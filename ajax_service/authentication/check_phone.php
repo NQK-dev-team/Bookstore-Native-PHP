@@ -4,9 +4,9 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['phone'])) {
-            $phone = sanitize($_GET['phone']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      if (isset($_POST['phone'])) {
+            $phone = sanitize($_POST['phone']);
 
             // Connect to MySQL
             $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);

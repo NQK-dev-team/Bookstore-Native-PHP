@@ -115,7 +115,7 @@ function signUpHandler(event)
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
       $('a').addClass('disable_link');
-      
+
       $.ajax({
             url: '/ajax_service/authentication/signup_handler.php',
             method: 'POST',
@@ -172,13 +172,10 @@ function checkPhoneUsed()
 {
       const phone = sanitize(document.getElementById('inputPhone').value);
 
-      const data = { phone: phone };
-
-      const queryString = $.param(data);
-
       $.ajax({
-            url: `/ajax_service/authentication/check_phone.php?${ queryString }`,
-            method: 'GET',
+            url: `/ajax_service/authentication/check_phone.php`,
+            method: 'POST',
+            data: { phone: phone },
             dataType: 'json',
             success: function (data)
             {
@@ -201,13 +198,10 @@ function checkEmailUsed(isRefEmail)
       {
             const email = sanitize(document.getElementById('inputEmail').value);
 
-            const data = { email: email };
-
-            const queryString = $.param(data);
-
             $.ajax({
-                  url: `/ajax_service/authentication/check_email.php?${ queryString }`,
-                  method: 'GET',
+                  url: `/ajax_service/authentication/check_email.php`,
+                  method: 'POST',
+                  data: { email: email },
                   dataType: 'json',
                   success: function (data)
                   {
