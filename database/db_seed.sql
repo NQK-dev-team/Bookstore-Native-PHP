@@ -82,6 +82,15 @@ INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink
 
 INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK25', '1', 'Arundhati Roy', 'https://en.wikipedia.org/wiki/Arundhati_Roy');
 
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK26', '1', 'Gaia Sol', 'https://www.goodreads.com/author/show/17085302.Gaia_Sol');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK27', '1', 'Laurence Kotlikoff', 'https://www.hachettebookgroup.com/contributor/laurence-kotlikoff/?lens=little-brown-and-company');
+
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK28', '1', 'Kyle Mills', 'https://www.amazon.com/stores/Kyle-Mills/author/B000APXUH0?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK29', '1', 'Adam Shoalts', 'https://www.goodreads.com/author/show/6523990.Adam_Shoalts');
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK30', '1', 'Mitch Albom', 'https://en.wikipedia.org/wiki/Mitch_Albom');
+
+INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`, `wikiLink`) VALUES ('BOOK31', '1', 'Michiel Werbrouck', 'https://www.amazon.com/stores/Michiel-Werbrouck/author/B089GQ8TC2?ref=ap_rdr&isDramIntegrated=true&shoppingPortalEnabled=true');
+
 -- Insert `category`
 INSERT INTO `bookstore`.`category` (`id`, `name`) VALUES
   ('CATEGORY1','Fiction'),
@@ -132,4 +141,10 @@ INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK22', 'CAT
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK23', 'CATEGORY1');
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK24', 'CATEGORY6');
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK25', 'CATEGORY3');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK26', 'CATEGORY1');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK27', 'CATEGORY13');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK28', 'CATEGORY1');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK29', 'CATEGORY2');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK30', 'CATEGORY1');
+INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK31', 'CATEGORY2');
 
