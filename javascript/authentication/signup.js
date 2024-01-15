@@ -264,13 +264,10 @@ function checkEmailUsed(isRefEmail)
                   return;
             }
 
-            const data = { email: email };
-
-            const queryString = $.param(data);
-
             $.ajax({
-                  url: `/ajax_service/authentication/check_email.php?${ queryString }`,
-                  method: 'GET',
+                  url: `/ajax_service/authentication/check_email.php`,
+                  method: 'POST',
+                  data: { email: email },
                   dataType: 'json',
                   success: function (data)
                   {
@@ -308,7 +305,7 @@ function checkEmailUsed(isRefEmail)
 
 function checkAge()
 {
-      const dobInput = sanitize(document.getElementById("inputDate").value);
+      const dobInput = document.getElementById("inputDate").value;
 
       const elem1 = document.getElementById('invalid_dob');
       const elem2 = document.getElementById('invalid_age');

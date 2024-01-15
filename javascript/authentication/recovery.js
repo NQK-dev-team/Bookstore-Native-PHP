@@ -120,7 +120,7 @@ function requestRecoveryCode()
       $.ajax({
             url: '/ajax_service/authentication/request_recovery_code.php',
             method: 'POST',
-            data: { email: globalEmail },
+            data: { email: sanitize(globalEmail) },
             dataType: 'json',
             success: function (data)
             {
@@ -216,7 +216,7 @@ function enterCode(e)
       $.ajax({
             url: '/ajax_service/authentication/check_recovery_code.php',
             method: 'POST',
-            data: { email: globalEmail, code: code },
+            data: { email: sanitize(globalEmail), code: code },
             dataType: 'json',
             success: function (data)
             {
@@ -351,7 +351,7 @@ function changePassword(e, user_type)
       $.ajax({
             url: '/ajax_service/authentication/change_password.php',
             method: 'POST',
-            data: { email: globalEmail, password: password, confirmPassword: confirmPassword, type: sanitize(user_type) },
+            data: { email: sanitize(globalEmail), password: password, confirmPassword: confirmPassword, type: sanitize(user_type) },
             dataType: 'json',
             success: function (data)
             {

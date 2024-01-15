@@ -4,6 +4,7 @@ function loginHandler(e, user_type)
 
       const email = sanitize(document.getElementById('inputEmail').value);
       const password = sanitize(document.getElementById('inputPassword').value);
+      const type = sanitize(user_type);
 
       if (email === '')
       {
@@ -47,7 +48,7 @@ function loginHandler(e, user_type)
       $.ajax({
             url: '/ajax_service/authentication/login_handler.php',
             method: 'POST',
-            data: { email: email, password: password, type: sanitize(user_type) },
+            data: { email: email, password: password, type: type },
             dataType: 'json',
             success: function (data)
             {
@@ -69,9 +70,9 @@ function loginHandler(e, user_type)
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'none';
 
-                        if (sanitize(user_type) === 'customer')
+                        if (type === 'customer')
                               window.location.href = '/';
-                        if (sanitize(user_type) === 'admin')
+                        if (type === 'admin')
                               window.location.href = '/admin/';
                   }
             },
