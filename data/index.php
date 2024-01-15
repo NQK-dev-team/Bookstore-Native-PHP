@@ -2,10 +2,11 @@
 <?php
 require_once __DIR__ . '/../tool/php/session_check.php';
 require_once __DIR__ . '/../tool/php/converter.php';
+require_once __DIR__ . '/../tool/php/sanitizer.php';
 
 if (check_session()) {
       if ($_SESSION['type'] === 'admin') {
-            $requestedUri = revertEncodedCharacter($_SERVER['REQUEST_URI']);
+            $requestedUri = sanitize(revertEncodedCharacter($_SERVER['REQUEST_URI']));
             $filePath = dirname(__DIR__) . $requestedUri;
 
             $contentType = mime_content_type($filePath);
