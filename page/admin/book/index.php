@@ -230,7 +230,7 @@ if (return_navigate_error() === 400) {
             ?>
             <section id="page">
                   <div class="container-fluid h-100 d-flex flex-column">
-                        <form class="d-flex align-items-center mt-2 w-100 search_form mx-auto" role="search" id="search_form">
+                        <form class="d-flex align-items-center mt-3 w-100 search_form mx-auto" role="search" id="search_form">
                               <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                     <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
