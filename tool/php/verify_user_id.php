@@ -18,6 +18,7 @@ function verifyUserID($id)
       $stmt->execute();
 
       $result = $stmt->get_result();
+      if ($result->num_rows !== 1) return false;
       $result = $result->fetch_assoc();
 
       return $result['result'] === 1;
