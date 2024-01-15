@@ -1,7 +1,7 @@
 function sanitize(param)
 {
       if (typeof param !== 'string') return param;
-      
+
       // Remove leading and trailing whitespaces
       param = param.trim();
       // Remove backslashes
