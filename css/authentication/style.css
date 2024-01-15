@@ -37,14 +37,6 @@
       display: none;
 }
 
-.wait {
-      cursor: wait !important;
-}
-
-.disable_link {
-      pointer-events: none;
-}
-
 @media only screen and (max-width:330px) {
       .error_message svg {
             width: 20px;

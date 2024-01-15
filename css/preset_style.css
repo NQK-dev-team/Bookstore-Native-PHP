@@ -60,6 +60,14 @@ body {
       max-width: 290px;
 }
 
+.wait {
+      cursor: wait !important;
+}
+
+.disable_link {
+      pointer-events: none;
+}
+
 @media only screen and (max-width: 991px) {
       #header {
             height: 60px;
