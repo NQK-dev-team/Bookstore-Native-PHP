@@ -6,34 +6,39 @@ require_once __DIR__ . '/../../tool/php/password.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['phone'])) {
-            $phone = sanitize($_POST['phone']);
+            try {
+                  $phone = sanitize($_POST['phone']);
 
-            // Connect to MySQL
-            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
+                  // Connect to MySQL
+                  $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
-            // Check connection
-            if (!$conn) {
+                  // Check connection
+                  if (!$conn) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'MySQL Connection Failed!']);
+                        exit;
+                  }
+
+                  // Using prepare statement (preventing SQL injection)
+                  $stmt = $conn->prepare("select * from appUser where phone=?");
+                  $stmt->bind_param('s', $phone);
+                  $stmt->execute();
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 1)
+                        echo json_encode(['query_result' => true]);
+                  else if ($result->num_rows === 0)
+                        echo json_encode(['query_result' => false]);
+                  else {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                  }
+
+                  // Close connection
+                  $conn->close();
+            } catch (Exception $e) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'MySQL Connection Failed!']);
-                  exit;
+                  echo json_encode(['error' => $e->getMessage()]);
             }
-
-            // Using prepare statement (preventing SQL injection)
-            $stmt = $conn->prepare("select * from appUser where phone=?");
-            $stmt->bind_param('s', $phone);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($result->num_rows === 1)
-                  echo json_encode(['query_result' => true]);
-            else if ($result->num_rows === 0)
-                  echo json_encode(['query_result' => false]);
-            else {
-                  http_response_code(500);
-                  echo json_encode(['error' => $stmt->error]);
-            }
-
-            // Close connection
-            $conn->close();
       } else {
             http_response_code(400);
             echo json_encode(['error' => 'Invalid data received!']);
