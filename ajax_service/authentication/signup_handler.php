@@ -4,21 +4,7 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
-
-function isAgeValid($input)
-{
-      // Assuming $input is the date of birth in 'Y-m-d' format
-      $dob = new DateTime($input, new DateTimeZone('Asia/Ho_Chi_Minh'));
-      $today = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-      $age = $today->format('Y') - $dob->format('Y');
-
-      // Check if the birthday has occurred this year
-      if ($today->format('m') < $dob->format('m') || ($today->format('m') == $dob->format('m') && $today->format('d') < $dob->format('d'))) {
-            $age--;
-      }
-
-      return $age >= 18;
-}
+require_once __DIR__ . '/../../tool/php/checker.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['name'], $_POST['date'], $_POST['phone'], $_POST['address'])) {
