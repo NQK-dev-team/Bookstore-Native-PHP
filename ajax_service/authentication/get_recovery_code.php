@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['recovery_email'] = $email;
                   } else {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query returns unexpected result!']);
+                        echo json_encode(['error' => $stmt->error]);
                   }
                   // Close statement
                   $stmt->close();

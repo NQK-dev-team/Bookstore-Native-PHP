@@ -23,10 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('s', $phone);
             $stmt->execute();
             $result = $stmt->get_result();
-            if ($result->num_rows > 0)
+            if ($result->num_rows === 1)
                   echo json_encode(['query_result' => true]);
-            else {
+            else if ($result->num_rows === 0)
                   echo json_encode(['query_result' => false]);
+            else {
+                  http_response_code(500);
+                  echo json_encode(['error' => $stmt->error]);
             }
 
             // Close connection

@@ -108,6 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->bind_param('s', $phone);
                   $stmt->execute();
                   $result = $stmt->get_result();
+                  if ($result->num_rows !== 1) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        exit;
+                  }
                   $result = $result->fetch_assoc();
                   if ($result['result'] === 1) {
                         echo json_encode(['error' => 'Phone number has been used!']);
@@ -120,6 +126,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->bind_param('s', $email);
                   $stmt->execute();
                   $result = $stmt->get_result();
+                  if ($result->num_rows !== 1) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        exit;
+                  }
                   $result = $result->fetch_assoc();
                   if ($result['result'] === 1) {
                         echo json_encode(['error' => 'Email has been used!']);
@@ -133,6 +145,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->bind_param('s', $refEmail);
                         $stmt->execute();
                         $result = $stmt->get_result();
+                        if ($result->num_rows !== 1) {
+                              http_response_code(500);
+                              echo json_encode(['error' => $stmt->error]);
+                              $stmt->close();
+                              exit;
+                        }
                         $result = $result->fetch_assoc();
                         if ($result['result'] === 0) {
                               echo json_encode(['error' => 'Referrer email not found!']);
@@ -147,9 +165,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->bind_param('ssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail);
                   $stmt->execute();
 
-                  if ($stmt->affected_rows <= 0) {
+                  if ($stmt->affected_rows < 0) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
+                  } else if ($stmt->affected_rows === 0) {
+                        echo json_encode(['query_result' => false]);
                   } else {
                         echo json_encode(['query_result' => true]);
                         create_new_account_mail($email);

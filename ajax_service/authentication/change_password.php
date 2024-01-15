@@ -96,9 +96,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->bind_param('ss', $hashedPassword, $email);
                   $stmt->execute();
 
-                  if ($stmt->affected_rows <= 0) {
+                  if ($stmt->affected_rows < 0) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
+                  } else if ($stmt->affected_rows === 0) {
+                        echo json_encode(['query_result' => false]);
                   } else {
                         echo json_encode(['query_result' => true]);
                         change_password_mail($email, $user_type);

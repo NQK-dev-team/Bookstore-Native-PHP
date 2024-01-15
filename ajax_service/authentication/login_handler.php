@@ -63,18 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->execute();
                   }
                   $result = $stmt->get_result();
-                  $result = $result->fetch_assoc();
-                  if (!verify_password($password, $result['password']))
+                  if ($result->num_rows === 0) {
                         echo json_encode(['error' => 'Email or password incorrect!']);
-                  else {
-                        // Start or resume the session
-                        session_start();
-                        $_SESSION['type'] = $user_type;
-                        $_SESSION['id'] = $result['id'];
+                  } else if ($result->num_rows < 0 || $result->num_rows > 1) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                  } else {
+                        $result = $result->fetch_assoc();
+                        if (!verify_password($password, $result['password']))
+                              echo json_encode(['error' => 'Email or password incorrect!']);
+                        else {
+                              // Start or resume the session
+                              session_start();
+                              $_SESSION['type'] = $user_type;
+                              $_SESSION['id'] = $result['id'];
 
-                        echo json_encode(['query_result' => true]);
+                              echo json_encode(['query_result' => true]);
 
-                        // Missing a procedure to set status=1 when status=0 and send an email to the customer
+                              // Missing a procedure to set status=1 when status=0 and send an email to the customer
+                        }
                   }
                   // Close statement
                   $stmt->close();
