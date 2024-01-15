@@ -7,6 +7,7 @@
 ### Composer version: 2.6.6
 
 ### Install all required packages using Composer: `composer install`
+###### To fix `The zip extension and unzip/7z commands are both missing` error, go to your PHP 8.3.0 installation folder, find the php.ini file and uncomment this line `;extension=zip`
 
 ### Install mkcert (for Windows OS):
 
