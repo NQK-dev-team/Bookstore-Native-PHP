@@ -3,6 +3,8 @@
 
 function sanitize($param)
 {
+      if (!is_string($param)) return $param;
+      
       // Remove leading and trailing whitespaces
       $param = trim($param);
       // Remove backslashes

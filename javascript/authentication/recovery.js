@@ -72,16 +72,16 @@ function enterEmail(e, user_type)
                   $('a').removeClass('disable_link');
 
                   console.error(err);
-                  if (err.status === 500)
+                  if (err.status >= 500)
                   {
                         const p_elem = document.getElementById('error_message_content_1');
                         p_elem.innerHTML = 'Server encountered error!';
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
-                  } else if (err.status === 400)
+                  } else
                   {
                         const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = 'Server request error!';
+                        p_elem.innerHTML = err.responseJSON.error;
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   }
@@ -150,16 +150,16 @@ function requestRecoveryCode()
                   $('a').removeClass('disable_link');
 
                   console.error(err);
-                  if (err.status === 500)
+                  if (err.status >= 500)
                   {
                         const p_elem = document.getElementById('error_message_content_2');
                         p_elem.innerHTML = 'Server encountered error!';
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
-                  } else if (err.status === 400)
+                  } else
                   {
                         const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = 'Server request error!';
+                        p_elem.innerHTML = err.responseJSON.error;
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
@@ -250,16 +250,16 @@ function enterCode(e)
                   $('a').removeClass('disable_link');
                   
                   console.error(err);
-                  if (err.status === 500)
+                  if (err.status >= 500)
                   {
                         const p_elem = document.getElementById('error_message_content_2');
                         p_elem.innerHTML = 'Server encountered error!';
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
-                  } else if (err.status === 400)
+                  } else
                   {
                         const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = 'Server request error!';
+                        p_elem.innerHTML = err.responseJSON.error;
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
@@ -383,16 +383,16 @@ function changePassword(e, user_type)
                   $('a').removeClass('disable_link');
 
                   console.error(err);
-                  if (err.status === 500)
+                  if (err.status >= 500)
                   {
                         const p_elem = document.getElementById('error_message_content_3');
                         p_elem.innerHTML = 'Server encountered error!';
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
-                  } else if (err.status === 400)
+                  } else
                   {
                         const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = 'Server request error!';
+                        p_elem.innerHTML = err.responseJSON.error;
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   }

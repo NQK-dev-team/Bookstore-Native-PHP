@@ -151,16 +151,16 @@ function signUpHandler(event)
                   $('a').removeClass('disable_link');
 
                   console.error(err);
-                  if (err.status === 500)
+                  if (err.status >= 500)
                   {
                         const p_elem = document.getElementById('error_message_content');
                         p_elem.innerHTML = 'Server encountered error!';
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
-                  } else if (err.status === 400)
+                  } else
                   {
                         const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server request error!';
+                        p_elem.innerHTML = err.responseJSON.error;
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
@@ -179,6 +179,11 @@ function checkPhoneUsed()
             dataType: 'json',
             success: function (data)
             {
+                  const p_elem = document.getElementById('error_message_content');
+                  p_elem.innerHTML = '';
+                  const error_message = document.getElementById('signup_fail');
+                  error_message.style.display = 'none';
+
                   const elem = document.getElementById('phone_used_error');
                   if (data.query_result)
                         elem.style.display = 'flex';
@@ -188,6 +193,19 @@ function checkPhoneUsed()
             error: function (err)
             {
                   console.error(err);
+                  if (err.status >= 500)
+                  {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = 'Server encountered error!';
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'flex';
+                  } else
+                  {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = err.responseJSON.error;
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'flex';
+                  }
             }
       });
 }
@@ -205,6 +223,11 @@ function checkEmailUsed(isRefEmail)
                   dataType: 'json',
                   success: function (data)
                   {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = '';
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'none';
+
                         const elem = document.getElementById('email_used_error');
                         if (data.query_result)
                               elem.style.display = 'flex';
@@ -214,6 +237,19 @@ function checkEmailUsed(isRefEmail)
                   error: function (err)
                   {
                         console.error(err);
+                        if (err.status >= 500)
+                        {
+                              const p_elem = document.getElementById('error_message_content');
+                              p_elem.innerHTML = 'Server encountered error!';
+                              const error_message = document.getElementById('signup_fail');
+                              error_message.style.display = 'flex';
+                        } else
+                        {
+                              const p_elem = document.getElementById('error_message_content');
+                              p_elem.innerHTML = err.responseJSON.error;
+                              const error_message = document.getElementById('signup_fail');
+                              error_message.style.display = 'flex';
+                        }
                   }
             });
       }
@@ -238,6 +274,11 @@ function checkEmailUsed(isRefEmail)
                   dataType: 'json',
                   success: function (data)
                   {
+                        const p_elem = document.getElementById('error_message_content');
+                        p_elem.innerHTML = '';
+                        const error_message = document.getElementById('signup_fail');
+                        error_message.style.display = 'none';
+
                         const elem = document.getElementById('ref_email_error');
                         if (data.query_result)
                               elem.style.display = 'none';
@@ -247,6 +288,19 @@ function checkEmailUsed(isRefEmail)
                   error: function (err)
                   {
                         console.error(err);
+                        if (err.status >= 500)
+                        {
+                              const p_elem = document.getElementById('error_message_content');
+                              p_elem.innerHTML = 'Server encountered error!';
+                              const error_message = document.getElementById('signup_fail');
+                              error_message.style.display = 'flex';
+                        } else
+                        {
+                              const p_elem = document.getElementById('error_message_content');
+                              p_elem.innerHTML = err.responseJSON.error;
+                              const error_message = document.getElementById('signup_fail');
+                              error_message.style.display = 'flex';
+                        }
                   }
             });
       }

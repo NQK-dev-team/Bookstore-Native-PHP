@@ -82,16 +82,16 @@ function loginHandler(e, user_type)
                   $('a').removeClass('disable_link');
 
                   console.error(err);
-                  if (err.status === 500)
+                  if (err.status >= 500)
                   {
                         const p_elem = document.getElementById('error_message_content');
                         p_elem.innerHTML = 'Server encountered error!';
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
-                  } else if (err.status === 400)
+                  } else
                   {
                         const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server request error!';
+                        p_elem.innerHTML = err.responseJSON.error;
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
                   }
