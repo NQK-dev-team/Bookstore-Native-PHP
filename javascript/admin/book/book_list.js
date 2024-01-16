@@ -9,6 +9,21 @@ $(document).ready(function ()
       {
             $('#error_message').text('');
       });
+
+      $('#deactivateModal').on('hidden.bs.modal', function ()
+      {
+            DEACTIVATE_ID = null;
+      });
+
+      $('#activateModal').on('hidden.bs.modal', function ()
+      {
+            ACTIVATE_ID = null;
+      });
+
+      $('#deleteModal').on('hidden.bs.modal', function ()
+      {
+            DELETE_ID = null;
+      });
 });
 
 function fetchBookList()
@@ -53,12 +68,9 @@ function fetchBookList()
             dataType: 'json',
             success: function (data)
             {
-                  console.log(data);
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#next_button').prop('disabled', nextBtnDisabledProp);
-                  $('#prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#list_offset').prop('disabled', true);
 
                   if (data.error)
@@ -74,7 +86,8 @@ function fetchBookList()
                         $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
                         $('#total_entries').text(data.query_result[1]);
 
-                        $('#next_button').prop('disabled', $('#next_button').prop('disabled') || listOffset * entry >= data.query_result[1]);
+                        $('#prev_button').prop('disabled', prevBtnDisabledProp || listOffset === 1);
+                        $('#next_button').prop('disabled', nextBtnDisabledProp || listOffset * entry >= data.query_result[1]);
 
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[0].length; i++)
@@ -118,14 +131,14 @@ function fetchBookList()
                                           {
                                                 div.append($(`<p class='mb-0'>
                                                       ${ data.query_result[0][i].category[j].name }
-                                                      <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
+                                                      <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
                                           }
                                           else
                                           {
                                                 div.append($(`<p>
                                                       ${ data.query_result[0][i].category[j].name }
-                                                      <i class="bi bi-question-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
+                                                      <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
                                           }
                                     }
@@ -144,7 +157,7 @@ function fetchBookList()
 
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').text(data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A'));
                               trElem.append($('<td>').addClass('align-middle').append(
-                                    $(`<svg fill='#ffee00' width='24px' height='24px' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' class='icon' stroke='#ffee00'><g id='SVGRepo_bgCarrier' stroke-width='0'></g><g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'></g><g id='SVGRepo_iconCarrier'> <path d='M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 0 0 .6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0 0 46.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z'></path> </g></svg>`)
+                                    $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
                               ).append(
                                     $(`<span>`).text(data.query_result[0][i].avgRating)
                               ));
@@ -161,15 +174,15 @@ function fetchBookList()
                               trElem.append(
                                     $(`<td class='align-middle'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
                                                             </a>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactive' : 'Activate' }\">
+                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactive' : 'Activate' }\">
                                                                   <i class="bi bi-power text-white"></i>
                                                             </button>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0'>
+                                                            ${ data.query_result[0][i].can_delete ? `<button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class=\"bi bi-trash text-white\"></i>
-                                                            </button>
+                                                            </button>`: '' }
                                                       </div>
                                                 </td>`));
 
@@ -245,31 +258,141 @@ function updateSwitchLabel()
 function confirmDeleteBook(id)
 {
       DELETE_ID = id;
+      $('#deleteModal').modal('show');
 }
 
 function deleteBook()
 {
+      $.ajax({
+            url: '/ajax_service/book/delete_book.php',
+            type: 'DELETE',
+            data: {
+                  id: sanitize(DELETE_ID)
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#error_message').text('');
+                        $('#deleteModal').modal('hide');
+                        fetchBookList();
+                  }
+            },
+            error: function (err)
+            {
+                  console.error(err);
 
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 }
 
 function confirmDeactivateBook(id)
 {
       DEACTIVATE_ID = id;
+      $('#deactivateModal').modal('show');
 }
 
 function deactivateBook()
 {
+      $.ajax({
+            url: '/ajax_service/book/update_book_status.php',
+            type: 'PATCH',
+            data: {
+                  id: sanitize(DEACTIVATE_ID),
+                  status: false
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#error_message').text('');
+                        $('#deactivateModal').modal('hide');
+                        fetchBookList();
+                  }
+            },
+            error: function (error)
+            {
+                  console.error(error);
 
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 }
 
 function confirmActivateBook(id)
 {
       ACTIVATE_ID = id;
+      $('#activateModal').modal('show');
 }
 
 function activateBook()
 {
+      $.ajax({
+            url: '/ajax_service/book/update_book_status.php',
+            type: 'PATCH',
+            data: {
+                  id: sanitize(ACTIVATE_ID),
+                  status: true
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#error_message').text('');
+                        $('#activateModal').modal('hide');
+                        fetchBookList();
+                  }
+            },
+            error: function (error)
+            {
+                  console.error(error);
 
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 }
 
 $("#search_form").submit(function (e)

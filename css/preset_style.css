@@ -68,6 +68,10 @@ body {
       pointer-events: none;
 }
 
+.help:hover {
+      cursor: help;
+}
+
 @media only screen and (max-width: 991px) {
       #header {
             height: 60px;

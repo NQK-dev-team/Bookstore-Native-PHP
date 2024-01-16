@@ -62,19 +62,19 @@ if (return_navigate_error() === 400) {
                               exit;
                         } else if ($sub_result->num_rows > 0) {
                               $elem .= "<td class=\"col-1 align-middle\">
-                                                            <div class='d-flex flex-column'>";
+                                          <div class='d-flex flex-column'>";
                               while ($sub_row = $sub_result->fetch_assoc()) {
                                     if ($sub_result->num_rows === 1)
                                           $elem .= "<p class='mb-0'>
-                                                                  {$sub_row['authorName']}
-                                                                  </p>";
+                                                      {$sub_row['authorName']}
+                                                </p>";
                                     else
                                           $elem .= "<p>
-                                                                  {$sub_row['authorName']}
-                                                                  </p>";
+                                                      {$sub_row['authorName']}
+                                                </p>";
                               }
                               $elem .= "</div>
-                                                            </td>";
+                                          </td>";
                         } else
                               $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
 
@@ -96,41 +96,41 @@ if (return_navigate_error() === 400) {
                                     $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
                                     if ($sub_result->num_rows === 1)
                                           $elem .= "<p class='mb-0'>
-                                                                  {$sub_row['name']}
-                                                                  <i class=\"bi bi-question-circle\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
-                                                                  </p>";
+                                                      {$sub_row['name']}
+                                                      <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
+                                                </p>";
                                     else
                                           $elem .= "<p>
-                                                                  {$sub_row['name']}
-                                                                  <i class=\"bi bi-question-circle\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
-                                                                  </p>";
+                                                      {$sub_row['name']}
+                                                      <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
+                                                </p>";
                               }
                               $elem .= "</div>
-                                                            </td>";
+                                          </td>";
                         } else
                               $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
 
                         $sub_stmt->close();
 
                         $elem .= "<td class=\"col-1 align-middle\">
-                                                      <div class='d-flex flex-column'>
-                                                            <a target=\"_blank\" alt=\"publisher link\" href=\"{$row['publisherLink']}\" class='mb-3'>
-                                                            {$row['publisher']}
-                                                            </a>
-                                                            <p>
-                                                            {$formatDate}   
-                                                            </p>
-                                                      </div>
-                                                      </td>";
+                                    <div class='d-flex flex-column'>
+                                          <a target=\"_blank\" alt=\"publisher link\" href=\"{$row['publisherLink']}\" class='mb-3'>
+                                                {$row['publisher']}
+                                          </a>
+                                          <p>
+                                                {$formatDate}   
+                                          </p>
+                                    </div>
+                              </td>";
                         $bookDescription = $row['description'] ? $row['description'] : 'N/A';
                         $elem .= "<td class=\"col-1 align-middle\">{$bookDescription}</td>";
                         $elem .= "<td class=\"align-middle\">
-                                                      <svg fill='#ffee00' width='24px' height='24px' viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg' class='icon' stroke='#ffee00'><g id='SVGRepo_bgCarrier' stroke-width='0'></g><g id='SVGRepo_tracerCarrier' stroke-linecap='round' stroke-linejoin='round'></g><g id='SVGRepo_iconCarrier'> <path d='M908.1 353.1l-253.9-36.9L540.7 86.1c-3.1-6.3-8.2-11.4-14.5-14.5-15.8-7.8-35-1.3-42.9 14.5L369.8 316.2l-253.9 36.9c-7 1-13.4 4.3-18.3 9.3a32.05 32.05 0 0 0 .6 45.3l183.7 179.1-43.4 252.9a31.95 31.95 0 0 0 46.4 33.7L512 754l227.1 119.4c6.2 3.3 13.4 4.4 20.3 3.2 17.4-3 29.1-19.5 26.1-36.9l-43.4-252.9 183.7-179.1c5-4.9 8.3-11.3 9.3-18.3 2.7-17.5-9.5-33.7-27-36.3z'></path> </g></svg>
-                                                      <span>{$row['avgRating']}</span>
-                                                      </td>";
+                                          <i class=\"bi bi-star-fill text-warning\"></i>
+                                          <span>{$row['avgRating']}</span>
+                                    </td>";
 
                         $elem .= "<td class=\"col-1 align-middle\">
-                                                      <div class='d-flex flex-column'>";
+                                    <div class='d-flex flex-column'>";
                         $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
                         $sub_stmt->bind_param('s', $id);
                         $sub_stmt->execute();
@@ -155,12 +155,12 @@ if (return_navigate_error() === 400) {
                         if ($sub_result->num_rows === 1) {
                               $sub_row = $sub_result->fetch_assoc();
                               $elem .= "<p>PDF: \${$sub_row['price']} <a target='_blank' href=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$sub_row['filePath']}\" alt='PDF file'>
-                                                            <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
-                                                            </a></p>";
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                                          </a></p>";
                         } else if ($sub_result->num_rows === 0)
                               $elem .= "<p>PDF: N/A <a href='#' alt='No PDF file'>
-                                                            <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
-                                                            </a></p>";
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                                          </a></p>";
                         else {
                               http_response_code(500);
                               require __DIR__ . '/../../../error/500.php';
@@ -170,7 +170,20 @@ if (return_navigate_error() === 400) {
                         $sub_stmt->close();
                         $elem .= "</div></td>";
 
-                        $elem .= "<td class='align-middle'>
+                        $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
+    or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
+                        $sub_stmt->bind_param('ss', $id, $id);
+                        $sub_stmt->execute();
+                        $sub_result = $sub_stmt->get_result();
+                        if ($sub_result->num_rows !== 1) {
+                              http_response_code(500);
+                              require __DIR__ . '/../../../error/500.php';
+                              $sub_stmt->close();
+                              exit;
+                        } else {
+                              $sub_result = $sub_result->fetch_assoc();
+                              if ($sub_result['result'])
+                                    $elem .= "<td class='align-middle'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -178,11 +191,23 @@ if (return_navigate_error() === 400) {
                                                             <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                                                   <i class=\"bi bi-power text-white\"></i>
                                                             </button>
-                                                            <button onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
+                                                      </div>
+                                                </td>";
+                              else
+                                    $elem .= "<td class='align-middle'>
+                                                      <div class='d-flex flex-lg-row flex-column'>
+                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                                  <i class=\"bi bi-pencil text-white\"></i>
+                                                            </a>
+                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                                                                  <i class=\"bi bi-power text-white\"></i>
+                                                            </button>
+                                                            <button onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
                                                                   <i class=\"bi bi-trash text-white\"></i>
                                                             </button>
                                                       </div>
                                                 </td>";
+                        }
                         $elem .= '</tr>';
                   }
             }
@@ -230,6 +255,7 @@ if (return_navigate_error() === 400) {
             ?>
             <section id="page">
                   <div class="container-fluid h-100 d-flex flex-column">
+                        <h1 class='fs-2 mx-auto mt-3'>Book List</h1>
                         <form class="d-flex align-items-center mt-2 w-100 search_form mx-auto" role="search" id="search_form">
                               <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                     <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
@@ -244,7 +270,7 @@ if (return_navigate_error() === 400) {
                               <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
                         </form>
                         <div class="mx-auto mt-3">
-                              <a class="btn btn-success" href="./add-book"><strong>+</strong> Add New Book</a>
+                              <a class="btn btn-success btn-sm" href="./add-book"><strong>+</strong> Add New Book</a>
                         </div>
                         <div class="mt-2">
                               <div class="d-flex align-items-center">
@@ -323,6 +349,57 @@ if (return_navigate_error() === 400) {
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5">Confirm deactivation</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Are you sure you want to deactivate this book?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-danger" onclick="deactivateBook()">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5">Confirm activation</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Are you sure you want to activate this book?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-primary" onclick="activateBook()">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5">Confirm deletion</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Are you sure you want to delete this book?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-danger" onclick="deleteBook()">Confirm</button>
                                     </div>
                               </div>
                         </div>

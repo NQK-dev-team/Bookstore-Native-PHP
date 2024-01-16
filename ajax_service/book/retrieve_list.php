@@ -62,6 +62,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                               $id = $row['id'];
 
+                              $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
+    or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
+                              $sub_stmt->bind_param('ss', $id, $id);
+                              $sub_stmt->execute();
+                              $sub_result = $sub_stmt->get_result();
+                              if ($sub_result->num_rows !== 1) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $sub_stmt->close();
+                                    exit;
+                              } else {
+                                    $sub_result = $sub_result->fetch_assoc();
+                                    $queryResult[$idx]['can_delete']=!$sub_result['result'];
+                              }
+
                               $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
                               $sub_stmt->bind_param('s', $id);
                               $sub_stmt->execute();
