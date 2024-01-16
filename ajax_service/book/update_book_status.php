@@ -26,8 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   if ($stmt->affected_rows < 0 || $stmt->affected_rows > 1) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else if ($stmt->affected_rows === 0) {
-                        echo json_encode(['error' => 'No book updated!']);
                   } else {
                         echo json_encode(['query_result' => true]);
                   }
