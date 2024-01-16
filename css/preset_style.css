@@ -68,7 +68,7 @@ body {
       pointer-events: none;
 }
 
-.help:hover {
+.help {
       cursor: help;
 }
 
