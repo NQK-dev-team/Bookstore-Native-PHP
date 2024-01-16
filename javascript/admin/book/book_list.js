@@ -281,8 +281,8 @@ function deleteBook()
                   {
                         $('#error_message').text('');
                         $('#deleteModal').modal('hide');
-                        fetchBookList();
                   }
+                  fetchBookList();
             },
             error: function (err)
             {
@@ -328,8 +328,8 @@ function deactivateBook()
                   {
                         $('#error_message').text('');
                         $('#deactivateModal').modal('hide');
-                        fetchBookList();
                   }
+                  fetchBookList();
             },
             error: function (error)
             {
@@ -375,8 +375,8 @@ function activateBook()
                   {
                         $('#error_message').text('');
                         $('#activateModal').modal('hide');
-                        fetchBookList();
                   }
+                  fetchBookList();
             },
             error: function (error)
             {
