@@ -1,0 +1,9 @@
+.custom_container {
+      width: 80%;
+      height: 95%;
+}
+
+.custom_image {
+      max-width: 300px;
+      height: auto;
+}
