@@ -9,6 +9,21 @@ $(document).ready(function ()
       {
             $('#error_message').text('');
       });
+
+      $('#deactivateModal').on('hidden.bs.modal', function ()
+      {
+            DEACTIVATE_ID = null;
+      });
+
+      $('#activateModal').on('hidden.bs.modal', function ()
+      {
+            ACTIVATE_ID = null;
+      });
+
+      $('#deleteModal').on('hidden.bs.modal', function ()
+      {
+            DELETE_ID = null;
+      });
 });
 
 function fetchBookList()
@@ -53,12 +68,9 @@ function fetchBookList()
             dataType: 'json',
             success: function (data)
             {
-                  console.log(data);
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#next_button').prop('disabled', nextBtnDisabledProp);
-                  $('#prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#list_offset').prop('disabled', true);
 
                   if (data.error)
@@ -74,7 +86,8 @@ function fetchBookList()
                         $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
                         $('#total_entries').text(data.query_result[1]);
 
-                        $('#next_button').prop('disabled', $('#next_button').prop('disabled') || listOffset * entry >= data.query_result[1]);
+                        $('#prev_button').prop('disabled', prevBtnDisabledProp || listOffset === 1);
+                        $('#next_button').prop('disabled', nextBtnDisabledProp || listOffset * entry >= data.query_result[1]);
 
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[0].length; i++)
@@ -161,15 +174,15 @@ function fetchBookList()
                               trElem.append(
                                     $(`<td class='align-middle'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
                                                             </a>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactive' : 'Activate' }\">
+                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactive' : 'Activate' }\">
                                                                   <i class="bi bi-power text-white"></i>
                                                             </button>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0'>
+                                                            ${ data.query_result[0][i].can_delete ? `<button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class=\"bi bi-trash text-white\"></i>
-                                                            </button>
+                                                            </button>`: '' }
                                                       </div>
                                                 </td>`));
 
@@ -245,31 +258,141 @@ function updateSwitchLabel()
 function confirmDeleteBook(id)
 {
       DELETE_ID = id;
+      $('#deleteModal').modal('show');
 }
 
 function deleteBook()
 {
+      $.ajax({
+            url: '/ajax_service/book/delete_book.php',
+            type: 'DELETE',
+            data: {
+                  id: sanitize(DELETE_ID)
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#error_message').text('');
+                        $('#deleteModal').modal('hide');
+                        fetchBookList();
+                  }
+            },
+            error: function (err)
+            {
+                  console.error(err);
 
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 }
 
 function confirmDeactivateBook(id)
 {
       DEACTIVATE_ID = id;
+      $('#deactivateModal').modal('show');
 }
 
 function deactivateBook()
 {
+      $.ajax({
+            url: '/ajax_service/book/update_book_status.php',
+            type: 'PATCH',
+            data: {
+                  id: sanitize(DEACTIVATE_ID),
+                  status: false
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#error_message').text('');
+                        $('#deactivateModal').modal('hide');
+                        fetchBookList();
+                  }
+            },
+            error: function (error)
+            {
+                  console.error(error);
 
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 }
 
 function confirmActivateBook(id)
 {
       ACTIVATE_ID = id;
+      $('#activateModal').modal('show');
 }
 
 function activateBook()
 {
+      $.ajax({
+            url: '/ajax_service/book/update_book_status.php',
+            type: 'PATCH',
+            data: {
+                  id: sanitize(ACTIVATE_ID),
+                  status: true
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#error_message').text('');
+                        $('#activateModal').modal('hide');
+                        fetchBookList();
+                  }
+            },
+            error: function (error)
+            {
+                  console.error(error);
 
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 }
 
 $("#search_form").submit(function (e)
