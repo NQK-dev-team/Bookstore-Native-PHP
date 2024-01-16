@@ -1,4 +1,7 @@
 <?php
+
+use Dotenv\Parser\Value;
+
 require_once __DIR__ . '/../../tool/php/role_check.php';
 
 if (return_navigate_error() === 400) {
@@ -8,6 +11,24 @@ if (return_navigate_error() === 400) {
       http_response_code(403);
       require __DIR__ . '/../../error/403.php';
 } else {
+      require_once __DIR__ . '/../../config/db_connection.php';
+
+      try {
+            // Connect to MySQL
+            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
+
+            // Check connection
+            if (!$conn) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../error/500.php';
+                  exit;
+            }
+            
+            $result = $stmt->get_result();
+      } catch (Exception $e) {
+            http_response_code(500);
+            require __DIR__ . '/../../error/500.php';
+      }
 ?>
 
       <!DOCTYPE html>
@@ -20,7 +41,7 @@ if (return_navigate_error() === 400) {
             ?>
             <link rel="stylesheet" href="/css/preset_style.css">
 
-            <meta name="author" content="Nghia Duong">
+            <meta name="author" content="Quang Nguyen">
             <meta name="description" content="Home page of NQK bookstore">
             <title>NQK Shop</title>
       </head>
@@ -30,6 +51,14 @@ if (return_navigate_error() === 400) {
             require __DIR__ . '/../../layout/customer/header.php';
             ?>
             <section id="page">
+                  <div class="container pb-5 mb-2 mb-md-4">
+                        <div class="row">
+                              <div class="row mx-2">
+                                    
+                                     
+                              </div>
+                        </div>
+                  </div>
             </section>
             <?php
             require __DIR__ . '/../../layout/footer.php';
