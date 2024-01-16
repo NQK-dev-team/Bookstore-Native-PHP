@@ -1,12 +1,15 @@
 <?php
+
+use Dotenv\Parser\Value;
+
 require_once __DIR__ . '/../../tool/php/role_check.php';
 
 if (return_navigate_error() === 400) {
       http_response_code(400);
-      require_once __DIR__ . '/../../error/400.php';
+      require __DIR__ . '/../../error/400.php';
 } else if (return_navigate_error() === 403) {
       http_response_code(403);
-      require_once __DIR__ . '/../../error/403.php';
+      require __DIR__ . '/../../error/403.php';
 } else {
 ?>
 
@@ -15,8 +18,8 @@ if (return_navigate_error() === 400) {
 
       <head>
             <?php
-            require_once __DIR__ . '/../../head_element/cdn.php';
-            require_once __DIR__ . '/../../head_element/meta.php';
+            require __DIR__ . '/../../head_element/cdn.php';
+            require __DIR__ . '/../../head_element/meta.php';
             ?>
             <link rel="stylesheet" href="/css/preset_style.css">
 
