@@ -4,10 +4,10 @@ require_once __DIR__ . '/../../../tool/php/role_check.php';
 
 if (return_navigate_error() === 400) {
       http_response_code(400);
-      require __DIR__ . '/../../../error/400.php';
+      require_once __DIR__ . '/../../../error/400.php';
 } else if (return_navigate_error() === 403) {
       http_response_code(403);
-      require __DIR__ . '/../../../error/403.php';
+      require_once __DIR__ . '/../../../error/403.php';
 } else {
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
@@ -57,7 +57,7 @@ if (return_navigate_error() === 400) {
                         $sub_result = $sub_stmt->get_result();
                         if ($sub_result->num_rows < 0) {
                               http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              require_once __DIR__ . '/../../../error/500.php';
                               $sub_stmt->close();
                               exit;
                         } else if ($sub_result->num_rows > 0) {
@@ -86,7 +86,7 @@ if (return_navigate_error() === 400) {
                         $sub_result = $sub_stmt->get_result();
                         if ($sub_result->num_rows < 0) {
                               http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              require_once __DIR__ . '/../../../error/500.php';
                               $sub_stmt->close();
                               exit;
                         } else if ($sub_result->num_rows > 0) {
@@ -142,7 +142,7 @@ if (return_navigate_error() === 400) {
                               $elem .= "<p>Physical: N/A (in stock: N/A)</p>";
                         else {
                               http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              require_once __DIR__ . '/../../../error/500.php';
                               $sub_stmt->close();
                               exit;
                         }
@@ -163,7 +163,7 @@ if (return_navigate_error() === 400) {
                                           </a></p>";
                         else {
                               http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              require_once __DIR__ . '/../../../error/500.php';
                               $sub_stmt->close();
                               exit;
                         }
@@ -177,7 +177,7 @@ if (return_navigate_error() === 400) {
                         $sub_result = $sub_stmt->get_result();
                         if ($sub_result->num_rows !== 1) {
                               http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              require_once __DIR__ . '/../../../error/500.php';
                               $sub_stmt->close();
                               exit;
                         } else {
@@ -218,7 +218,7 @@ if (return_navigate_error() === 400) {
             $result = $stmt->get_result();
             if ($result->num_rows !== 1) {
                   http_response_code(500);
-                  require __DIR__ . '/../../../error/500.php';
+                  require_once __DIR__ . '/../../../error/500.php';
                   $stmt->close();
                   exit;
             } else {
@@ -229,7 +229,7 @@ if (return_navigate_error() === 400) {
             $conn->close();
       } catch (Exception $e) {
             http_response_code(500);
-            require __DIR__ . '/../../../error/500.php';
+            require_once __DIR__ . '/../../../error/500.php';
       }
 ?>
 
@@ -246,7 +246,7 @@ if (return_navigate_error() === 400) {
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Manage books of NQK Bookstore">
             <title>Manage Books</title>
-            <link rel="stylesheet" href="/css/admin/book/styles.css">
+            <link rel="stylesheet" href="/css/admin/book/book_list.css">
       </head>
 
       <body>
