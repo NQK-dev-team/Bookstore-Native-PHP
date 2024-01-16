@@ -120,6 +120,7 @@ if (return_navigate_error() === 400) {
                         }
                   }
                   $stmt->close();
+$conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
                   require_once __DIR__ . '/../../../error/500.php';
