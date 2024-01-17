@@ -19,3 +19,13 @@
 #category_list {
       max-height: 250px !important;
 }
+
+.button_group {
+      position: absolute;
+}
+
+@media only screen and (max-width:1199px) {
+      .button_group {
+            position: unset;
+      }
+}

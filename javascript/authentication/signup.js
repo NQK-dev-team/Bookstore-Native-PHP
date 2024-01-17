@@ -304,33 +304,3 @@ function checkEmailUsed(isRefEmail)
             });
       }
 }
-
-function checkAge()
-{
-      const dobInput = document.getElementById("inputDate").value;
-
-      const elem1 = document.getElementById('invalid_dob');
-      const elem2 = document.getElementById('invalid_age');
-
-      if (dobInput === '')
-      {
-            elem1.style.display = 'none';
-            elem2.style.display = 'none';
-            return;
-      }
-
-      if (isDobValid(dobInput))
-      {
-            elem1.style.display = 'none';
-
-            if (isAgeValid(dobInput))
-                  elem2.style.display = 'none';
-            else
-                  elem2.style.display = 'flex';
-      }
-      else
-      {
-            elem2.style.display = 'none';
-            elem1.style.display = 'flex';
-      }
-}

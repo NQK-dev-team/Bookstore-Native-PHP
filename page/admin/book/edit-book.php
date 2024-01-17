@@ -164,8 +164,9 @@ if (return_navigate_error() === 400) {
             ?>
             <section id="page">
                   <div class='w-100 h-100 d-flex'>
-                        <form onsubmit="confirmSubmitForm(event)" class='border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
-                              <div class="ms-auto me-3 mt-xl-3 mb-3 mt-5 order-xl-1 order-2">
+                        <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
+                              <h1 class='mt-xl-3 ms-xl-3 mx-auto mt-2'>Edit <?php echo $query_result['name']; ?></h1>
+                              <div class="ms-auto me-3 mt-xl-3 mb-3 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
                                     <button class="btn btn-secondary ms-1" onclick="resetForm()" type='button'>Reset</button>
                                     <button class="btn btn-success me-1" type='submit'>Save</button>
                               </div>
@@ -266,7 +267,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Select category</h1>
+                                          <h2 class="modal-title fs-5">Select category</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -298,7 +299,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm Change</h1>
+                                          <h2 class="modal-title fs-5">Confirm Change</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -315,7 +316,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Error!</h1>
+                                          <h2 class="modal-title fs-5">Error!</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">

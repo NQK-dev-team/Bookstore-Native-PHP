@@ -342,7 +342,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Error!</h1>
+                                          <h2 class="modal-title fs-5">Error!</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -358,7 +358,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm Deactivation</h1>
+                                          <h2 class="modal-title fs-5">Confirm Deactivation</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -375,7 +375,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm Activation</h1>
+                                          <h2 class="modal-title fs-5">Confirm Activation</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -392,7 +392,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm Deletion</h1>
+                                          <h2 class="modal-title fs-5">Confirm Deletion</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">

@@ -28,7 +28,7 @@ if (check_session()) header('Location: /admin/');
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
                   <form onsubmit="enterEmail(event,'admin')" class="bg-white border border-black rounded form my-auto flex-column px-3" id="recovery_email_form">
                         <div class='w-100 d-flex flex-column'>
-                              <h2 class="mx-auto mb-0 mt-1">Confirm email</h2>
+                              <h1 class="mx-auto mb-0 mt-1">Confirm email</h1>
                               <div class="align-items-center justify-content-center error_message mt-2 mx-auto" id="recovery_fail_1">
                                     <svg class="ms-1" fill="#ff0000" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000" stroke-width="30.72">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -53,7 +53,7 @@ if (check_session()) header('Location: /admin/');
 
                   <form onsubmit="enterCode(event)" class="bg-white border border-black rounded form my-auto flex-column px-3" id="recovery_code_form">
                         <div class='w-100 d-flex flex-column'>
-                              <h2 class="mx-auto mb-0 mt-1">Recovery code</h2>
+                              <h1 class="mx-auto mb-0 mt-1">Recovery code</h1>
                               <div class="align-items-center justify-content-center error_message mt-2 mx-auto" id="recovery_fail_2">
                                     <svg class="ms-1" fill="#ff0000" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000" stroke-width="30.72">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -83,7 +83,7 @@ if (check_session()) header('Location: /admin/');
 
                   <form onsubmit="changePassword(event,'admin')" class="bg-white border border-black rounded form my-auto flex-column px-3" id="recovery_password_form">
                         <div class='w-100 d-flex flex-column'>
-                              <h2 class="mx-auto mb-0 mt-1">Change password</h2>
+                              <h1 class="mx-auto mb-0 mt-1">Change password</h1>
                               <div class="align-items-center justify-content-center error_message mt-2 mx-auto" id="recovery_fail_3">
                                     <svg class="ms-1" fill="#ff0000" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000" stroke-width="30.72">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -116,7 +116,7 @@ if (check_session()) header('Location: /admin/');
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="modalLabel">Password Changed!</h1>
+                                    <h2 class="modal-title fs-5" id="modalLabel">Password Changed!</h2>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body d-flex flex-column">
