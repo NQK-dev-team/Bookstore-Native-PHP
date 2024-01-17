@@ -49,7 +49,7 @@ create table book(
     unique(name,edition),
     isbn varchar(13) not null unique,
     ageRestriction int,
-    check(ageRestriction>0 and ageRestriction<=30),
+    check(ageRestriction>0),
     avgRating double,
     check(avgRating>=0 and avgRating<=5),
     publisher varchar(100) not null,
