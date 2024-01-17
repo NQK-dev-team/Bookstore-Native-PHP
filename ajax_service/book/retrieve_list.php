@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   } else {
                         $idx = 0;
                         while ($row = $result->fetch_assoc()) {
-                              $imgPath = $row['imagePath'];
+                              $imgPath = encodedCharacter($row['imagePath']);
                               $host = $_SERVER['HTTP_HOST'];
                               $row['imagePath'] = "https://$host/data/book/$imgPath";
                               $row['edition'] = convertToOrdinal($row['edition']);
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     exit;
                               } else {
                                     $sub_result = $sub_result->fetch_assoc();
-                                    $queryResult[$idx]['can_delete']=!$sub_result['result'];
+                                    $queryResult[$idx]['can_delete'] = !$sub_result['result'];
                               }
 
                               $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $queryResult[$idx]['fileCopy'] = [];
                               } else if ($sub_result->num_rows === 1) {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
-                                          $filePath = $sub_row['filePath'];
+                                          $filePath = encodedCharacter($sub_row['filePath']);
                                           $sub_row['filePath'] = "https://$host/data/book/$filePath";
 
                                           $queryResult[$idx]['fileCopy']['price'] = $sub_row['price'];

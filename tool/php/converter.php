@@ -30,6 +30,14 @@ function convertToOrdinal($number)
       return $number . $suffix;
 }
 
+function encodedCharacter($input)
+{
+      $result = str_replace(' ', '%20', $input);
+      $result = str_replace('`', '%60', $result);
+
+      return $result;
+}
+
 function revertEncodedCharacter($input)
 {
       $result = str_replace('%20', ' ', $input);

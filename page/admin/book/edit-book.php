@@ -13,6 +13,7 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../../config/db_connection.php';
             require_once __DIR__ . '/../../../tool/php/sanitizer.php';
             require_once __DIR__ . '/../../../tool/php/formatter.php';
+            require_once __DIR__ . '/../../../tool/php/converter.php';
 
             try {
                   $id = sanitize($_GET['id']);
@@ -47,6 +48,7 @@ if (return_navigate_error() === 400) {
                   } else {
                         $result = $result->fetch_assoc();
                         $result['isbn'] = formatISBN($result['isbn']);
+                        $result['imagePath'] = encodedCharacter($result['imagePath']);
                         $result['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/{$result['imagePath']}";
                         $query_result = $result;
                   }
@@ -124,6 +126,7 @@ if (return_navigate_error() === 400) {
                         $query_result['fileCopy'] = [];
                   } else {
                         while ($row = $result->fetch_assoc()) {
+                              $row['filePath'] = encodedCharacter($row['filePath']);
                               $query_result['fileCopy']['price'] = $row['price'];
                               $query_result['fileCopy']['filePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/{$row['filePath']}";
                         }
@@ -165,7 +168,7 @@ if (return_navigate_error() === 400) {
             <section id="page">
                   <div class='w-100 h-100 d-flex'>
                         <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
-                              <h1 class='mt-xl-3 ms-xl-3 mx-auto mt-2'>Edit <?php echo $query_result['name']; ?></h1>
+                              <h1 class='ms-xl-3 mt-2 mx-auto'>Edit Book</h1>
                               <div class="ms-auto me-3 mt-xl-3 mb-3 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
                                     <button class="btn btn-secondary ms-1" onclick="resetForm()" type='button'>Reset</button>
                                     <button class="btn btn-success me-1" type='submit'>Save</button>
