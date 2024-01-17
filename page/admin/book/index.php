@@ -123,7 +123,7 @@ if (return_navigate_error() === 400) {
                                     </div>
                               </td>";
                         $bookDescription = $row['description'] ? $row['description'] : 'N/A';
-                        $elem .= "<td class=\"col-1 align-middle\">{$bookDescription}</td>";
+                        $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$bookDescription}</div></td>";
                         $elem .= "<td class=\"align-middle\">
                                           <i class=\"bi bi-star-fill text-warning\"></i>
                                           <span>{$row['avgRating']}</span>
@@ -230,6 +230,7 @@ if (return_navigate_error() === 400) {
       } catch (Exception $e) {
             http_response_code(500);
             require_once __DIR__ . '/../../../error/500.php';
+            exit;
       }
 ?>
 
@@ -357,7 +358,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm deactivation</h1>
+                                          <h1 class="modal-title fs-5">Confirm Deactivation</h1>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -374,7 +375,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm activation</h1>
+                                          <h1 class="modal-title fs-5">Confirm Activation</h1>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -391,7 +392,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm deletion</h1>
+                                          <h1 class="modal-title fs-5">Confirm Deletion</h1>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">

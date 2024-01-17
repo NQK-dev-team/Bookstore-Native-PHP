@@ -155,7 +155,9 @@ function fetchBookList()
                                     )
                               ));
 
-                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').text(data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A'));
+                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
+                                    $('<div>').addClass('truncate').text(data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A'))
+                              );
                               trElem.append($('<td>').addClass('align-middle').append(
                                     $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
                               ).append(

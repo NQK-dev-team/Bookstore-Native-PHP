@@ -72,6 +72,10 @@ body {
       cursor: help;
 }
 
+.pointer {
+      cursor: pointer;
+}
+
 @media only screen and (max-width: 991px) {
       #header {
             height: 60px;

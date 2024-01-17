@@ -126,7 +126,7 @@ if (check_session()) header('Location: /');
                                     <label for="inputPassword" class="fs-4 fw-medium">Password</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password">
+                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputRefEmail" class="fs-4 fw-medium">Refferer email</label>
@@ -153,7 +153,7 @@ if (check_session()) header('Location: /');
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="modalLabel">Sign up success</h1>
+                                    <h1 class="modal-title fs-5" id="modalLabel">Sign Up Success</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body d-flex flex-column">
@@ -175,6 +175,7 @@ if (check_session()) header('Location: /');
       <script src="/tool/js/input_validity.js"></script>
       <script src="/tool/js/dob_checker.js"></script>
       <script src="/javascript/authentication/signup.js"></script>
+      <script src="/tool/js/tool_tip.js"></script>
 </body>
 
 </html>

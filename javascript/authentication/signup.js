@@ -5,6 +5,8 @@ $(document).ready(function ()
       {
             window.location.href = "/authentication/";
       });
+
+      initToolTip();
 });
 
 function signUpHandler(event)
