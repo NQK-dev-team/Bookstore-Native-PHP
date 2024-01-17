@@ -37,9 +37,13 @@ if (return_navigate_error() === 400) {
                   if ($result->num_rows < 0 || $result->num_rows > 1) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
+                        $stmt->close();
+                        exit;
                   } else if ($result->num_rows === 0) {
                         http_response_code(404);
                         require_once __DIR__ . '/../../../error/404.php';
+                        $stmt->close();
+                        exit;
                   } else {
                         $result = $result->fetch_assoc();
                         $result['isbn'] = formatISBN($result['isbn']);
@@ -56,6 +60,8 @@ if (return_navigate_error() === 400) {
                   if ($result->num_rows < 0) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
+                        $stmt->close();
+                        exit;
                   } else if ($result->num_rows === 0) {
                         $query_result['author'] = [];
                   } else {
@@ -65,7 +71,7 @@ if (return_navigate_error() === 400) {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                  $stmt = $conn->prepare('select category.name from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
                   $stmt->bind_param('s', $id);
                   $stmt->execute();
                   $result = $stmt->get_result();
@@ -73,14 +79,13 @@ if (return_navigate_error() === 400) {
                   if ($result->num_rows < 0) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
+                        $stmt->close();
+                        exit;
                   } else if ($result->num_rows === 0) {
                         $query_result['category'] = [];
                   } else {
                         while ($row = $result->fetch_assoc()) {
-                              $temp = [];
-                              $temp['name'] = $row['name'];
-                              $temp['description'] = $row['description'];
-                              $query_result['category'][] = $temp;
+                              $query_result['category'] = $row;
                         }
                   }
                   $stmt->close();
@@ -93,6 +98,8 @@ if (return_navigate_error() === 400) {
                   if ($result->num_rows < 0 || $result->num_rows > 1) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
+                        $stmt->close();
+                        exit;
                   } else if ($result->num_rows === 0) {
                         $query_result['physicalCopy'] = [];
                   } else {
@@ -111,6 +118,8 @@ if (return_navigate_error() === 400) {
                   if ($result->num_rows < 0 || $result->num_rows > 1) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
+                        $stmt->close();
+                        exit;
                   } else if ($result->num_rows === 0) {
                         $query_result['fileCopy'] = [];
                   } else {
@@ -120,14 +129,16 @@ if (return_navigate_error() === 400) {
                         }
                   }
                   $stmt->close();
-$conn->close();
+                  $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
                   require_once __DIR__ . '/../../../error/500.php';
+                  exit;
             }
       } else {
             http_response_code(400);
             require_once __DIR__ . '/../../../error/400.php';
+            exit;
       }
 ?>
 
@@ -190,6 +201,15 @@ $conn->close();
                                                       <label for="ageInput" class="form-label">Age Restriction:</label>
                                                       <input type="number" min="0" class="form-control" id="ageInput" value="<?php echo $query_result['ageRestriction'] ? $query_result['ageRestriction'] : ''; ?>">
                                                 </div>
+                                                <div class="my-2 px-xl-5 px-3">
+                                                      <label for="authorInput" class="form-label">Author:</label>
+                                                      <input type="text" class="form-control" id="authorInput" value="<?php echo implode(', ', $query_result['author']); ?>">
+                                                      <small class="form-text text-muted">You can enter multiple authors with each seperated by comma</small>
+                                                </div>
+                                                <div class="my-2 px-xl-5 px-3">
+                                                      <label for="categoryInput" class="form-label">Category:</label>
+                                                      <input readonly onclick="openCategoryModal()" type="text" class="form-control pointer" id="categoryInput" value="<?php echo implode(', ', $query_result['category']); ?>">
+                                                </div>
                                                 <div class="my-2 px-xl-5 px-3 d-flex flex-xl-row flex-column row">
                                                       <div class='col'>
                                                             <label for="publisherInput" class="form-label">Publisher:</label>
@@ -207,7 +227,7 @@ $conn->close();
                                                 <div class="my-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
                                                       <div class='col'>
                                                             <label for="physicalPriceInput" class="form-label">Physical Copy Price ($):</label>
-                                                            <input type="number" min="0" class="form-control" id="physicalPriceInput" value="<?php echo $query_result['physicalCopy']['price']; ?>">
+                                                            <input step="any" type="number" min="0" class="form-control" id="physicalPriceInput" value="<?php echo $query_result['physicalCopy']['price']; ?>">
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col">
                                                             <label for="inStockInput" class="form-label">In Stock:</label>
@@ -215,19 +235,19 @@ $conn->close();
                                                       </div>
                                                 </div>
                                                 <div class="mb-auto mt-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
-                                                      <div class='col'>
+                                                      <div class='col mb-3'>
                                                             <label for="filePriceInput" class="form-label">File Copy Price ($):</label>
-                                                            <input type="number" min="0" class="form-control" id="filePriceInput" value="<?php echo $query_result['fileCopy']['price']; ?>">
+                                                            <input step="any" type="number" min="0" class="form-control" id="filePriceInput" value="<?php echo $query_result['fileCopy']['price']; ?>">
                                                       </div>
-                                                      <div class="ms-md-5 mt-2 mt-md-0 col">
-                                                            <div class="d-flex flex-column">
-                                                                  <label class="form-label">
+                                                      <div class="ms-md-5 mt-2 mt-md-0 col mb-3">
+                                                            <div class="d-flex flex-column h-100">
+                                                                  <label class="form-label" for='filePathInput'>
                                                                         PDF (old file
-                                                                        <a id='pdfPath' href="<?php echo $query_result['fileCopy']['filePath']; ?>" target="_blank" alt='PDF file'>
+                                                                        <a id=' pdfPath' href="<?php echo $query_result['fileCopy']['filePath']; ?>" target="_blank" alt='PDF file'>
                                                                               <i class="bi bi-file-earmark-fill text-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Read file"></i>
                                                                         </a>):
                                                                   </label>
-                                                                  <div class="d-flex align-items-center">
+                                                                  <div class="d-flex align-items-center mt-auto">
                                                                         <label class='btn btn-sm btn-light border border-dark'>
                                                                               <input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">
                                                                               Browse
@@ -241,6 +261,71 @@ $conn->close();
                                     </div>
                               </div>
                         </form>
+                  </div>
+                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5">Select category</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <div class='w-100 mt-2 mb-4'>
+                                                <label class="form-label" for='searchCategoryInput'>Search category:</label>
+                                                <form id="category_search_form" class="d-flex align-items-center w-100 search_form mx-auto" role="search">
+                                                      <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                            <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
+                                                                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                                  <g id="SVGRepo_iconCarrier">
+                                                                        <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
+                                                                  </g>
+                                                            </svg>
+                                                      </button>
+                                                      <input class="form-control search_category" type='text' id='searchCategoryInput'></input>
+                                                </form>
+                                          </div>
+                                          <div class="w-100 overflow-y-auto" id='category_list'>
+                                          </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5">Confirm Change</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Are you sure you want to update this book?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="submitForm()">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h1 class="modal-title fs-5">Error!</h1>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p id="error_message"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
                   </div>
             </section>
             <?php

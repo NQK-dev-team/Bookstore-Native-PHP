@@ -7,3 +7,15 @@
       max-width: 300px;
       height: auto;
 }
+
+.search_category {
+      padding-left: 35px !important;
+}
+
+.check_box{
+      width:200px;
+}
+
+#category_list{
+      max-height:250px !important;
+}
