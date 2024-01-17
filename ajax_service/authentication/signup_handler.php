@@ -9,14 +9,14 @@ require_once __DIR__ . '/../../tool/php/checker.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['name'], $_POST['date'], $_POST['phone'], $_POST['address'])) {
             try {
-                  $email = sanitize($_POST['email']);
-                  $password = sanitize($_POST['password']);
-                  $name = sanitize($_POST['name']);
-                  $date = sanitize($_POST['date']);
-                  $phone = sanitize($_POST['phone']);
-                  $address = $_POST['address'] ? sanitize($_POST['address']) : null;
-                  $card = $_POST['card'] ? sanitize($_POST['card']) : null;
-                  $refEmail = $_POST['refEmail'] ? sanitize($_POST['refEmail']) : null;
+                  $email = sanitize(rawurldecode($_POST['email']));
+                  $password = sanitize(rawurldecode($_POST['password']));
+                  $name = sanitize(rawurldecode($_POST['name']));
+                  $date = sanitize(rawurldecode($_POST['date']));
+                  $phone = sanitize(rawurldecode($_POST['phone']));
+                  $address = $_POST['address'] ? sanitize(rawurldecode($_POST['address'])) : null;
+                  $card = $_POST['card'] ? sanitize(rawurldecode($_POST['card'])) : null;
+                  $refEmail = $_POST['refEmail'] ? sanitize(rawurldecode($_POST['refEmail'])) : null;
 
                   if (!$name) {
                         echo json_encode(['error' => 'No name provided!']);

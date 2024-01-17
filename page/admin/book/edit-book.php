@@ -16,7 +16,7 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../../tool/php/converter.php';
 
             try {
-                  $id = sanitize($_GET['id']);
+                  $id = sanitize(rawurldecode($_GET['id']));
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -48,7 +48,7 @@ if (return_navigate_error() === 400) {
                   } else {
                         $result = $result->fetch_assoc();
                         $result['isbn'] = formatISBN($result['isbn']);
-                        $result['imagePath'] = encodedCharacter($result['imagePath']);
+                        $result['imagePath'] = normalizeURL(rawurlencode($result['imagePath']));
                         $result['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/{$result['imagePath']}";
                         $query_result = $result;
                   }
@@ -87,7 +87,7 @@ if (return_navigate_error() === 400) {
                         $query_result['category'] = [];
                   } else {
                         while ($row = $result->fetch_assoc()) {
-                              $query_result['category'] = $row;
+                              $query_result['category'][] = $row['name'];
                         }
                   }
                   $stmt->close();
@@ -126,7 +126,7 @@ if (return_navigate_error() === 400) {
                         $query_result['fileCopy'] = [];
                   } else {
                         while ($row = $result->fetch_assoc()) {
-                              $row['filePath'] = encodedCharacter($row['filePath']);
+                              $row['filePath'] = normalizeURL(rawurlencode($row['filePath']));
                               $query_result['fileCopy']['price'] = $row['price'];
                               $query_result['fileCopy']['filePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/{$row['filePath']}";
                         }

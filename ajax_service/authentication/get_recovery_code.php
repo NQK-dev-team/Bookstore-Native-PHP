@@ -8,8 +8,8 @@ require_once __DIR__ . '/../../tool/php/random_generator.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['type'])) {
             try {
-                  $email = sanitize($_POST['email']);
-                  $user_type = sanitize($_POST['type']);
+                  $email = sanitize(rawurldecode($_POST['email']));
+                  $user_type = sanitize(rawurldecode($_POST['type']));
 
                   // Validate email
                   if (!$email) {

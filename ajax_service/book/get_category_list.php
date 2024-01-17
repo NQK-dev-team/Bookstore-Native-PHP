@@ -2,11 +2,12 @@
 <?php
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../tool/php/converter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['search'])) {
             try {
-                  $search = sanitize($_GET['search']);
+                  $search = sanitize(rawurldecode($_GET['search']));
 
                   $search = '%' . $search . '%';
 

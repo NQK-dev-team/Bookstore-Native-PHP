@@ -7,9 +7,9 @@ require_once __DIR__ . '/../../tool/php/password.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
             try {
-                  $email = sanitize($_POST['email']);
-                  $password = sanitize($_POST['password']);
-                  $user_type = sanitize($_POST['type']);
+                  $email = sanitize(rawurldecode($_POST['email']));
+                  $password = sanitize(rawurldecode($_POST['password']));
+                  $user_type = sanitize(rawurldecode($_POST['type']));
 
                   // Validate email
                   if (!$email) {

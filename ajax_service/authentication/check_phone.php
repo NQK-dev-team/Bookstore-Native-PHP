@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../tool/php/password.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['phone'])) {
             try {
-                  $phone = sanitize($_POST['phone']);
+                  $phone = sanitize(rawurldecode($_POST['phone']));
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);

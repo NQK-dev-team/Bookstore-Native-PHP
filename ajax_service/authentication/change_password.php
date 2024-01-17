@@ -8,10 +8,10 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['confirmPassword'], $_POST['type'])) {
             try {
-                  $email = sanitize($_POST['email']);
-                  $password = sanitize($_POST['password']);
-                  $confirmPassword = sanitize($_POST['confirmPassword']);
-                  $user_type = sanitize($_POST['type']);
+                  $email = sanitize(rawurldecode($_POST['email']));
+                  $password = sanitize(rawurldecode($_POST['password']));
+                  $confirmPassword = sanitize(rawurldecode($_POST['confirmPassword']));
+                  $user_type = sanitize(rawurldecode($_POST['type']));
 
                   if (!$email) {
                         echo json_encode(['error' => 'No email address provided!']);

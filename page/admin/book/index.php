@@ -43,7 +43,7 @@ if (return_navigate_error() === 400) {
                         $id = $row['id'];
                         $formatISBN = formatISBN($row['isbn']);
                         $formatDate = MDYDateFormat($row['publishDate']);
-                        $row['imagePath'] = encodedCharacter($row['imagePath']);
+                        $row['imagePath'] = normalizeURL(rawurlencode($row['imagePath']));
                         $elem .= '<tr>';
                         $elem .= "<td class=\"align-middle\">{$counter}</td>";
                         $elem .= "<td class=\"align-middle\"><img src=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$row['imagePath']}\" alt=\"book image\" class=\"book_image\"></img></td>";
@@ -155,7 +155,7 @@ if (return_navigate_error() === 400) {
                         $sub_result = $sub_stmt->get_result();
                         if ($sub_result->num_rows === 1) {
                               $sub_row = $sub_result->fetch_assoc();
-                              $sub_row['filePath'] = encodedCharacter($sub_row['filePath']);
+                              $sub_row['filePath'] = normalizeURL(rawurlencode($sub_row['filePath']));
                               $elem .= "<p>PDF: \${$sub_row['price']} <a target='_blank' href=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$sub_row['filePath']}\" alt='PDF file'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
                                           </a></p>";

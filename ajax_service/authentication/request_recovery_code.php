@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../tool/php/random_generator.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'])) {
             try {
-                  $email = sanitize($_POST['email']);
+                  $email = sanitize(rawurldecode($_POST['email']));
 
                   // Validate email
                   if (!$email) {

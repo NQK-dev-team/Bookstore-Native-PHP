@@ -5,8 +5,8 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['code'])) {
             try {
-                  $email = sanitize($_POST['email']);
-                  $code = sanitize($_POST['code']);
+                  $email = sanitize(rawurldecode($_POST['email']));
+                  $code = sanitize(rawurldecode($_POST['code']));
 
                   // Validate email
                   if (!$email) {

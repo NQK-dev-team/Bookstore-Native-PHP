@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
       parse_str(file_get_contents('php://input'), $_PATCH);
       if (isset($_PATCH['id'])) {
             try {
-                  $id = sanitize($_PATCH['id']);
+                  $id = sanitize(rawurldecode($_PATCH['id']));
                   $status = filter_var(sanitize($_PATCH['status']), FILTER_VALIDATE_BOOLEAN);
 
                   // Connect to MySQL

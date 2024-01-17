@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
       parse_str(file_get_contents('php://input'), $_DELETE);
       if (isset($_DELETE['id'])) {
             try {
-                  $id = sanitize($_DELETE['id']);
+                  $id = sanitize(rawurldecode($_DELETE['id']));
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);

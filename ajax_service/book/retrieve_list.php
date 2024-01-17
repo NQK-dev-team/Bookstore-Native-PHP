@@ -8,10 +8,10 @@ require_once __DIR__ . '/../../tool/php/formatter.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['entry'], $_GET['offset'], $_GET['status'], $_GET['search'])) {
             try {
-                  $entry = sanitize($_GET['entry']);
-                  $offset = sanitize($_GET['offset']);
-                  $status = filter_var(sanitize($_GET['status']), FILTER_VALIDATE_BOOLEAN);
-                  $search = sanitize($_GET['search']);
+                  $entry = sanitize(rawurldecode($_GET['entry']));
+                  $offset = sanitize(rawurldecode($_GET['offset']));
+                  $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
+                  $search = sanitize(rawurldecode($_GET['search']));
 
                   if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   } else {
                         $idx = 0;
                         while ($row = $result->fetch_assoc()) {
-                              $imgPath = encodedCharacter($row['imagePath']);
+                              $imgPath = normalizeURL(rawurlencode($row['imagePath']));
                               $host = $_SERVER['HTTP_HOST'];
                               $row['imagePath'] = "https://$host/data/book/$imgPath";
                               $row['edition'] = convertToOrdinal($row['edition']);
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $queryResult[$idx]['fileCopy'] = [];
                               } else if ($sub_result->num_rows === 1) {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
-                                          $filePath = encodedCharacter($sub_row['filePath']);
+                                          $filePath = normalizeURL(rawurlencode($sub_row['filePath']));
                                           $sub_row['filePath'] = "https://$host/data/book/$filePath";
 
                                           $queryResult[$idx]['fileCopy']['price'] = $sub_row['price'];

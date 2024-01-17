@@ -6,7 +6,7 @@ require_once __DIR__ . '/../tool/php/sanitizer.php';
 
 if (check_session()) {
       if ($_SESSION['type'] === 'admin') {
-            $requestedUri = sanitize(revertEncodedCharacter($_SERVER['REQUEST_URI']));
+            $requestedUri = sanitize(rawurldecode($_SERVER['REQUEST_URI']));
             $filePath = dirname(__DIR__) . $requestedUri;
 
             $contentType = mime_content_type($filePath);
