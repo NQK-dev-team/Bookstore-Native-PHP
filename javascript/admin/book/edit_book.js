@@ -119,15 +119,15 @@ function getCategory(search)
                                                 <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i].name }" id="category_${ i + 1 }" ${ $('#categoryInput').val().includes(data.query_result[i].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ i + 1 }">
                                                       ${ data.query_result[i].name }
+                                                      <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i].description }"></i>
                                                 </label>
-                                                <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i].description }"></i>
                                           </div>
                                           <div class="form-check mx-auto check_box">
                                                 <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i + 1].name }" id="category_${ i + 2 }" ${ $('#categoryInput').val().includes(data.query_result[i + 1].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ i + 2 }">
                                                       ${ data.query_result[i + 1].name }
+                                                      <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i + 1].description }"></i>
                                                 </label>
-                                                <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i + 1].description }"></i>
                                           </div>
                                     </div>
                                     `)
