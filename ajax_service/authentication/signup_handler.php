@@ -92,36 +92,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare('select exists(select * from appUser where phone=?) as result');
                   $stmt->bind_param('s', $phone);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows !== 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
+                  $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result'] === 1) {
                         echo json_encode(['error' => 'Phone number has been used!']);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from appUser where email=?) as result');
                   $stmt->bind_param('s', $email);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows !== 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
+                  $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result'] === 1) {
                         echo json_encode(['error' => 'Email has been used!']);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
@@ -129,18 +133,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if ($refEmail) {
                         $stmt = $conn->prepare('select exists(select * from appUser where email=?) as result');
                         $stmt->bind_param('s', $refEmail);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        if ($result->num_rows !== 1) {
+                        $isSuccess = $stmt->execute();
+                        if (!$isSuccess) {
                               http_response_code(500);
                               echo json_encode(['error' => $stmt->error]);
                               $stmt->close();
+                              $conn->close();
                               exit;
                         }
+                        $result = $stmt->get_result();
                         $result = $result->fetch_assoc();
                         if ($result['result'] === 0) {
                               echo json_encode(['error' => 'Referrer email not found!']);
                               $stmt->close();
+                              $conn->close();
                               exit;
                         }
                         $stmt->close();

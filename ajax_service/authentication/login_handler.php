@@ -56,32 +56,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if ($user_type === "admin") {
                         $stmt = $conn->prepare("select appUser.id,appUser.password from appUser join admin on admin.id=appUser.id where appUser.email=?");
                         $stmt->bind_param('s', $email);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
                   } else if ($user_type === "customer") {
                         $stmt = $conn->prepare("select appUser.id,appUser.password from appUser join customer on customer.id=appUser.id where appUser.email=?");
                         $stmt->bind_param('s', $email);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
                   }
-                  $result = $stmt->get_result();
-                  if ($result->num_rows === 0) {
-                        echo json_encode(['error' => 'Email or password incorrect!']);
-                  } else if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  if ($isSuccess) {
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 0) {
+                              echo json_encode(['error' => 'Email or password incorrect!']);
+                        } else {
+                              $result = $result->fetch_assoc();
+                              if (!verify_password($password, $result['password']))
+                                    echo json_encode(['error' => 'Email or password incorrect!']);
+                              else {
+                                    // Start or resume the session
+                                    session_start();
+                                    $_SESSION['type'] = $user_type;
+                                    $_SESSION['id'] = $result['id'];
+
+                                    echo json_encode(['query_result' => true]);
+
+                                    // Missing a procedure to set status=1 when status=0 and send an email to the customer
+                              }
+                        }
+                  } else {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else {
-                        $result = $result->fetch_assoc();
-                        if (!verify_password($password, $result['password']))
-                              echo json_encode(['error' => 'Email or password incorrect!']);
-                        else {
-                              // Start or resume the session
-                              session_start();
-                              $_SESSION['type'] = $user_type;
-                              $_SESSION['id'] = $result['id'];
-
-                              echo json_encode(['query_result' => true]);
-
-                              // Missing a procedure to set status=1 when status=0 and send an email to the customer
-                        }
                   }
                   // Close statement
                   $stmt->close();

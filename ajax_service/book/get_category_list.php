@@ -25,14 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $stmt = $conn->prepare('select name,description from category where name like ? order by name,id');
                   $stmt->bind_param('s', $search);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows < 0) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                              $query_result[] = $row;
+                  } else {
+                        $result = $stmt->get_result();
+                        if ($result->num_rows > 0) {
+                              while ($row = $result->fetch_assoc()) {
+                                    $query_result[] = $row;
+                              }
                         }
                   }
                   echo json_encode(['query_result' => $query_result]);

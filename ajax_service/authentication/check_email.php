@@ -22,15 +22,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare("select * from appUser where email=?");
                   $stmt->bind_param('s', $email);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows === 1)
-                        echo json_encode(['query_result' => true]);
-                  else if ($result->num_rows === 0)
-                        echo json_encode(['query_result' => false]);
-                  else {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
+                  } else {
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 1)
+                              echo json_encode(['query_result' => true]);
+                        else if ($result->num_rows === 0)
+                              echo json_encode(['query_result' => false]);
                   }
 
                   $stmt->close();

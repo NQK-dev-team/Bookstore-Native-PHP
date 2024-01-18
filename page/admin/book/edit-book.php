@@ -17,7 +17,7 @@ if (return_navigate_error() === 400) {
 
             try {
                   $id = sanitize(rawurldecode($_GET['id']));
-                  
+
                   $_SESSION['update_book_id'] = $id;
 
                   // Connect to MySQL
@@ -34,102 +34,117 @@ if (return_navigate_error() === 400) {
 
                   $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-
-                  if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
                         $stmt->close();
-                        exit;
-                  } else if ($result->num_rows === 0) {
-                        http_response_code(404);
-                        require_once __DIR__ . '/../../../error/404.php';
-                        $stmt->close();
+                        $conn->close();
                         exit;
                   } else {
-                        $result = $result->fetch_assoc();
-                        $result['isbn'] = formatISBN($result['isbn']);
-                        $result['imagePath'] = $result['imagePath'] ? "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"" : '';
-                        $query_result = $result;
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 0) {
+                              http_response_code(404);
+                              require_once __DIR__ . '/../../../error/404.php';
+                              $stmt->close();
+                              $conn->close();
+                              exit;
+                        } else {
+                              $result = $result->fetch_assoc();
+                              $result['isbn'] = formatISBN($result['isbn']);
+                              $result['imagePath'] = $result['imagePath'] ? "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"" : '';
+                              $query_result = $result;
+                        }
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-
-                  if ($result->num_rows < 0) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 0) {
-                        $query_result['author'] = [];
                   } else {
-                        while ($row = $result->fetch_assoc()) {
-                              $query_result['author'][] = $row['authorName'];
+                        $result = $stmt->get_result();
+
+                        if ($result->num_rows === 0) {
+                              $query_result['author'] = [];
+                        } else {
+                              while ($row = $result->fetch_assoc()) {
+                                    $query_result['author'][] = $row['authorName'];
+                              }
                         }
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select category.name from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
+                  $isSuccess = $stmt->execute();
 
-                  if ($result->num_rows < 0) {
+                  if (!$isSuccess) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 0) {
-                        $query_result['category'] = [];
                   } else {
-                        while ($row = $result->fetch_assoc()) {
-                              $query_result['category'][] = $row['name'];
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 0) {
+                              $query_result['category'] = [];
+                        } else {
+                              while ($row = $result->fetch_assoc()) {
+                                    $query_result['category'][] = $row['name'];
+                              }
                         }
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
+                  $isSuccess = $stmt->execute();
 
-                  if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  if (!$isSuccess) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 0) {
-                        $query_result['physicalCopy'] = [];
                   } else {
-                        while ($row = $result->fetch_assoc()) {
-                              $query_result['physicalCopy']['price'] = $row['price'];
-                              $query_result['physicalCopy']['inStock'] = $row['inStock'];
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 0) {
+                              $query_result['physicalCopy'] = [];
+                        } else {
+                              while ($row = $result->fetch_assoc()) {
+                                    $query_result['physicalCopy']['price'] = $row['price'];
+                                    $query_result['physicalCopy']['inStock'] = $row['inStock'];
+                              }
                         }
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
+                  $isSuccess = $stmt->execute();
 
-                  if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  if (!$isSuccess) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 0) {
-                        $query_result['fileCopy'] = [];
                   } else {
-                        while ($row = $result->fetch_assoc()) {
-                              $row['filePath'] = $row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
-                              $query_result['fileCopy']['price'] = $row['price'];
-                              $query_result['fileCopy']['filePath'] = $row['filePath'];
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 0) {
+                              $query_result['fileCopy'] = [];
+                        } else {
+                              while ($row = $result->fetch_assoc()) {
+                                    $row['filePath'] = $row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
+                                    $query_result['fileCopy']['price'] = $row['price'];
+                                    $query_result['fileCopy']['filePath'] = $row['filePath'];
+                              }
                         }
                   }
                   $stmt->close();

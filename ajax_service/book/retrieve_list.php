@@ -43,13 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id limit ? offset ?');
                   $stmt->bind_param('isssii', $status, $search, $isbnSearch,  $search, $entry, $offset);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
+                  $isSuccess = $stmt->execute();
 
-                  if ($result->num_rows < 0) {
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                   } else {
+                        $result = $stmt->get_result();
+
                         $idx = 0;
                         while ($row = $result->fetch_assoc()) {
                               $host = $_SERVER['HTTP_HOST'];
@@ -66,28 +67,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
                               $sub_stmt->bind_param('ss', $id, $id);
-                              $sub_stmt->execute();
-                              $sub_result = $sub_stmt->get_result();
-                              if ($sub_result->num_rows !== 1) {
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
                                     http_response_code(500);
                                     echo json_encode(['error' => $stmt->error]);
                                     $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
                                     exit;
-                              } else {
-                                    $sub_result = $sub_result->fetch_assoc();
-                                    $queryResult[$idx]['can_delete'] = !$sub_result['result'];
                               }
+                              $sub_result = $sub_stmt->get_result();
+                              $sub_result = $sub_result->fetch_assoc();
+                              $queryResult[$idx]['can_delete'] = !$sub_result['result'];
 
                               $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
                               $sub_stmt->bind_param('s', $id);
-                              $sub_stmt->execute();
-                              $sub_result = $sub_stmt->get_result();
-                              if ($sub_result->num_rows < 0) {
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
                                     http_response_code(500);
                                     echo json_encode(['error' => $sub_stmt->error]);
                                     $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
                                     exit;
-                              } else if ($sub_result->num_rows === 0) {
+                              }
+                              $sub_result = $sub_stmt->get_result();
+                              if ($sub_result->num_rows === 0) {
                                     $queryResult[$idx]['author'] = [];
                               } else {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
@@ -98,14 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                               $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
                               $sub_stmt->bind_param('s', $id);
-                              $sub_stmt->execute();
-                              $sub_result = $sub_stmt->get_result();
-                              if ($sub_result->num_rows < 0) {
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
                                     http_response_code(500);
                                     echo json_encode(['error' => $sub_stmt->error]);
                                     $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
                                     exit;
-                              } else if ($sub_result->num_rows === 0) {
+                              }
+                              $sub_result = $sub_stmt->get_result();
+                              if ($sub_result->num_rows === 0) {
                                     $queryResult[$idx]['category'] = [];
                               } else {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
@@ -119,7 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                               $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
                               $sub_stmt->bind_param('s', $id);
-                              $sub_stmt->execute();
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $sub_stmt->error]);
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_result = $sub_stmt->get_result();
                               if ($sub_result->num_rows === 0) {
                                     $queryResult[$idx]['physicalCopy'] = [];
@@ -128,17 +144,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                           $queryResult[$idx]['physicalCopy']['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
                                           $queryResult[$idx]['physicalCopy']['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
                                     }
-                              } else {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $sub_stmt->error]);
-                                    $sub_stmt->close();
-                                    exit;
                               }
                               $sub_stmt->close();
 
                               $sub_stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
                               $sub_stmt->bind_param('s', $id);
-                              $sub_stmt->execute();
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $sub_stmt->error]);
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_result = $sub_stmt->get_result();
                               if ($sub_result->num_rows === 0) {
                                     $queryResult[$idx]['fileCopy'] = [];
@@ -149,11 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                           $queryResult[$idx]['fileCopy']['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
                                           $queryResult[$idx]['fileCopy']['filePath'] = $sub_row['filePath'];
                                     }
-                              } else {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $sub_stmt->error]);
-                                    $sub_stmt->close();
-                                    exit;
                               }
                               $sub_stmt->close();
 
@@ -166,14 +180,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)');
                   $stmt->bind_param('isss', $status, $search, $isbnSearch, $search);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows !== 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   } else {
+                        $result = $stmt->get_result();
                         $result = $result->fetch_assoc();
                         $totalEntries = $result['totalBook'];
                   }

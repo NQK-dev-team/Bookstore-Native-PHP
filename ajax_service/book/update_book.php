@@ -158,48 +158,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $stmt = $conn->prepare('select * from book where id=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 0) {
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
                         echo json_encode(['error' => 'Book not found!']);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select * from book where id!=? and name=? and edition=?');
                   $stmt->bind_param('ssi', $id, $name, $edition);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 1) {
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 1) {
                         echo json_encode(['error' => 'Book name or edition found in another book!']);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
 
                   $stmt = $conn->prepare('select * from book where id!=? and isbn=?');
                   $stmt->bind_param('ss', $id, $isbn);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows < 0 || $result->num_rows > 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else if ($result->num_rows === 1) {
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 1) {
                         echo json_encode(['error' => 'Book ISBN-13 found in another book!']);
                         $stmt->close();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
@@ -219,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
                         $conn->rollback();
+                        $conn->close();
                         exit;
                   } else {
                         if ($stmt->affected_rows > 1) {
@@ -226,6 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => 'Updated more than one book!']);
                               $stmt->close();
                               $conn->rollback();
+                              $conn->close();
                               exit;
                         } else if ($stmt->affected_rows === 0) {
                               $isNothingUpdated = true;
@@ -241,6 +252,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
                         $conn->rollback();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
@@ -255,6 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => $stmt->error]);
                               $stmt->close();
                               $conn->rollback();
+                              $conn->close();
                               exit;
                         }
                   }
@@ -264,23 +277,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt = $conn->prepare('select id from category where name=?');
                   foreach ($category as $x) {
                         $stmt->bind_param('s', $x);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
                         $result = $stmt->get_result();
 
-                        if ($result->num_rows < 0 || $result->num_rows > 1) {
+                        if (!$isSuccess) {
                               http_response_code(500);
                               echo json_encode(['error' => $stmt->error]);
                               $stmt->close();
                               $conn->rollback();
-                              exit;
-                        } else if ($result->num_rows === 0) {
-                              echo json_encode(['error' => "Category $x not found!"]);
-                              $stmt->close();
-                              $conn->rollback();
+                              $conn->close();
                               exit;
                         } else {
-                              $result = $result->fetch_assoc();
-                              $categoryID[] = $result['id'];
+                              if ($result->num_rows === 0) {
+                                    echo json_encode(['error' => "Category $x not found!"]);
+                                    $stmt->close();
+                                    $conn->rollback();
+                                    $conn->close();
+                                    exit;
+                              } else {
+                                    $result = $result->fetch_assoc();
+                                    $categoryID[] = $result['id'];
+                              }
                         }
                   }
                   $stmt->close();
@@ -293,6 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
                         $conn->rollback();
+                        $conn->close();
                         exit;
                   }
                   $stmt->close();
@@ -307,6 +325,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => $stmt->error]);
                               $stmt->close();
                               $conn->rollback();
+                              $conn->close();
                               exit;
                         }
                   }

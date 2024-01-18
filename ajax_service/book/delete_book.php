@@ -22,20 +22,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   $stmt = $conn->prepare('select(exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
                   $stmt->bind_param('ss', $id, $id);
-                  $stmt->execute();
-                  $result = $stmt->get_result();
-                  if ($result->num_rows !== 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
+                        $conn->close();
                         exit;
-                  } else {
-                        $result = $result->fetch_assoc();
-                        if ($result['result']) {
-                              echo json_encode(['error' => 'Can not delete book that has been purchased!']);
-                              $stmt->close();
-                              exit;
-                        }
+                  }
+                  $result = $stmt->get_result();
+                  $result = $result->fetch_assoc();
+                  if ($result['result']) {
+                        echo json_encode(['error' => 'Can not delete book that has been purchased!']);
+                        $stmt->close();
+                        exit;
                   }
                   $stmt->close();
 

@@ -5,8 +5,6 @@ if (check_session()) {
       header('Location: /admin/');
 }
 
-// Resume the session
-session_start();
 $_SESSION['update_book_id'] = null;
 ?>
 

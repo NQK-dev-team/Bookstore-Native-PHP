@@ -43,24 +43,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if ($user_type === "admin") {
                         $stmt = $conn->prepare("select appUser.id from appUser join admin on admin.id=appUser.id where appUser.email=?");
                         $stmt->bind_param('s', $email);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
                   } else if ($user_type === "customer") {
                         $stmt = $conn->prepare("select appUser.id from appUser join customer on customer.id=appUser.id where appUser.email=?");
                         $stmt->bind_param('s', $email);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
                   }
-                  $result = $stmt->get_result();
-                  $result = $result->num_rows;
-                  if ($result === 0) {
-                        echo json_encode(['error' => 'Email not found!']);
-                  } else if ($result === 1) {
-                        echo json_encode(['query_result' => true]);
-                        $code = generateRandomString();
-                        recovery_mail($email, $code);
-                        session_start();
-                        $_SESSION['recovery_code'] = $code;
-                        $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                        $_SESSION['recovery_email'] = $email;
+                  if ($isSuccess) {
+                        $result = $stmt->get_result();
+                        $result = $result->num_rows;
+                        if ($result === 0) {
+                              echo json_encode(['error' => 'Email not found!']);
+                        } else if ($result === 1) {
+                              echo json_encode(['query_result' => true]);
+                              $code = generateRandomString();
+                              recovery_mail($email, $code);
+                              session_start();
+                              $_SESSION['recovery_code'] = $code;
+                              $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $_SESSION['recovery_email'] = $email;
+                        }
                   } else {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
