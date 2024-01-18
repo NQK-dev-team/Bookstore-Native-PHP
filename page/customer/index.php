@@ -13,7 +13,7 @@ if (return_navigate_error() === 400) {
 } else {
       require_once __DIR__. '/../../config/db_connection.php';
       require_once __DIR__. '/../../tool/php/converter.php';
-      require_once __DIR__. '/../../tool/php/converter.php';
+      require_once __DIR__. '/../../tool/php/formatter.php';
 
       try{
             $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -23,7 +23,6 @@ if (return_navigate_error() === 400) {
                   require_once __DIR__ . '/../../error/500.php';
                   exit;
             }
-
             $elem = $conn->prepare('select book.name, author.authorName from book inner join author on book.id = author.bookID');
             $elem->execute();
             $elem = $elem->get_result();
@@ -57,6 +56,7 @@ if (return_navigate_error() === 400) {
             ?>
             <section id="page">
                   <div>
+                        <h1>Welcome to our shop</h1>
                               <?php
                                     if($elem->num_rows > 0){
                                           while($row=$elem->fetch_assoc()){
