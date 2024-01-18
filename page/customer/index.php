@@ -30,6 +30,9 @@ if (return_navigate_error() === 400) {
                         echo "Book: ".$row["name"]."<br>";
                   }
             }
+            else{
+                  echo "0 result";
+            }
             $conn->close();
       }
       catch (Exception $e){
