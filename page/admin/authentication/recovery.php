@@ -2,6 +2,10 @@
 require_once __DIR__ . '../../../../tool/php/session_check.php';
 
 if (check_session()) header('Location: /admin/');
+
+// Resume the session
+session_start();
+$_SESSION['update_book_id'] = null;
 ?>
 
 <!DOCTYPE html>
