@@ -9,8 +9,6 @@ if (return_navigate_error() === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else {
-      // Resume the session
-      session_start();
       $_SESSION['update_book_id'] = null;
       
       require_once __DIR__ . '/../../../config/db_connection.php';

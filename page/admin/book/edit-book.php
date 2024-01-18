@@ -17,8 +17,7 @@ if (return_navigate_error() === 400) {
 
             try {
                   $id = sanitize(rawurldecode($_GET['id']));
-                  // Resume the session
-                  session_start();
+                  
                   $_SESSION['update_book_id'] = $id;
 
                   // Connect to MySQL
