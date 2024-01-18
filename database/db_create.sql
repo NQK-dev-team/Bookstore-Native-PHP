@@ -61,7 +61,7 @@ create table book(
 
 create table author(
 	bookID varchar(20),
-    authorIdx int default 1, -- This only used to combine with `bookID` to form a primary key, no further usage other than that.
+    authorIdx int, -- This only used to combine with `bookID` to form a primary key, no further usage other than that.
     check(authorIdx>=1),
     authorName varchar(255) not null,
     primary key(bookID,authorIdx)
