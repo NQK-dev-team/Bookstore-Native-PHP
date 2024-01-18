@@ -26,7 +26,7 @@ create table appUser(
     email varchar(255) unique,
     password varchar(255) not null,
     check(length(password)>=8),
-    imagePath text
+    imagePath text not null
 );
 
 create table admin(

@@ -52,7 +52,7 @@ if (return_navigate_error() === 400) {
                         } else {
                               $result = $result->fetch_assoc();
                               $result['isbn'] = formatISBN($result['isbn']);
-                              $result['imagePath'] = $result['imagePath'] ? "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"" : '';
+                              $result['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"" ;
                               $query_result = $result;
                         }
                   }

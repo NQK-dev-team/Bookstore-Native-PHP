@@ -46,7 +46,7 @@ if (return_navigate_error() === 400) {
                               $id = $row['id'];
                               $row['isbn'] = formatISBN($row['isbn']);
                               $row['publishDate'] = MDYDateFormat($row['publishDate']);
-                              $row['imagePath'] = $row['imagePath'] ? "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"" : '';
+                              $row['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
                               $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
                               $elem .= '<tr>';
                               $elem .= "<td class=\"align-middle\">{$counter}</td>";

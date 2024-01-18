@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $idx = 0;
                         while ($row = $result->fetch_assoc()) {
                               $host = $_SERVER['HTTP_HOST'];
-                              $row['imagePath'] = $row['imagePath'] ? "src=\"https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"" : '';
+                              $row['imagePath'] = "src=\"https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
                               $row['ageRestriction'] = $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
                               $row['edition'] = convertToOrdinal($row['edition']);
                               $row['isbn'] = formatISBN($row['isbn']);
