@@ -96,7 +96,7 @@ function fetchBookList()
 
                               trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
                               trElem.append(
-                                    $(`<td class=\"align-middle\"><img src=\"${ data.query_result[0][i].imagePath }\" alt=\"book image\" class=\"book_image\"></img></td>`)
+                                    $(`<td class=\"align-middle\"><img ${ data.query_result[0][i].imagePath } alt=\"book image\" class=\"book_image\"></img></td>`)
                               );
                               trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
@@ -149,26 +149,29 @@ function fetchBookList()
 
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $('<div>').addClass('d-flex').addClass('flex-column').append(
-                                          $('<a>').text(data.query_result[0][i].publisher).attr('href', data.query_result[0][i].publisherLink).attr('alt', 'publisher link').addClass('mb-3').attr('target', '_blank')
+                                          $('<p>').text(data.query_result[0][i].publisher)
                                     ).append(
                                           $('<p>').text(data.query_result[0][i].publishDate)
                                     )
                               ));
 
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
-                                    $('<div>').addClass('truncate').text(data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A'))
+                                    $('<div>').addClass('truncate').text(data.query_result[0][i].description))
                               );
-                              trElem.append($('<td>').addClass('align-middle').append(
-                                    $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
-                              ).append(
-                                    $(`<span>`).text(data.query_result[0][i].avgRating)
-                              ));
+                              if (data.query_result[0][i].avgRating)
+                                    trElem.append($('<td>').addClass('align-middle').append(
+                                          $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
+                                    ).append(
+                                          $(`<span>`).text(data.query_result[0][i].avgRating)
+                                    ));
+                              else
+                                    trElem.append($('<td>').addClass('align-middle').text('N/A'));
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $(`<div class="d-flex flex-column">`).append(
-                                          $(`<p>Physical: $${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
+                                          $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>PDF: $${ data.query_result[0][i].fileCopy.price } <a target='_blank' href=\"${ data.query_result[0][i].fileCopy.filePath }\" alt='PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                                          $(`<p>PDF: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath!==''?'PDF file':'No PDF file'}'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath!==''?'Read file':'No PDF file'}\"></i>
                                           </a></p>`)
                                     )
                               ));

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publisherLink,book.publishDate,book.description,book.imagePath
+                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id limit ? offset ?');
@@ -52,12 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   } else {
                         $idx = 0;
                         while ($row = $result->fetch_assoc()) {
-                              $imgPath = normalizeURL(rawurlencode($row['imagePath']));
                               $host = $_SERVER['HTTP_HOST'];
-                              $row['imagePath'] = "https://$host/data/book/$imgPath";
+                              $row['imagePath'] = $row['imagePath'] ? "src=\"https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"" : '';
+                              $row['ageRestriction'] = $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
                               $row['edition'] = convertToOrdinal($row['edition']);
                               $row['isbn'] = formatISBN($row['isbn']);
                               $row['publishDate'] = MDYDateFormat($row['publishDate']);
+                              $row['description'] = $row['description'] ? $row['description'] : 'N/A';
                               $queryResult[] = $row;
 
                               $id = $row['id'];
@@ -124,8 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $queryResult[$idx]['physicalCopy'] = [];
                               } else if ($sub_result->num_rows === 1) {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
-                                          $queryResult[$idx]['physicalCopy']['price'] = $sub_row['price'];
-                                          $queryResult[$idx]['physicalCopy']['inStock'] = $sub_row['inStock'];
+                                          $queryResult[$idx]['physicalCopy']['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
+                                          $queryResult[$idx]['physicalCopy']['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
                                     }
                               } else {
                                     http_response_code(500);
@@ -143,10 +144,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $queryResult[$idx]['fileCopy'] = [];
                               } else if ($sub_result->num_rows === 1) {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
-                                          $filePath = normalizeURL(rawurlencode($sub_row['filePath']));
-                                          $sub_row['filePath'] = "https://$host/data/book/$filePath";
+                                          $sub_row['filePath'] = $sub_row['filePath'] ? "href=\"https://$host/data/book/" . normalizeURL(rawurlencode($sub_row['filePath'])) . "\"" : '';
 
-                                          $queryResult[$idx]['fileCopy']['price'] = $sub_row['price'];
+                                          $queryResult[$idx]['fileCopy']['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
                                           $queryResult[$idx]['fileCopy']['filePath'] = $sub_row['filePath'];
                                     }
                               } else {

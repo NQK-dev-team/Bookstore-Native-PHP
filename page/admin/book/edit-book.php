@@ -17,6 +17,9 @@ if (return_navigate_error() === 400) {
 
             try {
                   $id = sanitize(rawurldecode($_GET['id']));
+                  // Resume the session
+                  session_start();
+                  $_SESSION['update_book_id'] = $id;
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -30,7 +33,7 @@ if (return_navigate_error() === 400) {
 
                   $query_result = null;
 
-                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publisherLink,book.publishDate,book.description,book.imagePath from book where book.id=?');
+                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?');
                   $stmt->bind_param('s', $id);
                   $stmt->execute();
                   $result = $stmt->get_result();
@@ -48,8 +51,7 @@ if (return_navigate_error() === 400) {
                   } else {
                         $result = $result->fetch_assoc();
                         $result['isbn'] = formatISBN($result['isbn']);
-                        $result['imagePath'] = normalizeURL(rawurlencode($result['imagePath']));
-                        $result['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/{$result['imagePath']}";
+                        $result['imagePath'] = $result['imagePath'] ? "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"" : '';
                         $query_result = $result;
                   }
                   $stmt->close();
@@ -126,9 +128,9 @@ if (return_navigate_error() === 400) {
                         $query_result['fileCopy'] = [];
                   } else {
                         while ($row = $result->fetch_assoc()) {
-                              $row['filePath'] = normalizeURL(rawurlencode($row['filePath']));
+                              $row['filePath'] = $row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
                               $query_result['fileCopy']['price'] = $row['price'];
-                              $query_result['fileCopy']['filePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/{$row['filePath']}";
+                              $query_result['fileCopy']['filePath'] = $row['filePath'];
                         }
                   }
                   $stmt->close();
@@ -169,36 +171,40 @@ if (return_navigate_error() === 400) {
                   <div class='w-100 h-100 d-flex'>
                         <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
                               <h1 class='ms-xl-3 mt-2 mx-auto'>Edit Book</h1>
-                              <div class="ms-auto me-3 mt-xl-3 mb-3 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
+                              <div class="ms-auto me-3 mt-xl-3 mb-3 mb-xl-2 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
                                     <button class="btn btn-secondary ms-1" onclick="resetForm()" type='button'>Reset</button>
-                                    <button class="btn btn-success me-1" type='submit'>Save</button>
+                                    <button class="btn btn-success me-1" type='submit' onclick="clearAllCustomValidity()">Save</button>
                               </div>
                               <div class='row flex-grow-1 order-xl-2 order-1'>
                                     <div class="col-xl-5 col-12">
                                           <div class='d-flex flex-column align-items-center w-100 h-100 ps-xl-5 px-3'>
                                                 <div class="mt-xl-auto my-2 mt-3">
-                                                      <label for="bookNameInput" class="form-label">Book Name:</label>
+                                                      <label for="bookNameInput" class="form-label">Book Name:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="text" class="form-control fs-4" id="bookNameInput" value="<?php echo $query_result['name']; ?>">
                                                 </div>
                                                 <div class="mb-auto my-2 d-flex flex-column w-100 align-items-center">
-                                                      <img class='custom_image w-100' id="bookImage" alt="book image" src="<?php echo $query_result['imagePath']; ?>">
+                                                      <img class='custom_image w-100' id="bookImage" alt="book image" <?php echo $query_result['imagePath']; ?>>
                                                       </img>
                                                       <label class='btn btn-sm btn-light border border-dark mt-3 mx-auto'>
                                                             <input accept='.jpg,.jpeg,.png' id="imageInput" type='file' class='d-none' onchange="setNewImage(event)"></input>
                                                             Browse
                                                       </label>
                                                       <p id="imageFileName" class='mx-auto'></p>
+                                                      <div class='mx-auto text-danger d-none' id="imgeFileError">
+                                                            <p class='text-danger'><i class="bi bi-exclamation-triangle"></i>&nbsp;</p>
+                                                            <p class='text-danger' id='imgeFileErrorMessage'></p>
+                                                      </div>
                                                 </div>
                                           </div>
                                     </div>
                                     <div class="col-xl-7 col-12">
                                           <div class='d-flex flex-column ps-xl-5 w-100 h-100'>
                                                 <div class="mt-auto mb-2 px-xl-5 px-3">
-                                                      <label for="editionInput" class="form-label">Edition:</label>
+                                                      <label for="editionInput" class="form-label">Edition:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="number" min="1" class="form-control" id="editionInput" value="<?php echo $query_result['edition']; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
-                                                      <label for="isbnInput" class="form-label">ISBN-13:</label>
+                                                      <label for="isbnInput" class="form-label">ISBN-13:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="text" class="form-control" id="isbnInput" value="<?php echo $query_result['isbn']; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
@@ -206,7 +212,7 @@ if (return_navigate_error() === 400) {
                                                       <input type="number" min="0" class="form-control" id="ageInput" value="<?php echo $query_result['ageRestriction'] ? $query_result['ageRestriction'] : ''; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
-                                                      <label for="authorInput" class="form-label">Author:</label>
+                                                      <label for="authorInput" class="form-label">Author:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="text" class="form-control" id="authorInput" value="<?php echo implode(', ', $query_result['author']); ?>">
                                                       <small class="form-text text-muted">You can enter multiple authors with each seperated by comma</small>
                                                 </div>
@@ -214,43 +220,41 @@ if (return_navigate_error() === 400) {
                                                       <label for="categoryInput" class="form-label">Category:</label>
                                                       <input readonly onclick="openCategoryModal()" type="text" class="form-control pointer" id="categoryInput" value="<?php echo implode(', ', $query_result['category']); ?>">
                                                 </div>
-                                                <div class="my-2 px-xl-5 px-3 d-flex flex-xl-row flex-column row">
-                                                      <div class='col'>
-                                                            <label for="publisherInput" class="form-label">Publisher:</label>
-                                                            <input type="text" class="form-control" id="publisherInput" value="<?php echo $query_result['publisher']; ?>">
-                                                      </div>
-                                                      <div class="ms-xl-3 mt-2 mt-xl-0 col">
-                                                            <label for="publisherLinkInput" class="form-label">Publisher Link:</label>
-                                                            <input type="url" class="form-control" id="publisherLinkInput" value="<?php echo $query_result['publisherLink'] ? $query_result['publisherLink'] : ''; ?>">
-                                                      </div>
+                                                <div class="my-2 px-xl-5 px-3">
+                                                      <label for="publisherInput" class="form-label">Publisher:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                      <input type="text" class="form-control" id="publisherInput" value="<?php echo $query_result['publisher']; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
-                                                      <label for="publishDateInput" class="form-label">Publish Date:</label>
+                                                      <label for="publishDateInput" class="form-label">Publish Date:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="date" class="form-control" id="publishDateInput" value="<?php echo $query_result['publishDate']; ?>">
+                                                </div>
+                                                <div class="my-2 px-xl-5 px-3">
+                                                      <label for="descriptionInput" class="form-label">Description:</label>
+                                                      <textarea rows="5" class="form-control" id="descriptionInput" maxlength='2000'><?php if ($query_result['description']) echo $query_result['description']; ?></textarea>
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
                                                       <div class='col'>
                                                             <label for="physicalPriceInput" class="form-label">Physical Copy Price ($):</label>
-                                                            <input step="any" type="number" min="0" class="form-control" id="physicalPriceInput" value="<?php echo $query_result['physicalCopy']['price']; ?>">
+                                                            <input step="any" type="number" class="form-control" id="physicalPriceInput" value="<?php if ($query_result['physicalCopy']['price']) echo $query_result['physicalCopy']['price']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['price']) echo 'Enter price'; ?>">
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col">
                                                             <label for="inStockInput" class="form-label">In Stock:</label>
-                                                            <input type="number" min="0" class="form-control" id="inStockInput" value="<?php echo $query_result['physicalCopy']['inStock']; ?>">
+                                                            <input type="number" min="0" class="form-control" id="inStockInput" value="<?php if ($query_result['physicalCopy']['inStock']) echo $query_result['physicalCopy']['inStock']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['inStock']) echo 'Enter number'; ?>">
                                                       </div>
                                                 </div>
                                                 <div class="mb-auto mt-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
                                                       <div class='col mb-3'>
                                                             <label for="filePriceInput" class="form-label">File Copy Price ($):</label>
-                                                            <input step="any" type="number" min="0" class="form-control" id="filePriceInput" value="<?php echo $query_result['fileCopy']['price']; ?>">
+                                                            <input step="any" type="number" class="form-control" id="filePriceInput" value="<?php if ($query_result['fileCopy']['price']) echo $query_result['fileCopy']['price']; ?>" placeholder="<?php if (!$query_result['fileCopy']['price']) echo 'Enter price'; ?>">
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col mb-3">
                                                             <div class="d-flex flex-column h-100">
-                                                                  <label class="form-label" for='filePathInput'>
+                                                                  <span class="form-label">
                                                                         PDF (old file
-                                                                        <a id=' pdfPath' href="<?php echo $query_result['fileCopy']['filePath']; ?>" target="_blank" alt='PDF file'>
-                                                                              <i class="bi bi-file-earmark-fill text-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Read file"></i>
+                                                                        <a id=' pdfPath' <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
+                                                                              <i class="bi bi-file-earmark-fill text-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>"></i>
                                                                         </a>):
-                                                                  </label>
+                                                                  </span>
                                                                   <div class="d-flex align-items-center mt-auto">
                                                                         <label class='btn btn-sm btn-light border border-dark'>
                                                                               <input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">
@@ -258,6 +262,7 @@ if (return_navigate_error() === 400) {
                                                                         </label>
                                                                         <p class="mb-0 ms-3" id="pdfFileName"></p>
                                                                   </div>
+                                                                  <p id="pdfFileError" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
                                                             </div>
                                                       </div>
                                                 </div>

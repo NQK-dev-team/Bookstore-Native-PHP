@@ -13,17 +13,17 @@ insert into pointConfig values(5);
 
 create table category(
     id varchar(20) primary key,
-	name varchar(100) not null unique,
+	name varchar(255) not null unique,
     description text
 );
 
 create table appUser(
 	id varchar(20) primary key,
-    name varchar(100) not null,
+    name varchar(255) not null,
     dob date not null,
     address text,
     phone varchar(10) unique,
-    email varchar(100) unique,
+    email varchar(255) unique,
     password varchar(255) not null,
     check(length(password)>=8),
     imagePath text
@@ -44,7 +44,7 @@ create table customer(
 
 create table book(
 	id varchar(20) primary key,
-    name varchar(100) not null,
+    name varchar(255) not null,
     edition int not null,
     unique(name,edition),
     isbn varchar(13) not null unique,
@@ -52,8 +52,7 @@ create table book(
     check(ageRestriction>0),
     avgRating double,
     check(avgRating>=0 and avgRating<=5),
-    publisher varchar(100) not null,
-    publisherLink text,
+    publisher varchar(255) not null,
     publishDate date not null,
     status boolean not null default true, -- true means the book is purchasable, false means not
     imagePath text,
@@ -64,8 +63,7 @@ create table author(
 	bookID varchar(20),
     authorIdx int default 1, -- This only used to combine with `bookID` to form a primary key, no further usage other than that.
     check(authorIdx>=1),
-    authorName varchar(100) not null,
-    wikiLink text,
+    authorName varchar(255) not null,
     primary key(bookID,authorIdx)
 );
 
@@ -77,15 +75,15 @@ create table belong(
 
 create table fileCopy(
 	id varchar(20) primary key references book(id) on delete cascade on update cascade,
-    price double not null,
-    check (price>=0),
+    price double,
+    check (price>0),
     filePath text
 );
 
 create table physicalCopy(
 	id varchar(20) primary key references book(id) on delete cascade on update cascade,
-    price double not null,
-    check (price>=0),
+    price double,
+    check (price>0),
 	inStock int,
     check(inStock>=0)
 );
@@ -157,6 +155,7 @@ create table physicalOrderContain(
 
 create table discount(
 	id varchar(20) primary key,
+    name varchar(255) not null,
     status boolean not null default true -- true means the discount is appliable, false means not
 );
 

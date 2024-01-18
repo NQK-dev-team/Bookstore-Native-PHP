@@ -9,6 +9,10 @@ if (return_navigate_error() === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else {
+      // Resume the session
+      session_start();
+      $_SESSION['update_book_id'] = null;
+      
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
@@ -26,7 +30,7 @@ if (return_navigate_error() === 400) {
 
             $elem = '';
 
-            $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publisherLink,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
+            $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
             $stmt->execute();
 
             $result = $stmt->get_result();
@@ -39,17 +43,18 @@ if (return_navigate_error() === 400) {
                   $counter = 0;
                   while ($row = $result->fetch_assoc()) {
                         $counter++;
-                        $ordinal = convertToOrdinal($row['edition']);
+                        $row['edition'] = convertToOrdinal($row['edition']);
                         $id = $row['id'];
-                        $formatISBN = formatISBN($row['isbn']);
-                        $formatDate = MDYDateFormat($row['publishDate']);
-                        $row['imagePath'] = normalizeURL(rawurlencode($row['imagePath']));
+                        $row['isbn'] = formatISBN($row['isbn']);
+                        $row['publishDate'] = MDYDateFormat($row['publishDate']);
+                        $row['imagePath'] = $row['imagePath'] ? "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"" : '';
+                        $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
                         $elem .= '<tr>';
                         $elem .= "<td class=\"align-middle\">{$counter}</td>";
-                        $elem .= "<td class=\"align-middle\"><img src=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$row['imagePath']}\" alt=\"book image\" class=\"book_image\"></img></td>";
+                        $elem .= "<td class=\"align-middle\"><img {$row['imagePath']} alt=\"book image\" class=\"book_image\"></img></td>";
                         $elem .= "<td class=\"col-2 align-middle\">{$row['name']}</td>";
-                        $elem .= "<td class=\"align-middle\">{$ordinal}</td>";
-                        $elem .= "<td class=\"align-middle\">{$formatISBN}</td>";
+                        $elem .= "<td class=\"align-middle\">{$row['edition']}</td>";
+                        $elem .= "<td class=\"align-middle\">{$row['isbn']}</td>";
                         $elem .= "<td class=\"align-middle\">{$row['ageRestriction']}</td>";
 
                         $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
@@ -92,7 +97,7 @@ if (return_navigate_error() === 400) {
                               exit;
                         } else if ($sub_result->num_rows > 0) {
                               $elem .= "<td class=\"col-1 align-middle\">
-                                                            <div class='d-flex flex-column'>";
+                                          <div class='d-flex flex-column'>";
                               while ($sub_row = $sub_result->fetch_assoc()) {
                                     $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
                                     if ($sub_result->num_rows === 1)
@@ -115,19 +120,24 @@ if (return_navigate_error() === 400) {
 
                         $elem .= "<td class=\"col-1 align-middle\">
                                     <div class='d-flex flex-column'>
-                                          <a target=\"_blank\" alt=\"publisher link\" href=\"{$row['publisherLink']}\" class='mb-3'>
+                                          <p>
                                                 {$row['publisher']}
                                           </a>
                                           <p>
-                                                {$formatDate}   
+                                                {$row['publishDate']}   
                                           </p>
                                     </div>
                               </td>";
-                        $bookDescription = $row['description'] ? $row['description'] : 'N/A';
-                        $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$bookDescription}</div></td>";
-                        $elem .= "<td class=\"align-middle\">
+                        $row['description'] = $row['description'] ? $row['description'] : 'N/A';
+                        $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$row['description']}</div></td>";
+                        if ($row['avgRating'])
+                              $elem .= "<td class=\"align-middle\">
                                           <i class=\"bi bi-star-fill text-warning\"></i>
                                           <span>{$row['avgRating']}</span>
+                                    </td>";
+                        else
+                              $elem .= "<td class=\"align-middle\">
+                                          N/A
                                     </td>";
 
                         $elem .= "<td class=\"col-1 align-middle\">
@@ -138,7 +148,9 @@ if (return_navigate_error() === 400) {
                         $sub_result = $sub_stmt->get_result();
                         if ($sub_result->num_rows === 1) {
                               $sub_row = $sub_result->fetch_assoc();
-                              $elem .= "<p>Physical: \${$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
+                              $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
+                              $sub_row['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
+                              $elem .= "<p>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
                         } else if ($sub_result->num_rows === 0)
                               $elem .= "<p>Physical: N/A (in stock: N/A)</p>";
                         else {
@@ -155,13 +167,17 @@ if (return_navigate_error() === 400) {
                         $sub_result = $sub_stmt->get_result();
                         if ($sub_result->num_rows === 1) {
                               $sub_row = $sub_result->fetch_assoc();
-                              $sub_row['filePath'] = normalizeURL(rawurlencode($sub_row['filePath']));
-                              $elem .= "<p>PDF: \${$sub_row['price']} <a target='_blank' href=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$sub_row['filePath']}\" alt='PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                              $sub_row['filePath'] = $sub_row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($sub_row['filePath']))."\"" : '';
+                              $target = $sub_row['filePath'] !== '' ? "target='_blank'" : '';
+                              $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
+                              $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
+                              $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
+                              $elem .= "<p>PDF: {$sub_row['price']} <a $target {$sub_row['filePath']} alt='$alt'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
                                           </a></p>";
                         } else if ($sub_result->num_rows === 0)
                               $elem .= "<p>PDF: N/A <a href='#' alt='No PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
                                           </a></p>";
                         else {
                               http_response_code(500);
