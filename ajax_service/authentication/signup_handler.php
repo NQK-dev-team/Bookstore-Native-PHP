@@ -149,18 +149,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $hashedPassword = hash_password($password);
                   $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?)');
                   $stmt->bind_param('ssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail);
-                  $stmt->execute();
+                  $isSuccess = $stmt->execute();
 
-                  if ($stmt->affected_rows < 0) {
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else if ($stmt->affected_rows === 0) {
-                        echo json_encode(['query_result' => false]);
                   } else {
-                        echo json_encode(['query_result' => true]);
-                        create_new_account_mail($email);
-                        if ($refEmail)
-                              referrer_mail($refEmail, $email);
+                        if ($stmt->affected_rows === 0) {
+                              echo json_encode(['query_result' => false]);
+                        } else {
+                              echo json_encode(['query_result' => true]);
+                              create_new_account_mail($email);
+                              if ($refEmail)
+                                    referrer_mail($refEmail, $email);
+                        }
                   }
 
                   // Close statement

@@ -41,14 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
                   $stmt = $conn->prepare('delete from book where id=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  if ($stmt->affected_rows < 0) {
+                  $isSuccess = $stmt->execute();
+
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else if ($stmt->affected_rows === 0) {
-                        echo json_encode(['error' => 'No book found!']);
                   } else {
-                        echo json_encode(['query_result' => true]);
+                        if ($stmt->affected_rows === 0) {
+                              echo json_encode(['error' => 'No book found!']);
+                        } else {
+                              echo json_encode(['query_result' => true]);
+                        }
                   }
                   $stmt->close();
                   $conn->close();

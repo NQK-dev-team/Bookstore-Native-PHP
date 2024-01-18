@@ -22,14 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
 
                   $stmt = $conn->prepare('update book set status=? where id=?');
                   $stmt->bind_param('is', $status, $id);
-                  $stmt->execute();
-                  if ($stmt->affected_rows < 0 || $stmt->affected_rows > 1) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else if ($stmt->affected_rows === 0) {
-                        echo json_encode(['error' => 'No book found!']);
                   } else {
-                        echo json_encode(['query_result' => true]);
+                        if ($stmt->affected_rows > 1) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Updated more than one book!']);
+                        } else if ($stmt->affected_rows === 0) {
+                              echo json_encode(['error' => 'No book found!']);
+                        } else {
+                              echo json_encode(['query_result' => true]);
+                        }
                   }
                   $stmt->close();
                   $conn->close();

@@ -212,23 +212,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Begin updating information
                   $stmt = $conn->prepare('update book set name=?,edition=?,isbn=?,publisher=?,publishDate=?,ageRestriction=?,description=? where id=?');
                   $stmt->bind_param('ssssssss', $name, $edition, $isbn, $publisher, $publishDate, $age, $description, $id);
-                  $stmt->execute();
+                  $isSuccess = $stmt->execute();
 
-                  if ($stmt->affected_rows < 0 || $stmt->affected_rows > 1) {
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
                         $conn->rollback();
                         exit;
-                  } else if ($stmt->affected_rows === 0) {
-                        $isNothingUpdated = true;
+                  } else {
+                        if ($stmt->affected_rows > 1) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Updated more than one book!']);
+                              $stmt->close();
+                              $conn->rollback();
+                              exit;
+                        } else if ($stmt->affected_rows === 0) {
+                              $isNothingUpdated = true;
+                        }
+                        $stmt->close();
                   }
-                  $stmt->close();
 
                   $stmt = $conn->prepare('delete from author where bookID=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  if ($stmt->affected_rows < 0) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
@@ -240,9 +248,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt = $conn->prepare('insert into author(bookID,authorName) values(?,?)');
                   foreach ($author as $x) {
                         $stmt->bind_param('ss', $id, $x);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
 
-                        if ($stmt->affected_rows < 0 || $stmt->affected_rows > 1) {
+                        if (!$isSuccess) {
                               http_response_code(500);
                               echo json_encode(['error' => $stmt->error]);
                               $stmt->close();
@@ -279,8 +287,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $stmt = $conn->prepare('delete from belong where bookID=?');
                   $stmt->bind_param('s', $id);
-                  $stmt->execute();
-                  if ($stmt->affected_rows < 0) {
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
@@ -292,9 +300,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt = $conn->prepare('insert into belong(bookID,categoryID) values(?,?)');
                   foreach ($categoryID as $x) {
                         $stmt->bind_param('ss', $id, $x);
-                        $stmt->execute();
+                        $isSuccess = $stmt->execute();
 
-                        if ($stmt->affected_rows <= 0) {
+                        if (!$isSuccess) {
                               http_response_code(500);
                               echo json_encode(['error' => $stmt->error]);
                               $stmt->close();
