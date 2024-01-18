@@ -11,6 +11,24 @@ if (return_navigate_error() === 400) {
       http_response_code(403);
       require __DIR__ . '/../../error/403.php';
 } else {
+      require_once __DIR__. '/../../config/db_connection.php';
+      require_once __DIR__. '/../../tool/php/converter.php';
+      require_once __DIR__. '/../../tool/php/converter.php';
+
+      try{
+            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
+
+            if (!$conn) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../error/500.php';
+                  exit;
+            }
+      }
+      catch (Exception $e){
+            http_response_code(500);
+            require_once __DIR__ . '/../../error/500.php';
+            exit;
+      }
 ?>
 
       <!DOCTYPE html>
