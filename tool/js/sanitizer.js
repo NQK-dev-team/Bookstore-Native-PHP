@@ -11,5 +11,8 @@ function sanitize(param)
       // Encode '
       param = param.replace(/'/g, '%27');
 
+      // Decode @
+      param = param.replace(/%40/g, '@');
+
       return param;
 }
