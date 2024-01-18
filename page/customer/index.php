@@ -23,6 +23,14 @@ if (return_navigate_error() === 400) {
                   require_once __DIR__ . '/../../error/500.php';
                   exit;
             }
+
+            $elem = $conn->prepare('select name from book');
+            if($elem->num_rows>0){
+                  while($row=$elem->fetch_assoc()){
+                        echo "Book: ".$row["name"]."<br>";
+                  }
+            }
+            $conn->close();
       }
       catch (Exception $e){
             http_response_code(500);
