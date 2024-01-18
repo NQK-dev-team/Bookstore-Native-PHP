@@ -24,15 +24,9 @@ if (return_navigate_error() === 400) {
                   exit;
             }
 
-            $elem = $conn->prepare('select name from book');
-            if($elem->num_rows>0){
-                  while($row=$elem->fetch_assoc()){
-                        echo "Book: ".$row["name"]."<br>";
-                  }
-            }
-            else{
-                  echo "0 result";
-            }
+            $elem = $conn->prepare('select book.name, author.authorName from book inner join author on book.id = author.bookID');
+            $elem->execute();
+            $elem = $elem->get_result();
             $conn->close();
       }
       catch (Exception $e){
@@ -62,6 +56,22 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../layout/customer/header.php';
             ?>
             <section id="page">
+                  <div>
+                              <?php
+                                    if($elem->num_rows > 0){
+                                          while($row=$elem->fetch_assoc()){
+                                                echo "<div class=\"card dashboard-card\">";
+                                                      echo "<div class=\"card-body\">";
+                                                            echo "<h6>"."Book: ".$row["name"]."</h6>".$row["authorName"];
+                                                      echo "</div>";
+                                                echo "</div>";
+                                          }
+                                    }
+                                    else{
+                                          echo "Can't find the thing you need!";
+                                    }
+                              ?>
+                  </div>
             </section>
             <?php
             require_once __DIR__ . '/../../layout/footer.php';
