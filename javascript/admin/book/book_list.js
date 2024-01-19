@@ -28,9 +28,9 @@ $(document).ready(function ()
 
 function fetchBookList()
 {
-      const entry = parseInt(sanitize($('#entry_select').val()));
-      const search = sanitize($('#search_book').val());
-      const listOffset = parseInt(sanitize($('#list_offset').text()));
+      const entry = parseInt(encodeData($('#entry_select').val()));
+      const search = encodeData($('#search_book').val());
+      const listOffset = parseInt(encodeData($('#list_offset').text()));
       const status = parseBool($('#flexSwitchCheckDefault').prop('checked'));
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
@@ -272,7 +272,7 @@ function deleteBook()
             url: '/ajax_service/book/delete_book.php',
             type: 'DELETE',
             data: {
-                  id: sanitize(DELETE_ID)
+                  id: encodeData(DELETE_ID)
             },
             dataType: 'json',
             success: function (data)
@@ -318,7 +318,7 @@ function deactivateBook()
             url: '/ajax_service/book/update_book_status.php',
             type: 'PATCH',
             data: {
-                  id: sanitize(DEACTIVATE_ID),
+                  id: encodeData(DEACTIVATE_ID),
                   status: false
             },
             dataType: 'json',
@@ -365,7 +365,7 @@ function activateBook()
             url: '/ajax_service/book/update_book_status.php',
             type: 'PATCH',
             data: {
-                  id: sanitize(ACTIVATE_ID),
+                  id: encodeData(ACTIVATE_ID),
                   status: true
             },
             dataType: 'json',

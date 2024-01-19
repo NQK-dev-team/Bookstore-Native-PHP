@@ -13,7 +13,7 @@ function enterEmail(e, user_type)
 {
       e.preventDefault();
 
-      const email = sanitize($('#inputEmail').val()).replace(/%40/g, '@');
+      const email = encodeData($('#inputEmail').val()).replace(/%40/g, '@');
 
       if (email === '')
       {
@@ -37,7 +37,7 @@ function enterEmail(e, user_type)
       $.ajax({
             url: '/ajax_service/authentication/get_recovery_code.php',
             method: 'POST',
-            data: { email: email, type: sanitize(user_type) },
+            data: { email: email, type: encodeData(user_type) },
             dataType: 'json',
             success: function (data)
             {
@@ -120,7 +120,7 @@ function requestRecoveryCode()
       $.ajax({
             url: '/ajax_service/authentication/request_recovery_code.php',
             method: 'POST',
-            data: { email: sanitize(globalEmail) },
+            data: { email: encodeData(globalEmail) },
             dataType: 'json',
             success: function (data)
             {
@@ -171,7 +171,7 @@ function enterCode(e)
 {
       e.preventDefault();
 
-      const code = sanitize($('#inputRecoveryCode').val());
+      const code = encodeData($('#inputRecoveryCode').val());
 
       if (globalEmail && globalEmail === '')
       {
@@ -216,7 +216,7 @@ function enterCode(e)
       $.ajax({
             url: '/ajax_service/authentication/check_recovery_code.php',
             method: 'POST',
-            data: { email: sanitize(globalEmail), code: code },
+            data: { email: encodeData(globalEmail), code: code },
             dataType: 'json',
             success: function (data)
             {
@@ -271,8 +271,8 @@ function changePassword(e, user_type)
 {
       e.preventDefault();
 
-      const password = sanitize($('#inputNewPassword').val());
-      const confirmPassword = sanitize($('#inputConfirmNewPassword').val());
+      const password = encodeData($('#inputNewPassword').val());
+      const confirmPassword = encodeData($('#inputConfirmNewPassword').val());
 
       if (globalEmail && globalEmail === '')
       {
@@ -351,7 +351,7 @@ function changePassword(e, user_type)
       $.ajax({
             url: '/ajax_service/authentication/change_password.php',
             method: 'POST',
-            data: { email: sanitize(globalEmail), password: password, confirmPassword: confirmPassword, type: sanitize(user_type) },
+            data: { email: encodeData(globalEmail), password: password, confirmPassword: confirmPassword, type: encodeData(user_type) },
             dataType: 'json',
             success: function (data)
             {

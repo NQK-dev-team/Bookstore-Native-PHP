@@ -64,7 +64,7 @@ $_SESSION['update_book_id'] = null;
       require_once __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/admin/menu_after_load.js"></script>
-      <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/encoder.js"></script>
       <script src="/tool/js/input_validity.js"></script>
       <script src="/javascript/authentication/login.js"></script>
 </body>

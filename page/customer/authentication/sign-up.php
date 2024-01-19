@@ -151,7 +151,7 @@ if (check_session()) header('Location: /');
       require_once __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/customer/menu_after_load.js"></script>
-      <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/encoder.js"></script>
       <script src="/tool/js/input_validity.js"></script>
       <script src="/tool/js/dob_checker.js"></script>
       <script src="/javascript/authentication/signup.js"></script>

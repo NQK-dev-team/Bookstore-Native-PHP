@@ -102,7 +102,7 @@ function getCategory(search)
       $.ajax({
             url: '/ajax_service/book/get_category_list.php',
             method: 'GET',
-            data: { search: sanitize(search) },
+            data: { search: encodeData(search) },
             dataType: 'json',
             success: function (data)
             {
@@ -225,18 +225,18 @@ function confirmSubmitForm(e)
 
 function submitForm()
 {
-      const name = sanitize($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
-      const edition = sanitize($('#editionInput').val()) === '' ? '' : parseInt(sanitize($('#editionInput').val()));
-      const isbn = sanitize($('#isbnInput').val().replace(/-/g, ''));
-      const age = sanitize($('#ageInput').val()) === '' ? '' : parseInt(sanitize($('#ageInput').val()));
-      const author = $('#authorInput').val().split(',').map(str => sanitize(str));
-      const category = $('#categoryInput').val().split(',').map(str => sanitize(str));
-      const publisher = sanitize($('#publisherInput').val());
-      const publishDate = sanitize($('#publishDateInput').val());
-      const physicalPrice = sanitize($('#physicalPriceInput').val()) === '' ? '' : parseFloat(sanitize($('#physicalPriceInput').val()));
-      const inStock = sanitize($('#inStockInput').val()) === '' ? '' : parseInt(sanitize($('#inStockInput').val()));
-      const filePrice = sanitize($('#filePriceInput').val()) === '' ? '' : parseFloat(sanitize($('#filePriceInput').val()));
-      const description = sanitize($('#descriptionInput').val());
+      const name = encodeData($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+      const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
+      const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
+      const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
+      const author = $('#authorInput').val().split(',').map(str => encodeData(str));
+      const category = $('#categoryInput').val().split(',').map(str => encodeData(str));
+      const publisher = encodeData($('#publisherInput').val());
+      const publishDate = encodeData($('#publishDateInput').val());
+      const physicalPrice = encodeData($('#physicalPriceInput').val()) === '' ? '' : parseFloat(encodeData($('#physicalPriceInput').val()));
+      const inStock = encodeData($('#inStockInput').val()) === '' ? '' : parseInt(encodeData($('#inStockInput').val()));
+      const filePrice = encodeData($('#filePriceInput').val()) === '' ? '' : parseFloat(encodeData($('#filePriceInput').val()));
+      const description = encodeData($('#descriptionInput').val());
 
       if (name === '')
       {

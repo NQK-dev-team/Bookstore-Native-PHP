@@ -447,7 +447,7 @@ if (return_navigate_error() === 400) {
             <script src="/javascript/admin/menu_after_load.js"></script>
             <script src="/javascript/admin/book/book_list.js"></script>
             <script src="/tool/js/input_parser.js"></script>
-            <script src="/tool/js/sanitizer.js"></script>
+            <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
       </body>
 

@@ -1,4 +1,4 @@
-function sanitize(param)
+function encodeData(param)
 {
       if (typeof param !== 'string') return param;
 
@@ -7,9 +7,6 @@ function sanitize(param)
 
       // Replace special characters
       param = encodeURIComponent(param);
-
-      // Encode '
-      param = param.replace(/'/g, '%27');
 
       return param;
 }
