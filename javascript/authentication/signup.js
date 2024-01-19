@@ -131,15 +131,13 @@ function signUpHandler(event)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content').text(data.error);
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'none';
 
@@ -155,14 +153,12 @@ function signUpHandler(event)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content').text('Server encountered error!');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content').text(err.responseJSON.error);
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
@@ -181,8 +177,7 @@ function checkPhoneUsed()
             dataType: 'json',
             success: function (data)
             {
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = '';
+                  $('#error_message_content').text('');
                   const error_message = document.getElementById('signup_fail');
                   error_message.style.display = 'none';
 
@@ -197,14 +192,12 @@ function checkPhoneUsed()
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content').text('Server encountered error!');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content').text(err.responseJSON.error);
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
@@ -225,8 +218,7 @@ function checkEmailUsed(isRefEmail)
                   dataType: 'json',
                   success: function (data)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'none';
 
@@ -241,14 +233,12 @@ function checkEmailUsed(isRefEmail)
                         console.error(err);
                         if (err.status >= 500)
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = 'Server encountered error!';
+                              $('#error_message_content').text('Server encountered error!');
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         } else
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = err.responseJSON.error;
+                              $('#error_message_content').text(err.responseJSON.error);
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         }
@@ -273,8 +263,7 @@ function checkEmailUsed(isRefEmail)
                   dataType: 'json',
                   success: function (data)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'none';
 
@@ -289,14 +278,12 @@ function checkEmailUsed(isRefEmail)
                         console.error(err);
                         if (err.status >= 500)
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = 'Server encountered error!';
+                              $('#error_message_content').text('Server encountered error!');
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         } else
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = err.responseJSON.error;
+                              $('#error_message_content').text(err.responseJSON.error);
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         }

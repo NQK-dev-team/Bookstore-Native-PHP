@@ -47,15 +47,13 @@ function enterEmail(e, user_type)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_1').text(ata.error);
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_1').text('');
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'none';
 
@@ -74,14 +72,12 @@ function enterEmail(e, user_type)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_1').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_1').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   }
@@ -94,8 +90,7 @@ function requestRecoveryCode()
 
       if (globalEmail && globalEmail === '')
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'No email provided!';
+            $('#error_message_content_2').text('No email provided!');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
@@ -105,8 +100,7 @@ function requestRecoveryCode()
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(globalEmail))
             {
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Email format invalid!';
+                  $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
                   error_message.style.display = 'flex';
                   return;
@@ -130,15 +124,13 @@ function requestRecoveryCode()
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_2').text(data.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_2').text('');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'none';
                   }
@@ -152,14 +144,12 @@ function requestRecoveryCode()
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_2').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_2').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
@@ -175,8 +165,7 @@ function enterCode(e)
 
       if (globalEmail && globalEmail === '')
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'No email provided!';
+            $('#error_message_content_2').text('No email provided!');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
@@ -186,8 +175,7 @@ function enterCode(e)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(globalEmail))
             {
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Email format invalid!';
+                  $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
                   error_message.style.display = 'flex';
                   return;
@@ -226,15 +214,13 @@ function enterCode(e)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_2').text(data.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_2').text('');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'none';
 
@@ -252,14 +238,12 @@ function enterCode(e)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_2').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_2').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
@@ -276,8 +260,7 @@ function changePassword(e, user_type)
 
       if (globalEmail && globalEmail === '')
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'No email provided!';
+            $('#error_message_content_2').text('No email provided!');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
@@ -287,8 +270,7 @@ function changePassword(e, user_type)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(globalEmail))
             {
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Email format invalid!';
+                  $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
                   error_message.style.display = 'flex';
                   return;
@@ -337,8 +319,7 @@ function changePassword(e, user_type)
 
       if (password !== confirmPassword)
       {
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = 'Passwords are not matched!';
+            $('#error_message_content_3').text('Passwords are not matched!');
             const error_message = document.getElementById('recovery_fail_3');
             error_message.style.display = 'flex';
             return;
@@ -361,15 +342,13 @@ function changePassword(e, user_type)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_3').text(data.error);
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_3').text('');
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'none';
 
@@ -385,14 +364,12 @@ function changePassword(e, user_type)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_3').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_3').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   }
@@ -405,24 +382,21 @@ function changeEmail()
       globalEmail = null;
 
       {
-            const p_elem = document.getElementById('error_message_content_1');
-            p_elem.innerHTML = '';
+            $('#error_message_content_1').text('');
             const error_message = document.getElementById('recovery_fail_1');
             error_message.style.display = 'none';
             $('#recovery_email_form').css('display', 'flex');
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = '';
+            $('#error_message_content_3').text('');
             const error_message = document.getElementById('recovery_fail_3');
             error_message.style.display = 'none';
             $('#recovery_password_form').css('display', 'none');
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = '';
+            $('#error_message_content_2').text('');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'none';
             $('#recovery_code_form').css('display', 'none');
@@ -434,16 +408,14 @@ function changeEmail()
 function backToGetCode()
 {
       {
-            const p_elem = document.getElementById('error_message_content_1');
-            p_elem.innerHTML = '';
+            $('#error_message_content_1').text('');
             const error_message = document.getElementById('recovery_fail_1');
             error_message.style.display = 'none';
             $('#recovery_email_form').css('display', 'none');
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = '';
+            $('#error_message_content_3').text('');
             const error_message = document.getElementById('recovery_fail_3');
             error_message.style.display = 'none';
             $('#recovery_password_form').css('display', 'none');
@@ -451,8 +423,7 @@ function backToGetCode()
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = '';
+            $('#error_message_content_2').text('');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'none';
             $('#recovery_code_form').css('display', 'flex');
