@@ -17,7 +17,7 @@ function signUpHandler(event)
       const date = sanitize(document.getElementById('inputDate').value);
       const phone = sanitize(document.getElementById('inputPhone').value);
       const address = sanitize(document.getElementById('inputAddress').value);
-      const email = sanitize(document.getElementById('inputEmail').value);
+      const email = sanitize(document.getElementById('inputEmail').value).replace(/%40/g, '@');
       const password = sanitize(document.getElementById('inputPassword').value);
       const card = sanitize(document.getElementById('inputCard').value);
       const refEmail = sanitize(document.getElementById('inputRefEmail').value);
@@ -216,7 +216,7 @@ function checkEmailUsed(isRefEmail)
 {
       if (!isRefEmail)
       {
-            const email = sanitize(document.getElementById('inputEmail').value);
+            const email = sanitize(document.getElementById('inputEmail').value).replace(/%40/g, '@');
 
             $.ajax({
                   url: `/ajax_service/authentication/check_email.php`,
@@ -257,7 +257,7 @@ function checkEmailUsed(isRefEmail)
       }
       else
       {
-            const email = sanitize(document.getElementById('inputRefEmail').value);
+            const email = sanitize(document.getElementById('inputRefEmail').value).replace(/%40/g, '@');
 
             if (email === '')
             {

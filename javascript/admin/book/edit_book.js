@@ -225,7 +225,7 @@ function confirmSubmitForm(e)
 
 function submitForm()
 {
-      const name = sanitize($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?');
+      const name = sanitize($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
       const edition = sanitize($('#editionInput').val()) === '' ? '' : parseInt(sanitize($('#editionInput').val()));
       const isbn = sanitize($('#isbnInput').val().replace(/-/g, ''));
       const age = sanitize($('#ageInput').val()) === '' ? '' : parseInt(sanitize($('#ageInput').val()));
@@ -245,10 +245,10 @@ function submitForm()
       }
       else
       {
-            const regex = /[?/]/;
+            const regex = /[?/\\]/;
             if (regex.test(name))
             {
-                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\' or \'/\' characters!');
+                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\' or \'\\\' characters!');
                   return;
             }
       }

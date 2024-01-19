@@ -2,7 +2,7 @@ function loginHandler(e, user_type)
 {
       e.preventDefault();
 
-      const email = sanitize(document.getElementById('inputEmail').value);
+      const email = sanitize(document.getElementById('inputEmail').value).replace(/%40/g, '@');
       const password = sanitize(document.getElementById('inputPassword').value);
       const type = sanitize(user_type);
 

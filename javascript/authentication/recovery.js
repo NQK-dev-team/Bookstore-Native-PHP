@@ -13,7 +13,7 @@ function enterEmail(e, user_type)
 {
       e.preventDefault();
 
-      const email = sanitize($('#inputEmail').val());
+      const email = sanitize($('#inputEmail').val()).replace(/%40/g, '@');
 
       if (email === '')
       {

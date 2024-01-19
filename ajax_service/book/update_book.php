@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'Book name is empty!']);
                         exit;
                   } else if (preg_match('/[?\/]/', $name)) {
-                        echo json_encode(['error' => 'Book name must not contain \'?\' or \'/\' characters!']);
+                        echo json_encode(['error' => 'Book name must not contain \'?\', \'/\' or \'\\\' characters!']);
                         exit;
                   }
 
