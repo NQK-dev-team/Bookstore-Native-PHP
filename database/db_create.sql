@@ -26,7 +26,7 @@ create table appUser(
     email varchar(255) unique,
     password varchar(255) not null,
     check(length(password)>=8),
-    imagePath text not null
+    imagePath text
 );
 
 create table admin(
@@ -55,7 +55,7 @@ create table book(
     publisher varchar(255) not null,
     publishDate date not null,
     status boolean not null default true, -- true means the book is purchasable, false means not
-    imagePath text,
+    imagePath text not null,
     description text
 );
 

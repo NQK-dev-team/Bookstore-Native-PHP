@@ -52,7 +52,7 @@ if (return_navigate_error() === 400) {
                         } else {
                               $result = $result->fetch_assoc();
                               $result['isbn'] = formatISBN($result['isbn']);
-                              $result['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"" ;
+                              $result['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"";
                               $query_result = $result;
                         }
                   }
@@ -117,10 +117,9 @@ if (return_navigate_error() === 400) {
                         if ($result->num_rows === 0) {
                               $query_result['physicalCopy'] = [];
                         } else {
-                              while ($row = $result->fetch_assoc()) {
-                                    $query_result['physicalCopy']['price'] = $row['price'];
-                                    $query_result['physicalCopy']['inStock'] = $row['inStock'];
-                              }
+                              $row = $result->fetch_assoc();
+                              $query_result['physicalCopy']['price'] = $row['price'];
+                              $query_result['physicalCopy']['inStock'] = $row['inStock'];
                         }
                   }
                   $stmt->close();
@@ -140,11 +139,10 @@ if (return_navigate_error() === 400) {
                         if ($result->num_rows === 0) {
                               $query_result['fileCopy'] = [];
                         } else {
-                              while ($row = $result->fetch_assoc()) {
-                                    $row['filePath'] = $row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
-                                    $query_result['fileCopy']['price'] = $row['price'];
-                                    $query_result['fileCopy']['filePath'] = $row['filePath'];
-                              }
+                              $row = $result->fetch_assoc();
+                              $row['filePath'] = $row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
+                              $query_result['fileCopy']['price'] = $row['price'];
+                              $query_result['fileCopy']['filePath'] = $row['filePath'];
                         }
                   }
                   $stmt->close();
@@ -200,10 +198,10 @@ if (return_navigate_error() === 400) {
                                                       <img class='custom_image w-100' id="bookImage" alt="book image" <?php echo $query_result['imagePath']; ?>>
                                                       </img>
                                                       <label class='btn btn-sm btn-light border border-dark mt-3 mx-auto'>
-                                                            <input accept='.jpg,.jpeg,.png' id="imageInput" type='file' class='d-none' onchange="setNewImage(event)"></input>
+                                                            <input accept='image/jpeg,image/png' id="imageInput" type='file' class='d-none' onchange="setNewImage(event)"></input>
                                                             Browse
                                                       </label>
-                                                      <p id="imageFileName" class='mx-auto'></p>
+                                                      <p id="imageFileName" class='mx-auto mt-2'></p>
                                                       <div class='mx-auto text-danger d-none' id="imgeFileError">
                                                             <p class='text-danger'><i class="bi bi-exclamation-triangle"></i>&nbsp;</p>
                                                             <p class='text-danger' id='imgeFileErrorMessage'></p>
@@ -215,7 +213,7 @@ if (return_navigate_error() === 400) {
                                           <div class='d-flex flex-column ps-xl-5 w-100 h-100'>
                                                 <div class="mt-auto mb-2 px-xl-5 px-3">
                                                       <label for="editionInput" class="form-label">Edition:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                                      <input type="number" min="1" class="form-control" id="editionInput" value="<?php echo $query_result['edition']; ?>">
+                                                      <input type="number" class="form-control" id="editionInput" value="<?php echo $query_result['edition']; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="isbnInput" class="form-label">ISBN-13:<span class='fw-bold text-danger'>&nbsp;*</span></label>
@@ -223,7 +221,7 @@ if (return_navigate_error() === 400) {
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="ageInput" class="form-label">Age Restriction:</label>
-                                                      <input type="number" min="0" class="form-control" id="ageInput" value="<?php echo $query_result['ageRestriction'] ? $query_result['ageRestriction'] : ''; ?>">
+                                                      <input type="number" class="form-control" id="ageInput" value="<?php echo $query_result['ageRestriction'] ? $query_result['ageRestriction'] : ''; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="authorInput" class="form-label">Author:<span class='fw-bold text-danger'>&nbsp;*</span></label>
@@ -253,7 +251,7 @@ if (return_navigate_error() === 400) {
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col">
                                                             <label for="inStockInput" class="form-label">In Stock:</label>
-                                                            <input type="number" min="0" class="form-control" id="inStockInput" value="<?php if ($query_result['physicalCopy']['inStock']) echo $query_result['physicalCopy']['inStock']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['inStock']) echo 'Enter number'; ?>">
+                                                            <input type="number" class="form-control" id="inStockInput" value="<?php if ($query_result['physicalCopy']['inStock']) echo $query_result['physicalCopy']['inStock']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['inStock']) echo 'Enter number'; ?>">
                                                       </div>
                                                 </div>
                                                 <div class="mb-auto mt-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
@@ -265,17 +263,25 @@ if (return_navigate_error() === 400) {
                                                             <div class="d-flex flex-column h-100">
                                                                   <span class="form-label">
                                                                         PDF (old file
-                                                                        <a id=' pdfPath' <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
-                                                                              <i class="bi bi-file-earmark-fill text-secondary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>"></i>
+                                                                        <a id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
+                                                                              <i class="bi bi-file-earmark-fill text-secondary"></i>
                                                                         </a>):
                                                                   </span>
-                                                                  <div class="d-flex align-items-center mt-auto">
-                                                                        <label class='btn btn-sm btn-light border border-dark'>
-                                                                              <input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">
-                                                                              Browse
-                                                                        </label>
-                                                                        <p class="mb-0 ms-3" id="pdfFileName"></p>
+                                                                  <div class="d-flex align-items-center mt-auto" id="btn_grp">
+                                                                        <div class="d-flex align-items-center">
+                                                                              <?php if ($query_result['fileCopy']['filePath'])
+                                                                                    echo '<div class=\'me-3\'>
+                                                                                    <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                                                                    <label class="btn btn-outline-danger btn-sm" for="btncheck1">Remove file</label>
+                                                                              </div>';
+                                                                              ?>
+                                                                              <label class='btn btn-sm btn-light border border-dark' id='browsePDF'>
+                                                                                    <input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">
+                                                                                    Browse
+                                                                              </label>
+                                                                        </div>
                                                                   </div>
+                                                                  <p class="mt-2" id="pdfFileName"></p>
                                                                   <p id="pdfFileError" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
                                                             </div>
                                                       </div>
@@ -343,6 +349,22 @@ if (return_navigate_error() === 400) {
                                     </div>
                                     <div class="modal-body d-flex flex-column">
                                           <p id="error_message"></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h2 class="modal-title fs-5">Success!</h2>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Changes successfully applied!</p>
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>

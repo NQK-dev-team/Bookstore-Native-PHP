@@ -3,7 +3,7 @@ let originalImg = null, originalName = null, originalEdition = null,
       originalPublishDate = null, originalPhysicalPrice = null, originalFilePrice = null,
       originalPhysicalInStock = null, originalAuthor = null, originalCategory = null, originalDescription = null;
 
-let newImg = null, newFile = null;
+let newImg = null, newFile = null, removeFile = false;
 
 $(document).ready(() =>
 {
@@ -61,6 +61,7 @@ function resetForm()
 
       $('#bookImage').attr('src', originalImg);
       $('#imageFileName').text('');
+      $('#imageInput').val('');
 
       $('#editionInput').val(originalEdition);
 
@@ -78,8 +79,7 @@ function resetForm()
 
       $('#filePriceInput').val(originalFilePrice);
 
-      const newFileInput = $(`<input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">`);
-      $('#filePathInput').replaceWith(newFileInput);
+      $('#filePathInput').val('');
       $('#pdfFileName').text('');
 
       $('#authorInput').val(originalAuthor);
@@ -177,6 +177,22 @@ function getCategory(search)
       })
 }
 
+function setRemoveFile(e)
+{
+      removeFile = e.target.checked;
+
+      if (e.target.checked)
+      {
+            newFile = null;
+            $('#pdfFileName').text('');
+            $('#browsePDF').addClass('disabled');
+            $('#filePathInput').val('');
+            $('#pdfFileError').addClass('d-none');
+      }
+      else
+            $('#browsePDF').removeClass('disabled');
+}
+
 function setCategory(e)
 {
       const arr = $('#categoryInput').val().split(', ');
@@ -221,19 +237,6 @@ function submitForm()
       const inStock = sanitize($('#inStockInput').val()) === '' ? '' : parseInt(sanitize($('#inStockInput').val()));
       const filePrice = sanitize($('#filePriceInput').val()) === '' ? '' : parseFloat(sanitize($('#filePriceInput').val()));
       const description = sanitize($('#descriptionInput').val());
-
-      console.log(name);
-      console.log(edition);
-      console.log(isbn);
-      console.log(age);
-      console.log(author);
-      console.log(category);
-      console.log(publisher);
-      console.log(publishDate);
-      console.log(physicalPrice);
-      console.log(inStock);
-      console.log(filePrice);
-      console.log(description);
 
       if (name === '')
       {
@@ -364,6 +367,7 @@ function submitForm()
       postData.append('inStock', inStock);
       postData.append('image', newImg);
       postData.append('pdf', newFile);
+      postData.append('removeFile', removeFile);
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
@@ -375,7 +379,7 @@ function submitForm()
             data: postData,
             contentType: false,
             processData: false,
-            //dataType: 'json',
+            dataType: 'json',
             success: function (data)
             {
                   $('*').removeClass('wait');
@@ -389,7 +393,68 @@ function submitForm()
                   }
                   else if (data.query_result)
                   {
+                        if (typeof data.query_result === 'string')
+                        {
+                              $('#btn_grp').empty();
+                              $('#btn_grp').append(
+                                    $(`<div class="d-flex align-items-center">
+                                          <div class=\'me-3\'>
+                                                <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                                <label class="btn btn-outline-danger btn-sm" for="btncheck1">Remove file</label>
+                                          </div>
+                                          <label class='btn btn-sm btn-light border border-dark' id='browsePDF'>
+                                                <input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">
+                                                Browse
+                                          </label>
+                                    </div>`)
+                              );
 
+                              $('#pdfPath').attr('href', data.query_result);
+                              $('#pdfPath').attr('alt', 'Read file');
+                              $('#pdfPath').attr('target', '_blank');
+                              $('#pdfPath').attr('data-bs-title', 'Read file');
+                        }
+                        else if (data.query_result === -1)
+                        {
+                              $('#btn_grp').empty();
+                              $('#btn_grp').append(
+                                    $(`<div class="d-flex align-items-center">
+                                          <label class='btn btn-sm btn-light border border-dark' id='browsePDF'>
+                                                <input type="file" class="form-control d-none" id="filePathInput" accept='.pdf' onchange="setNewFile(event)">
+                                                Browse
+                                          </label>
+                                    </div>`)
+                              );
+
+                              $('#pdfPath').removeAttr('href');
+                              $('#pdfPath').removeAttr('target');
+                              $('#pdfPath').attr('alt', 'No PDF file');
+                              $('#pdfPath').attr('data-bs-title', 'No PDF file');
+                        }
+
+                        originalImg = $('#bookImage').prop('src');
+                        originalName = $('#bookNameInput').val();
+                        originalEdition = $('#editionInput').val();
+                        originalISBN = $('#isbnInput').val();
+                        originalAge = $('#ageInput').val();
+                        originalPublisher = $('#publisherInput').val();
+                        originalPublishDate = $('#publishDateInput').val();
+                        originalPhysicalPrice = $('#physicalPriceInput').val();
+                        originalFilePrice = $('#filePriceInput').val();
+                        originalPhysicalInStock = $('#inStockInput').val();
+                        originalAuthor = $('#authorInput').val();
+                        originalCategory = $('#categoryInput').val();
+                        originalDescription = $('#descriptionInput').val();
+
+                        newImg = null, newFile = null, removeFile = false;
+
+                        $('#imageInput').val('');
+                        $('#imageFileName').text('');
+
+                        $('#pdfFileName').text('');
+                        $('#filePathInput').val('');
+
+                        $('#successModal').modal('show');
                         initToolTip();
                   }
             },
