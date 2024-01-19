@@ -262,7 +262,7 @@ if (return_navigate_error() === 400) {
                                                       <div class="ms-md-5 mt-2 mt-md-0 col mb-3">
                                                             <div class="d-flex flex-column h-100">
                                                                   <span class="form-label">
-                                                                        PDF (old file
+                                                                        PDF (current file
                                                                         <a id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
                                                                               <i class="bi bi-file-earmark-fill text-secondary"></i>
                                                                         </a>):
@@ -282,7 +282,8 @@ if (return_navigate_error() === 400) {
                                                                         </div>
                                                                   </div>
                                                                   <p class="mt-2" id="pdfFileName"></p>
-                                                                  <p id="pdfFileError" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
+                                                                  <p id="pdfFileError1" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
+                                                                  <p id="pdfFileError2" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Conflict request, please choose either removing the current file or uploading a new one, not both!</p>
                                                             </div>
                                                       </div>
                                                 </div>

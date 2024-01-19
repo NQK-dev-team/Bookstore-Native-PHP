@@ -351,13 +351,21 @@ function submitForm()
             $('#imgeFileError').addClass('d-none').removeClass('d-flex');
       }
 
-      if (newFile && newFile.type !== 'application/pdf')
+      if (removeFile && newFile)
       {
-            $('#pdfFileError').removeClass('d-none');
+            $('#pdfFileError2').removeClass('d-none');
+            isOK = false;
+      }
+      else if (newFile && newFile.type !== 'application/pdf')
+      {
+            $('#pdfFileError1').removeClass('d-none');
             isOK = false;
       }
       else
-            $('#pdfFileError').addClass('d-none');
+      {
+            $('#pdfFileError1').addClass('d-none');
+            $('#pdfFileError2').addClass('d-none');
+      }
 
       if (!isOK) return;
 

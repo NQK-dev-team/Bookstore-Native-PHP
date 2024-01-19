@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if (isset($_FILES['pdf'])) {
                         if ($removeFile) {
-                              echo json_encode(['error' => 'Conflict request, please choose removing the old file or uploading a new one, not both!']);
+                              echo json_encode(['error' => 'Conflict request, please choose either removing the current file or uploading a new one, not both!']);
                               exit;
                         }
 
