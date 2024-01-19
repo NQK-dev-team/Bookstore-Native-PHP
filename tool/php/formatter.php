@@ -11,8 +11,8 @@ function formatISBN($isbn)
             return substr($isbn, 0, 3) . '-' . substr($isbn, 3, 1) . '-' . substr($isbn, 4, 2) . '-' . substr($isbn, 6, 6) . '-' . substr($isbn, 12, 1);
       }
 
-      // Invalid ISBN length
-      return "Invalid ISBN length";
+      // Invalid ISBN number
+      return "Invalid ISBN number";
 }
 
 function MDYDateFormat($inputDate)
