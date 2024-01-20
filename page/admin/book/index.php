@@ -28,7 +28,7 @@ if (return_navigate_error() === 400) {
 
             $elem = '';
 
-            $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
+            $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
