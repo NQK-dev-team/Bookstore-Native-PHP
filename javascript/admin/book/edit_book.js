@@ -204,7 +204,7 @@ function setRemoveFile(e)
 
 function setCategory(e)
 {
-      const arr = $('#categoryInput').val().split(',').map(x => x.trim());
+      const arr = $('#categoryInput').val() !== '' ? $('#categoryInput').val().split(',').map(x => x.trim()) : [];
       if (e.target.checked)
       {
             if (!arr.includes(e.target.value))
