@@ -10,6 +10,7 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
+require_once __DIR__ . '/../../tool/php/delete_directory.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
       parse_str(file_get_contents('php://input'), $_DELETE);
@@ -47,6 +48,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
                   $stmt->close();
 
+                  $deleteDir = null;
+
+                  $stmt = $conn->prepare('select imagePath from book where id=?');
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  } else {
+                        $result = $stmt->get_result();
+                        $result = $result->fetch_assoc();
+                        $deleteDir = dirname(dirname(dirname(__DIR__)) . "/data/book/" . $result['imagePath']);
+                  }
+
                   $stmt = $conn->prepare('delete from book where id=?');
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
@@ -59,6 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               echo json_encode(['error' => 'No book found!']);
                         } else {
                               echo json_encode(['query_result' => true]);
+
+                              rrmdir($deleteDir);
                         }
                   }
                   $stmt->close();
