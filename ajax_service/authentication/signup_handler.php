@@ -152,6 +152,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
                   }
 
+                  // Begin transaction
+                  $conn->begin_transaction();
+
                   $hashedPassword = hash_password($password);
                   $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?)');
                   $stmt->bind_param('ssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail);
@@ -160,6 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
+                        $conn->rollback();
                   } else {
                         if ($stmt->affected_rows === 0) {
                               echo json_encode(['query_result' => false]);
@@ -173,6 +177,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Close statement
                   $stmt->close();
+
+                  // Commit transaction
+                  $conn->commit();
 
                   // Close connection
                   $conn->close();
