@@ -542,9 +542,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $queryResult = "https://{$_SERVER['HTTP_HOST']}/data/book/$pdfFile";
                               }
                         }
-                  }
-
-                  if ($removeFile) {
+                  } else if ($removeFile) {
                         $stmt = $conn->prepare('update fileCopy set filePath=null where id=?');
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
