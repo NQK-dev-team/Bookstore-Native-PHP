@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
                   $age = sanitize(rawurldecode($_POST['age'])) ? sanitize(rawurldecode($_POST['age'])) : null;
                   $author =  array_map('map', explode(',', $_POST['author']));
-                  $category = array_map('map', explode(',', $_POST['category']));
+                  $category = $_POST['category'] ? array_map('map', explode(',', $_POST['category'])) : [];
                   $publisher = sanitize(rawurldecode($_POST['publisher']));
                   $publishDate = sanitize(rawurldecode($_POST['publishDate']));
                   $description = sanitize(rawurldecode($_POST['description'])) ? sanitize(rawurldecode($_POST['description'])) : null;
@@ -244,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
-                              $currentDateTime= new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
                               $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
                               $imageDir = null;
@@ -344,35 +344,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $stmt->close();
 
-                  $categoryID = [];
-                  $stmt = $conn->prepare('select id from category where name=?');
-                  foreach ($category as $x) {
-                        $stmt->bind_param('s', $x);
-                        $isSuccess = $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                              $stmt->close();
-                              $conn->rollback();
-                              $conn->close();
-                              exit;
-                        } else {
-                              if ($result->num_rows === 0) {
-                                    echo json_encode(['error' => "Category $x not found!"]);
-                                    $stmt->close();
-                                    $conn->rollback();
-                                    $conn->close();
-                                    exit;
-                              } else {
-                                    $result = $result->fetch_assoc();
-                                    $categoryID[] = $result['id'];
-                              }
-                        }
-                  }
-                  $stmt->close();
-
                   $stmt = $conn->prepare('delete from belong where bookID=?');
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
@@ -386,21 +357,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('insert into belong(bookID,categoryID) values(?,?)');
-                  foreach ($categoryID as $x) {
-                        $stmt->bind_param('ss', $id, $x);
-                        $isSuccess = $stmt->execute();
+                  if (count($category)) {
+                        $categoryID = [];
+                        $stmt = $conn->prepare('select id from category where name=?');
+                        foreach ($category as $x) {
+                              $stmt->bind_param('s', $x);
+                              $isSuccess = $stmt->execute();
+                              $result = $stmt->get_result();
 
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                              $stmt->close();
-                              $conn->rollback();
-                              $conn->close();
-                              exit;
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->rollback();
+                                    $conn->close();
+                                    exit;
+                              } else {
+                                    if ($result->num_rows === 0) {
+                                          echo json_encode(['error' => "Category $x not found!"]);
+                                          $stmt->close();
+                                          $conn->rollback();
+                                          $conn->close();
+                                          exit;
+                                    } else {
+                                          $result = $result->fetch_assoc();
+                                          $categoryID[] = $result['id'];
+                                    }
+                              }
                         }
+                        $stmt->close();
+
+                        $stmt = $conn->prepare('insert into belong(bookID,categoryID) values(?,?)');
+                        foreach ($categoryID as $x) {
+                              $stmt->bind_param('ss', $id, $x);
+                              $isSuccess = $stmt->execute();
+
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->rollback();
+                                    $conn->close();
+                                    exit;
+                              }
+                        }
+                        $stmt->close();
                   }
-                  $stmt->close();
 
                   $stmt = $conn->prepare('update physicalCopy set price=?,inStock=? where id=?');
                   $stmt->bind_param('dis', $physicalPrice, $inStock, $id);
