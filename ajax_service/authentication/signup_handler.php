@@ -21,6 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$name) {
                         echo json_encode(['error' => 'No name provided!']);
                         exit;
+                  } else if (strlen($name) > 255) {
+                        echo json_encode(['error' => 'Name must be 255 characters long or less!']);
+                        exit;
                   }
 
                   if (!$date) {
@@ -62,6 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
+                  } else if (strlen($email) > 255) {
+                        echo json_encode(['error' => 'Email must be 255 characters long or less!']);
+                        exit;
                   }
 
                   if (!$password) {
@@ -78,7 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if ($refEmail && !filter_var($refEmail, FILTER_VALIDATE_EMAIL)) {
                         echo json_encode(['error' => 'Invalid referrer email format!']);
                         exit;
+                  } else if (strlen($refEmail) > 255) {
+                        echo json_encode(['error' => 'Refferer email must be 255 characters long or less!']);
+                        exit;
                   }
+
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
