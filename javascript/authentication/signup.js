@@ -26,6 +26,10 @@ function signUpHandler(event)
       {
             reportCustomValidity($('#inputName').get(0), "Name field is empty!");
             return;
+      } else if (name.length > 255)
+      {
+            reportCustomValidity($('#inputName').get(0), "Name must be 255 characters long or less!");
+            return;
       }
 
       if (date === '')
@@ -82,6 +86,11 @@ function signUpHandler(event)
                   reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
             }
+            else if (email.length > 255)
+            {
+                  reportCustomValidity($('#inputEmail').get(0), "Email must be 255 characters long or less!");
+                  return;
+            }
       }
 
       if (password === '')
@@ -110,6 +119,11 @@ function signUpHandler(event)
             if (!regex.test(refEmail))
             {
                   reportCustomValidity($('#inputRefEmail').get(0), "Referrer email format invalid!");
+                  return;
+            }
+            else if (refEmail.length > 255)
+            {
+                  reportCustomValidity($('#inputRefEmail').get(0), "Refferer email must be 255 characters long or less!");
                   return;
             }
       }

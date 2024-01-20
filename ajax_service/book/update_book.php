@@ -60,6 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else if (preg_match('/[?\/]/', $name)) {
                         echo json_encode(['error' => 'Book name must not contain \'?\', \'/\' or \'\\\' characters!']);
                         exit;
+                  } else if (strlen($name) > 255) {
+                        echo json_encode(['error' => 'Book name must be 255 characters long or less!']);
+                        exit;
                   }
 
                   if (!$edition) {
@@ -86,10 +89,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!count($author)) {
                         echo json_encode(['error' => 'Book must have at least one author!']);
                         exit;
+                  } else {
+                        foreach ($author as $x) {
+                              if (strlen($x) > 255) {
+                                    echo json_encode(['error' => 'Author name must be 255 characters long or less!']);
+                                    exit;
+                              }
+                        }
                   }
 
                   if (!$publisher) {
                         echo json_encode(['error' => 'Publisher is empty!']);
+                        exit;
+                  } else if (strlen($publisher) > 255) {
+                        echo json_encode(['error' => 'Publisher must be 255 characters long or less!']);
                         exit;
                   }
 
@@ -107,6 +120,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => 'Publish date invalid!']);
                               exit;
                         }
+                  }
+
+                  if ($description && strlen($description) > 2000) {
+                        echo json_encode(['error' => 'Description must be 2000 characters long or less!']);
+                        exit;
                   }
 
                   if ($physicalPrice && (!is_numeric($physicalPrice) || $physicalPrice <= 0)) {

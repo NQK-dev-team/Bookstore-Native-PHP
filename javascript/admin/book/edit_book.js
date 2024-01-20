@@ -263,6 +263,11 @@ function submitForm()
                   reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\' or \'\\\' characters!');
                   return;
             }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must be 255 characters long or less!');
+                  return;
+            }
       }
 
       if (typeof edition === 'string' && edition === '')
@@ -302,10 +307,20 @@ function submitForm()
             reportCustomValidity($('#authorInput').get(0), 'Book must have at least one author!');
             return;
       }
+      else if (author.findIndex(elem => elem.length > 255)!==-1)
+      {
+            reportCustomValidity($('#authorInput').get(0), 'Author name must be 255 characters long or less!');
+            return;
+      }
 
       if (publisher === '')
       {
             reportCustomValidity($('#publisherInput').get(0), 'Publisher is empty!');
+            return;
+      }
+      else if (publisher.length > 255)
+      {
+            reportCustomValidity($('#publisherInput').get(0), 'Publisher must be 255 characters long or less!');
             return;
       }
 
@@ -323,6 +338,12 @@ function submitForm()
                   reportCustomValidity($('#publishDateInput').get(0), 'Publish date invalid!');
                   return;
             }
+      }
+
+      if (description.length > 2000)
+      {
+            reportCustomValidity($('#descriptionInput').get(0), 'Description must be 2000 characters long or less!');
+            return;
       }
 
       if (!((typeof physicalPrice === 'number' && !isNaN(physicalPrice) && physicalPrice > 0) || (typeof physicalPrice === 'string' && physicalPrice === '')))
