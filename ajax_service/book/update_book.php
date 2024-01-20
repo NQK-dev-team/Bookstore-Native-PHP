@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $edition = sanitize(rawurldecode($_POST['edition']));
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
                   $age = sanitize(rawurldecode($_POST['age'])) ? sanitize(rawurldecode($_POST['age'])) : null;
-                  $author =  array_map('map', explode(',', $_POST['author']));
+                  $author =  $_POST['author'] ? array_map('map', explode(',', $_POST['author'])) : [];
                   $category = $_POST['category'] ? array_map('map', explode(',', $_POST['category'])) : [];
                   $publisher = sanitize(rawurldecode($_POST['publisher']));
                   $publishDate = sanitize(rawurldecode($_POST['publishDate']));
