@@ -244,7 +244,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
-                              $currentDateTime = date("YmdHis");
+                              $currentDateTime= new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
                               $imageDir = null;
 
@@ -466,7 +467,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
-                              $currentDateTime = date("YmdHis");
+                              $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileDir = null;
 
                               if ($result['filePath']) {

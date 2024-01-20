@@ -90,6 +90,9 @@ function resetForm()
 
       newImg = null;
       newFile = null;
+      removeFile = false;
+      $('#btncheck1').prop('checked', false);
+      $('#browsePDF').removeClass('disabled');
 }
 
 function openCategoryModal()
