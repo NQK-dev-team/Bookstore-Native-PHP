@@ -238,14 +238,17 @@ function submitForm()
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
       const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
-      const author = $('#authorInput').val() !== '' ? $('#authorInput').val().split(',').map(str => encodeData(str)) : '';
-      const category = $('#categoryInput').val() !== '' ? $('#categoryInput').val().split(',').map(str => encodeData(str)) : '';
+      const author = $('#authorInput').val() !== '' ? (($('#authorInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
+      const category = $('#categoryInput').val() !== '' ? (($('#categoryInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
       const publisher = encodeData($('#publisherInput').val());
       const publishDate = encodeData($('#publishDateInput').val());
       const physicalPrice = encodeData($('#physicalPriceInput').val()) === '' ? '' : parseFloat(encodeData($('#physicalPriceInput').val()));
       const inStock = encodeData($('#inStockInput').val()) === '' ? '' : parseInt(encodeData($('#inStockInput').val()));
       const filePrice = encodeData($('#filePriceInput').val()) === '' ? '' : parseFloat(encodeData($('#filePriceInput').val()));
       const description = encodeData($('#descriptionInput').val());
+
+      const rawAuthor = $('#authorInput').val() !== '' ? ($('#authorInput').val().split(',')).filter(str => str.trim() !== '') : '';
+      const rawCategory = $('#categoryInput').val() !== '' ? ($('#categoryInput').val().split(',')).filter(str => str.trim() !== '') : '';
 
       if (name === '')
       {
@@ -468,8 +471,10 @@ function submitForm()
                         originalPhysicalPrice = $('#physicalPriceInput').val();
                         originalFilePrice = $('#filePriceInput').val();
                         originalPhysicalInStock = $('#inStockInput').val();
-                        originalAuthor = $('#authorInput').val();
-                        originalCategory = $('#categoryInput').val();
+                        originalAuthor = rawAuthor.join(', ');
+                        originalCategory = rawCategory.join(', ');
+                        $('#authorInput').val(originalAuthor);
+                        $('#categoryInput').val(originalCategory);
                         originalDescription = $('#descriptionInput').val();
 
                         newImg = null, newFile = null, removeFile = false;
