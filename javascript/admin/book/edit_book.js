@@ -93,6 +93,12 @@ function resetForm()
       removeFile = false;
       $('#btncheck1').prop('checked', false);
       $('#browsePDF').removeClass('disabled');
+
+      $('#imgeFileErrorMessage').text('');
+      $('#imgeFileError').addClass('d-none').removeClass('d-flex');
+
+      $('#pdfFileError1').addClass('d-none');
+      $('#pdfFileError2').addClass('d-none');
 }
 
 function openCategoryModal()
