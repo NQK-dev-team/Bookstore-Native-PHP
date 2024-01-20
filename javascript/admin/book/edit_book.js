@@ -247,8 +247,8 @@ function submitForm()
       const filePrice = encodeData($('#filePriceInput').val()) === '' ? '' : parseFloat(encodeData($('#filePriceInput').val()));
       const description = encodeData($('#descriptionInput').val());
 
-      const rawAuthor = $('#authorInput').val() !== '' ? ($('#authorInput').val().split(',')).filter(str => str.trim() !== '') : '';
-      const rawCategory = $('#categoryInput').val() !== '' ? ($('#categoryInput').val().split(',')).filter(str => str.trim() !== '') : '';
+      const rawAuthor = $('#authorInput').val() !== '' ? ($('#authorInput').val().split(',')).filter(str => str.trim() !== '') : [];
+      const rawCategory = $('#categoryInput').val() !== '' ? ($('#categoryInput').val().split(',')).filter(str => str.trim() !== '') : [];
 
       if (name === '')
       {
