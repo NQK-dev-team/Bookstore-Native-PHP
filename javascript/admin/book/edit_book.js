@@ -238,8 +238,8 @@ function submitForm()
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
       const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
-      const author = $('#authorInput').val().split(',').map(str => encodeData(str));
-      const category = $('#categoryInput').val().split(',').map(str => encodeData(str));
+      const author = $('#authorInput').val() !== '' ? $('#authorInput').val().split(',').map(str => encodeData(str)) : '';
+      const category = $('#categoryInput').val() !== '' ? $('#categoryInput').val().split(',').map(str => encodeData(str)) : '';
       const publisher = encodeData($('#publisherInput').val());
       const publishDate = encodeData($('#publishDateInput').val());
       const physicalPrice = encodeData($('#physicalPriceInput').val()) === '' ? '' : parseFloat(encodeData($('#physicalPriceInput').val()));
