@@ -33,9 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['removeFile']
       )) {
             try {
-                  // Resume the session
-                  session_start();
-
                   $id = $_SESSION['update_book_id'];
                   $name = sanitize(rawurldecode($_POST['name']));
                   $edition = sanitize(rawurldecode($_POST['edition']));
