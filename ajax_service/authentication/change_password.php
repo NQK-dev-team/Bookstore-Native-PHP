@@ -113,8 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($stmt->affected_rows === 0) {
                               echo json_encode(['query_result' => false]);
                         } else {
-                              echo json_encode(['query_result' => true]);
                               change_password_mail($email, $user_type);
+                              echo json_encode(['query_result' => true]);
                         }
                   }
 
