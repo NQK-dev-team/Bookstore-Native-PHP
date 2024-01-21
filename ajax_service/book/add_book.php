@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => 'Invalid image file!']);
                               exit;
                         } else if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-                              echo json_encode(['error' => 'Image size too large!']);
+                              echo json_encode(['error' => 'Image size must be 5MB or less!']);
                               exit;
                         }
                   } else {

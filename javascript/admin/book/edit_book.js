@@ -374,7 +374,7 @@ function submitForm()
       }
       else if (newImg && newImg.size > 5 * 1024 * 1024)
       {
-            $('#imgeFileErrorMessage').text('Image size too large!');
+            $('#imgeFileErrorMessage').text('Image size must be 5MB or less!');
             $('#imgeFileError').removeClass('d-none').addClass('d-flex');
             isOK = false;
       }
