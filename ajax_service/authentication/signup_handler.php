@@ -49,14 +49,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$phone) {
                         echo json_encode(['error' => 'No phone number provided!']);
                         exit;
-                  } else if (!preg_match('/^[0-9]{10}$/', $phone)) {
-                        echo json_encode(['error' => 'Invalid phone number format!']);
-                        exit;
+                  } else {
+                        $matchResult = preg_match('/^[0-9]{10}$/', $phone);
+                        if ($matchResult === false) {
+                              throw new Exception('Error occurred during phone number format check!');
+                        } else if ($matchResult === 0) {
+                              echo json_encode(['error' => 'Invalid phone number format!']);
+                              exit;
+                        }
                   }
 
-                  if ($card && !preg_match('/^[0-9]{8,16}$/', $card)) {
-                        echo json_encode(['error' => 'Card number format invalid!']);
-                        exit;
+                  if ($card) {
+                        $matchResult = preg_match('/^[0-9]{8,16}$/', $card);
+                        if ($matchResult === false) {
+                              throw new Exception('Error occurred during card number format check!');
+                        } else if ($matchResult === 0) {
+                              echo json_encode(['error' => 'Card number format invalid!']);
+                              exit;
+                        }
                   }
 
                   if (!$email) {
@@ -76,9 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else if (strlen($password) < 8) {
                         echo json_encode(['error' => 'Password must be at least 8 characters long!']);
                         exit;
-                  } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password)) {
-                        echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
-                        exit;
+                  } else {
+                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password);
+                        if ($matchResult === false) {
+                              throw new Exception('Error occurred during password format check!');
+                        } else if ($matchResult === 0) {
+                              echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
+                              exit;
+                        }
                   }
 
                   if ($refEmail && !filter_var($refEmail, FILTER_VALIDATE_EMAIL)) {

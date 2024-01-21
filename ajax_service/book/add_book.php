@@ -48,11 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$name) {
                         echo json_encode(['error' => 'Book name is empty!']);
                         exit;
-                  } else if (preg_match('/[?\/]/', $name)) {
+                  } else if (preg_match('/[?\/]/', $name) === 0) {
                         echo json_encode(['error' => 'Book name must not contain \'?\', \'/\' or \'\\\' characters!']);
                         exit;
                   } else if (strlen($name) > 255) {
                         echo json_encode(['error' => 'Book name must be 255 characters long or less!']);
+                        exit;
+                  } else if (preg_match('/[?\/]/', $name) === false) {
+                        throw new Exception('Error occurred during book name format check!');
                         exit;
                   }
 
@@ -67,8 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$isbn) {
                         echo json_encode(['error' => 'Book ISBN-13 is empty!']);
                         exit;
-                  } else if (!preg_match('/^[0-9]{13}$/', $isbn)) {
+                  } else if (preg_match('/^[0-9]{13}$/', $isbn) === 0) {
                         echo json_encode(['error' => 'Book ISBN-13 invalid!']);
+                        exit;
+                  } else if (preg_match('/[?\/]/', $name) === false) {
+                        throw new Exception('Error occurred during book ISBN-13 format check!');
                         exit;
                   }
 
@@ -138,8 +144,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if (isset($_FILES['image'])) {
                         $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        if ($finfo === false) {
+                              throw new Exception("Failed to open fileinfo database!");
+                        }
                         $fileMimeType = finfo_file($finfo, $_FILES['image']['tmp_name']);
-                        finfo_close($finfo);
+                        if ($fileMimeType === false) {
+                              throw new Exception("Failed to get the MIME type of the image file!");
+                        }
+                        $finfoCloseResult = finfo_close($finfo);
+                        if ($finfoCloseResult) {
+                              throw new Exception("Failed to close fileinfo resource!");
+                        }
 
                         if (!in_array($fileMimeType, $allowedImageTypes)) {
                               echo json_encode(['error' => 'Invalid image file!']);
@@ -155,8 +170,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if (isset($_FILES['pdf'])) {
                         $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        if ($finfo === false) {
+                              throw new Exception("Failed to open fileinfo database!");
+                        }
                         $fileMimeType = finfo_file($finfo, $_FILES['pdf']['tmp_name']);
-                        finfo_close($finfo);
+                        if ($fileMimeType === false) {
+                              throw new Exception("Failed to get the MIME type of the PDF file!");
+                        }
+                        $finfoCloseResult = finfo_close($finfo);
+                        if ($finfoCloseResult) {
+                              throw new Exception("Failed to close fileinfo resource!");
+                        }
 
                         if (!in_array($fileMimeType, $allowedFileTypes)) {
                               echo json_encode(['error' => 'Invalid PDF file!']);
@@ -314,12 +338,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $id)) {
                         mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $id);
+                  } else {
+                        throw new Exception("Error occurred during creating directory!");
                   }
 
-                  move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $imageFile);
+                  if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $imageFile))
+                        throw new Exception("Error occurred during moving image file!");
 
                   if (isset($_FILES['pdf'])) {
-                        move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $pdfFile);
+                        if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $pdfFile))
+                              throw new Exception("Error occurred during moving PDF file!");
                   }
 
                   echo json_encode(['query_result' => true]);

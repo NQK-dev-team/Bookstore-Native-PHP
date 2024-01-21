@@ -4,16 +4,24 @@ function rrmdir($dir)
 {
       if (is_dir($dir)) {
             $objects = scandir($dir);
+            if ($objects === false) {
+                  throw new Exception("Failed to scan directory: $dir");
+            }
             foreach ($objects as $object) {
                   if ($object != "." && $object != "..") {
-                        if (is_dir($dir . DIRECTORY_SEPARATOR . $object) && !is_link($dir . DIRECTORY_SEPARATOR . $object)) {
-                              rrmdir($dir . DIRECTORY_SEPARATOR . $object);
+                        $fullPath = $dir . DIRECTORY_SEPARATOR . $object;
+                        if (is_dir($fullPath) && !is_link($fullPath)) {
+                              rrmdir($fullPath);
                         } else {
-                              unlink($dir . DIRECTORY_SEPARATOR . $object);
+                              if (!unlink($fullPath)) {
+                                    throw new Exception("Failed to delete file: $fullPath");
+                              }
                         }
                   }
             }
-            rmdir($dir);
+            if (!rmdir($dir)) {
+                  throw new Exception("Failed to delete directory: $dir");
+            }
       }
 }
 ?>

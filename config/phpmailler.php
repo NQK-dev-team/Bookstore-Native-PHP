@@ -33,9 +33,7 @@ try {
       // Mail format
       $mail->isHTML(true); //Set email format to HTML
 } catch (Exception $e) {
-      $GLOBALS['error_message'] = "Mailer configuration step failed. Error: {$mail->ErrorInfo}";
       http_response_code(500);
-      require_once __DIR__ . '/../error/500.php';
-      // echo "Mailer configuration step failed. Error: {$mail->ErrorInfo}";
+      throw new Exception("Mailer configuration step failed. Error: {$mail->ErrorInfo}");
 }
 ?>

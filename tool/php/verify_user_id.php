@@ -15,12 +15,19 @@ function verifyUserID($id)
 
       $stmt = $conn->prepare('select exists(select * from appUser where id=?) as result;');
       $stmt->bind_param('s', $id);
-      $stmt->execute();
+      $isSuccess = $stmt->execute();
+
+      if (!$isSuccess) {
+            return false;
+      }
 
       $result = $stmt->get_result();
       if ($result->num_rows !== 1) return false;
       $result = $result->fetch_assoc();
+      $result = $result['result'];
+      $stmt->close();
+      $conn->close();
 
-      return $result['result'] === 1;
+      return $result === 1;
 }
 ?>

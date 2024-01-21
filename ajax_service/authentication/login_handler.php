@@ -27,10 +27,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else if (strlen($password) < 8) {
                         echo json_encode(['error' => 'Password must be at least 8 characters long!']);
                         exit;
-                  } else if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password)) {
-                        echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
-                        exit;
+                  } else {
+                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password);
+                        if ($matchResult === false) {
+                              throw new Exception('Error occurred during password format check!');
+                        } else if ($matchResult === 0) {
+                              echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
+                              exit;
+                        }
                   }
+
 
                   // Valid user type
                   if (!$user_type) {
@@ -71,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               if (!verify_password($password, $result['password']))
                                     echo json_encode(['error' => 'Email or password incorrect!']);
                               else {
-                                    // Start or resume the session
-                                    session_start();
+                                    if (!session_start())
+                                          throw new Exception('Error occurred during starting session!');
                                     $_SESSION['type'] = $user_type;
                                     $_SESSION['id'] = $result['id'];
 

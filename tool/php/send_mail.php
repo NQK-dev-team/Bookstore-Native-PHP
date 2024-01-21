@@ -6,33 +6,49 @@ function create_new_account_mail($email)
 {
       global $mail;
 
-      $mail->addAddress($email);
+      try {
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add address: ' . $e->getMessage());
+      }
 
       $mail->Subject = 'Account created!';
       $mail->Body    = "You account has been created successfully, you can now use this email address to login NQK Bookstore website!";
       $mail->AltBody = "You account has been created successfully, you can now use this email address to login NQK Bookstore website!";
 
-      $mail->send();
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
 }
 
 function referrer_mail($refEmail, $email)
 {
       global $mail;
 
-      $mail->addAddress($refEmail);
+      try {
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add address: ' . $e->getMessage());
+      }
 
       $mail->Subject = 'Referrer acknowledge';
       $mail->Body    = "You account has been set to be the referrer of user <strong>{$email}</strong>!";
       $mail->AltBody = "You account has been set to be the referrer of user {$email}!";
 
-      $mail->send();
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
 }
 
 function recovery_mail($email, $code)
 {
       global $mail;
 
-      $mail->addAddress($email);
+      try {
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add address: ' . $e->getMessage());
+      }
 
       $mail->Subject = 'Recovery code (No Reply)';
       $mail->Body    = "This is your recovery code: <b>$code</b>
@@ -41,14 +57,20 @@ function recovery_mail($email, $code)
       $mail->AltBody = "This is your recovery code: $code\n
       This code will only be valid for 2 minutes";
 
-      $mail->send();
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
 }
 
 function change_password_mail($email, $user_type)
 {
       global $mail;
 
-      $mail->addAddress($email);
+      try {
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add address: ' . $e->getMessage());
+      }
 
       $mail->Subject = 'Password changed!';
       if ($user_type === 'customer') {
@@ -59,7 +81,9 @@ function change_password_mail($email, $user_type)
             $mail->AltBody = "Your password has been changed successfully. If you did not perform this action, contact the database administrator immediately!";
       }
 
-      $mail->send();
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
 }
 
 ?>

@@ -58,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['query_result' => true]);
                               $code = generateRandomString();
                               recovery_mail($email, $code);
-                              session_start();
+                              if (!session_start())
+                                    throw new Exception('Error occurred during starting session!');
                               $_SESSION['recovery_code'] = $code;
                               $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
                               $_SESSION['recovery_email'] = $email;

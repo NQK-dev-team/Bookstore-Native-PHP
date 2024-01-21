@@ -33,10 +33,6 @@
             <div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center">
                   <h1>Error 500</h1>
                   <h5 class="text-center">The server has encountered an error!</h5>
-                  <?php
-                  // if (isset($GLOBALS['error_message']))
-                  //       echo "<p class=\"text-center text-wrap text-truncate w-75\">{$GLOBALS['error_message']}</p>";
-                  ?>
             </div>
       </section>
       <?php
