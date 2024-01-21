@@ -14,19 +14,19 @@ insert into pointConfig values(5);
 create table category(
     id varchar(20) primary key,
 	name varchar(255) not null unique,
-    description text
+    description varchar(1000)
 );
 
 create table appUser(
 	id varchar(20) primary key,
     name varchar(255) not null,
     dob date not null,
-    address text,
+    address varchar(1000),
     phone varchar(10) unique,
     email varchar(255) unique,
     password varchar(255) not null,
     check(length(password)>=8),
-    imagePath text
+    imagePath varchar(1000)
 );
 
 create table admin(
@@ -58,8 +58,8 @@ create table book(
     publisher varchar(255) not null,
     publishDate date not null,
     status boolean not null default true, -- true means the book is purchasable, false means not
-    imagePath text not null,
-    description text
+    imagePath varchar(1000) not null,
+    description varchar(2000)
 );
 
 create table author(
@@ -83,7 +83,7 @@ create table fileCopy(
 	id varchar(20) primary key,
     price double,
     check (price>0),
-    filePath text,
+    filePath varchar(1000),
     foreign key (id) references book(id) on delete cascade on update cascade
 );
 
@@ -130,7 +130,7 @@ create table commentContent(
 	check(commentIdx>=1),
     primary key(customerID,bookID,commentIdx),
     commentTime datetime not null,
-    content text not null,
+    content varchar(2000) not null,
     foreign key (customerID) references comment(customerID) on delete cascade on update cascade,
     foreign key (bookID) references comment(bookID) on delete cascade on update cascade
 );
@@ -171,7 +171,7 @@ create table physicalOrderContain(
     primary key(bookID,orderID),
 	amount int not null default 1,
     check(amount>=1),
-    destinationAddress text not null,
+    destinationAddress varchar(1000) not null,
     foreign key (bookID) references physicalCopy(id) on delete cascade on update cascade,
     foreign key (orderID) references physicalOrder(id) on delete cascade on update cascade
 );
