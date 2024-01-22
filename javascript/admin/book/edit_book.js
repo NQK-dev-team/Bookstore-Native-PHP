@@ -234,6 +234,8 @@ function confirmSubmitForm(e)
 
 function submitForm()
 {
+      $('#confirmModal').modal('hide');
+
       const name = encodeData($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
@@ -307,7 +309,7 @@ function submitForm()
             reportCustomValidity($('#authorInput').get(0), 'Book must have at least one author!');
             return;
       }
-      else if (author.findIndex(elem => elem.length > 255)!==-1)
+      else if (author.findIndex(elem => elem.length > 255) !== -1)
       {
             reportCustomValidity($('#authorInput').get(0), 'Author name must be 255 characters long or less!');
             return;
@@ -418,7 +420,7 @@ function submitForm()
       postData.append('image', newImg);
       postData.append('pdf', newFile);
       postData.append('removeFile', removeFile);
-      postData.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
+      postData.append('csrf_token', $('#csrf_token').val());
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);

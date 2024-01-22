@@ -273,7 +273,7 @@ function deleteBook()
             type: 'DELETE',
             data: {
                   id: encodeData(DELETE_ID),
-                  csrf_token: $('meta[name="csrf-token"]').attr('content')
+                  csrf_token: $('#csrf_token').val()
             },
             dataType: 'json',
             success: function (data)
@@ -315,13 +315,14 @@ function confirmDeactivateBook(id)
 
 function deactivateBook()
 {
+      $('#deactivateModal').modal('hide');
       $.ajax({
             url: '/ajax_service/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(DEACTIVATE_ID),
                   status: false,
-                  csrf_token: $('meta[name="csrf-token"]').attr('content')
+                  csrf_token: $('#csrf_token').val()
             },
             dataType: 'json',
             success: function (data)
@@ -338,9 +339,9 @@ function deactivateBook()
                   }
                   fetchBookList();
             },
-            error: function (error)
+            error: function (err)
             {
-                  console.error(error);
+                  console.error(err);
 
                   if (err.status >= 500)
                   {
@@ -363,13 +364,14 @@ function confirmActivateBook(id)
 
 function activateBook()
 {
+      $('#activateModal').modal('hide');
       $.ajax({
             url: '/ajax_service/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(ACTIVATE_ID),
                   status: true,
-                  csrf_token: $('meta[name="csrf-token"]').attr('content')
+                  csrf_token: $('#csrf_token').val()
             },
             dataType: 'json',
             success: function (data)
@@ -386,7 +388,7 @@ function activateBook()
                   }
                   fetchBookList();
             },
-            error: function (error)
+            error: function (err)
             {
                   console.error(error);
 

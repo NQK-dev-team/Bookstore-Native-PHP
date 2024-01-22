@@ -199,6 +199,8 @@ function confirmSubmitForm(e)
 
 function submitForm()
 {
+      $('#confirmModal').modal('hide');
+      
       const name = encodeData($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
@@ -383,7 +385,7 @@ function submitForm()
       postData.append('inStock', inStock);
       postData.append('image', newImg);
       postData.append('pdf', newFile);
-      postData.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
+      postData.append('csrf_token', $('#csrf_token').val());
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);

@@ -285,7 +285,6 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Manage books of NQK Bookstore">
             <title>Manage Books</title>
             <link rel="stylesheet" href="/css/admin/book/book_list.css">
-            <?php csrfMeta(); ?>
       </head>
 
       <body>
@@ -293,6 +292,7 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../../layout/admin/header.php';
             ?>
             <section id="page">
+                  <?php csrfInput(); ?>
                   <div class="container-fluid h-100 d-flex flex-column">
                         <h1 class='fs-2 mx-auto mt-3'>Book List</h1>
                         <form class="d-flex align-items-center mt-2 w-100 search_form mx-auto" role="search" id="search_form">

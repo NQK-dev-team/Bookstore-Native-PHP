@@ -28,7 +28,6 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Add a book to NQK Bookstore">
             <title>Add Book</title>
             <link rel="stylesheet" href="/css/admin/book/book_detail.css">
-            <?php csrfMeta(); ?>
       </head>
 
       <body>
@@ -36,6 +35,7 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../../layout/admin/header.php';
             ?>
             <section id="page">
+                  <?php csrfInput(); ?>
                   <div class='w-100 h-100 d-flex'>
                         <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
                               <h1 class='ms-xl-3 mt-2 mx-auto'>Add Book</h1>
