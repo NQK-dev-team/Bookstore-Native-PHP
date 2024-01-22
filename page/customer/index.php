@@ -60,10 +60,16 @@ if (return_navigate_error() === 400) {
                               <?php
                                     if($elem->num_rows > 0){
                                           while($row=$elem->fetch_assoc()){
-                                                echo "<div class=\"card dashboard-card\">";
-                                                      echo "<div class=\"card-body\">";
-                                                            echo "<h6>"."Book: ".$row["name"]."</h6>".$row["authorName"];
+                                                echo"<div class=\"row\"";
+                                                echo "<div class=\"col-sm-6\">";
+                                                      echo "<div class=\"card mb-3 border-dark\" style=\"max-width: 18rem;\">";
+                                                            // insert picture here
+                                                            echo "<div class=\"card-body\" style=\"display: block;\">";
+                                                                  echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
+                                                                  echo "<p>".$row["authorName"]."</p>";
+                                                            echo "</div>";
                                                       echo "</div>";
+                                                echo "</div>";
                                                 echo "</div>";
                                           }
                                     }
