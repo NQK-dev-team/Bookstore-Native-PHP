@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     if (!session_set_cookie_params([
                                           'lifetime' => 3 * 24 * 60 * 60,
                                           'path' => '/',
-                                          'domain' => $_SERVER['HTTP_HOST'],
+                                          'domain' => '',
                                           'secure' => true,
                                           'httponly' => true,
                                           'samesite' => 'Strict'
