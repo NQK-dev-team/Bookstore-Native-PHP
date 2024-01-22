@@ -24,6 +24,12 @@ $(document).ready(function ()
       {
             DELETE_ID = null;
       });
+
+      $("#search_form").submit(function (e)
+      {
+            e.preventDefault();
+            selectEntry();
+      });
 });
 
 function fetchBookList()
@@ -247,7 +253,6 @@ function selectEntry()
       $('#list_offset').text(1);
       $('#prev_button').attr('disabled', true);
       $('#next_button').attr('disabled', false);
-      $('#end_entry').text($('#entry_select').val());
       fetchBookList();
 }
 
@@ -410,9 +415,3 @@ function activateBook()
             }
       });
 }
-
-$("#search_form").submit(function (e)
-{
-      e.preventDefault();
-      selectEntry();
-});
