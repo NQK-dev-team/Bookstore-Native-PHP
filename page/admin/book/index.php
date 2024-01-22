@@ -285,6 +285,7 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Manage books of NQK Bookstore">
             <title>Manage Books</title>
             <link rel="stylesheet" href="/css/admin/book/book_list.css">
+            <?php csrfMeta(); ?>
       </head>
 
       <body>

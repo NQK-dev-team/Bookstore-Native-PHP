@@ -175,6 +175,7 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Edit book information of NQK Bookstore">
             <title>Edit Book</title>
             <link rel="stylesheet" href="/css/admin/book/book_detail.css">
+            <?php csrfMeta(); ?>
       </head>
 
       <body>

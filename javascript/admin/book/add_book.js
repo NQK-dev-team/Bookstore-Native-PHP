@@ -383,6 +383,7 @@ function submitForm()
       postData.append('inStock', inStock);
       postData.append('image', newImg);
       postData.append('pdf', newFile);
+      postData.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);

@@ -418,6 +418,7 @@ function submitForm()
       postData.append('image', newImg);
       postData.append('pdf', newFile);
       postData.append('removeFile', removeFile);
+      postData.append('csrf_token', $('meta[name="csrf-token"]').attr('content'));
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);

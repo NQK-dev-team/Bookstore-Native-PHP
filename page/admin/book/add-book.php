@@ -28,6 +28,7 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Add a book to NQK Bookstore">
             <title>Add Book</title>
             <link rel="stylesheet" href="/css/admin/book/book_detail.css">
+            <?php csrfMeta(); ?>
       </head>
 
       <body>

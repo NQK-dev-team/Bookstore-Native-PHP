@@ -170,8 +170,8 @@ function fetchBookList()
                                     $(`<div class="d-flex flex-column">`).append(
                                           $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>PDF: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath!==''?'PDF file':'No PDF file'}'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath!==''?'Read file':'No PDF file'}\"></i>
+                                          $(`<p>PDF: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
                                     )
                               ));
@@ -272,7 +272,8 @@ function deleteBook()
             url: '/ajax_service/book/delete_book.php',
             type: 'DELETE',
             data: {
-                  id: encodeData(DELETE_ID)
+                  id: encodeData(DELETE_ID),
+                  csrf_token: $('meta[name="csrf-token"]').attr('content')
             },
             dataType: 'json',
             success: function (data)
@@ -319,7 +320,8 @@ function deactivateBook()
             type: 'PATCH',
             data: {
                   id: encodeData(DEACTIVATE_ID),
-                  status: false
+                  status: false,
+                  csrf_token: $('meta[name="csrf-token"]').attr('content')
             },
             dataType: 'json',
             success: function (data)
@@ -366,7 +368,8 @@ function activateBook()
             type: 'PATCH',
             data: {
                   id: encodeData(ACTIVATE_ID),
-                  status: true
+                  status: true,
+                  csrf_token: $('meta[name="csrf-token"]').attr('content')
             },
             dataType: 'json',
             success: function (data)

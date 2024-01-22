@@ -15,14 +15,11 @@ function checkToken($token)
       return check_session() && isset($_SESSION['csrf_token']) && $_SESSION['csrf_token'] === $token;
 }
 
-# Return input type=hidden with the anti-CSRF token
-function csrfInput($idx = null)
+# Echo anti-CSRF token inside the meta tag
+function csrfMeta()
 {
       if (check_session()) {
-            if ($idx)
-                  return '<input type="hidden" name="csrf_token_' . $idx . '" value="' . $_SESSION['csrf_token'] . '">';
-            else
-                  return '<input type="hidden" name="csrf_token" value="' . $_SESSION['csrf_token'] . '">';
+            echo "<meta name=\"csrf-token\" content=\"{$_SESSION['csrf_token']}\">";
       }
 }
 ?>
