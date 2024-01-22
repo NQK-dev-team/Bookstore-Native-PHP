@@ -5,7 +5,7 @@ use bookstore;
 
 
 -- ** Begin of rating **
--- These 2 triggers below forbid any insert or update statement to `rating` table if the user hasn't bought the book yet
+-- This trigger forbid any insert statement to `rating` table if the user hasn't bought the book yet
 drop trigger if exists ratingInsertTrigger;
 delimiter //
 create trigger ratingInsertTrigger
@@ -23,22 +23,10 @@ begin
     end if;
 end//
 delimiter ;
-
-drop trigger if exists ratingUpdateTrigger;
-delimiter //
-create trigger ratingUpdateTrigger
-before update on rating
-for each row
-begin
-    if new.bookID!=old.bookID or new.customerID!=old.customerID then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Changing `bookID` or `customerID` columns is not allowed, only the `star` column is allowed to be changed!';
-    end if;
-end//
-delimiter ;
 -- ** End of rating **
 
 -- ** Begin of comment **
--- These 2 triggers below forbid any insert or update statement to `comment` table if the user hasn't bought the book yet
+-- This trigger forbid any insert statement to `comment` table if the user hasn't bought the book yet
 drop trigger if exists commentInsertTrigger;
 delimiter //
 create trigger commentInsertTrigger
@@ -54,16 +42,6 @@ begin
     ) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer hasn\'t buy this book yet, commenting is not allowed!';
     end if;
-end//
-delimiter ;
-
-drop trigger if exists commentUpdateTrigger;
-delimiter //
-create trigger commentUpdateTrigger
-before update on comment
-for each row
-begin
-	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update this table is not allowed!';
 end//
 delimiter ;
 -- ** End of comment **
@@ -655,166 +633,3 @@ begin
 end//
 delimiter ;
 -- ** End of eventDiscount **
-
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
--- **** Specialization/Generalization constraints ****
-
--- *** appUser super class ***
--- ** Begin of customer **
-drop trigger if exists customerSGConstraintInsertTrigger;
-delimiter //
-create trigger customerSGConstraintInsertTrigger
-before insert on customer
-for each row
-follows customerDataConstraintInsertTrigger
-begin
-	if exists(select * from admin where admin.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s ID found in admin table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists customerSGConstraintUpdateTrigger;
-delimiter //
-create trigger customerSGConstraintUpdateTrigger
-before update on customer
-for each row
-follows customerDataConstraintUpdateTrigger
-begin
-	if exists(select * from admin where admin.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s ID found in admin table!';
-    end if;
-end//
-delimiter ;
--- ** End of customer **
-
--- ** Begin of admin **
-drop trigger if exists adminSGConstraintInsertTrigger;
-delimiter //
-create trigger adminSGConstraintInsertTrigger
-before insert on admin
-for each row
-begin
-	if exists(select * from customer where customer.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s ID found in customer table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists adminSGConstraintUpdateTrigger;
-delimiter //
-create trigger adminSGConstraintUpdateTrigger
-before update on admin
-for each row
-begin
-	if exists(select * from customer where customer.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s ID found in customer table!';
-    end if;
-end//
-delimiter ;
--- ** End of admin **
--- *** appUser super class ***
-
--- *** Discount super class ***
--- ** Begin of customerDiscount **
-drop trigger if exists customerDiscountSGConstraintInsertTrigger;
-delimiter //
-create trigger customerDiscountSGConstraintInsertTrigger
-before insert on customerDiscount
-for each row
-begin
-	if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in referrerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists customerDiscountSGConstraintUpdateTrigger;
-delimiter //
-create trigger customerDiscountSGConstraintUpdateTrigger
-before update on customerDiscount
-for each row
-begin
-	if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in referrerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
--- ** End of customerDiscount **
-
--- ** Begin of referrerDiscount **
-drop trigger if exists referrerDiscountSGConstraintInsertTrigger;
-delimiter //
-create trigger referrerDiscountSGConstraintInsertTrigger
-before insert on referrerDiscount
-for each row
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists referrerDiscountSGConstraintUpdateTrigger;
-delimiter //
-create trigger referrerDiscountSGConstraintUpdateTrigger
-before update on referrerDiscount
-for each row
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
--- ** End of referrerDiscount **
-
--- ** Begin of eventDiscount **
-drop trigger if exists eventDiscountSGConstraintInsertTrigger;
-delimiter //
-create trigger eventDiscountSGConstraintInsertTrigger
-before insert on eventDiscount
-for each row
-follows eventDiscountDataConstraintInsertTrigger
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in referrerDiscount table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists eventDiscountSGConstraintUpdateTrigger;
-delimiter //
-create trigger eventDiscountSGConstraintUpdateTrigger
-before update on eventDiscount
-for each row
-follows eventDiscountBusinessConstraintUpdateTrigger
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in referrerDiscount table!';
-    end if;
-end//
-delimiter ;
--- ** End of eventDiscount **
--- *** Discount super class ***
