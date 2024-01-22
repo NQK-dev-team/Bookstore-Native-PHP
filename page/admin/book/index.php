@@ -373,7 +373,7 @@ if (return_navigate_error() === 400) {
                                     <div class="btn-group d-flex" role="group">
                                           <button type="button" class="btn btn-outline-info" id="prev_button" onClick="changeList(false)" disabled>Previous</button>
                                           <button type="button" class="btn btn-info text-white" disabled id="list_offset">1</button>
-                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) $elem .= 'disabled'; ?>>Next</button>
+                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) echo 'disabled'; ?>>Next</button>
                                     </div>
                               </div>
                         </div>
