@@ -272,8 +272,10 @@ function deleteBook()
             url: '/ajax_service/book/delete_book.php',
             type: 'DELETE',
             data: {
-                  id: encodeData(DELETE_ID),
-                  csrf_token: $('#csrf_token').val()
+                  id: encodeData(DELETE_ID)
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -321,8 +323,10 @@ function deactivateBook()
             type: 'PATCH',
             data: {
                   id: encodeData(DEACTIVATE_ID),
-                  status: false,
-                  csrf_token: $('#csrf_token').val()
+                  status: false
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -370,8 +374,10 @@ function activateBook()
             type: 'PATCH',
             data: {
                   id: encodeData(ACTIVATE_ID),
-                  status: true,
-                  csrf_token: $('#csrf_token').val()
+                  status: true
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)

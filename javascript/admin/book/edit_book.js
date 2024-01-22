@@ -236,7 +236,7 @@ function submitForm()
 {
       $('#confirmModal').modal('hide');
 
-      const name = encodeData($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+      const name = encodeData($('#bookNameInput').val());
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
       const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
@@ -260,7 +260,8 @@ function submitForm()
       else
       {
             const regex = /[?/\\]/;
-            if (regex.test(name))
+            const localName = name.replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+            if (regex.test(localName))
             {
                   reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\' or \'\\\' characters!');
                   return;
@@ -420,7 +421,6 @@ function submitForm()
       postData.append('image', newImg);
       postData.append('pdf', newFile);
       postData.append('removeFile', removeFile);
-      postData.append('csrf_token', $('#csrf_token').val());
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
@@ -430,6 +430,9 @@ function submitForm()
             url: '/ajax_service/book/update_book.php',
             method: 'POST',
             data: postData,
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             contentType: false,
             processData: false,
             dataType: 'json',

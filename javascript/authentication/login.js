@@ -2,7 +2,7 @@ function loginHandler(e, user_type)
 {
       e.preventDefault();
 
-      const email = encodeData(document.getElementById('inputEmail').value).replace(/%40/g, '@');
+      const email = encodeData(document.getElementById('inputEmail').value);
       const password = encodeData(document.getElementById('inputPassword').value);
       const type = encodeData(user_type);
 
@@ -14,7 +14,8 @@ function loginHandler(e, user_type)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(email))
+            const localEmail = email.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;

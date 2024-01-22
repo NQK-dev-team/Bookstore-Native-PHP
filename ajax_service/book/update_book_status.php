@@ -15,9 +15,9 @@ require_once __DIR__ . '/../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
       parse_str(file_get_contents('php://input'), $_PATCH);
-      if (isset($_PATCH['id'], $_PATCH['csrf_token'])) {
+      if (isset($_PATCH['id'])) {
             try {
-                  if (!checkToken($_PATCH['csrf_token'])) {
+                  if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
                         echo json_encode(['error' => 'CSRF token validation failed!']);
                         exit;

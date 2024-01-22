@@ -15,11 +15,12 @@ function checkToken($token)
       return check_session() && isset($_SESSION['csrf_token']) && $_SESSION['csrf_token'] === $token;
 }
 
-# Echo anti-CSRF token inside the input type=hidden tag
-function csrfInput()
+# Store anti-CSRF token in a constant variable in javascript
+function storeToken()
 {
-      if (check_session()) {
-            echo '<input type="hidden" id="csrf_token" value="' . $_SESSION['csrf_token'] . '" disabled>';
+      if (check_session() && isset($_SESSION['csrf_token'])) {
+            echo '<script>const CSRF_TOKEN = "' . $_SESSION['csrf_token'] . '";</script>';
       }
 }
+
 ?>
