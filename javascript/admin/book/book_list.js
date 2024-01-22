@@ -273,7 +273,6 @@ function confirmDeleteBook(id)
 
 function deleteBook()
 {
-      $('#deleteModal').modal('hide');
       $.ajax({
             url: '/ajax_service/admin/book/delete_book.php',
             type: 'DELETE',
@@ -313,6 +312,7 @@ function deleteBook()
                   }
             }
       });
+      $('#deleteModal').modal('hide');
 }
 
 function confirmDeactivateBook(id)
@@ -323,7 +323,6 @@ function confirmDeactivateBook(id)
 
 function deactivateBook()
 {
-      $('#deactivateModal').modal('hide');
       $.ajax({
             url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
@@ -364,6 +363,7 @@ function deactivateBook()
                   }
             }
       });
+      $('#deactivateModal').modal('hide');
 }
 
 function confirmActivateBook(id)
@@ -374,7 +374,6 @@ function confirmActivateBook(id)
 
 function activateBook()
 {
-      $('#activateModal').modal('hide');
       $.ajax({
             url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
@@ -415,4 +414,5 @@ function activateBook()
                   }
             }
       });
+      $('#activateModal').modal('hide');
 }

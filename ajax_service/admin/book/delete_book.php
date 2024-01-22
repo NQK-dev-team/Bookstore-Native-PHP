@@ -36,6 +36,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         exit;
                   }
 
+                  $stmt = $conn->prepare('select * from book where id=?');
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Book not found!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->close();
+
                   $stmt = $conn->prepare('select(exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
                   $stmt->bind_param('ss', $id, $id);
