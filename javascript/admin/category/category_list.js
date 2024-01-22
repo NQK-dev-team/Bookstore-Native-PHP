@@ -281,8 +281,30 @@ function deleteCategory()
 
 function updateCategory()
 {
+      clearAllCustomValidity();
+
       const name = encodeData($('#categoryName').val());
       const description = encodeData($('#categoryDescription').val());
+
+      if (name === '')
+      {
+            $("#updateModal").modal('hide');
+            reportCustomValidity($('#categoryName').get(0), 'Category name is empty!');
+            return;
+      }
+      else if (name.length > 255)
+      {
+            $("#updateModal").modal('hide');
+            reportCustomValidity($('#categoryName').get(0), 'Category name must be 255 characters long or less!');
+            return;
+      }
+
+      if (description.length > 500)
+      {
+            $("#updateModal").modal('hide');
+            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be 500 characters long or less!');
+            return;
+      }
 
       $.ajax({
             url: '/ajax_service/admin/category/update_category.php',
@@ -325,8 +347,30 @@ function updateCategory()
 
 function addCategory()
 {
+      clearAllCustomValidity();
+
       const name = encodeData($('#categoryName').val());
       const description = encodeData($('#categoryDescription').val());
+
+      if (name === '')
+      {
+            $("#addModal").modal('hide');
+            reportCustomValidity($('#categoryName').get(0), 'Category name is empty!');
+            return;
+      }
+      else if (name.length > 255)
+      {
+            $("#addModal").modal('hide');
+            reportCustomValidity($('#categoryName').get(0), 'Category name must be 255 characters long or less!');
+            return;
+      }
+
+      if (description.length > 500)
+      {
+            $("#addModal").modal('hide');
+            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be 500 characters long or less!');
+            return;
+      }
 
       $.ajax({
             url: '/ajax_service/admin/category/add_category.php',

@@ -35,6 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $name = sanitize(rawurldecode($_POST['name']));
                   $description = sanitize(rawurldecode($_POST['description']));
 
+                  if (!$name) {
+                        echo json_encode(['error' => 'Category name is empty!']);
+                        exit;
+                  } else if (strlen($name) > 255) {
+                        echo json_encode(['error' => 'Category name must be 255 characters long or less!']);
+                        exit;
+                  }
+
+                  if ($description && strlen($description) > 500) {
+                        echo json_encode(['error' => 'Category description must be 500 characters long or less!']);
+                        exit;
+                  }
+
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 

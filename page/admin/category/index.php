@@ -299,6 +299,7 @@ if (return_navigate_error() === 400) {
             <script src=" /javascript/admin/menu_after_load.js"></script>
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
+            <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/admin/category/category_list.js"></script>
       </body>
 
