@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select count(*) as totalBook
+                  $stmt = $conn->prepare('select count(distinct book.id) as totalBook
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)');
                   $stmt->bind_param('isss', $status, $search, $isbnSearch, $search);

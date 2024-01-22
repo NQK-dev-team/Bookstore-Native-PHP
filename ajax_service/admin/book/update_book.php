@@ -305,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $imageDir = null;
 
                               if ($result['imagePath']) {
-                                    $path = dirname(dirname(__DIR__)) . "/data/book/" . $result['imagePath'];
+                                    $path = dirname(dirname(dirname(__DIR__))) . "/data/book/" . $result['imagePath'];
                                     $temp_arr = explode('/', $result['imagePath']);
                                     array_pop($temp_arr);
                                     $imageDir = implode('/', $temp_arr);
@@ -314,14 +314,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $imageDir = "$id";
                                     $imageFile = "$id/{$name}-{$currentDateTime}.{$fileExtension}";
                               }
-                              if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $imageDir)) {
-                                    if (!mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $imageDir)) {
+                              if (!is_dir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $imageDir)) {
+                                    if (!mkdir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $imageDir)) {
+                                          $conn->rollback();
+                                          $conn->close();
                                           throw new Exception("Error occurred during creating directory!");
                                     }
                               }
 
-                              if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/" . $imageFile))
+                              if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(dirname(__DIR__))) . "/data/book/" . $imageFile)) {
+                                    $conn->rollback();
+                                    $conn->close();
                                     throw new Exception("Error occurred during moving image file!");
+                              }
 
                               $stmt->close();
 
@@ -536,7 +541,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $fileDir = null;
 
                               if ($result['filePath']) {
-                                    $path = dirname(dirname(__DIR__)) . "/data/book/" . $result['filePath'];
+                                    $path = dirname(dirname(dirname(__DIR__))) . "/data/book/" . $result['filePath'];
                                     $temp_arr_1 = explode('/', $result['filePath']);
                                     array_pop($temp_arr_1);
                                     $fileDir = implode('/', $temp_arr_1);
@@ -545,14 +550,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $fileDir = "$id";
                                     $pdfFile = "$id/{$name}-{$currentDateTime}.pdf";
                               }
-                              if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $fileDir)) {
-                                    if (!mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $fileDir)) {
+                              if (!is_dir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $fileDir)) {
+                                    if (!mkdir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $fileDir)) {
+                                          $conn->rollback();
+                                          $conn->close();
                                           throw new Exception("Error occurred during creating directory!");
                                     }
                               }
 
-                              if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/" . $pdfFile))
+                              if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(dirname(__DIR__))) . "/data/book/" . $pdfFile)) {
+                                    $conn->rollback();
+                                    $conn->close();
                                     throw new Exception("Error occurred during moving PDF file!");
+                              }
 
                               $stmt->close();
 

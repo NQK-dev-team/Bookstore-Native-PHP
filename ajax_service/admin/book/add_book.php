@@ -343,18 +343,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
                   }
 
-                  if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $id)) {
-                        if(!mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $id)) {
+                  if (!is_dir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $id)) {
+                        if (!mkdir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $id)) {
+                              $conn->rollback();
+                              $conn->close();
                               throw new Exception("Error occurred during creating directory!");
                         }
                   }
 
-                  if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $imageFile))
+                  if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(dirname(__DIR__))) . "/data/book/{$id}/" . $imageFile)) {
+                        $conn->rollback();
+                        $conn->close();
                         throw new Exception("Error occurred during moving image file!");
+                  }
 
                   if (isset($_FILES['pdf'])) {
-                        if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $pdfFile))
+                        if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(dirname(__DIR__))) . "/data/book/{$id}/" . $pdfFile)) {
+                              $conn->rollback();
+                              $conn->close();
                               throw new Exception("Error occurred during moving PDF file!");
+                        }
                   }
 
                   echo json_encode(['query_result' => true]);
