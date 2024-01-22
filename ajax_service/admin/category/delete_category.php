@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         echo json_encode(['error' => $stmt->error]);
                   } else {
                         if ($stmt->affected_rows === 0) {
-                              echo json_encode(['error' => 'No category found!']);
+                              echo json_encode(['error' => 'Category not found!']);
                         } else {
                               echo json_encode(['query_result' => true]);
                         }
