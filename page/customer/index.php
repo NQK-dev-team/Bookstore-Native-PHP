@@ -72,19 +72,15 @@ if (return_navigate_error() === 400) {
                               <?php
                                     if($elem->num_rows > 0){
                                           echo"<div class=\"grid-container\">";
-                                                // echo"<div class=\"row\">";
-                                                while($row=$elem->fetch_assoc()){
-                                                      // echo "<div class=\"col-sm-6\">";
-                                                            echo "<div class=\"card mb-3 border-dark\">";
-                                                                  // insert picture here
-                                                                  echo "<div class=\"card-body\">";
-                                                                        echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
-                                                                        echo "<p>".$row["authorName"]."</p>";
-                                                                  echo "</div>";
-                                                            echo "</div>";
-                                                      // echo "</div>";
-                                                }
-                                                // echo "</div>";
+                                          while($row=$elem->fetch_assoc()){
+                                                 echo "<div class=\"card mb-3 border-dark\">";
+                                                      // insert picture here
+                                                      echo "<div class=\"card-body\">";
+                                                            echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
+                                                            echo "<p>".$row["authorName"]."</p>";
+                                                      echo "</div>";
+                                                echo "</div>";
+                                           }
                                           echo "</div>";
                                     }
                                     else{
