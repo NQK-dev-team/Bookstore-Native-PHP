@@ -74,7 +74,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputAddress" class="fs-4 fw-medium">Address</label>
-                              <p class="mb-1">(For default delivery address)</p>
+                              <p class="mb-1">(For default delivery address usage)</p>
 
                               <input autocomplete="on" type="text" class="form-control" id="inputAddress" placeholder="Enter address" name="address">
                         </div>

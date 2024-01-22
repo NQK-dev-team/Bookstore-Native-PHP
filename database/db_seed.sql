@@ -250,3 +250,22 @@ UPDATE `bookstore`.`book` SET `description` = 'One of Jane Austen’s most belov
 UPDATE `bookstore`.`book` SET `description` = 'One of the best-loved stories of all time, To Kill a Mockingbird has been translated into more than 40 languages, sold more than 30 million copies worldwide, served as the basis for an enormously popular motion picture, and was voted one of the best novels of the 20th century by librarians across the country. A gripping, heart-wrenching, and wholly remarkable tale of coming-of-age in a South poisoned by virulent prejudice, it views a world of great beauty and savage inequities through the eyes of a young girl, as her father - a crusading local lawyer - risks everything to defend a black man unjustly accused of a terrible crime.' WHERE (`id` = 'BOOK7');
 UPDATE `bookstore`.`book` SET `description` = 'Paulo Coelho\'s enchanting novel has inspired a devoted following around the world. This story, dazzling in its simplicity and wisdom, is about an Andalusian shepherd boy named Santiago who travels from his homeland in Spain to the Egyptian desert in search of treasure buried in the Pyramids. Along the way he meets a Gypsy woman, a man who calls himself king, and an Alchemist, all of whom point Santiago in the direction of his quest. No one knows what the treasure is, or if Santiago will be able to surmount the obstacles along the way But what starts out as a journey to find worldly goods turns into a meditation on the treasures found within. Lush, evocative, and deeply humane, the story of Santiago is art eternal testament to the transforming power of our dreams and the importance of listening to our hearts.' WHERE (`id` = 'BOOK8');
 UPDATE `bookstore`.`book` SET `description` = 'Margaret Atwood\'s popular dystopian novel The Handmaid\'s Tale explores a broad range of issues relating to power, gender, and religious politics. Multiple Golden Globe award-winner Claire Danes (Romeo and Juliet, The Hours) gives a stirring performance of this classic in speculative fiction, one of the most powerful and widely read novels of our time. ' WHERE (`id` = 'BOOK9');
+
+insert into discount(id,name,status) values('C_DISCOUNT1','Customer discount level 1',true),('C_DISCOUNT2','Customer discount level 2',true),('C_DISCOUNT3','Customer discount level 3',true);
+insert into discount(id,name,status) values('R_DISCOUNT1','Referrer discount level 1',true),('R_DISCOUNT2','Referrer discount level 2',true),('R_DISCOUNT3','Referrer discount level 3',true);
+insert into discount(id,name,status) values('E_DISCOUNT1','Black Friday Sales',true),('E_DISCOUNT2','Science Fair',true),('E_DISCOUNT3','History Lesson',true),('E_DISCOUNT4','Children\'s story',true),('E_DISCOUNT5','Fiction day',true);
+
+insert into customerDiscount(id,point,discount) values('C_DISCOUNT1',50,5),('C_DISCOUNT2',100,7),('C_DISCOUNT3',200,10);
+insert into referrerDiscount(id,numberOfPeople,discount) values('R_DISCOUNT1',3,2),('R_DISCOUNT2',5,5),('R_DISCOUNT3',10,7);
+insert into eventDiscount(id,discount,startDate,endDate,applyForAll) values('E_DISCOUNT1',30,date_sub(now(),interval 3 day),date_add(now(),interval 10 day),true),
+('E_DISCOUNT2',35,now(),date_add(now(),interval 7 day),false),
+('E_DISCOUNT3',25,date_add(now(),interval 2 day),date_add(now(),interval 9 day),false),
+('E_DISCOUNT4',40,date_sub(now(),interval 2 day),date_add(now(),interval 7 day),false),
+('E_DISCOUNT5',20,date_sub(now(),interval 8 day),date_add(now(),interval 3 day),false);
+
+insert into eventApply(eventID,bookID) values('E_DISCOUNT2','BOOK4'),('E_DISCOUNT2','BOOK5'),('E_DISCOUNT2','BOOK7'),('E_DISCOUNT2','BOOK12'),('E_DISCOUNT2','BOOK13'),('E_DISCOUNT2','BOOK17');
+insert into eventApply(eventID,bookID) values('E_DISCOUNT3','BOOK10'),('E_DISCOUNT3','BOOK20');
+insert into eventApply(eventID,bookID) values('E_DISCOUNT4','BOOK5');
+insert into eventApply(eventID,bookID) values('E_DISCOUNT5','BOOK4'),('E_DISCOUNT5','BOOK5'),('E_DISCOUNT5','BOOK7'),('E_DISCOUNT5','BOOK12'),('E_DISCOUNT5','BOOK13'),('E_DISCOUNT5','BOOK17'),
+('E_DISCOUNT5','BOOK6'),('E_DISCOUNT5','BOOK9'),('E_DISCOUNT5','BOOK11'),('E_DISCOUNT5','BOOK19'),('E_DISCOUNT5','BOOK21'),('E_DISCOUNT5','BOOK24');
+

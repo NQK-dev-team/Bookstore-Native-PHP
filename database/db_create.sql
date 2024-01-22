@@ -8,7 +8,7 @@ use bookstore;
 create table pointConfig(
 	pointConversionRate double primary key
 );
-insert into pointConfig values(5);
+insert into pointConfig values(10);
 -- Important --
 
 create table category(
@@ -137,14 +137,15 @@ create table commentContent(
 
 create table customerOrder(
 	id varchar(20) primary key,
-    time datetime,
+    purchaseTime datetime,
     status boolean not null default false, -- true means the order has been purchased, false means not
     totalCost double not null, -- cost after using discount coupons
     check(totalCost>=0),
     totalDiscount double not null,
     check(totalDiscount>=0),
     customerID varchar(20) not null,
-    foreign key (customerID) references customer(id) on delete cascade on update cascade
+    foreign key (customerID) references customer(id) on delete cascade on update cascade,
+    check((status and purchaseTime is not null) or (!status and purchaseTime is null))
 );
 
 create table physicalOrder(

@@ -1,5 +1,6 @@
 use bookstore;
 
+-- **** ID generator ****
 drop trigger if exists authorInsertUltilityTrigger;
 delimiter //
 create trigger authorInsertUltilityTrigger
@@ -25,3 +26,68 @@ begin
     set new.id=concat('CATEGORY',counter);
 end//
 delimiter ;
+
+-- ********************************************************************************************
+-- ********************************************************************************************
+-- ********************************************************************************************
+-- ********************************************************************************************
+
+-- **** Derived properties calculator ****
+
+-- Calculate book's average rating after insert, update, delete opeartions on the `rating` table
+drop trigger if exists avgRatingAfterInsertTrigger;
+DELIMITER //
+CREATE TRIGGER avgRatingAfterInsertTrigger
+AFTER insert ON rating
+FOR EACH ROW
+BEGIN
+    DECLARE totalStar double default 0;
+    DECLARE totalRating int default 0;
+    DECLARE newAverageRating double default 0;
+
+    SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = NEW.bookID;
+    
+    IF totalRating > 0 THEN
+		SET newAverageRating := totalStar / totalRating;
+    END IF;
+    UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
+END//
+DELIMITER ;
+
+drop trigger if exists avgRatingAfterUpdateTrigger;
+DELIMITER //
+CREATE TRIGGER avgRatingAfterUpdateTrigger
+AFTER update ON rating
+FOR EACH ROW
+BEGIN
+	DECLARE totalStar double default 0;
+    DECLARE totalRating int default 0;
+    DECLARE newAverageRating double default 0;
+
+    SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = NEW.bookID;
+    
+    IF totalRating > 0 THEN
+		SET newAverageRating := totalStar / totalRating;
+    END IF;
+    UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
+END//
+DELIMITER ;
+
+drop trigger if exists avgRatingAfterDeleteTrigger;
+DELIMITER //
+CREATE TRIGGER avgRatingAfterDeleteTrigger
+AFTER delete ON rating
+FOR EACH ROW
+BEGIN
+	DECLARE totalStar double default 0;
+    DECLARE totalRating int default 0;
+    DECLARE newAverageRating double default 0;
+
+    SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = old.bookID;
+    
+    IF totalRating > 0 THEN
+		SET newAverageRating := totalStar / totalRating;
+    END IF;
+    UPDATE book SET avgRating = newAverageRating WHERE book.id=old.bookID;
+END//
+DELIMITER ;
