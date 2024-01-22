@@ -1,6 +1,6 @@
 
 <?php
-require_once __DIR__ . '/../../tool/php/session_check.php';
+require_once __DIR__ . '/../../../tool/php/session_check.php';
 
 if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       http_response_code(403);
@@ -8,10 +8,9 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       exit;
 }
 
-require_once __DIR__ . '/../../tool/php/sanitizer.php';
-require_once __DIR__ . '/../../config/db_connection.php';
-require_once __DIR__ . '/../../tool/php/anti_csrf.php';
-
+require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../config/db_connection.php';
+require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 function map($elem)
 {
@@ -31,8 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['description'],
             $_POST['physicalPrice'],
             $_POST['filePrice'],
-            $_POST['inStock'],
-            $_POST['removeFile']
+            $_POST['inStock']
       )) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
@@ -41,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $id = $_SESSION['update_book_id'];
                   $name = sanitize(rawurldecode($_POST['name']));
                   $edition = sanitize(rawurldecode($_POST['edition']));
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
@@ -54,13 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $physicalPrice = sanitize(rawurldecode($_POST['physicalPrice'])) ? sanitize(rawurldecode($_POST['physicalPrice'])) : null;
                   $filePrice = sanitize(rawurldecode($_POST['filePrice'])) ? sanitize(rawurldecode($_POST['filePrice'])) : null;
                   $inStock = sanitize(rawurldecode($_POST['inStock'])) ? sanitize(rawurldecode($_POST['inStock'])) : null;
-                  $removeFile = filter_var(sanitize(rawurlencode($_POST['removeFile'])), FILTER_VALIDATE_BOOLEAN);
-
-                  if (!$id) {
-                        http_response_code(500);
-                        echo json_encode(['error' => 'Server can\'t find this book ID!']);
-                        exit;
-                  }
 
                   if (!$name) {
                         echo json_encode(['error' => 'Book name is empty!']);
@@ -180,14 +170,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => 'Image size must be 5MB or less!']);
                               exit;
                         }
+                  } else {
+                        echo json_encode(['error' => 'Missing image file!']);
+                        exit;
                   }
 
                   if (isset($_FILES['pdf'])) {
-                        if ($removeFile) {
-                              echo json_encode(['error' => 'Conflict request, please choose either removing the current file or uploading a new one, not both!']);
-                              exit;
-                        }
-
                         $finfo = finfo_open(FILEINFO_MIME_TYPE);
                         if ($finfo === false) {
                               throw new Exception("Failed to open fileinfo database!");
@@ -219,28 +207,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Check for existing book
 
-                  $stmt = $conn->prepare('select * from book where id=?');
-                  $stmt->bind_param('s', $id);
-                  $isSuccess = $stmt->execute();
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
-                        $conn->close();
-                        exit;
-                  }
-                  $result = $stmt->get_result();
-                  if ($result->num_rows === 0) {
-                        http_response_code(500);
-                        echo json_encode(['error' => 'Book not found!']);
-                        $stmt->close();
-                        $conn->close();
-                        exit;
-                  }
-                  $stmt->close();
-
-                  $stmt = $conn->prepare('select * from book where id!=? and name=? and edition=?');
-                  $stmt->bind_param('ssi', $id, $name, $edition);
+                  $stmt = $conn->prepare('select * from book where name=? and edition=?');
+                  $stmt->bind_param('si', $name, $edition);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -258,8 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select * from book where id!=? and isbn=?');
-                  $stmt->bind_param('ss', $id, $isbn);
+                  $stmt = $conn->prepare('select * from book where isbn=?');
+                  $stmt->bind_param('s', $isbn);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -280,80 +248,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Start a transaction
                   $conn->begin_transaction();
 
-                  // Begin updating information
+                  $id = null;
 
-                  if (isset($_FILES['image'])) {
-                        $imageFile = null;
+                  $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                  $currentDateTime = $currentDateTime->format('YmdHis');
+                  $imageExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
+                  $imageFile = "{$name}-{$currentDateTime}.{$imageExtension}";
 
-                        $stmt = $conn->prepare('select imagePath from book where id=?');
-                        $stmt->bind_param('s', $id);
-                        $isSuccess = $stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                              $stmt->close();
-                              $conn->rollback();
-                              $conn->close();
-                              exit;
-                        } else {
-                              $result = $stmt->get_result();
-                              $result = $result->fetch_assoc();
+                  $pdfFile = isset($_FILES['pdf']) ? "{$name}-{$currentDateTime}.pdf" : null;
 
-                              $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                              $currentDateTime = $currentDateTime->format('YmdHis');
-                              $fileExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
-                              $imageDir = null;
-
-                              if ($result['imagePath']) {
-                                    $path = dirname(dirname(__DIR__)) . "/data/book/" . $result['imagePath'];
-                                    $temp_arr = explode('/', $result['imagePath']);
-                                    array_pop($temp_arr);
-                                    $imageDir = implode('/', $temp_arr);
-                                    $imageFile = implode('/', $temp_arr) . "/{$name}-{$currentDateTime}.{$fileExtension}";
-                              } else {
-                                    $imageDir = "$id";
-                                    $imageFile = "$id/{$name}-{$currentDateTime}.{$fileExtension}";
-                              }
-                              if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $imageDir)) {
-                                    if (!mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $imageDir)) {
-                                          throw new Exception("Error occurred during creating directory!");
-                                    }
-                              }
-
-                              if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/" . $imageFile))
-                                    throw new Exception("Error occurred during moving image file!");
-
-                              $stmt->close();
-
-                              $stmt = $conn->prepare('update book set imagePath=? where id=?');
-                              $stmt->bind_param('ss', $imageFile, $id);
-                              $isSuccess = $stmt->execute();
-
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $stmt->error]);
-                                    $stmt->close();
-                                    $conn->rollback();
-                                    $conn->close();
-                                    exit;
-                              } else {
-                                    if ($stmt->affected_rows > 1) {
-                                          http_response_code(500);
-                                          echo json_encode(['error' => 'Updated more than one book!']);
-                                          $stmt->close();
-                                          $conn->rollback();
-                                          $conn->close();
-                                          exit;
-                                    }
-                                    $stmt->close();
-                              }
-                        }
-                  }
-
-                  $stmt = $conn->prepare('update book set name=?,edition=?,isbn=?,publisher=?,publishDate=?,ageRestriction=?,description=? where id=?');
-                  $stmt->bind_param('ssssssss', $name, $edition, $isbn, $publisher, $publishDate, $age, $description, $id);
+                  $stmt = $conn->prepare('call addBook(?,?,?,?,?,?,?,?,?,?,?,?)');
+                  $stmt->bind_param('sisissssdids', $name, $edition, $isbn, $age, $publisher, $publishDate, $description, $imageFile, $physicalPrice, $inStock, $filePrice, $pdfFile);
                   $isSuccess = $stmt->execute();
-
                   if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
@@ -362,27 +268,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $conn->close();
                         exit;
                   } else {
-                        if ($stmt->affected_rows > 1) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Updated more than one book!']);
-                              $stmt->close();
-                              $conn->rollback();
-                              $conn->close();
-                              exit;
+                        $result = $stmt->get_result();
+                        if ($result->num_rows === 1) {
+                              $result = $result->fetch_assoc();
+                              $id = $result['id'];
                         }
-                        $stmt->close();
-                  }
-
-                  $stmt = $conn->prepare('delete from author where bookID=?');
-                  $stmt->bind_param('s', $id);
-                  $isSuccess = $stmt->execute();
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
-                        $conn->rollback();
-                        $conn->close();
-                        exit;
                   }
                   $stmt->close();
 
@@ -401,19 +291,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     exit;
                               }
                         }
-                  }
-                  $stmt->close();
-
-                  $stmt = $conn->prepare('delete from belong where bookID=?');
-                  $stmt->bind_param('s', $id);
-                  $isSuccess = $stmt->execute();
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
-                        $conn->rollback();
-                        $conn->close();
-                        exit;
                   }
                   $stmt->close();
 
@@ -466,146 +343,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
                   }
 
-                  $stmt = $conn->prepare('update physicalCopy set price=?,inStock=? where id=?');
-                  $stmt->bind_param('dis', $physicalPrice, $inStock, $id);
-                  $isSuccess = $stmt->execute();
-
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
-                        $conn->rollback();
-                        $conn->close();
-                        exit;
-                  } else {
-                        if ($stmt->affected_rows > 1) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Updated more than one book!']);
-                              $stmt->close();
+                  if (!is_dir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $id)) {
+                        if (!mkdir(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $id)) {
                               $conn->rollback();
                               $conn->close();
-                              exit;
+                              throw new Exception("Error occurred during creating directory!");
                         }
-                        $stmt->close();
                   }
 
-                  $stmt = $conn->prepare('update fileCopy set price=? where id=?');
-                  $stmt->bind_param('ds', $filePrice, $id);
-                  $isSuccess = $stmt->execute();
-
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
+                  if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(dirname(__DIR__))) . "/data/book/{$id}/" . $imageFile)) {
                         $conn->rollback();
                         $conn->close();
-                        exit;
-                  } else {
-                        if ($stmt->affected_rows > 1) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Updated more than one book!']);
-                              $stmt->close();
-                              $conn->rollback();
-                              $conn->close();
-                              exit;
-                        }
-                        $stmt->close();
+                        throw new Exception("Error occurred during moving image file!");
                   }
-
-                  $queryResult = true;
 
                   if (isset($_FILES['pdf'])) {
-                        $pdfFile = null;
-
-                        $stmt = $conn->prepare('select filePath from fileCopy where id=?');
-                        $stmt->bind_param('s', $id);
-                        $isSuccess = $stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                              $stmt->close();
+                        if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(dirname(__DIR__))) . "/data/book/{$id}/" . $pdfFile)) {
                               $conn->rollback();
                               $conn->close();
-                              exit;
-                        } else {
-                              $result = $stmt->get_result();
-                              $result = $result->fetch_assoc();
-
-                              $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-                              $currentDateTime = $currentDateTime->format('YmdHis');
-                              $fileDir = null;
-
-                              if ($result['filePath']) {
-                                    $path = dirname(dirname(__DIR__)) . "/data/book/" . $result['filePath'];
-                                    $temp_arr_1 = explode('/', $result['filePath']);
-                                    array_pop($temp_arr_1);
-                                    $fileDir = implode('/', $temp_arr_1);
-                                    $pdfFile = implode('/', $temp_arr_1) . "/{$name}-{$currentDateTime}.pdf";
-                              } else {
-                                    $fileDir = "$id";
-                                    $pdfFile = "$id/{$name}-{$currentDateTime}.pdf";
-                              }
-                              if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $fileDir)) {
-                                    if (!mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $fileDir)) {
-                                          throw new Exception("Error occurred during creating directory!");
-                                    }
-                              }
-
-                              if (!move_uploaded_file($_FILES["pdf"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/" . $pdfFile))
-                                    throw new Exception("Error occurred during moving PDF file!");
-
-                              $stmt->close();
-
-                              $stmt = $conn->prepare('update fileCopy set filePath=? where id=?');
-                              $stmt->bind_param('ss', $pdfFile, $id);
-                              $isSuccess = $stmt->execute();
-
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $stmt->error]);
-                                    $stmt->close();
-                                    $conn->rollback();
-                                    $conn->close();
-                                    exit;
-                              } else {
-                                    if ($stmt->affected_rows > 1) {
-                                          http_response_code(500);
-                                          echo json_encode(['error' => 'Updated more than one book!']);
-                                          $stmt->close();
-                                          $conn->rollback();
-                                          $conn->close();
-                                          exit;
-                                    }
-                                    $stmt->close();
-                                    $queryResult = "https://{$_SERVER['HTTP_HOST']}/data/book/$pdfFile";
-                              }
-                        }
-                  } else if ($removeFile) {
-                        $stmt = $conn->prepare('update fileCopy set filePath=null where id=?');
-                        $stmt->bind_param('s', $id);
-                        $isSuccess = $stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                              $stmt->close();
-                              $conn->rollback();
-                              $conn->close();
-                              exit;
-                        } else {
-                              if ($stmt->affected_rows > 1) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => 'Updated more than one book!']);
-                                    $stmt->close();
-                                    $conn->rollback();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $stmt->close();
-                              $queryResult = -1;
+                              throw new Exception("Error occurred during moving PDF file!");
                         }
                   }
 
-                  echo json_encode(['query_result' => $queryResult]);
+                  echo json_encode(['query_result' => true]);
 
                   // Commit transaction
                   $conn->commit();

@@ -93,21 +93,21 @@ INSERT INTO `bookstore`.`author` (`bookID`, `authorIdx`, `authorName`) VALUES ('
 
 -- Insert `category`
 INSERT INTO `bookstore`.`category` (`id`, `name`,`description`) VALUES
-  ('CATEGORY1','Fiction','Fiction books are imaginative narratives that take readers into invented worlds, offering an entertaining escape into diverse emotions and experiences'),
-  ('CATEGORY2','Fantasy','Fantasy books weave magical tales, transporting readers to enchanting worlds filled with mythical creatures and extraordinary adventures'),
-  ('CATEGORY3','Mystery','Mystery books captivate with suspenseful tales, inviting readers to unravel puzzles and navigate thrilling plots, often featuring detectives and unexpected twists'),
-  ('CATEGORY4','Thriller','Thriller books offer gripping plots, high stakes, and relentless suspense, delivering an edge-of-the-seat reading experience'),
-  ('CATEGORY5','Romance','Romance books delve into love and relationships, weaving passionate tales of connection and heartwarming journeys to find true love'),
-  ('CATEGORY6','Historical fiction','Historical fiction brings the past to life, blending real history with fictional characters and events, creating captivating stories set against rich historical backdrops'),
-  ('CATEGORY7','Science fiction','Science fiction envisions futuristic worlds, probing into advanced technologies, extraterrestrial encounters, and the limitless possibilities of the universe, sparking curiosity and creativity'),
-  ('CATEGORY8','Nonfiction','Nonfiction books provide factual insights and real-world knowledge across diverse subjects, offering readers an opportunity to expand their understanding of the world'),
-  ('CATEGORY9','Biography','Biographies offer firsthand insights into the lives, achievements, and challenges of real individuals, providing readers with a glimpse into notable figures\' personal journeys'),
-  ('CATEGORY10','Memoir','Memoirs share personal experiences and emotions, offering an intimate journey through the author\'s life, capturing significant moments and unique perspectives'),
-  ('CATEGORY11','History','History books chronicle past events and societal changes, offering insights into the triumphs and challenges of human development over time'),
-  ('CATEGORY12','Self-help','Self-help books empower readers with practical tools and insights for personal development, offering actionable advice for positive life changes and growth'),
-  ('CATEGORY13','Business','Business books delve into the principles, challenges, and trends of the corporate world, offering valuable insights for individuals navigating the dynamic landscape of business and entrepreneurship'),
-  ('CATEGORY14','Children\'s books','Children\'s books captivate young readers with imaginative stories, vibrant illustrations, and valuable life lessons, fostering a love for reading and nurturing creativity'),
-  ('CATEGORY15','Tutorial','Tutorials offer step-by-step guidance for learners to acquire new skills or knowledge in a hands-on and practical manner');
+  ('CATEGORY1','Fiction','Fiction books are imaginative narratives that take readers into invented worlds, offering an entertaining escape into diverse emotions and experiences.'),
+  ('CATEGORY2','Fantasy','Fantasy books weave magical tales, transporting readers to enchanting worlds filled with mythical creatures and extraordinary adventures.'),
+  ('CATEGORY3','Mystery','Mystery books captivate with suspenseful tales, inviting readers to unravel puzzles and navigate thrilling plots, often featuring detectives and unexpected twists.'),
+  ('CATEGORY4','Thriller','Thriller books offer gripping plots, high stakes, and relentless suspense, delivering an edge-of-the-seat reading experience.'),
+  ('CATEGORY5','Romance','Romance books delve into love and relationships, weaving passionate tales of connection and heartwarming journeys to find true love.'),
+  ('CATEGORY6','Historical fiction','Historical fiction brings the past to life, blending real history with fictional characters and events, creating captivating stories set against rich historical backdrops.'),
+  ('CATEGORY7','Science fiction','Science fiction envisions futuristic worlds, probing into advanced technologies, extraterrestrial encounters, and the limitless possibilities of the universe, sparking curiosity and creativity.'),
+  ('CATEGORY8','Nonfiction','Nonfiction books provide factual insights and real-world knowledge across diverse subjects, offering readers an opportunity to expand their understanding of the world.'),
+  ('CATEGORY9','Biography','Biographies offer firsthand insights into the lives, achievements, and challenges of real individuals, providing readers with a glimpse into notable figures\' personal journeys.'),
+  ('CATEGORY10','Memoir','Memoirs share personal experiences and emotions, offering an intimate journey through the author\'s life, capturing significant moments and unique perspectives.'),
+  ('CATEGORY11','History','History books chronicle past events and societal changes, offering insights into the triumphs and challenges of human development over time.'),
+  ('CATEGORY12','Self-help','Self-help books empower readers with practical tools and insights for personal development, offering actionable advice for positive life changes and growth.'),
+  ('CATEGORY13','Business','Business books delve into the principles, challenges, and trends of the corporate world, offering valuable insights for individuals navigating the dynamic landscape of business and entrepreneurship.'),
+  ('CATEGORY14','Children\'s books','Children\'s books captivate young readers with imaginative stories, vibrant illustrations, and valuable life lessons, fostering a love for reading and nurturing creativity.'),
+  ('CATEGORY15','Tutorial','Tutorials offer step-by-step guidance for learners to acquire new skills or knowledge in a hands-on and practical manner.');
 
 -- Insert `belong`
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK1', 'CATEGORY15');

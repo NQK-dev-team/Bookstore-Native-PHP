@@ -24,6 +24,12 @@ $(document).ready(function ()
       {
             DELETE_ID = null;
       });
+
+      $("#search_form").submit(function (e)
+      {
+            e.preventDefault();
+            selectEntry();
+      });
 });
 
 function fetchBookList()
@@ -62,7 +68,7 @@ function fetchBookList()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/book/retrieve_list.php',
+            url: '/ajax_service/admin/book/retrieve_list.php',
             method: 'GET',
             data: { entry: entry, offset: listOffset, status: status, search: search },
             dataType: 'json',
@@ -80,14 +86,12 @@ function fetchBookList()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
-
                         $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
                         $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
                         $('#total_entries').text(data.query_result[1]);
 
-                        $('#prev_button').prop('disabled', prevBtnDisabledProp || listOffset === 1);
-                        $('#next_button').prop('disabled', nextBtnDisabledProp || listOffset * entry >= data.query_result[1]);
+                        $('#prev_button').prop('disabled', listOffset === 1);
+                        $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
 
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[0].length; i++)
@@ -247,7 +251,6 @@ function selectEntry()
       $('#list_offset').text(1);
       $('#prev_button').attr('disabled', true);
       $('#next_button').attr('disabled', false);
-      $('#end_entry').text($('#entry_select').val());
       fetchBookList();
 }
 
@@ -269,7 +272,7 @@ function confirmDeleteBook(id)
 function deleteBook()
 {
       $.ajax({
-            url: '/ajax_service/book/delete_book.php',
+            url: '/ajax_service/admin/book/delete_book.php',
             type: 'DELETE',
             data: {
                   id: encodeData(DELETE_ID)
@@ -287,7 +290,6 @@ function deleteBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#deleteModal').modal('hide');
                   }
                   fetchBookList();
@@ -307,6 +309,7 @@ function deleteBook()
                   }
             }
       });
+      $('#deleteModal').modal('hide');
 }
 
 function confirmDeactivateBook(id)
@@ -317,9 +320,8 @@ function confirmDeactivateBook(id)
 
 function deactivateBook()
 {
-      $('#deactivateModal').modal('hide');
       $.ajax({
-            url: '/ajax_service/book/update_book_status.php',
+            url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(DEACTIVATE_ID),
@@ -338,7 +340,6 @@ function deactivateBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#deactivateModal').modal('hide');
                   }
                   fetchBookList();
@@ -358,6 +359,7 @@ function deactivateBook()
                   }
             }
       });
+      $('#deactivateModal').modal('hide');
 }
 
 function confirmActivateBook(id)
@@ -368,9 +370,8 @@ function confirmActivateBook(id)
 
 function activateBook()
 {
-      $('#activateModal').modal('hide');
       $.ajax({
-            url: '/ajax_service/book/update_book_status.php',
+            url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(ACTIVATE_ID),
@@ -389,7 +390,6 @@ function activateBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#activateModal').modal('hide');
                   }
                   fetchBookList();
@@ -409,10 +409,5 @@ function activateBook()
                   }
             }
       });
+      $('#activateModal').modal('hide');
 }
-
-$("#search_form").submit(function (e)
-{
-      e.preventDefault();
-      selectEntry();
-});

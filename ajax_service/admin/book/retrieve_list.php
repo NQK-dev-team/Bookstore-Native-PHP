@@ -1,6 +1,6 @@
 
 <?php
-require_once __DIR__ . '/../../tool/php/session_check.php';
+require_once __DIR__ . '/../../../tool/php/session_check.php';
 
 if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       http_response_code(403);
@@ -8,10 +8,10 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       exit;
 }
 
-require_once __DIR__ . '/../../tool/php/sanitizer.php';
-require_once __DIR__ . '/../../config/db_connection.php';
-require_once __DIR__ . '/../../tool/php/converter.php';
-require_once __DIR__ . '/../../tool/php/formatter.php';
+require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../config/db_connection.php';
+require_once __DIR__ . '/../../../tool/php/converter.php';
+require_once __DIR__ . '/../../../tool/php/formatter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['entry'], $_GET['offset'], $_GET['status'], $_GET['search'])) {
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select count(*) as totalBook
+                  $stmt = $conn->prepare('select count(distinct book.id) as totalBook
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)');
                   $stmt->bind_param('isss', $status, $search, $isbnSearch, $search);

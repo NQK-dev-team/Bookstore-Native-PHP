@@ -1,6 +1,6 @@
 
 <?php
-require_once __DIR__ . '/../../tool/php/session_check.php';
+require_once __DIR__ . '/../../../tool/php/session_check.php';
 
 if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       http_response_code(403);
@@ -8,18 +8,15 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       exit;
 }
 
-require_once __DIR__ . '/../../config/db_connection.php';
-require_once __DIR__ . '/../../tool/php/sanitizer.php';
-require_once __DIR__ . '/../../tool/php/converter.php';
+require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../config/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['search'])) {
+      if (isset($_GET['id'])) {
             try {
 
-                  
-                  $search = sanitize(rawurldecode($_GET['search']));
 
-                  $search = '%' . $search . '%';
+                  $id = sanitize(rawurldecode($_GET['id']));
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -31,24 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $query_result = [];
-
-                  $stmt = $conn->prepare('select name,description from category where name like ? order by name,id');
-                  $stmt->bind_param('s', $search);
+                  $stmt = $conn->prepare('select name,description from category where id = ?');
+                  $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
-                  } else {
-                        $result = $stmt->get_result();
-                        if ($result->num_rows > 0) {
-                              while ($row = $result->fetch_assoc()) {
-                                    $query_result[] = $row;
-                              }
-                        }
+                        $stmt->close();
+                        $conn->close();
+                        exit;
                   }
-                  echo json_encode(['query_result' => $query_result]);
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
+                        echo json_encode(['error' => 'Category not found!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $result->fetch_assoc();
                   $stmt->close();
+
+                  echo json_encode(['query_result' => $result]);
+
+                  // Close connection
                   $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);

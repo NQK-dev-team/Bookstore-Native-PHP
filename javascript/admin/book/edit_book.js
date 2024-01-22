@@ -109,7 +109,7 @@ function openCategoryModal()
 function getCategory(search)
 {
       $.ajax({
-            url: '/ajax_service/book/get_category_list.php',
+            url: '/ajax_service/admin/book/get_category_list.php',
             method: 'GET',
             data: { search: encodeData(search) },
             dataType: 'json',
@@ -133,14 +133,14 @@ function getCategory(search)
                                                 <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i].name }" id="category_${ i + 1 }" ${ $('#categoryInput').val().includes(data.query_result[i].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ i + 1 }">
                                                       ${ data.query_result[i].name }
-                                                      <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i].description }"></i>
+                                                      <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i].description ? data.query_result[i].description : 'N/A' }"></i>
                                                 </label>
                                           </div>
                                           <div class="form-check mx-auto check_box">
                                                 <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i + 1].name }" id="category_${ i + 2 }" ${ $('#categoryInput').val().includes(data.query_result[i + 1].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ i + 2 }">
                                                       ${ data.query_result[i + 1].name }
-                                                      <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i + 1].description }"></i>
+                                                      <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i + 1].description ? data.query_result[i + 1].description : 'N/A' }"></i>
                                                 </label>
                                           </div>
                                     </div>
@@ -157,7 +157,7 @@ function getCategory(search)
                                                 <label class="form-check-label" for="category_${ data.query_result.length }">
                                                       ${ data.query_result[data.query_result.length - 1].name }
                                                 </label>
-                                                <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[data.query_result.length - 1].description }"></i>
+                                                <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[data.query_result.length - 1].description ? data.query_result[data.query_result.length - 1].description : 'N/A' }"></i>
                                           </div>
                                           <div class='mx-auto check_box' aria-label="Dummy Element">
                                           </div>
@@ -427,7 +427,7 @@ function submitForm()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/book/update_book.php',
+            url: '/ajax_service/admin/book/update_book.php',
             method: 'POST',
             data: postData,
             headers: {

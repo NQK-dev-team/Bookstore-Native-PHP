@@ -1,6 +1,6 @@
 
 <?php
-require_once __DIR__ . '/../../tool/php/session_check.php';
+require_once __DIR__ . '/../../../tool/php/session_check.php';
 
 if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       http_response_code(403);
@@ -8,10 +8,10 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       exit;
 }
 
-require_once __DIR__ . '/../../tool/php/sanitizer.php';
-require_once __DIR__ . '/../../config/db_connection.php';
-require_once __DIR__ . '/../../tool/php/delete_directory.php';
-require_once __DIR__ . '/../../tool/php/anti_csrf.php';
+require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../config/db_connection.php';
+require_once __DIR__ . '/../../../tool/php/delete_directory.php';
+require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
@@ -35,6 +35,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         echo json_encode(['error' => 'MySQL Connection Failed!']);
                         exit;
                   }
+
+                  $stmt = $conn->prepare('select * from book where id=?');
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
+                        echo json_encode(['error' => 'Book not found!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->close();
 
                   $stmt = $conn->prepare('select(exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
@@ -81,13 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                   } else {
-                        if ($stmt->affected_rows === 0) {
-                              echo json_encode(['error' => 'No book found!']);
-                        } else {
-                              echo json_encode(['query_result' => true]);
+                        echo json_encode(['query_result' => true]);
 
-                              rrmdir($deleteDir);
-                        }
+                        rrmdir($deleteDir);
                   }
                   $stmt->close();
                   $conn->close();

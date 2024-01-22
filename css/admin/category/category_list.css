@@ -1,0 +1,43 @@
+#search_category {
+      padding-left: 35px !important;
+}
+
+.search_form {
+      max-width: 500px;
+}
+
+.group_button {
+      max-width: 180px;
+}
+
+.pointer:hover {
+      cursor: pointer;
+}
+
+.truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 7;
+      /* Number of lines to show before ellipsis */
+      -webkit-box-orient: vertical;
+}
+
+#updateModal,
+#deleteModal,
+#addModal {
+      z-index: 1052 !important;
+}
+
+#updateSuccessModal,
+#addSuccessModal {
+      z-index: 1053 !important;
+}
+
+#errorModal{
+      z-index: 1054 !important;
+}
+
+#inputModal {
+      z-index: 1051 !important;
+}
