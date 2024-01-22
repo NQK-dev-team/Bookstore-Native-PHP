@@ -6,7 +6,16 @@ function check_session()
 {
       if (session_status() !== PHP_SESSION_ACTIVE) {
             // Set the session cookie's attributes: expires - path - domain - secure - httpOnly
-            if (!session_set_cookie_params(3 * 24 * 60 * 60, "/", "", true, true)) return false;
+            // session_set_cookie_params(3 * 24 * 60 * 60, '/; samesite=' .'Strict', $_SERVER['HTTP_HOST'], true, true); // (old)
+            if (!session_set_cookie_params([
+                  'lifetime' => 3 * 24 * 60 * 60,
+                  'path' => '/',
+                  'domain' => $_SERVER['HTTP_HOST'],
+                  'secure' => true,
+                  'httponly' => true,
+                  'samesite' => 'Strict'
+            ])) return false;
+
             // Start or resume session
             if (!session_start()) return false;
       }

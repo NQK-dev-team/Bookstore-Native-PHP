@@ -10,6 +10,8 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
+require_once __DIR__ . '/../../tool/php/anti_csrf.php';
+
 
 function map($elem)
 {
@@ -30,9 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['physicalPrice'],
             $_POST['filePrice'],
             $_POST['inStock'],
-            $_POST['removeFile']
+            $_POST['removeFile'],
+            $_POST['csrf_token']
       )) {
             try {
+                  if (!checkToken($_POST['csrf_token'])) {
+                        http_response_code(403);
+                        echo json_encode(['error' => 'CSRF token validation failed!']);
+                        exit;
+                  }
+
                   $id = $_SESSION['update_book_id'];
                   $name = sanitize(rawurldecode($_POST['name']));
                   $edition = sanitize(rawurldecode($_POST['edition']));

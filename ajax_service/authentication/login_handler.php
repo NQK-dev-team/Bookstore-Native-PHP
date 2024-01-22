@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
+require_once __DIR__ . '/../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
@@ -77,10 +78,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               if (!verify_password($password, $result['password']))
                                     echo json_encode(['error' => 'Email or password incorrect!']);
                               else {
+                                    if (!session_set_cookie_params([
+                                          'lifetime' => 3 * 24 * 60 * 60,
+                                          'path' => '/',
+                                          'domain' => $_SERVER['HTTP_HOST'],
+                                          'secure' => true,
+                                          'httponly' => true,
+                                          'samesite' => 'Strict'
+                                    ])) throw new Exception('Error occurred during setting up session attributes!');
+
                                     if (!session_start())
                                           throw new Exception('Error occurred during starting session!');
+
                                     $_SESSION['type'] = $user_type;
                                     $_SESSION['id'] = $result['id'];
+                                    generateToken();
 
                                     echo json_encode(['query_result' => true]);
 
