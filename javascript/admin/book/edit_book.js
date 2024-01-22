@@ -234,7 +234,9 @@ function confirmSubmitForm(e)
 
 function submitForm()
 {
-      const name = encodeData($('#bookNameInput').val()).replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+      $('#confirmModal').modal('hide');
+
+      const name = encodeData($('#bookNameInput').val());
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
       const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
@@ -258,7 +260,8 @@ function submitForm()
       else
       {
             const regex = /[?/\\]/;
-            if (regex.test(name))
+            const localName = name.replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+            if (regex.test(localName))
             {
                   reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\' or \'\\\' characters!');
                   return;
@@ -307,7 +310,7 @@ function submitForm()
             reportCustomValidity($('#authorInput').get(0), 'Book must have at least one author!');
             return;
       }
-      else if (author.findIndex(elem => elem.length > 255)!==-1)
+      else if (author.findIndex(elem => elem.length > 255) !== -1)
       {
             reportCustomValidity($('#authorInput').get(0), 'Author name must be 255 characters long or less!');
             return;
@@ -427,6 +430,9 @@ function submitForm()
             url: '/ajax_service/book/update_book.php',
             method: 'POST',
             data: postData,
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             contentType: false,
             processData: false,
             dataType: 'json',

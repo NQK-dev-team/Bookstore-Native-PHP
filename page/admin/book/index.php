@@ -9,6 +9,8 @@ if (return_navigate_error() === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else {
+      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+
       $_SESSION['update_book_id'] = null;
 
       require_once __DIR__ . '/../../../config/db_connection.php';
@@ -283,6 +285,7 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Manage books of NQK Bookstore">
             <title>Manage Books</title>
             <link rel="stylesheet" href="/css/admin/book/book_list.css">
+            <?php storeToken(); ?>
       </head>
 
       <body>

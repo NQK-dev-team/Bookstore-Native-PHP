@@ -11,11 +11,19 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/delete_directory.php';
+require_once __DIR__ . '/../../tool/php/anti_csrf.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
       parse_str(file_get_contents('php://input'), $_DELETE);
       if (isset($_DELETE['id'])) {
             try {
+                  if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                        http_response_code(403);
+                        echo json_encode(['error' => 'CSRF token validation failed!']);
+                        exit;
+                  }
+
                   $id = sanitize(rawurldecode($_DELETE['id']));
 
                   // Connect to MySQL

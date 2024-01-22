@@ -170,8 +170,8 @@ function fetchBookList()
                                     $(`<div class="d-flex flex-column">`).append(
                                           $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>PDF: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath!==''?'PDF file':'No PDF file'}'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath!==''?'Read file':'No PDF file'}\"></i>
+                                          $(`<p>PDF: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
                                     )
                               ));
@@ -274,6 +274,9 @@ function deleteBook()
             data: {
                   id: encodeData(DELETE_ID)
             },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             dataType: 'json',
             success: function (data)
             {
@@ -314,12 +317,16 @@ function confirmDeactivateBook(id)
 
 function deactivateBook()
 {
+      $('#deactivateModal').modal('hide');
       $.ajax({
             url: '/ajax_service/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(DEACTIVATE_ID),
                   status: false
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -336,9 +343,9 @@ function deactivateBook()
                   }
                   fetchBookList();
             },
-            error: function (error)
+            error: function (err)
             {
-                  console.error(error);
+                  console.error(err);
 
                   if (err.status >= 500)
                   {
@@ -361,12 +368,16 @@ function confirmActivateBook(id)
 
 function activateBook()
 {
+      $('#activateModal').modal('hide');
       $.ajax({
             url: '/ajax_service/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(ACTIVATE_ID),
                   status: true
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -383,7 +394,7 @@ function activateBook()
                   }
                   fetchBookList();
             },
-            error: function (error)
+            error: function (err)
             {
                   console.error(error);
 

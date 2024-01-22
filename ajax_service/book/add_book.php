@@ -10,6 +10,7 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
+require_once __DIR__ . '/../../tool/php/anti_csrf.php';
 
 function map($elem)
 {
@@ -32,6 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['inStock']
       )) {
             try {
+                  if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                        http_response_code(403);
+                        echo json_encode(['error' => 'CSRF token validation failed!']);
+                        exit;
+                  }
+
                   $name = sanitize(rawurldecode($_POST['name']));
                   $edition = sanitize(rawurldecode($_POST['edition']));
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
@@ -48,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$name) {
                         echo json_encode(['error' => 'Book name is empty!']);
                         exit;
-                  } else if (preg_match('/[?\/]/', $name) === 0) {
+                  } else if (preg_match('/[?\/]/', $name) === 1) {
                         echo json_encode(['error' => 'Book name must not contain \'?\', \'/\' or \'\\\' characters!']);
                         exit;
                   } else if (strlen($name) > 255) {
@@ -152,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               throw new Exception("Failed to get the MIME type of the image file!");
                         }
                         $finfoCloseResult = finfo_close($finfo);
-                        if ($finfoCloseResult) {
+                        if (!$finfoCloseResult) {
                               throw new Exception("Failed to close fileinfo resource!");
                         }
 
@@ -178,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               throw new Exception("Failed to get the MIME type of the PDF file!");
                         }
                         $finfoCloseResult = finfo_close($finfo);
-                        if ($finfoCloseResult) {
+                        if (!$finfoCloseResult) {
                               throw new Exception("Failed to close fileinfo resource!");
                         }
 
@@ -337,9 +344,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if (!is_dir(dirname(dirname(__DIR__)) . "/data/book/" . $id)) {
-                        mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $id);
-                  } else {
-                        throw new Exception("Error occurred during creating directory!");
+                        if(!mkdir(dirname(dirname(__DIR__)) . "/data/book/" . $id)) {
+                              throw new Exception("Error occurred during creating directory!");
+                        }
                   }
 
                   if (!move_uploaded_file($_FILES["image"]["tmp_name"], dirname(dirname(__DIR__)) . "/data/book/{$id}/" . $imageFile))

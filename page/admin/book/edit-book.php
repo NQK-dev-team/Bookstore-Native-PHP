@@ -9,6 +9,8 @@ if (return_navigate_error() === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else {
+      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+
       if (isset($_GET['id'])) {
             require_once __DIR__ . '/../../../config/db_connection.php';
             require_once __DIR__ . '/../../../tool/php/sanitizer.php';
@@ -173,6 +175,7 @@ if (return_navigate_error() === 400) {
             <meta name="description" content="Edit book information of NQK Bookstore">
             <title>Edit Book</title>
             <link rel="stylesheet" href="/css/admin/book/book_detail.css">
+            <?php storeToken(); ?>
       </head>
 
       <body>

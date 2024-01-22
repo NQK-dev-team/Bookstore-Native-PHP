@@ -17,7 +17,7 @@ function signUpHandler(event)
       const date = encodeData(document.getElementById('inputDate').value);
       const phone = encodeData(document.getElementById('inputPhone').value);
       const address = encodeData(document.getElementById('inputAddress').value);
-      const email = encodeData(document.getElementById('inputEmail').value).replace(/%40/g, '@');
+      const email = encodeData(document.getElementById('inputEmail').value);
       const password = encodeData(document.getElementById('inputPassword').value);
       const card = encodeData(document.getElementById('inputCard').value);
       const refEmail = encodeData(document.getElementById('inputRefEmail').value);
@@ -81,7 +81,8 @@ function signUpHandler(event)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(email))
+            const localEmail = email.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
@@ -223,7 +224,7 @@ function checkEmailUsed(isRefEmail)
 {
       if (!isRefEmail)
       {
-            const email = encodeData(document.getElementById('inputEmail').value).replace(/%40/g, '@');
+            const email = encodeData(document.getElementById('inputEmail').value);
 
             $.ajax({
                   url: `/ajax_service/authentication/check_email.php`,
@@ -261,7 +262,7 @@ function checkEmailUsed(isRefEmail)
       }
       else
       {
-            const email = encodeData(document.getElementById('inputRefEmail').value).replace(/%40/g, '@');
+            const email = encodeData(document.getElementById('inputRefEmail').value);
 
             if (email === '')
             {

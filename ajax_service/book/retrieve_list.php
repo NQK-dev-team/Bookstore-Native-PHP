@@ -16,6 +16,8 @@ require_once __DIR__ . '/../../tool/php/formatter.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['entry'], $_GET['offset'], $_GET['status'], $_GET['search'])) {
             try {
+
+                  
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
