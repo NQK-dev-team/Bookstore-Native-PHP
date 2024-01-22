@@ -295,21 +295,23 @@ if (return_navigate_error() === 400) {
             <section id="page">
                   <div class="container-fluid h-100 d-flex flex-column">
                         <h1 class='fs-2 mx-auto mt-3'>Book List</h1>
-                        <form class="d-flex align-items-center mt-2 w-100 search_form mx-auto" role="search" id="search_form">
-                              <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
-                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
-                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                          <g id="SVGRepo_iconCarrier">
-                                                <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
-                                          </g>
-                                    </svg>
-                              </button>
+                        <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
+                              <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
+                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                          <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                      <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
+                                                </g>
+                                          </svg>
+                                    </button>
 
-                              <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
-                        </form>
-                        <div class="mx-auto mt-3">
-                              <a class="btn btn-success btn-sm" href="./add-book"><strong>+</strong> Add New Book</a>
+                                    <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
+                              </form>
+                              <div class="mx-auto mx-lg-0 ms-lg-2 order-1 order-lg-2">
+                                    <a class="btn btn-success btn-sm" href="./add-book"><strong>+</strong> Add New Book</a>
+                              </div>
                         </div>
                         <div class="mt-2">
                               <div class="d-flex align-items-center">
