@@ -273,6 +273,7 @@ function confirmDeleteBook(id)
 
 function deleteBook()
 {
+      $('#deleteModal').modal('hide');
       $.ajax({
             url: '/ajax_service/admin/book/delete_book.php',
             type: 'DELETE',
