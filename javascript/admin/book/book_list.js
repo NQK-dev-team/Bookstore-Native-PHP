@@ -86,8 +86,6 @@ function fetchBookList()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
-
                         $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
                         $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
                         $('#total_entries').text(data.query_result[1]);
@@ -292,7 +290,6 @@ function deleteBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#deleteModal').modal('hide');
                   }
                   fetchBookList();
@@ -343,7 +340,6 @@ function deactivateBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#deactivateModal').modal('hide');
                   }
                   fetchBookList();
@@ -394,7 +390,6 @@ function activateBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#activateModal').modal('hide');
                   }
                   fetchBookList();
