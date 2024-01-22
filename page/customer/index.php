@@ -48,6 +48,18 @@ if (return_navigate_error() === 400) {
             <meta name="author" content="Quang Nguyen">
             <meta name="description" content="Home page of NQK bookstore">
             <title>NQK Shop</title>
+
+            <style>
+                  .grid-container {
+                        display: grid;
+                        grid-template-columns: auto auto auto auto;
+                        justify-content: space-evenly;
+                        align-content: center;
+                  }
+                  .card {
+                        margin: 1rem;
+                  }
+            </style>
       </head>
 
       <body>
@@ -59,20 +71,20 @@ if (return_navigate_error() === 400) {
                         <h1 class="text-center">Welcome to our shop</h1>
                               <?php
                                     if($elem->num_rows > 0){
-                                          echo"<div class=\"container-sm\">";
-                                                echo"<div class=\"row\">";
+                                          echo"<div class=\"grid-container\">";
+                                                // echo"<div class=\"row\">";
                                                 while($row=$elem->fetch_assoc()){
-                                                      echo "<div class=\"col-sm-6\">";
-                                                            echo "<div class=\"card mb-3 border-dark\" style=\"max-width: 18rem;\">";
+                                                      // echo "<div class=\"col-sm-6\">";
+                                                            echo "<div class=\"card mb-3 border-dark\">";
                                                                   // insert picture here
-                                                                  echo "<div class=\"card-body\" style=\"display: block;\">";
+                                                                  echo "<div class=\"card-body\">";
                                                                         echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
                                                                         echo "<p>".$row["authorName"]."</p>";
                                                                   echo "</div>";
                                                             echo "</div>";
-                                                      echo "</div>";
+                                                      // echo "</div>";
                                                 }
-                                                echo "</div>";
+                                                // echo "</div>";
                                           echo "</div>";
                                     }
                                     else{
