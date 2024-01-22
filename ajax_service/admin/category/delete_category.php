@@ -10,12 +10,13 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
+require_once __DIR__ . '/../../../tool/php/delete_directory.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
-      parse_str(file_get_contents('php://input'), $_PATCH);
-      if (isset($_PATCH['id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+      parse_str(file_get_contents('php://input'), $_DELETE);
+      if (isset($_DELETE['id'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -23,8 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         exit;
                   }
 
-                  $id = sanitize(rawurldecode($_PATCH['id']));
-                  $status = filter_var(sanitize($_PATCH['status']), FILTER_VALIDATE_BOOLEAN);
+                  $id = sanitize(rawurldecode($_DELETE['id']));
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -36,39 +36,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select * from book where id=?');
+                  $stmt = $conn->prepare('delete from category where id=?');
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
-                        $conn->close();
-                        exit;
-                  }
-                  $result = $stmt->get_result();
-                  if ($result->num_rows === 0) {
-                        echo json_encode(['error' => 'Book not found!']);
-                        $stmt->close();
-                        $conn->close();
-                        exit;
-                  }
-                  $stmt->close();
 
-                  $stmt = $conn->prepare('update book set status=? where id=?');
-                  $stmt->bind_param('is', $status, $id);
-                  $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                   } else {
-                        if ($stmt->affected_rows > 1) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Updated more than one book!']);
-                        }  else {
+                        if ($stmt->affected_rows === 0) {
+                              echo json_encode(['error' => 'No category found!']);
+                        } else {
                               echo json_encode(['query_result' => true]);
                         }
                   }
+
                   $stmt->close();
                   $conn->close();
             } catch (Exception $e) {

@@ -90,8 +90,8 @@ function fetchBookList()
                         $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
                         $('#total_entries').text(data.query_result[1]);
 
-                        $('#prev_button').prop('disabled', prevBtnDisabledProp || listOffset === 1);
-                        $('#next_button').prop('disabled', nextBtnDisabledProp || listOffset * entry >= data.query_result[1]);
+                        $('#prev_button').prop('disabled', listOffset === 1);
+                        $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
 
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[0].length; i++)
