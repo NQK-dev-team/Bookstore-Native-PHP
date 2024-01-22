@@ -56,22 +56,24 @@ if (return_navigate_error() === 400) {
             ?>
             <section id="page">
                   <div>
-                        <h1>Welcome to our shop</h1>
+                        <h1 class="text-center">Welcome to our shop</h1>
                               <?php
                                     if($elem->num_rows > 0){
-                                          while($row=$elem->fetch_assoc()){
-                                                echo"<div class=\"row\"";
-                                                echo "<div class=\"col-sm-6\">";
-                                                      echo "<div class=\"card mb-3 border-dark\" style=\"max-width: 18rem;\">";
-                                                            // insert picture here
-                                                            echo "<div class=\"card-body\" style=\"display: block;\">";
-                                                                  echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
-                                                                  echo "<p>".$row["authorName"]."</p>";
+                                          echo"<div class=\"container-sm\">";
+                                                echo"<div class=\"row\">";
+                                                while($row=$elem->fetch_assoc()){
+                                                      echo "<div class=\"col-sm-6\">";
+                                                            echo "<div class=\"card mb-3 border-dark\" style=\"max-width: 18rem;\">";
+                                                                  // insert picture here
+                                                                  echo "<div class=\"card-body\" style=\"display: block;\">";
+                                                                        echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
+                                                                        echo "<p>".$row["authorName"]."</p>";
+                                                                  echo "</div>";
                                                             echo "</div>";
                                                       echo "</div>";
+                                                }
                                                 echo "</div>";
-                                                echo "</div>";
-                                          }
+                                          echo "</div>";
                                     }
                                     else{
                                           echo "Can't find the thing you need!";
