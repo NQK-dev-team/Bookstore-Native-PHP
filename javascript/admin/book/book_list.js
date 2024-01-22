@@ -62,7 +62,7 @@ function fetchBookList()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/book/retrieve_list.php',
+            url: '/ajax_service/admin/book/retrieve_list.php',
             method: 'GET',
             data: { entry: entry, offset: listOffset, status: status, search: search },
             dataType: 'json',
@@ -269,7 +269,7 @@ function confirmDeleteBook(id)
 function deleteBook()
 {
       $.ajax({
-            url: '/ajax_service/book/delete_book.php',
+            url: '/ajax_service/admin/book/delete_book.php',
             type: 'DELETE',
             data: {
                   id: encodeData(DELETE_ID)
@@ -319,7 +319,7 @@ function deactivateBook()
 {
       $('#deactivateModal').modal('hide');
       $.ajax({
-            url: '/ajax_service/book/update_book_status.php',
+            url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(DEACTIVATE_ID),
@@ -370,7 +370,7 @@ function activateBook()
 {
       $('#activateModal').modal('hide');
       $.ajax({
-            url: '/ajax_service/book/update_book_status.php',
+            url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(ACTIVATE_ID),

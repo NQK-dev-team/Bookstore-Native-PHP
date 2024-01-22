@@ -109,7 +109,7 @@ function openCategoryModal()
 function getCategory(search)
 {
       $.ajax({
-            url: '/ajax_service/book/get_category_list.php',
+            url: '/ajax_service/admin/book/get_category_list.php',
             method: 'GET',
             data: { search: encodeData(search) },
             dataType: 'json',
@@ -427,7 +427,7 @@ function submitForm()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/book/update_book.php',
+            url: '/ajax_service/admin/book/update_book.php',
             method: 'POST',
             data: postData,
             headers: {
