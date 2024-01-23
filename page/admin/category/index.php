@@ -151,9 +151,17 @@ if (return_navigate_error() === 400) {
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">1</p>
+                                    <p id="start_entry">
+                                          <?php
+                                          if ($totalEntries === 0) echo '0';
+                                          else echo '1'; ?>
+                                    </p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">10</p>
+                                    <p id="end_entry">
+                                          <?php
+                                          if ($totalEntries < 10) echo $totalEntries;
+                                          else echo '10'; ?>
+                                    </p>
                                     <p>&nbsp;of&nbsp;</p>
                                     <p id="total_entries"><?php echo $totalEntries; ?></p>
                                     <p>&nbsp;entries</p>
