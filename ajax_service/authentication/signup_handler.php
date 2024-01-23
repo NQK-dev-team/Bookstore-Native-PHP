@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/checker.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['password'], $_POST['name'], $_POST['date'], $_POST['phone'], $_POST['address'])) {
+      if (isset($_POST['email'], $_POST['password'], $_POST['name'], $_POST['date'], $_POST['phone'], $_POST['address'], $_POST['gender'])) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $password = sanitize(rawurldecode($_POST['password']));
@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $address = $_POST['address'] ? sanitize(rawurldecode($_POST['address'])) : null;
                   $card = $_POST['card'] ? sanitize(rawurldecode($_POST['card'])) : null;
                   $refEmail = $_POST['refEmail'] ? sanitize(rawurldecode($_POST['refEmail'])) : null;
+                  $gender = sanitize(rawurldecode($_POST['gender']));
 
                   if (!$name) {
                         echo json_encode(['error' => 'No name provided!']);
@@ -44,6 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => 'You must be at least 18 years old to sign up!']);
                               exit;
                         }
+                  }
+
+                  if (!$gender || $gender === 'null') {
+                        echo json_encode(['error' => 'No gender provided!']);
+                        exit;
+                  } else if ($gender !== 'M' && $gender !== 'F' && $gender !== 'O') {
+                        echo json_encode(['error' => 'Gender invalid!']);
+                        exit;
                   }
 
                   if (!$phone) {
@@ -181,8 +190,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $conn->begin_transaction();
 
                   $hashedPassword = hash_password($password);
-                  $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?)');
-                  $stmt->bind_param('ssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail);
+                  $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?,?)');
+                  $stmt->bind_param('sssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail, $gender);
                   $isSuccess = $stmt->execute();
 
                   if (!$isSuccess) {

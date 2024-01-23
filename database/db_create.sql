@@ -26,7 +26,9 @@ create table appUser(
     email varchar(255) unique,
     password varchar(255) not null,
     check(length(password)>=8),
-    imagePath varchar(1000)
+    imagePath varchar(1000),
+    gender varchar(1) not null,
+    check (gender='F' or gender='M' or gender='O')
 );
 
 create table admin(

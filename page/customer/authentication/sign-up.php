@@ -57,6 +57,18 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group mt-3">
                               <div class="d-flex">
+                                    <label for="inputGender" class="fs-4 fw-medium">Gender</label>
+                                    <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
+                              </div>
+                              <select class="form-select" aria-label="Select gender" id='inputGender'>
+                                    <option selected value=null>Choose your gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="O">Other</option>
+                              </select>
+                        </div>
+                        <div class="form-group mt-3">
+                              <div class="d-flex">
                                     <label for="inputPhone" class="fs-4 fw-medium">Phone number</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>

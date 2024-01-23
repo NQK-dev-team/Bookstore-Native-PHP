@@ -21,6 +21,7 @@ function signUpHandler(event)
       const password = encodeData(document.getElementById('inputPassword').value);
       const card = encodeData(document.getElementById('inputCard').value);
       const refEmail = encodeData(document.getElementById('inputRefEmail').value);
+      const gender = encodeData(document.getElementById('inputGender').value);
 
       if (name === '')
       {
@@ -45,6 +46,17 @@ function signUpHandler(event)
       else if (!isAgeValid(date))
       {
             reportCustomValidity($('#inputDate').get(0), "You must be at least 18 years old to sign up!");
+            return;
+      }
+
+      if (gender === 'null')
+      {
+            reportCustomValidity($('#inputGender').get(0), "Gender field is empty!");
+            return;
+      }
+      else if (gender !== 'F' && gender !== 'M' && gender !== 'O')
+      {
+            reportCustomValidity($('#inputGender').get(0), "Invalid gender!");
             return;
       }
 
@@ -136,7 +148,7 @@ function signUpHandler(event)
       $.ajax({
             url: '/ajax_service/authentication/signup_handler.php',
             method: 'POST',
-            data: { name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
             dataType: 'json',
             success: function (data)
             {

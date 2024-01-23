@@ -10,14 +10,15 @@ create procedure addCustomer(
     in cardNumber varchar(16),
     in email varchar(255),
     in password varchar(255),
-    in refEmail varchar(255)
+    in refEmail varchar(255),
+    in gender varchar(1)
 )
 begin
 	declare counter int default 0;
     declare refID varchar(20) default null;
     select cast(substr(id,9) as unsigned) into counter from customer ORDER BY cast(substr(id,9) as unsigned) DESC LIMIT 1;
     set counter:=counter+1;
-    insert into appUser values(concat('CUSTOMER',counter),name,dob,address,phone,email,password,null);
+    insert into appUser(id,name,dob,address,phone,email,password,imagePath,gender) values(concat('CUSTOMER',counter),name,dob,address,phone,email,password,null,gender);
     if refEmail is not null then
 		select customer.id into refID from customer join appUser on appUser.id=customer.id where appUser.email=refEmail;
     end if;
