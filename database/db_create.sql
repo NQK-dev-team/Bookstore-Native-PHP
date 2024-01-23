@@ -106,15 +106,6 @@ create table rating(
     foreign key (bookID) references book(id) on delete cascade on update cascade
 );
 
-create table wishlist(
-	customerID varchar(20),
-    bookID varchar(20),
-    primary key(customerID,bookID),
-    flag boolean default true, -- true means physical wishlist (get notification when discounted, restocked or emptied), false means file wishlist (get notification when available or discounted)
-    foreign key (customerID) references customer(id) on delete cascade on update cascade,
-    foreign key (bookID) references book(id) on delete cascade on update cascade
-);
-
 create table comment(
 	customerID varchar(20),
     bookID varchar(20),

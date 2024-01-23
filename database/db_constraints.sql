@@ -3,7 +3,6 @@ use bookstore;
 -- **** Business constraints ****
 
 
-
 -- ** Begin of rating **
 -- This trigger forbid any insert statement to `rating` table if the user hasn't bought the book yet
 drop trigger if exists ratingInsertTrigger;
