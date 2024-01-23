@@ -54,15 +54,22 @@ if (return_navigate_error() === 400) {
             <style>
                   .grid-container {
                         display: grid;
-                        grid-template-columns: auto auto auto auto auto;
+                        grid-template-columns: auto auto auto auto;
                         justify-content: space-evenly;
                         align-content: center;
                   }
                   .card {
                         margin: 1rem;
+                        width: 20rem;
                   }
+                  .card:hover {
+                        transform: scale(1.1);
+                  } 
                   .author {
                         color: gray;
+                  }
+                  .pic {
+                        height:auto;
                   }
             </style>
       </head>
@@ -74,18 +81,22 @@ if (return_navigate_error() === 400) {
             <section id="page">
                   <div>
                         <h1 class="text-center">Welcome to our shop</h1>
+                        <h2>Featured books</h2>
+                        <h2>Browse book</h2>
                               <?php
                                     if($elem->num_rows > 0){
                                           echo"<div class=\"grid-container\">";
                                           while($row=$elem->fetch_assoc()){
                                                 // insert a card for link here
-                                                 echo "<div class=\"card mb-3 border-dark\">";
+                                                 echo "<div class=\"card mb-3 border-light\">";
                                                       // insert picture here
+                                                      echo "<img class=\"pic\" src=\"https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg\">";
                                                       echo "<div class=\"card-body\">";
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
                                                             echo "<p class=\"author\">".$row["authorName"]."</p>";
                                                             echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
                                                             echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
+                                                            // insert ratings here
                                                       echo "</div>";
                                                 echo "</div>";
                                            }
