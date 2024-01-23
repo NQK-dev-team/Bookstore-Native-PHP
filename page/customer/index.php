@@ -23,7 +23,9 @@ if (return_navigate_error() === 400) {
                   require_once __DIR__ . '/../../error/500.php';
                   exit;
             }
-            $elem = $conn->prepare('select book.name, author.authorName from book inner join author on book.id = author.bookID');
+            $elem = $conn->prepare('select book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice from book inner join author on book.id = author.bookID
+                                                                                                                                                          join fileCopy on book.id = fileCopy.id
+                                                                                                                                                          join physicalCopy on book.id = physicalCopy.id');
             $elem->execute();
             $elem = $elem->get_result();
             $conn->close();
@@ -59,6 +61,9 @@ if (return_navigate_error() === 400) {
                   .card {
                         margin: 1rem;
                   }
+                  .author {
+                        color: gray;
+                  }
             </style>
       </head>
 
@@ -73,11 +78,14 @@ if (return_navigate_error() === 400) {
                                     if($elem->num_rows > 0){
                                           echo"<div class=\"grid-container\">";
                                           while($row=$elem->fetch_assoc()){
+                                                // insert a card for link here
                                                  echo "<div class=\"card mb-3 border-dark\">";
                                                       // insert picture here
                                                       echo "<div class=\"card-body\">";
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
-                                                            echo "<p>".$row["authorName"]."</p>";
+                                                            echo "<p class=\"author\">".$row["authorName"]."</p>";
+                                                            echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
+                                                            echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
                                                       echo "</div>";
                                                 echo "</div>";
                                            }
