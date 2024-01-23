@@ -54,7 +54,7 @@ if (return_navigate_error() === 400) {
             <style>
                   .grid-container {
                         display: grid;
-                        grid-template-columns: auto auto auto auto;
+                        grid-template-columns: auto auto auto auto auto;
                         justify-content: space-evenly;
                         align-content: center;
                   }
