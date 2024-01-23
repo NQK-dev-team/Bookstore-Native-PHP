@@ -185,11 +185,11 @@ if (return_navigate_error() === 400) {
                                           $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
                                           $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
                                           $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $elem .= "<p>PDF: {$sub_row['price']} <a $target {$sub_row['filePath']} alt='$alt'>
+                                          $elem .= "<p>E-book: {$sub_row['price']} <a $target {$sub_row['filePath']} alt='$alt'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
                                           </a></p>";
                                     } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p>PDF: N/A <a href='#' alt='No PDF file'>
+                                          $elem .= "<p>E-book: N/A <a href='#' alt='No PDF file'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
                                           </a></p>";
                               } else {

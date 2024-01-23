@@ -259,13 +259,13 @@ if (return_navigate_error() === 400) {
                                                 </div>
                                                 <div class="mb-auto mt-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
                                                       <div class='col mb-3'>
-                                                            <label for="filePriceInput" class="form-label">File Copy Price ($):</label>
+                                                            <label for="filePriceInput" class="form-label">E-book Price ($):</label>
                                                             <input step="any" type="number" class="form-control" id="filePriceInput" value="<?php if ($query_result['fileCopy']['price']) echo $query_result['fileCopy']['price']; ?>" placeholder="<?php if (!$query_result['fileCopy']['price']) echo 'Enter price'; ?>">
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col mb-3">
                                                             <div class="d-flex flex-column h-100">
                                                                   <span class="form-label">
-                                                                        PDF (current file
+                                                                        E-book file (current file
                                                                         <a id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
                                                                               <i class="bi bi-file-earmark-fill text-secondary"></i>
                                                                         </a>):

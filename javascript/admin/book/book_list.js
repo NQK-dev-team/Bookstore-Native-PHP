@@ -86,102 +86,104 @@ function fetchBookList()
                   }
                   else if (data.query_result)
                   {
-                        $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
-                        $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
-                        $('#total_entries').text(data.query_result[1]);
-
-                        $('#prev_button').prop('disabled', listOffset === 1);
-                        $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
-
-                        $('#table_body').empty();
-                        for (let i = 0; i < data.query_result[0].length; i++)
+                        if (data.query_result[0].length)
                         {
-                              const trElem = $('<tr>');
+                              $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
+                              $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
+                              $('#total_entries').text(data.query_result[1]);
 
-                              trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
-                              trElem.append(
-                                    $(`<td class=\"align-middle\"><img ${ data.query_result[0][i].imagePath } alt=\"book image\" class=\"book_image\"></img></td>`)
-                              );
-                              trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
-                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
-                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].isbn }</td>`));
-                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].ageRestriction }</td>`));
+                              $('#prev_button').prop('disabled', listOffset === 1);
+                              $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
 
-                              if (data.query_result[0][i].author.length)
+                              $('#table_body').empty();
+                              for (let i = 0; i < data.query_result[0].length; i++)
                               {
-                                    let div = $('<div>').addClass('d-flex').addClass('flex-column');
-                                    for (let j = 0; j < data.query_result[0][i].author.length; j++)
+                                    const trElem = $('<tr>');
+
+                                    trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
+                                    trElem.append(
+                                          $(`<td class=\"align-middle\"><img ${ data.query_result[0][i].imagePath } alt=\"book image\" class=\"book_image\"></img></td>`)
+                                    );
+                                    trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
+                                    trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
+                                    trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].isbn }</td>`));
+                                    trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].ageRestriction }</td>`));
+
+                                    if (data.query_result[0][i].author.length)
                                     {
-                                          if (data.query_result[0][i].author.length === 1)
+                                          let div = $('<div>').addClass('d-flex').addClass('flex-column');
+                                          for (let j = 0; j < data.query_result[0][i].author.length; j++)
                                           {
-                                                div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                if (data.query_result[0][i].author.length === 1)
+                                                {
+                                                      div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                }
+                                                else
+                                                {
+                                                      div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                }
                                           }
-                                          else
-                                          {
-                                                div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
-                                          }
+                                          trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(div));
                                     }
-                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(div));
-                              }
-                              else
-                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').text('N/A'));
+                                    else
+                                          trElem.append($('<td>').addClass('align-middle').addClass('col-1').text('N/A'));
 
-                              if (data.query_result[0][i].category.length)
-                              {
-                                    let div = $('<div>').addClass('d-flex').addClass('flex-column');
-                                    for (let j = 0; j < data.query_result[0][i].category.length; j++)
+                                    if (data.query_result[0][i].category.length)
                                     {
-                                          if (data.query_result[0][i].category.length === 1)
+                                          let div = $('<div>').addClass('d-flex').addClass('flex-column');
+                                          for (let j = 0; j < data.query_result[0][i].category.length; j++)
                                           {
-                                                div.append($(`<p class='mb-0'>
+                                                if (data.query_result[0][i].category.length === 1)
+                                                {
+                                                      div.append($(`<p class='mb-0'>
                                                       ${ data.query_result[0][i].category[j].name }
                                                       <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
-                                          }
-                                          else
-                                          {
-                                                div.append($(`<p>
+                                                }
+                                                else
+                                                {
+                                                      div.append($(`<p>
                                                       ${ data.query_result[0][i].category[j].name }
                                                       <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
+                                                }
                                           }
+                                          trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(div));
                                     }
-                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(div));
-                              }
-                              else
-                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').text('N/A'));
+                                    else
+                                          trElem.append($('<td>').addClass('align-middle').addClass('col-1').text('N/A'));
 
-                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
-                                    $('<div>').addClass('d-flex').addClass('flex-column').append(
-                                          $('<p>').text(data.query_result[0][i].publisher)
-                                    ).append(
-                                          $('<p>').text(data.query_result[0][i].publishDate)
-                                    )
-                              ));
-
-                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
-                                    $('<div>').addClass('truncate').text(data.query_result[0][i].description))
-                              );
-                              if (data.query_result[0][i].avgRating)
-                                    trElem.append($('<td>').addClass('align-middle').append(
-                                          $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
-                                    ).append(
-                                          $(`<span>`).text(data.query_result[0][i].avgRating)
+                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
+                                          $('<div>').addClass('d-flex').addClass('flex-column').append(
+                                                $('<p>').text(data.query_result[0][i].publisher)
+                                          ).append(
+                                                $('<p>').text(data.query_result[0][i].publishDate)
+                                          )
                                     ));
-                              else
-                                    trElem.append($('<td>').addClass('align-middle').text('N/A'));
-                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
-                                    $(`<div class="d-flex flex-column">`).append(
-                                          $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
-                                    ).append(
-                                          $(`<p>PDF: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+
+                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
+                                          $('<div>').addClass('truncate').text(data.query_result[0][i].description))
+                                    );
+                                    if (data.query_result[0][i].avgRating)
+                                          trElem.append($('<td>').addClass('align-middle').append(
+                                                $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
+                                          ).append(
+                                                $(`<span>`).text(data.query_result[0][i].avgRating)
+                                          ));
+                                    else
+                                          trElem.append($('<td>').addClass('align-middle').text('N/A'));
+                                    trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
+                                          $(`<div class="d-flex flex-column">`).append(
+                                                $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
+                                          ).append(
+                                                $(`<p>E-book: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
-                                    )
-                              ));
+                                          )
+                                    ));
 
-                              trElem.append(
-                                    $(`<td class='align-middle'>
+                                    trElem.append(
+                                          $(`<td class='align-middle'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -195,10 +197,15 @@ function fetchBookList()
                                                       </div>
                                                 </td>`));
 
-                              $('#table_body').append(trElem);
-                        }
+                                    $('#table_body').append(trElem);
+                              }
 
-                        initToolTip();
+                              initToolTip();
+                        }
+                        else
+                        {
+                              changeList(false);
+                        }
                   }
             },
 

@@ -113,13 +113,13 @@ if (return_navigate_error() === 400) {
                                                 </div>
                                                 <div class="mb-auto mt-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
                                                       <div class='col mb-3'>
-                                                            <label for="filePriceInput" class="form-label">File Copy Price ($):</label>
+                                                            <label for="filePriceInput" class="form-label">E-book Price ($):</label>
                                                             <input step="any" type="number" class="form-control" id="filePriceInput" placeholder="Enter price">
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col mb-3">
                                                             <div class="d-flex flex-column h-100">
                                                                   <span class="form-label">
-                                                                        PDF:
+                                                                        E-book file:
                                                                   </span>
                                                                   <div class="d-flex align-items-center mt-auto" id="btn_grp">
                                                                         <label class='btn btn-sm btn-light border border-dark'>
