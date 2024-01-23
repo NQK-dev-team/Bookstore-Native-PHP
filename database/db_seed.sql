@@ -12,7 +12,7 @@ INSERT INTO admin (`id`) VALUES ('ADMIN1');
 INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
-insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,0,1142369875),('CUSTOMER2','CUSTOMER1',0,1245369870),('CUSTOMER3','CUSTOMER1',0,4100335874);
+insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,1142369875),('CUSTOMER2','CUSTOMER1',27.8692,1245369870),('CUSTOMER3','CUSTOMER1',27.8692,4100335874);
 
 -- Insert `book` table
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publishDate`, `status`, `imagePath`) VALUES ('BOOK1', 'The Joy of PHP', '1', '9781522792147', '3', '4', 'CreateSpace Independent Publishing Platform', '2012-12-13', '1','demo/BOOK1/The Joy of PHP.png');
@@ -153,7 +153,7 @@ INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK31', 'CAT
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '29.99', '0');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2', '39.99', '14');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK3', '49.99', '14');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK4', '59.99', '12');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK4', '59.99', '32');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK5', '15.99', '15');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK6', '29.99', '0');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK7', '39.99', '15');
@@ -258,8 +258,8 @@ insert into discount(id,name,status) values('E_DISCOUNT1','Black Friday Sales',t
 insert into customerDiscount(id,point,discount) values('C_DISCOUNT1',50,5),('C_DISCOUNT2',100,7),('C_DISCOUNT3',200,10);
 insert into referrerDiscount(id,numberOfPeople,discount) values('R_DISCOUNT1',3,2),('R_DISCOUNT2',5,5),('R_DISCOUNT3',10,7);
 insert into eventDiscount(id,discount,startDate,endDate,applyForAll) values('E_DISCOUNT1',30,date_sub(now(),interval 3 day),date_add(now(),interval 10 day),true),
-('E_DISCOUNT2',35,now(),date_add(now(),interval 7 day),false),
-('E_DISCOUNT3',25,date_add(now(),interval 2 day),date_add(now(),interval 9 day),false),
+('E_DISCOUNT2',35,date_sub(now(),interval 1 day),date_add(now(),interval 7 day),false),
+('E_DISCOUNT3',25,date_sub(now(),interval 2 day),date_add(now(),interval 9 day),false),
 ('E_DISCOUNT4',40,date_sub(now(),interval 2 day),date_add(now(),interval 7 day),false),
 ('E_DISCOUNT5',20,date_sub(now(),interval 8 day),date_add(now(),interval 3 day),false);
 
@@ -269,3 +269,59 @@ insert into eventApply(eventID,bookID) values('E_DISCOUNT4','BOOK5');
 insert into eventApply(eventID,bookID) values('E_DISCOUNT5','BOOK4'),('E_DISCOUNT5','BOOK5'),('E_DISCOUNT5','BOOK7'),('E_DISCOUNT5','BOOK12'),('E_DISCOUNT5','BOOK13'),('E_DISCOUNT5','BOOK17'),
 ('E_DISCOUNT5','BOOK6'),('E_DISCOUNT5','BOOK9'),('E_DISCOUNT5','BOOK11'),('E_DISCOUNT5','BOOK19'),('E_DISCOUNT5','BOOK21'),('E_DISCOUNT5','BOOK24');
 
+insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID) values('ORDER1',SUBTIME(now(),'00:05:00'),true,253.92388,115.94612,'CUSTOMER1'),
+('ORDER2',SUBTIME(now(),'00:02:30'),true,19.19428,8.78572,'CUSTOMER1'),
+('ORDER3',null,false,420.13482,239.72518,'CUSTOMER1');
+
+insert into physicalOrder values('ORDER1'),('ORDER3');
+insert into fileOrder values('ORDER1'),('ORDER2'),('ORDER3');
+
+insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER1','BOOK4',1,'211 Ly Thuong Kiet'),('ORDER1','BOOK5',2,'211 Ly Thuong Kiet'),
+('ORDER1','BOOK6',3,'211 Ly Thuong Kiet'),('ORDER1','BOOK7',1,'211 Ly Thuong Kiet'),('ORDER1','BOOK21',4,'211 Ly Thuong Kiet');
+insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER3','BOOK4',10,'211 Ly Thuong Kiet'),('ORDER3','BOOK5',2,'211 Ly Thuong Kiet');
+
+insert into fileOrderContain(orderID,bookID) values('ORDER1','BOOK8'),('ORDER1','BOOK1');
+insert into fileOrderContain(orderID,bookID) values('ORDER2','BOOK10'),('ORDER2','BOOK21');
+insert into fileOrderContain(orderID,bookID) values('ORDER3','BOOK10'),('ORDER3','BOOK21');
+
+insert into discountApply(orderID,discountID) values('ORDER1','E_DISCOUNT1'),('ORDER1','E_DISCOUNT2'),('ORDER1','E_DISCOUNT4'),('ORDER1','R_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER2','E_DISCOUNT1'),('ORDER2','R_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER3','E_DISCOUNT2'),('ORDER3','E_DISCOUNT4'),('ORDER3','E_DISCOUNT1'),('ORDER3','R_DISCOUNT1');
+
+insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID) values('ORDER4',SUBTIME(now(),'00:10:00'),true,259.106,110.764,'CUSTOMER2'),
+('ORDER5',SUBTIME(now(),'00:07:30'),true,19.586,8.394,'CUSTOMER2'),
+('ORDER6',null,false,428.709,231.151,'CUSTOMER1');
+
+insert into physicalOrder values('ORDER4'),('ORDER6');
+insert into fileOrder values('ORDER4'),('ORDER5'),('ORDER6');
+
+insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER4','BOOK4',1,'211 Ly Thuong Kiet'),('ORDER4','BOOK5',2,'211 Ly Thuong Kiet'),
+('ORDER4','BOOK6',3,'211 Ly Thuong Kiet'),('ORDER4','BOOK7',1,'211 Ly Thuong Kiet'),('ORDER4','BOOK21',4,'211 Ly Thuong Kiet');
+insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER6','BOOK4',10,'211 Ly Thuong Kiet'),('ORDER6','BOOK5',2,'211 Ly Thuong Kiet');
+
+insert into fileOrderContain(orderID,bookID) values('ORDER4','BOOK8'),('ORDER4','BOOK1');
+insert into fileOrderContain(orderID,bookID) values('ORDER5','BOOK10'),('ORDER5','BOOK21');
+insert into fileOrderContain(orderID,bookID) values('ORDER6','BOOK10'),('ORDER6','BOOK21');
+
+insert into discountApply(orderID,discountID) values('ORDER4','E_DISCOUNT1'),('ORDER4','E_DISCOUNT2'),('ORDER4','E_DISCOUNT4');
+insert into discountApply(orderID,discountID) values('ORDER5','E_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER6','E_DISCOUNT2'),('ORDER6','E_DISCOUNT4'),('ORDER6','E_DISCOUNT1');
+
+insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID) values('ORDER7',SUBTIME(now(),'00:15:00'),true,259.106,110.764,'CUSTOMER3'),
+('ORDER8',SUBTIME(now(),'00:01:30'),true,19.586,8.394,'CUSTOMER3'),
+('ORDER9',null,false,428.709,231.151,'CUSTOMER3');
+
+insert into physicalOrder values('ORDER7'),('ORDER9');
+insert into fileOrder values('ORDER7'),('ORDER8'),('ORDER9');
+
+insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER7','BOOK4',1,'211 Ly Thuong Kiet'),('ORDER7','BOOK5',2,'211 Ly Thuong Kiet'),
+('ORDER7','BOOK6',3,'211 Ly Thuong Kiet'),('ORDER7','BOOK7',1,'211 Ly Thuong Kiet'),('ORDER7','BOOK21',4,'211 Ly Thuong Kiet');
+insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER9','BOOK4',10,'211 Ly Thuong Kiet'),('ORDER9','BOOK5',2,'211 Ly Thuong Kiet');
+
+insert into fileOrderContain(orderID,bookID) values('ORDER7','BOOK8'),('ORDER7','BOOK1');
+insert into fileOrderContain(orderID,bookID) values('ORDER8','BOOK10'),('ORDER8','BOOK21');
+insert into fileOrderContain(orderID,bookID) values('ORDER9','BOOK10'),('ORDER9','BOOK21');
+
+insert into discountApply(orderID,discountID) values('ORDER7','E_DISCOUNT1'),('ORDER7','E_DISCOUNT2'),('ORDER7','E_DISCOUNT4');
+insert into discountApply(orderID,discountID) values('ORDER8','E_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER9','E_DISCOUNT2'),('ORDER9','E_DISCOUNT4'),('ORDER9','E_DISCOUNT1');
