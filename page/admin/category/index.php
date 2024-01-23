@@ -55,9 +55,9 @@ if (return_navigate_error() === 400) {
                   $idx++;
                   $row['description'] = $row['description'] ? $row['description'] : 'N/A';
                   $elem .= '<tr>';
-                  $elem .= '<th scope="row">' . $idx . '</th>';
-                  $elem .= '<td class="col-1">' . $row['name'] . '</td>';
-                  $elem .= '<td><div class="truncate">' . $row['description'] . '</div></td>';
+                  $elem .= '<td class="align-middle">' . $idx . '</td>';
+                  $elem .= '<td class="col-1 align-middle">' . $row['name'] . '</td>';
+                  $elem .= '<td class="align-middle"><div class="truncate">' . $row['description'] . '</div></td>';
                   $elem .= '<td class="align-middle col-1">';
                   $elem .= "<div class='d-flex flex-lg-row flex-column'>";
                   $elem .= '<button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal(\'' . $row['id'] . '\')"><i class="bi bi-pencil text-white"></i></button>';
