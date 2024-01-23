@@ -88,25 +88,23 @@ function fetchCategoryList()
                   }
                   else if (data.query_result)
                   {
-                        if (data.query_result[0].length)
+                        $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
+                        $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
+                        $('#total_entries').text(data.query_result[1]);
+
+                        $('#prev_button').prop('disabled', listOffset === 1);
+                        $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
+
+                        $('#table_body').empty();
+                        for (let i = 0; i < data.query_result[0].length; i++)
                         {
-                              $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
-                              $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
-                              $('#total_entries').text(data.query_result[1]);
+                              const trElem = $('<tr>');
 
-                              $('#prev_button').prop('disabled', listOffset === 1);
-                              $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
-
-                              $('#table_body').empty();
-                              for (let i = 0; i < data.query_result[0].length; i++)
-                              {
-                                    const trElem = $('<tr>');
-
-                                    trElem.append($(`<th scope="row">${ (listOffset - 1) * entry + i + 1 }</th>`));
-                                    trElem.append($(`<td class="col-1">${ data.query_result[0][i].name }</td>`));
-                                    trElem.append($(`<td><div class="truncate">${ data.query_result[0][i].description }</div></td>`));
-                                    trElem.append(
-                                          $(`
+                              trElem.append($(`<th scope="row">${ (listOffset - 1) * entry + i + 1 }</th>`));
+                              trElem.append($(`<td class="col-1">${ data.query_result[0][i].name }</td>`));
+                              trElem.append($(`<td><div class="truncate">${ data.query_result[0][i].description }</div></td>`));
+                              trElem.append(
+                                    $(`
                                     <td class="align-middle col-1">
                                           <div class='d-flex flex-lg-row flex-column'>
                                                 <button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal('${ data.query_result[0][i].id }')"><i class="bi bi-pencil text-white"></i></button>
@@ -114,14 +112,14 @@ function fetchCategoryList()
                                           </div>
                                     </td>
                                     `)
-                                    );
+                              );
 
-                                    $('#table_body').append(trElem);
-                              }
-
-                              initToolTip();
+                              $('#table_body').append(trElem);
                         }
-                        else
+
+                        initToolTip();
+
+                        if (listOffset > 1 && !data.query_result[0].length)
                         {
                               changeList(false);
                         }
@@ -166,7 +164,7 @@ function changeList(isNext)
       else
       {
             $('#next_button').prop('disabled', false);
-            $('#list_offset').text(currentOffset - 1);
+            $('#list_offset').text((currentOffset - 1) ? currentOffset - 1 : 1);
             $('#prev_button').prop('disabled', currentOffset <= 2);
       }
       fetchCategoryList();
