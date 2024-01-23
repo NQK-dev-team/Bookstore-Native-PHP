@@ -24,16 +24,20 @@ if (return_navigate_error() === 400) {
             }
             $elem = '';
 
-            $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
+            $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 20');
             $stmt->execute();
             $result = $stmt->get_result();
 
-            echo '<section id="page">';
+            echo '<section id="page" class="container">';
             while ($row = $result->fetch_assoc()) {
-            echo '<div>';
-            echo '<h2>' . $row['name'] . '</h2>';
-            echo '<p>Edition: ' . $row['edition'] . '</p>';
+                  $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+            echo '<div class="card" style="width: 18rem;">';
+            echo '<img src="' . $imagePath . '" class="card-img-top" alt="...">';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">' . $row['name'] . '</h5>';
+            echo '<p class="card-text">Edition: ' . $row['edition'] . '</p>';
             // Output other fields as needed...
+            echo '</div>';
             echo '</div>';
             }
             echo '</section>';
