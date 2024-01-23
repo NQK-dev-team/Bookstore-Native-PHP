@@ -102,7 +102,7 @@ function fetchCategoryList()
 
                               trElem.append($(`<th scope="row">${ (listOffset - 1) * entry + i + 1 }</th>`));
                               trElem.append($(`<td class="col-1">${ data.query_result[0][i].name }</td>`));
-                              trElem.append($(`<td><div class="truncate">${ data.query_result[0][i].description }</div></td>`));
+                              trElem.append($(`<td><div class="truncate">${ data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A' }</div></td>`));
                               trElem.append(
                                     $(`
                                     <td class="align-middle col-1">

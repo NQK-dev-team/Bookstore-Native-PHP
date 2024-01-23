@@ -53,6 +53,7 @@ if (return_navigate_error() === 400) {
             $elem = '';
             while ($row = $result->fetch_assoc()) {
                   $idx++;
+                  $row['description'] = $row['description'] ? $row['description'] : 'N/A';
                   $elem .= '<tr>';
                   $elem .= '<th scope="row">' . $idx . '</th>';
                   $elem .= '<td class="col-1">' . $row['name'] . '</td>';

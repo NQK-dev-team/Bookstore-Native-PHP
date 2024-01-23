@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $id = sanitize(rawurldecode($_POST['id']));
                   $name = sanitize(rawurldecode($_POST['name']));
-                  $description = sanitize(rawurldecode($_POST['description']));
+                  $description = $_POST['description'] ? sanitize(rawurldecode($_POST['description'])) : null;
 
                   if (!$name) {
                         echo json_encode(['error' => 'Category name is empty!']);
