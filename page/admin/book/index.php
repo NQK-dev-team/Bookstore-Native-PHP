@@ -218,7 +218,7 @@ if (return_navigate_error() === 400) {
                                     $sub_result = $sub_stmt->get_result();
                                     $sub_result = $sub_result->fetch_assoc();
                                     if ($sub_result['result'])
-                                          $elem .= "<td class='align-middle'>
+                                          $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -229,7 +229,7 @@ if (return_navigate_error() === 400) {
                                                       </div>
                                                 </td>";
                                     else
-                                          $elem .= "<td class='align-middle'>
+                                          $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>

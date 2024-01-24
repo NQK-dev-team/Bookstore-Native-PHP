@@ -181,7 +181,7 @@ function fetchBookList()
                               ));
 
                               trElem.append(
-                                    $(`<td class='align-middle'>
+                                    $(`<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
