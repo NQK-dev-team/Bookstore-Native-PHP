@@ -94,7 +94,7 @@ if (return_navigate_error() === 400) {
                   <div>
                         <h1 class="text-center">Welcome to our shop</h1>
                         <h2>Featured books</h2>
-                        <?php
+                              <?php
                                     if($featured->num_rows > 0){
                                           echo"<div class=\"grid-container\">";
                                           while($row=$featured->fetch_assoc()){
