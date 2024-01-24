@@ -444,5 +444,6 @@ function activateBook()
 function chooseCategory(e)
 {
       $('#categoryInput').val(e.target.innerText);
+      $('#categoryInput').trigger('input');
       selectEntry();
 }
