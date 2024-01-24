@@ -58,6 +58,16 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                     <?php
                                     if (!check_session())
                                           echo '<li class="nav-item ms-2">
+                                                      <a class="nav-link fs-5" href="/admin/authentication/" id="policy_nav">Policy</a>
+                                                </li>';
+                                    else
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
+                                          </li>";
+                                    ?>
+                                    <?php
+                                    if (!check_session())
+                                          echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/admin/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
                                     else

@@ -19,6 +19,8 @@ $(document).ready(() =>
       }
       else if (location.includes('/account'))
             $('#profile_nav').addClass('text-primary');
+      else if (location.includes('/policy'))
+            $('#policy_nav').addClass('text-primary');
       else if (location.includes('/authentication') && !location.includes('recovery'))
             $('#signin_nav').addClass('text-primary');
       else if (location.includes('/') && !location.includes('recovery'))
