@@ -81,7 +81,7 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../../head_element/meta.php';
             ?>
             <link rel="stylesheet" href="/css/preset_style.css">
-
+            <title>Book list</title>
       </head>
 
       <body>
@@ -239,6 +239,14 @@ if (return_navigate_error() === 400) {
                   . '<a href="#" class="card-link" style="font-size: 30px;"> <i class="bi bi-cart"></i></a>'
                   . '<a href="#" class="card-link" style="font-size: 30px;"><i class="bi bi-heart"></i> </a>'
                   . '</div>';
+                  echo '<a
+                        name=""
+                        id=""
+                        class="btn btn-primary d-flex justify-content-center align-items-center"
+                        href="book-detail-page.php?bookID=' . $row['id'] . '"
+                        role="button"
+                        >Learn more</a>';
+
                   echo '</div>';
                   echo '</div>';
 
@@ -247,6 +255,8 @@ if (return_navigate_error() === 400) {
                         echo '</div>';
                   }
                   }
+                  
+                  
             ?>
             
       
