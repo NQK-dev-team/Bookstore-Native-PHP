@@ -65,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$name) {
                         echo json_encode(['error' => 'Book name is empty!']);
                         exit;
-                  } else if (preg_match('/[?\/]/', $name) === 1) {
-                        echo json_encode(['error' => 'Book name must not contain \'?\', \'/\' or \'\\\' characters!']);
+                  } else if (preg_match('/[?\/"]/', $name) === 1) {
+                        echo json_encode(['error' => 'Book name must not contain \'?\', \'/\', \'"\' or \'\\\' characters!']);
                         exit;
                   } else if (strlen($name) > 255) {
                         echo json_encode(['error' => 'Book name must be 255 characters long or less!']);

@@ -222,10 +222,10 @@ function submitForm()
       else
       {
             const regex = /[?/\\]/;
-            const localName = name.replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+            const localName = name.replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\').replace(/%22/g, '\"');
             if (regex.test(localName))
             {
-                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\' or \'\\\' characters!');
+                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\', \'\"\' or \'\\\' characters!');
                   return;
             }
             else if (name.length > 255)
