@@ -37,6 +37,11 @@ $(document).ready(function ()
             selectEntry();
       });
 
+      $('#categoryDropDown').on('hidden.bs.dropdown', function ()
+      {
+            selectEntry();
+      });
+
       $('#categoryInput').on('input', function ()
       {
             let filter = $(this).val().toUpperCase();

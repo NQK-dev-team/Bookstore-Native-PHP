@@ -333,7 +333,7 @@ if (return_navigate_error() === 400) {
                               <div class="d-flex align-items-center">
                                     <p class="mb-0 me-2">Category</p>
                                     <div>
-                                          <div class="dropdown">
+                                          <div class="dropdown" id='categoryDropDown'>
                                                 <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                                       Select category
                                                 </button>
