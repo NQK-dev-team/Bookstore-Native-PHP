@@ -169,7 +169,7 @@ if (return_navigate_error() === 400) {
                   }
                   // Output other fields as needed...
                   echo '<p class="card-text">Written by: ' . $row['authorName'] . '</p>';
-                  echo '<p class="card-text">';
+                  echo '<p class="card-text text-warning">';
                   if($row['avgRating'] <1){
                         echo '<i class="bi bi-star-half"></i>';
                         echo '<i class="bi bi-star"></i>';
@@ -235,10 +235,10 @@ if (return_navigate_error() === 400) {
                   }
                   echo '</p>';
                   echo '<p class="card-text">Digital copy: ' . $row['price'] . '$</p>';
-                  echo '<div class="card-body d-flex justify-content-center align-items-center">' 
-                  . '<a href="#" class="card-link" style="font-size: 30px;"> <i class="bi bi-cart"></i></a>'
-                  . '<a href="#" class="card-link" style="font-size: 30px;"><i class="bi bi-heart"></i> </a>'
-                  . '</div>';
+                  // echo '<div class="card-body d-flex justify-content-center align-items-center">' 
+                  // . '<a href="#" class="card-link" style="font-size: 30px;"> <i class="bi bi-cart"></i></a>'
+                  // . '<a href="#" class="card-link" style="font-size: 30px;"><i class="bi bi-heart"></i> </a>'
+                  // . '</div>';
                   echo '<a
                         name=""
                         id=""
