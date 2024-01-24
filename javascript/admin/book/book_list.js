@@ -30,6 +30,29 @@ $(document).ready(function ()
             e.preventDefault();
             selectEntry();
       });
+
+      $('#searchCategoryForm').submit(function (e)
+      {
+            e.preventDefault();
+            selectEntry();
+      });
+
+      $('#categoryInput').on('input', function ()
+      {
+            let filter = $(this).val().toUpperCase();
+
+            $('.categories li').each(function ()
+            {
+                  let txtValue = $(this).text();
+                  if (txtValue.toUpperCase().indexOf(filter) > -1)
+                  {
+                        $(this).show();
+                  } else
+                  {
+                        $(this).hide();
+                  }
+            });
+      });
 });
 
 function fetchBookList()
@@ -38,6 +61,7 @@ function fetchBookList()
       const search = encodeData($('#search_book').val());
       const listOffset = parseInt(encodeData($('#list_offset').text()));
       const status = parseBool($('#flexSwitchCheckDefault').prop('checked'));
+      const category = encodeData($('#categoryInput').val());
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
@@ -70,7 +94,7 @@ function fetchBookList()
       $.ajax({
             url: '/ajax_service/admin/book/retrieve_list.php',
             method: 'GET',
-            data: { entry: entry, offset: listOffset, status: status, search: search },
+            data: { entry: entry, offset: listOffset, status: status, search: search, category: category },
             dataType: 'json',
             success: function (data)
             {
@@ -415,4 +439,10 @@ function activateBook()
             }
       });
       $('#activateModal').modal('hide');
+}
+
+function chooseCategory(e)
+{
+      $('#categoryInput').val(e.target.innerText);
+      selectEntry();
 }

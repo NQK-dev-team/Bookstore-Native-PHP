@@ -263,6 +263,21 @@ if (return_navigate_error() === 400) {
                   $totalEntries = $result['totalBook'];
             }
             $stmt->close();
+
+            $stmt = $conn->prepare('select name from category order by name,id');
+            $isSuccess = $stmt->execute();
+            if (!$isSuccess) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $categoryList = '';
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                  $categoryList .= "<li class='categoryHover pointer' onclick='chooseCategory(event)'>{$row['name']}</li>";
+            }
             $conn->close();
       } catch (Exception $e) {
             http_response_code(500);
@@ -311,6 +326,30 @@ if (return_navigate_error() === 400) {
                               </form>
                               <div class="mx-auto mx-lg-0 ms-lg-2 order-1 order-lg-2">
                                     <a class="btn btn-success btn-sm" href="./add-book"><strong>+</strong> Add New Book</a>
+                              </div>
+                        </div>
+                        <div class="mt-2">
+                              <div class="d-flex align-items-center">
+                                    <p class="mb-0 me-2">Category</p>
+                                    <div>
+                                          <div class="dropdown">
+                                                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                      Select category
+                                                </button>
+                                                <ul class="dropdown-menu dropdownCategory">
+                                                      <div class="container">
+                                                            <form id='searchCategoryForm'>
+                                                                  <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
+                                                            </form>
+                                                      </div>
+                                                      <div class='categories w-100 container mt-2'>
+                                                            <?php
+                                                            echo $categoryList;
+                                                            ?>
+                                                      </div>
+                                                </ul>
+                                          </div>
+                                    </div>
                               </div>
                         </div>
                         <div class="mt-2">

@@ -14,14 +14,15 @@ require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['entry'], $_GET['offset'], $_GET['status'], $_GET['search'])) {
+      if (isset($_GET['entry'], $_GET['offset'], $_GET['status'], $_GET['search'], $_GET['category'])) {
             try {
 
-                  
+
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
                   $search = sanitize(rawurldecode($_GET['search']));
+                  $category = sanitize(rawurldecode($_GET['category']));
 
                   if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
@@ -37,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $isbnSearch = '%' . str_replace('-', '', $search) . '%';
                   $search = '%' . $search . '%';
                   $offset = ($offset - 1) * $entry;
+                  $category = '%' . $category . '%';
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -50,9 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
-                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
                   order by book.name,book.id limit ? offset ?');
-                  $stmt->bind_param('isssii', $status, $search, $isbnSearch,  $search, $entry, $offset);
+                  $stmt->bind_param('issssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset);
                   $isSuccess = $stmt->execute();
 
                   if (!$isSuccess) {
