@@ -278,6 +278,7 @@ if (return_navigate_error() === 400) {
             while ($row = $result->fetch_assoc()) {
                   $categoryList .= "<li class='categoryHover pointer' onclick='chooseCategory(event)'>{$row['name']}</li>";
             }
+            $stmt->close();
             $conn->close();
       } catch (Exception $e) {
             http_response_code(500);
