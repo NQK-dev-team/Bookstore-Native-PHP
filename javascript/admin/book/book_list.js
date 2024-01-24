@@ -401,7 +401,7 @@ function activateBook()
             },
             error: function (err)
             {
-                  console.error(error);
+                  console.error(err);
 
                   if (err.status >= 500)
                   {
