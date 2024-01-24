@@ -24,7 +24,29 @@ if (return_navigate_error() === 400) {
             }
             $elem = '';
 
-            $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 20');
+            $stmt = $conn->prepare('SELECT DISTINCT 
+            book.id,
+            book.name,
+            book.edition,
+            book.isbn,
+            book.ageRestriction,
+            book.avgRating,
+            book.publisher,
+            book.publishDate,
+            book.description,
+            book.imagePath,
+            author.authorName,
+            filecopy.price
+        FROM 
+            book
+        JOIN 
+            author ON book.id = author.bookid
+        JOIN 
+            filecopy ON book.id = filecopy.id
+        WHERE 
+            book.status = 1
+        ORDER BY 
+            book.name, book.id');
             $stmt->execute();
             $result = $stmt->get_result();
             // $cate_re = $cate->get_result();
@@ -68,56 +90,167 @@ if (return_navigate_error() === 400) {
             ?>
             <section id="page">
             <h1 style="text-align: center;">Customer book page</h1>
-            <div class="container">
-      <div class="row">
-            <div class="col">
-            <select class="form-select" aria-label="Default select example">
-                  <option selected>Category</option>
-                  <?php 
-                        if ($cate) {
-                              $success = $cate->execute();
-                              if ($success) {
-                                    $result1 = $cate->get_result();
-                                    while ($row = $result1->fetch_assoc()) {
-                                          // Process each row of data here...
-                                          echo '<option value="' . $row['ID'].'">'. $row['name'] . '</option>';
-                                    }
+      <div class="container">
+            <div class="row">
+                  <div class="col-12 col-md-4">
+                        <!-- category form -->
+                  <select class="form-select " aria-label="Default select example">
+                        <option selected>Category</option>
+                        <?php 
+                              if ($cate) {
+                                    $success = $cate->execute();
+                                    if ($success) {
+                                          $result1 = $cate->get_result();
+                                          while ($row = $result1->fetch_assoc()) {
+                                                // Process each row of data here...
+                                                echo '<option value="' . $row['ID'].'">'. $row['name'] . '</option>';
+                                          }
+                                                } else {
+                                          echo "Error executing statement: " . $conn->error;
+                                                }     
                                           } else {
-                                    echo "Error executing statement: " . $conn->error;
-                                          }     
-                                    } else {
-                                     echo "Error preparing statement: " . $conn->error;
-                                    }
-                  ?>
-                  </select>  
-            </div>
-            <div class="col">
-            <select class="form-select" aria-label="Default select example">
-                  <option selected>Author</option>
-                  <?php 
-                        if ($auth) {
-                              $success1 = $auth->execute();
-                              if ($success1) {
-                                    $result2 = $auth->get_result();
-                                    while ($row = $result2->fetch_assoc()) {
-                                          // Process each row of data here...
-                                          echo '<option value="' . $row['authorName'].'">'. $row['authorName'] . '</option>';
-                                    }
+                                          echo "Error preparing statement: " . $conn->error;
+                                          }
+                        ?>
+                        </select>  
+                  </div>
+                  <!-- author form -->
+                  <div class="col-12 col-md-4">
+                  <select class="form-select" aria-label="Default select example">
+                        <option selected>Author</option>
+                        <?php 
+                              if ($auth) {
+                                    $success1 = $auth->execute();
+                                    if ($success1) {
+                                          $result2 = $auth->get_result();
+                                          while ($row = $result2->fetch_assoc()) {
+                                                // Process each row of data here...
+                                                echo '<option value="' . $row['authorName'].'">'. $row['authorName'] . '</option>';
+                                          }
+                                                } else {
+                                          echo "Error executing statement: " . $conn->error;
+                                                }     
                                           } else {
-                                    echo "Error executing statement: " . $conn->error;
-                                          }     
-                                    } else {
-                                     echo "Error preparing statement: " . $conn->error;
-                                    }
-                  ?>
-                  </select>  
+                                          echo "Error preparing statement: " . $conn->error;
+                                          }
+                        ?>
+                        </select>  
+                  </div>
+                  <!-- search button -->
+                  <div class="col-12 col-md-4">
+                  <button type="button" class="btn btn-primary mx-auto d-block">SEARCH NOW</button>
+                  </div>
             </div>
-            <div class="col">
-            <button type="button" class="btn btn-primary">SEARCH NOW</button>
-            </div>
-      </div>
+            <br>
+            <?php
+                  for ($i = 1; $i <= $result2->num_rows; $i++) {
+                  if ($i % 3 == 1) {
+                        echo '<div class="row justify-content-center align-items-center g-2 m-3">';
+                  }
+                  echo '<div class="col-9 col-md-4">';
+                  $row = $result->fetch_assoc();
+                  $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+                  echo '<div class="card w-75 mx-auto d-block">';
+                  echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
+                  echo '<div class="card-body">';
+                  echo '<h5 class="card-title">' . $row['name'] . '</h5>';
+                  if($row['edition'] == 1){
+                        echo '<p class="card-text">' . $row['edition'] . 'rst edition</p>';
+                  }
+                  
+                  elseif($row['edition'] == 2){
+                        echo '<p class="card-text">' . $row['edition'] . 'nd edition</p>';
+                  }
+                  elseif($row['edition'] == 3){
+                        echo '<p class="card-text">' . $row['edition'] . 'rd edition</p>';
+                  }
+                  else{
+                        echo '<p class="card-text">' . $row['edition'] . 'th edition</p>';
+                  }
+                  // Output other fields as needed...
+                  echo '<p class="card-text">Written by: ' . $row['authorName'] . '</p>';
+                  echo '<p class="card-text">';
+                  if($row['avgRating'] <1){
+                        echo '<i class="bi bi-star-half"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 1 && $row['avgRating'] <1.5){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 1.5 && $row['avgRating'] <2){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-half"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 2 && $row['avgRating'] <2.5){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 2.5 && $row['avgRating'] <3){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-half"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 3 && $row['avgRating'] <3.5){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 3.5 && $row['avgRating'] <4){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-half"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 4 && $row['avgRating'] <4.5){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star"></i>';
+                  }
+                  elseif($row['avgRating'] >= 4.5 && $row['avgRating'] <5){
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-fill"></i>';
+                        echo '<i class="bi bi-star-half"></i>';
+                  }
+                  echo '</p>';
+                  echo '<p class="card-text">Digital copy: ' . $row['price'] . '$</p>';
+                  echo '<div class="card-body d-flex justify-content-center align-items-center">' 
+                  . '<a href="#" class="card-link" style="font-size: 30px;"> <i class="bi bi-cart"></i></a>'
+                  . '<a href="#" class="card-link" style="font-size: 30px;"><i class="bi bi-heart"></i> </a>'
+                  . '</div>';
+                  echo '</div>';
+                  echo '</div>';
+
+                  echo '</div>';
+                  if ($i % 3 == 0 || $i == $result2->num_rows) {
+                        echo '</div>';
+                  }
+                  }
+            ?>
+            
       
-</div>
+      </div>
             
         
             </section>
