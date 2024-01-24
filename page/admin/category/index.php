@@ -283,11 +283,11 @@ if (return_navigate_error() === 400) {
                                     </div>
                                     <div class="modal-body d-flex flex-column">
                                           <div class="mb-3">
-                                                <label for="categoryName" class="form-label fw-medium">Category Name</label>
+                                                <label for="categoryName" class="form-label fw-medium">Category Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
                                                 <input type="text" class="form-control" id="categoryName" placeholder="Enter name">
                                           </div>
                                           <div class="mb-3">
-                                                <label for="categoryDescription" class="form-label fw-medium">Category Description</label>
+                                                <label for="categoryDescription" class="form-label fw-medium">Category Description:</label>
                                                 <textarea class="form-control" id="categoryDescription" rows="5" maxlength="500"></textarea>
                                           </div>
                                           <div>
