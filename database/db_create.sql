@@ -190,7 +190,6 @@ create table customerDiscount(
     check(point>0),
     discount double not null,
     check(0<discount and discount<=100),
-	unique(id,point),
     foreign key (id) references discount(id) on delete cascade on update cascade
 );
 
@@ -200,7 +199,6 @@ create table referrerDiscount(
     check(numberOfPeople>=1),
     discount double not null,
     check(0<discount and discount<=100),
-    unique(id,numberOfPeople),
     foreign key (id) references discount(id) on delete cascade on update cascade
 );
 

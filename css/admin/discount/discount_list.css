@@ -1,0 +1,58 @@
+#search_coupon {
+      padding-left: 35px !important;
+}
+
+.search_form {
+      max-width: 500px;
+}
+
+.group_button {
+      max-width: 180px;
+}
+
+.pointer:hover {
+      cursor: pointer;
+}
+
+.truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 7;
+      /* Number of lines to show before ellipsis */
+      -webkit-box-orient: vertical;
+}
+
+#couponSelect {
+      width: auto !important;
+}
+
+#errorModal {
+      z-index: 2000 !important;
+}
+
+#book_list {
+      max-height: 400px !important;
+}
+
+.search_book {
+      padding-left: 35px !important;
+}
+
+#categoryList {
+      max-height: 50px;
+      overflow-y: auto;
+}
+
+.dropdownCategory {
+      width: 300px;
+}
+
+.categories {
+      max-height: 200px;
+      overflow-y: auto;
+}
+
+.categoryHover:hover {
+      background-color: #adadad;
+}
