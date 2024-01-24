@@ -4,6 +4,8 @@ require_once __DIR__ . '../../../../tool/php/session_check.php';
 if (check_session()) {
       header('Location: /admin/');
 }
+
+$_SESSION['update_book_id'] = null;
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +32,7 @@ if (check_session()) {
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
                   <form onsubmit="loginHandler(event,'admin')" class="bg-white border border-black rounded form my-auto d-flex flex-column px-3">
                         <div class='w-100 d-flex flex-column'>
-                              <h2 class="mx-auto mb-0 mt-1">Login</h2>
+                              <h1 class="mx-auto mb-0 mt-1">Login</h1>
                               <div class="align-items-center justify-content-center error_message mt-2 mx-auto" id="login_fail">
                                     <svg class="ms-1" fill="#ff0000" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000" stroke-width="30.72">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -62,7 +64,7 @@ if (check_session()) {
       require_once __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/admin/menu_after_load.js"></script>
-      <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/encoder.js"></script>
       <script src="/tool/js/input_validity.js"></script>
       <script src="/javascript/authentication/login.js"></script>
 </body>

@@ -28,7 +28,7 @@ if (check_session()) header('Location: /');
             <div class="container-fluid h-100 d-flex justify-content-center py-4">
                   <form onsubmit="signUpHandler(event)" class="bg-white border border-black rounded form my-auto d-flex flex-column px-3">
                         <div class='w-100 d-flex flex-column'>
-                              <h2 class="mx-auto mb-0 mt-1">Sign up</h2>
+                              <h1 class="mx-auto mb-0 mt-1">Sign up</h1>
                               <div class="align-items-center justify-content-center error_message mt-2 mx-auto" id="signup_fail">
                                     <svg class="ms-1" fill="#ff0000" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000" stroke-width="30.72">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -53,27 +53,19 @@ if (check_session()) header('Location: /');
                                     <label for="inputDate" class="fs-4 fw-medium">Date of birth</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input onchange="checkAge()" autocomplete="on" type="date" class="form-control" id="inputDate" name="date">
-                              <div class="mt-2 align-items-center used_error" id="invalid_dob">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
-                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                          <g id="SVGRepo_iconCarrier">
-                                                <path d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                          </g>
-                                    </svg>
-                                    <p class="ms-1 text-danger mb-0 fw-medium">Invalid date of birth!</p>
+                              <input autocomplete="on" type="date" class="form-control" id="inputDate" name="date">
+                        </div>
+                        <div class="form-group mt-3">
+                              <div class="d-flex">
+                                    <label for="inputGender" class="fs-4 fw-medium">Gender</label>
+                                    <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <div class="mt-2 align-items-center used_error" id="invalid_age">
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
-                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                          <g id="SVGRepo_iconCarrier">
-                                                <path d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                          </g>
-                                    </svg>
-                                    <p class="ms-1 text-danger mb-0 fw-medium">You must be at least 18 years old!</p>
-                              </div>
+                              <select class="form-select" aria-label="Select gender" id='inputGender'>
+                                    <option selected value=null>Choose your gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="O">Other</option>
+                              </select>
                         </div>
                         <div class="form-group mt-3">
                               <div class="d-flex">
@@ -94,7 +86,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputAddress" class="fs-4 fw-medium">Address</label>
-                              <p class="mb-1">(For default delivery address)</p>
+                              <p class="mb-1">(For default delivery address usage)</p>
 
                               <input autocomplete="on" type="text" class="form-control" id="inputAddress" placeholder="Enter address" name="address">
                         </div>
@@ -126,7 +118,7 @@ if (check_session()) header('Location: /');
                                     <label for="inputPassword" class="fs-4 fw-medium">Password</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password">
+                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputRefEmail" class="fs-4 fw-medium">Refferer email</label>
@@ -153,7 +145,7 @@ if (check_session()) header('Location: /');
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="modalLabel">Sign up success</h1>
+                                    <h2 class="modal-title fs-5" id="modalLabel">Sign Up Success</h2>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body d-flex flex-column">
@@ -171,10 +163,11 @@ if (check_session()) header('Location: /');
       require_once __DIR__ . '/../../../layout/footer.php';
       ?>
       <script src="/javascript/customer/menu_after_load.js"></script>
-      <script src="/tool/js/sanitizer.js"></script>
+      <script src="/tool/js/encoder.js"></script>
       <script src="/tool/js/input_validity.js"></script>
       <script src="/tool/js/dob_checker.js"></script>
       <script src="/javascript/authentication/signup.js"></script>
+      <script src="/tool/js/tool_tip.js"></script>
 </body>
 
 </html>

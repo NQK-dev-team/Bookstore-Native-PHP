@@ -5,24 +5,31 @@ $(document).ready(function ()
       {
             window.location.href = "/authentication/";
       });
+
+      initToolTip();
 });
 
 function signUpHandler(event)
 {
       event.preventDefault();
 
-      const name = sanitize(document.getElementById('inputName').value);
-      const date = sanitize(document.getElementById('inputDate').value);
-      const phone = sanitize(document.getElementById('inputPhone').value);
-      const address = sanitize(document.getElementById('inputAddress').value);
-      const email = sanitize(document.getElementById('inputEmail').value);
-      const password = sanitize(document.getElementById('inputPassword').value);
-      const card = sanitize(document.getElementById('inputCard').value);
-      const refEmail = sanitize(document.getElementById('inputRefEmail').value);
+      const name = encodeData(document.getElementById('inputName').value);
+      const date = encodeData(document.getElementById('inputDate').value);
+      const phone = encodeData(document.getElementById('inputPhone').value);
+      const address = encodeData(document.getElementById('inputAddress').value);
+      const email = encodeData(document.getElementById('inputEmail').value);
+      const password = encodeData(document.getElementById('inputPassword').value);
+      const card = encodeData(document.getElementById('inputCard').value);
+      const refEmail = encodeData(document.getElementById('inputRefEmail').value);
+      const gender = encodeData(document.getElementById('inputGender').value);
 
       if (name === '')
       {
             reportCustomValidity($('#inputName').get(0), "Name field is empty!");
+            return;
+      } else if (name.length > 255)
+      {
+            reportCustomValidity($('#inputName').get(0), "Name must be 255 characters long or less!");
             return;
       }
 
@@ -39,6 +46,17 @@ function signUpHandler(event)
       else if (!isAgeValid(date))
       {
             reportCustomValidity($('#inputDate').get(0), "You must be at least 18 years old to sign up!");
+            return;
+      }
+
+      if (gender === 'null')
+      {
+            reportCustomValidity($('#inputGender').get(0), "Gender field is empty!");
+            return;
+      }
+      else if (gender !== 'F' && gender !== 'M' && gender !== 'O')
+      {
+            reportCustomValidity($('#inputGender').get(0), "Invalid gender!");
             return;
       }
 
@@ -75,9 +93,15 @@ function signUpHandler(event)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(email))
+            const localEmail = email.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
+                  return;
+            }
+            else if (email.length > 255)
+            {
+                  reportCustomValidity($('#inputEmail').get(0), "Email must be 255 characters long or less!");
                   return;
             }
       }
@@ -110,6 +134,11 @@ function signUpHandler(event)
                   reportCustomValidity($('#inputRefEmail').get(0), "Referrer email format invalid!");
                   return;
             }
+            else if (refEmail.length > 255)
+            {
+                  reportCustomValidity($('#inputRefEmail').get(0), "Refferer email must be 255 characters long or less!");
+                  return;
+            }
       }
 
       $('*').addClass('wait');
@@ -119,7 +148,7 @@ function signUpHandler(event)
       $.ajax({
             url: '/ajax_service/authentication/signup_handler.php',
             method: 'POST',
-            data: { name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
             dataType: 'json',
             success: function (data)
             {
@@ -129,15 +158,13 @@ function signUpHandler(event)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content').text(data.error);
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'none';
 
@@ -153,14 +180,12 @@ function signUpHandler(event)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content').text('Server encountered error!');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content').text(err.responseJSON.error);
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
@@ -170,7 +195,7 @@ function signUpHandler(event)
 
 function checkPhoneUsed()
 {
-      const phone = sanitize(document.getElementById('inputPhone').value);
+      const phone = encodeData(document.getElementById('inputPhone').value);
 
       $.ajax({
             url: `/ajax_service/authentication/check_phone.php`,
@@ -179,8 +204,7 @@ function checkPhoneUsed()
             dataType: 'json',
             success: function (data)
             {
-                  const p_elem = document.getElementById('error_message_content');
-                  p_elem.innerHTML = '';
+                  $('#error_message_content').text('');
                   const error_message = document.getElementById('signup_fail');
                   error_message.style.display = 'none';
 
@@ -195,14 +219,12 @@ function checkPhoneUsed()
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content').text('Server encountered error!');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content').text(err.responseJSON.error);
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'flex';
                   }
@@ -214,7 +236,7 @@ function checkEmailUsed(isRefEmail)
 {
       if (!isRefEmail)
       {
-            const email = sanitize(document.getElementById('inputEmail').value);
+            const email = encodeData(document.getElementById('inputEmail').value);
 
             $.ajax({
                   url: `/ajax_service/authentication/check_email.php`,
@@ -223,8 +245,7 @@ function checkEmailUsed(isRefEmail)
                   dataType: 'json',
                   success: function (data)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'none';
 
@@ -239,14 +260,12 @@ function checkEmailUsed(isRefEmail)
                         console.error(err);
                         if (err.status >= 500)
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = 'Server encountered error!';
+                              $('#error_message_content').text('Server encountered error!');
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         } else
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = err.responseJSON.error;
+                              $('#error_message_content').text(err.responseJSON.error);
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         }
@@ -255,7 +274,7 @@ function checkEmailUsed(isRefEmail)
       }
       else
       {
-            const email = sanitize(document.getElementById('inputRefEmail').value);
+            const email = encodeData(document.getElementById('inputRefEmail').value);
 
             if (email === '')
             {
@@ -271,8 +290,7 @@ function checkEmailUsed(isRefEmail)
                   dataType: 'json',
                   success: function (data)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('signup_fail');
                         error_message.style.display = 'none';
 
@@ -287,48 +305,16 @@ function checkEmailUsed(isRefEmail)
                         console.error(err);
                         if (err.status >= 500)
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = 'Server encountered error!';
+                              $('#error_message_content').text('Server encountered error!');
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         } else
                         {
-                              const p_elem = document.getElementById('error_message_content');
-                              p_elem.innerHTML = err.responseJSON.error;
+                              $('#error_message_content').text(err.responseJSON.error);
                               const error_message = document.getElementById('signup_fail');
                               error_message.style.display = 'flex';
                         }
                   }
             });
-      }
-}
-
-function checkAge()
-{
-      const dobInput = document.getElementById("inputDate").value;
-
-      const elem1 = document.getElementById('invalid_dob');
-      const elem2 = document.getElementById('invalid_age');
-
-      if (dobInput === '')
-      {
-            elem1.style.display = 'none';
-            elem2.style.display = 'none';
-            return;
-      }
-
-      if (isDobValid(dobInput))
-      {
-            elem1.style.display = 'none';
-
-            if (isAgeValid(dobInput))
-                  elem2.style.display = 'none';
-            else
-                  elem2.style.display = 'flex';
-      }
-      else
-      {
-            elem2.style.display = 'none';
-            elem1.style.display = 'flex';
       }
 }

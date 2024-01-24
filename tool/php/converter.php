@@ -30,11 +30,10 @@ function convertToOrdinal($number)
       return $number . $suffix;
 }
 
-function revertEncodedCharacter($input)
+function normalizeURL($url)
 {
-      $result = str_replace('%20', ' ', $input);
-      $result = str_replace('%60', '`', $result);
+      $url = str_replace('%2F', '/', $url);
 
-      return $result;
+      return $url;
 }
 ?>

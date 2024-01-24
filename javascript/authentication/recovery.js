@@ -13,7 +13,7 @@ function enterEmail(e, user_type)
 {
       e.preventDefault();
 
-      const email = sanitize($('#inputEmail').val());
+      const email = encodeData($('#inputEmail').val());
 
       if (email === '')
       {
@@ -23,7 +23,8 @@ function enterEmail(e, user_type)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(email))
+            const localEmail = email.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
@@ -37,7 +38,7 @@ function enterEmail(e, user_type)
       $.ajax({
             url: '/ajax_service/authentication/get_recovery_code.php',
             method: 'POST',
-            data: { email: email, type: sanitize(user_type) },
+            data: { email: email, type: encodeData(user_type) },
             dataType: 'json',
             success: function (data)
             {
@@ -47,15 +48,13 @@ function enterEmail(e, user_type)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_1').text(ata.error);
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_1').text('');
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'none';
 
@@ -74,14 +73,12 @@ function enterEmail(e, user_type)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_1').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_1');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_1').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'flex';
                   }
@@ -94,8 +91,7 @@ function requestRecoveryCode()
 
       if (globalEmail && globalEmail === '')
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'No email provided!';
+            $('#error_message_content_2').text('No email provided!');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
@@ -105,8 +101,7 @@ function requestRecoveryCode()
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(globalEmail))
             {
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Email format invalid!';
+                  $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
                   error_message.style.display = 'flex';
                   return;
@@ -120,7 +115,7 @@ function requestRecoveryCode()
       $.ajax({
             url: '/ajax_service/authentication/request_recovery_code.php',
             method: 'POST',
-            data: { email: sanitize(globalEmail) },
+            data: { email: encodeData(globalEmail) },
             dataType: 'json',
             success: function (data)
             {
@@ -130,15 +125,13 @@ function requestRecoveryCode()
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_2').text(data.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_2').text('');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'none';
                   }
@@ -152,14 +145,12 @@ function requestRecoveryCode()
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_2').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_2').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
@@ -171,12 +162,11 @@ function enterCode(e)
 {
       e.preventDefault();
 
-      const code = sanitize($('#inputRecoveryCode').val());
+      const code = encodeData($('#inputRecoveryCode').val());
 
       if (globalEmail && globalEmail === '')
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'No email provided!';
+            $('#error_message_content_2').text('No email provided!');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
@@ -186,8 +176,7 @@ function enterCode(e)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(globalEmail))
             {
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Email format invalid!';
+                  $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
                   error_message.style.display = 'flex';
                   return;
@@ -216,7 +205,7 @@ function enterCode(e)
       $.ajax({
             url: '/ajax_service/authentication/check_recovery_code.php',
             method: 'POST',
-            data: { email: sanitize(globalEmail), code: code },
+            data: { email: encodeData(globalEmail), code: code },
             dataType: 'json',
             success: function (data)
             {
@@ -226,15 +215,13 @@ function enterCode(e)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_2').text(data.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_2').text('');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'none';
 
@@ -248,18 +235,16 @@ function enterCode(e)
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  
+
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_2').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_2');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_2').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_2');
                         error_message.style.display = 'flex';
                   }
@@ -271,13 +256,12 @@ function changePassword(e, user_type)
 {
       e.preventDefault();
 
-      const password = sanitize($('#inputNewPassword').val());
-      const confirmPassword = sanitize($('#inputConfirmNewPassword').val());
+      const password = encodeData($('#inputNewPassword').val());
+      const confirmPassword = encodeData($('#inputConfirmNewPassword').val());
 
       if (globalEmail && globalEmail === '')
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = 'No email provided!';
+            $('#error_message_content_2').text('No email provided!');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
@@ -287,8 +271,7 @@ function changePassword(e, user_type)
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
             if (!regex.test(globalEmail))
             {
-                  const p_elem = document.getElementById('error_message_content_2');
-                  p_elem.innerHTML = 'Email format invalid!';
+                  $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
                   error_message.style.display = 'flex';
                   return;
@@ -337,8 +320,7 @@ function changePassword(e, user_type)
 
       if (password !== confirmPassword)
       {
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = 'Passwords are not matched!';
+            $('#error_message_content_3').text('Passwords are not matched!');
             const error_message = document.getElementById('recovery_fail_3');
             error_message.style.display = 'flex';
             return;
@@ -351,7 +333,7 @@ function changePassword(e, user_type)
       $.ajax({
             url: '/ajax_service/authentication/change_password.php',
             method: 'POST',
-            data: { email: sanitize(globalEmail), password: password, confirmPassword: confirmPassword, type: sanitize(user_type) },
+            data: { email: encodeData(globalEmail), password: password, confirmPassword: confirmPassword, type: encodeData(user_type) },
             dataType: 'json',
             success: function (data)
             {
@@ -361,15 +343,13 @@ function changePassword(e, user_type)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content_3').text(data.error);
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content_3').text('');
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'none';
 
@@ -385,14 +365,12 @@ function changePassword(e, user_type)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content_3').text('Server encountered error!');
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content_3');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content_3').text(err.responseJSON.error);
                         const error_message = document.getElementById('recovery_fail_3');
                         error_message.style.display = 'flex';
                   }
@@ -405,24 +383,21 @@ function changeEmail()
       globalEmail = null;
 
       {
-            const p_elem = document.getElementById('error_message_content_1');
-            p_elem.innerHTML = '';
+            $('#error_message_content_1').text('');
             const error_message = document.getElementById('recovery_fail_1');
             error_message.style.display = 'none';
             $('#recovery_email_form').css('display', 'flex');
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = '';
+            $('#error_message_content_3').text('');
             const error_message = document.getElementById('recovery_fail_3');
             error_message.style.display = 'none';
             $('#recovery_password_form').css('display', 'none');
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = '';
+            $('#error_message_content_2').text('');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'none';
             $('#recovery_code_form').css('display', 'none');
@@ -434,16 +409,14 @@ function changeEmail()
 function backToGetCode()
 {
       {
-            const p_elem = document.getElementById('error_message_content_1');
-            p_elem.innerHTML = '';
+            $('#error_message_content_1').text('');
             const error_message = document.getElementById('recovery_fail_1');
             error_message.style.display = 'none';
             $('#recovery_email_form').css('display', 'none');
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_3');
-            p_elem.innerHTML = '';
+            $('#error_message_content_3').text('');
             const error_message = document.getElementById('recovery_fail_3');
             error_message.style.display = 'none';
             $('#recovery_password_form').css('display', 'none');
@@ -451,8 +424,7 @@ function backToGetCode()
       }
 
       {
-            const p_elem = document.getElementById('error_message_content_2');
-            p_elem.innerHTML = '';
+            $('#error_message_content_2').text('');
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'none';
             $('#recovery_code_form').css('display', 'flex');

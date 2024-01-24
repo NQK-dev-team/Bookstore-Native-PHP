@@ -4,11 +4,15 @@ require_once __DIR__ . '/../../../tool/php/role_check.php';
 
 if (return_navigate_error() === 400) {
       http_response_code(400);
-      require __DIR__ . '/../../../error/400.php';
+      require_once __DIR__ . '/../../../error/400.php';
 } else if (return_navigate_error() === 403) {
       http_response_code(403);
-      require __DIR__ . '/../../../error/403.php';
+      require_once __DIR__ . '/../../../error/403.php';
 } else {
+      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+
+      $_SESSION['update_book_id'] = null;
+
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
@@ -26,175 +30,206 @@ if (return_navigate_error() === 400) {
 
             $elem = '';
 
-            $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publisherLink,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
-            $stmt->execute();
-
-            $result = $stmt->get_result();
-            if ($result->num_rows < 0) {
+            $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
+            $isSuccess = $stmt->execute();
+            if (!$isSuccess) {
                   http_response_code(500);
                   require_once __DIR__ . '/../../../error/500.php';
                   $stmt->close();
+                  $conn->close();
                   exit;
-            } else if ($result->num_rows > 0) {
-                  $counter = 0;
-                  while ($row = $result->fetch_assoc()) {
-                        $counter++;
-                        $ordinal = convertToOrdinal($row['edition']);
-                        $id = $row['id'];
-                        $formatISBN = formatISBN($row['isbn']);
-                        $formatDate = MDYDateFormat($row['publishDate']);
-                        $elem .= '<tr>';
-                        $elem .= "<td class=\"align-middle\">{$counter}</td>";
-                        $elem .= "<td class=\"align-middle\"><img src=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$row['imagePath']}\" alt=\"book image\" class=\"book_image\"></img></td>";
-                        $elem .= "<td class=\"col-2 align-middle\">{$row['name']}</td>";
-                        $elem .= "<td class=\"align-middle\">{$ordinal}</td>";
-                        $elem .= "<td class=\"align-middle\">{$formatISBN}</td>";
-                        $elem .= "<td class=\"align-middle\">{$row['ageRestriction']}</td>";
+            } else {
+                  $result = $stmt->get_result();
+                  if ($result->num_rows > 0) {
+                        $counter = 0;
+                        while ($row = $result->fetch_assoc()) {
+                              $counter++;
+                              $row['edition'] = convertToOrdinal($row['edition']);
+                              $id = $row['id'];
+                              $row['isbn'] = formatISBN($row['isbn']);
+                              $row['publishDate'] = MDYDateFormat($row['publishDate']);
+                              $row['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
+                              $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
+                              $elem .= '<tr>';
+                              $elem .= "<td class=\"align-middle\">{$counter}</td>";
+                              $elem .= "<td class=\"align-middle\"><img {$row['imagePath']} alt=\"book image\" class=\"book_image\"></img></td>";
+                              $elem .= "<td class=\"col-2 align-middle\">{$row['name']}</td>";
+                              $elem .= "<td class=\"align-middle\">{$row['edition']}</td>";
+                              $elem .= "<td class=\"align-middle\">{$row['isbn']}</td>";
+                              $elem .= "<td class=\"align-middle\">{$row['ageRestriction']}</td>";
 
-                        $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
-                        $sub_stmt->bind_param('s', $id);
-                        $sub_stmt->execute();
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows < 0) {
-                              http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
-                              $sub_stmt->close();
-                              exit;
-                        } else if ($sub_result->num_rows > 0) {
-                              $elem .= "<td class=\"col-1 align-middle\">
+                              $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
+                              $sub_stmt->bind_param('s', $id);
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              } else {
+                                    $sub_result = $sub_stmt->get_result();
+                                    if ($sub_result->num_rows > 0) {
+                                          $elem .= "<td class=\"col-1 align-middle\">
                                           <div class='d-flex flex-column'>";
-                              while ($sub_row = $sub_result->fetch_assoc()) {
-                                    if ($sub_result->num_rows === 1)
-                                          $elem .= "<p class='mb-0'>
+                                          while ($sub_row = $sub_result->fetch_assoc()) {
+                                                if ($sub_result->num_rows === 1)
+                                                      $elem .= "<p class='mb-0'>
                                                       {$sub_row['authorName']}
                                                 </p>";
-                                    else
-                                          $elem .= "<p>
+                                                else
+                                                      $elem .= "<p>
                                                       {$sub_row['authorName']}
                                                 </p>";
-                              }
-                              $elem .= "</div>
+                                          }
+                                          $elem .= "</div>
                                           </td>";
-                        } else
-                              $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
+                                    } else
+                                          $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
+                              }
 
-                        $sub_stmt->close();
-
-                        $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
-                        $sub_stmt->bind_param('s', $id);
-                        $sub_stmt->execute();
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows < 0) {
-                              http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
                               $sub_stmt->close();
-                              exit;
-                        } else if ($sub_result->num_rows > 0) {
-                              $elem .= "<td class=\"col-1 align-middle\">
-                                                            <div class='d-flex flex-column'>";
-                              while ($sub_row = $sub_result->fetch_assoc()) {
-                                    $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
-                                    if ($sub_result->num_rows === 1)
-                                          $elem .= "<p class='mb-0'>
+
+                              $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                              $sub_stmt->bind_param('s', $id);
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              } else {
+                                    $sub_result = $sub_stmt->get_result();
+                                    if ($sub_result->num_rows > 0) {
+                                          $elem .= "<td class=\"col-1 align-middle\">
+                                          <div class='d-flex flex-column'>";
+                                          while ($sub_row = $sub_result->fetch_assoc()) {
+                                                $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
+                                                if ($sub_result->num_rows === 1)
+                                                      $elem .= "<p class='mb-0'>
                                                       {$sub_row['name']}
                                                       <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
                                                 </p>";
-                                    else
-                                          $elem .= "<p>
+                                                else
+                                                      $elem .= "<p>
                                                       {$sub_row['name']}
                                                       <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
                                                 </p>";
-                              }
-                              $elem .= "</div>
+                                          }
+                                          $elem .= "</div>
                                           </td>";
-                        } else
-                              $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
+                                    } else
+                                          $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
+                              }
 
-                        $sub_stmt->close();
+                              $sub_stmt->close();
 
-                        $elem .= "<td class=\"col-1 align-middle\">
+                              $elem .= "<td class=\"col-1 align-middle\">
                                     <div class='d-flex flex-column'>
-                                          <a target=\"_blank\" alt=\"publisher link\" href=\"{$row['publisherLink']}\" class='mb-3'>
+                                          <p>
                                                 {$row['publisher']}
                                           </a>
                                           <p>
-                                                {$formatDate}   
+                                                {$row['publishDate']}   
                                           </p>
                                     </div>
                               </td>";
-                        $bookDescription = $row['description'] ? $row['description'] : 'N/A';
-                        $elem .= "<td class=\"col-1 align-middle\">{$bookDescription}</td>";
-                        $elem .= "<td class=\"align-middle\">
+                              $row['description'] = $row['description'] ? $row['description'] : 'N/A';
+                              $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$row['description']}</div></td>";
+                              if ($row['avgRating'])
+                                    $elem .= "<td class=\"align-middle\">
                                           <i class=\"bi bi-star-fill text-warning\"></i>
                                           <span>{$row['avgRating']}</span>
                                     </td>";
+                              else
+                                    $elem .= "<td class=\"align-middle\">
+                                          N/A
+                                    </td>";
 
-                        $elem .= "<td class=\"col-1 align-middle\">
+                              $elem .= "<td class=\"col-1 align-middle\">
                                     <div class='d-flex flex-column'>";
-                        $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
-                        $sub_stmt->bind_param('s', $id);
-                        $sub_stmt->execute();
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows === 1) {
-                              $sub_row = $sub_result->fetch_assoc();
-                              $elem .= "<p>Physical: \${$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
-                        } else if ($sub_result->num_rows === 0)
-                              $elem .= "<p>Physical: N/A (in stock: N/A)</p>";
-                        else {
-                              http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
+                              $sub_stmt->bind_param('s', $id);
+                              $isSuccess = $sub_stmt->execute();
+                              if ($isSuccess) {
+                                    $sub_result = $sub_stmt->get_result();
+                                    if ($sub_result->num_rows === 1) {
+                                          $sub_row = $sub_result->fetch_assoc();
+                                          $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
+                                          $sub_row['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
+                                          $elem .= "<p>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
+                                    } else if ($sub_result->num_rows === 0)
+                                          $elem .= "<p>Physical: N/A (in stock: N/A)</p>";
+                              } else {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->close();
-                              exit;
-                        }
-                        $sub_stmt->close();
 
-                        $sub_stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
-                        $sub_stmt->bind_param('s', $id);
-                        $sub_stmt->execute();
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows === 1) {
-                              $sub_row = $sub_result->fetch_assoc();
-                              $elem .= "<p>PDF: \${$sub_row['price']} <a target='_blank' href=\"https://{$_SERVER['HTTP_HOST']}/data/book/{$sub_row['filePath']}\" alt='PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                              $sub_stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
+                              $sub_stmt->bind_param('s', $id);
+                              $isSuccess = $sub_stmt->execute();
+                              if ($isSuccess) {
+                                    $sub_result = $sub_stmt->get_result();
+                                    if ($sub_result->num_rows === 1) {
+                                          $sub_row = $sub_result->fetch_assoc();
+                                          $sub_row['filePath'] = $sub_row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($sub_row['filePath'])) . "\"" : '';
+                                          $target = $sub_row['filePath'] !== '' ? "target='_blank'" : '';
+                                          $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
+                                          $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
+                                          $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
+                                          $elem .= "<p>E-book: {$sub_row['price']} <a $target {$sub_row['filePath']} alt='$alt'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
                                           </a></p>";
-                        } else if ($sub_result->num_rows === 0)
-                              $elem .= "<p>PDF: N/A <a href='#' alt='No PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                                    } else if ($sub_result->num_rows === 0)
+                                          $elem .= "<p>E-book: N/A <a href='#' alt='No PDF file'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
                                           </a></p>";
-                        else {
-                              http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
+                              } else {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->close();
-                              exit;
-                        }
-                        $sub_stmt->close();
-                        $elem .= "</div></td>";
+                              $elem .= "</div></td>";
 
-                        $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
+                              $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
-                        $sub_stmt->bind_param('ss', $id, $id);
-                        $sub_stmt->execute();
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows !== 1) {
-                              http_response_code(500);
-                              require __DIR__ . '/../../../error/500.php';
-                              $sub_stmt->close();
-                              exit;
-                        } else {
-                              $sub_result = $sub_result->fetch_assoc();
-                              if ($sub_result['result'])
-                                    $elem .= "<td class='align-middle'>
+                              $sub_stmt->bind_param('ss', $id, $id);
+                              $isSuccess = $sub_stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $sub_stmt->close();
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              } else {
+                                    $sub_result = $sub_stmt->get_result();
+                                    $sub_result = $sub_result->fetch_assoc();
+                                    if ($sub_result['result'])
+                                          $elem .= "<td class='align-middle'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
                                                             </a>
-                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                                                   <i class=\"bi bi-power text-white\"></i>
                                                             </button>
                                                       </div>
                                                 </td>";
-                              else
-                                    $elem .= "<td class='align-middle'>
+                                    else
+                                          $elem .= "<td class='align-middle'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -207,21 +242,23 @@ if (return_navigate_error() === 400) {
                                                             </button>
                                                       </div>
                                                 </td>";
+                              }
+                              $elem .= '</tr>';
                         }
-                        $elem .= '</tr>';
                   }
             }
             $stmt->close();
 
             $stmt = $conn->prepare('select count(*) as totalBook from book where status=1');
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($result->num_rows !== 1) {
+            $isSuccess = $stmt->execute();
+            if (!$isSuccess) {
                   http_response_code(500);
-                  require __DIR__ . '/../../../error/500.php';
+                  require_once __DIR__ . '/../../../error/500.php';
                   $stmt->close();
+                  $conn->close();
                   exit;
             } else {
+                  $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   $totalEntries = $result['totalBook'];
             }
@@ -229,7 +266,8 @@ if (return_navigate_error() === 400) {
             $conn->close();
       } catch (Exception $e) {
             http_response_code(500);
-            require __DIR__ . '/../../../error/500.php';
+            require_once __DIR__ . '/../../../error/500.php';
+            exit;
       }
 ?>
 
@@ -246,7 +284,8 @@ if (return_navigate_error() === 400) {
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Manage books of NQK Bookstore">
             <title>Manage Books</title>
-            <link rel="stylesheet" href="/css/admin/book/styles.css">
+            <link rel="stylesheet" href="/css/admin/book/book_list.css">
+            <?php storeToken(); ?>
       </head>
 
       <body>
@@ -256,21 +295,23 @@ if (return_navigate_error() === 400) {
             <section id="page">
                   <div class="container-fluid h-100 d-flex flex-column">
                         <h1 class='fs-2 mx-auto mt-3'>Book List</h1>
-                        <form class="d-flex align-items-center mt-2 w-100 search_form mx-auto" role="search" id="search_form">
-                              <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
-                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
-                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                          <g id="SVGRepo_iconCarrier">
-                                                <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
-                                          </g>
-                                    </svg>
-                              </button>
+                        <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
+                              <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
+                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                          <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                      <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
+                                                </g>
+                                          </svg>
+                                    </button>
 
-                              <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
-                        </form>
-                        <div class="mx-auto mt-3">
-                              <a class="btn btn-success btn-sm" href="./add-book"><strong>+</strong> Add New Book</a>
+                                    <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
+                              </form>
+                              <div class="mx-auto mx-lg-0 ms-lg-2 order-1 order-lg-2">
+                                    <a class="btn btn-success btn-sm" href="./add-book"><strong>+</strong> Add New Book</a>
+                              </div>
                         </div>
                         <div class="mt-2">
                               <div class="d-flex align-items-center">
@@ -332,7 +373,7 @@ if (return_navigate_error() === 400) {
                                     <div class="btn-group d-flex" role="group">
                                           <button type="button" class="btn btn-outline-info" id="prev_button" onClick="changeList(false)" disabled>Previous</button>
                                           <button type="button" class="btn btn-info text-white" disabled id="list_offset">1</button>
-                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) $elem .= 'disabled'; ?>>Next</button>
+                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) echo 'disabled'; ?>>Next</button>
                                     </div>
                               </div>
                         </div>
@@ -341,7 +382,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Error!</h1>
+                                          <h2 class="modal-title fs-5">Error!</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -357,7 +398,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm deactivation</h1>
+                                          <h2 class="modal-title fs-5">Confirm Deactivation</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -374,7 +415,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm activation</h1>
+                                          <h2 class="modal-title fs-5">Confirm Activation</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -391,7 +432,7 @@ if (return_navigate_error() === 400) {
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h1 class="modal-title fs-5">Confirm deletion</h1>
+                                          <h2 class="modal-title fs-5">Confirm Deletion</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -411,7 +452,7 @@ if (return_navigate_error() === 400) {
             <script src="/javascript/admin/menu_after_load.js"></script>
             <script src="/javascript/admin/book/book_list.js"></script>
             <script src="/tool/js/input_parser.js"></script>
-            <script src="/tool/js/sanitizer.js"></script>
+            <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
       </body>
 

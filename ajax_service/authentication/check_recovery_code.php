@@ -5,8 +5,8 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['code'])) {
             try {
-                  $email = sanitize($_POST['email']);
-                  $code = sanitize($_POST['code']);
+                  $email = sanitize(rawurldecode($_POST['email']));
+                  $code = sanitize(rawurldecode($_POST['code']));
 
                   // Validate email
                   if (!$email) {
@@ -21,11 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$code) {
                         echo json_encode(['error' => 'No recovery code provided!']);
                         exit;
-                  } else if (!preg_match('/^[0-9a-zA-Z]{8}$/', $code)) {
-                        echo json_encode(['error' => 'Invalid recovery code format!']);
-                        exit;
+                  } else {
+                        $matchResult = preg_match('/^[0-9a-zA-Z]{8}$/', $code);
+                        if ($matchResult === false) {
+                              throw new Exception('Error occurred during recovery code format check!');
+                        } else if ($matchResult === 0) {
+                              echo json_encode(['error' => 'Invalid recovery code format!']);
+                              exit;
+                        }
                   }
-                  session_start();
+                  if (!session_start())
+                        throw new Exception('Error occurred during starting session!');
                   if (isset($_SESSION['recovery_code'], $_SESSION['recovery_code_send_time'], $_SESSION['recovery_email']) && $_SESSION['recovery_code'] && $_SESSION['recovery_code_send_time'] && $_SESSION['recovery_email']) {
                         if ($email === $_SESSION['recovery_email']) {
                               if ($code === $_SESSION['recovery_code']) {

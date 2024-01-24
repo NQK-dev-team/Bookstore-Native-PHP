@@ -24,13 +24,19 @@ $(document).ready(function ()
       {
             DELETE_ID = null;
       });
+
+      $("#search_form").submit(function (e)
+      {
+            e.preventDefault();
+            selectEntry();
+      });
 });
 
 function fetchBookList()
 {
-      const entry = parseInt(sanitize($('#entry_select').val()));
-      const search = sanitize($('#search_book').val());
-      const listOffset = parseInt(sanitize($('#list_offset').text()));
+      const entry = parseInt(encodeData($('#entry_select').val()));
+      const search = encodeData($('#search_book').val());
+      const listOffset = parseInt(encodeData($('#list_offset').text()));
       const status = parseBool($('#flexSwitchCheckDefault').prop('checked'));
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
@@ -62,7 +68,7 @@ function fetchBookList()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/book/retrieve_list.php',
+            url: '/ajax_service/admin/book/retrieve_list.php',
             method: 'GET',
             data: { entry: entry, offset: listOffset, status: status, search: search },
             dataType: 'json',
@@ -80,14 +86,12 @@ function fetchBookList()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
-
                         $('#start_entry').text(data.query_result[1] ? (listOffset - 1) * entry + 1 : 0);
                         $('#end_entry').text(listOffset * entry <= data.query_result[1] ? listOffset * entry : data.query_result[1]);
                         $('#total_entries').text(data.query_result[1]);
 
-                        $('#prev_button').prop('disabled', prevBtnDisabledProp || listOffset === 1);
-                        $('#next_button').prop('disabled', nextBtnDisabledProp || listOffset * entry >= data.query_result[1]);
+                        $('#prev_button').prop('disabled', listOffset === 1);
+                        $('#next_button').prop('disabled', listOffset * entry >= data.query_result[1]);
 
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[0].length; i++)
@@ -96,7 +100,7 @@ function fetchBookList()
 
                               trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
                               trElem.append(
-                                    $(`<td class=\"align-middle\"><img src=\"${ data.query_result[0][i].imagePath }\" alt=\"book image\" class=\"book_image\"></img></td>`)
+                                    $(`<td class=\"align-middle\"><img ${ data.query_result[0][i].imagePath } alt=\"book image\" class=\"book_image\"></img></td>`)
                               );
                               trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
@@ -149,24 +153,29 @@ function fetchBookList()
 
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $('<div>').addClass('d-flex').addClass('flex-column').append(
-                                          $('<a>').text(data.query_result[0][i].publisher).attr('href', data.query_result[0][i].publisherLink).attr('alt', 'publisher link').addClass('mb-3').attr('target', '_blank')
+                                          $('<p>').text(data.query_result[0][i].publisher)
                                     ).append(
                                           $('<p>').text(data.query_result[0][i].publishDate)
                                     )
                               ));
 
-                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').text(data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A'));
-                              trElem.append($('<td>').addClass('align-middle').append(
-                                    $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
-                              ).append(
-                                    $(`<span>`).text(data.query_result[0][i].avgRating)
-                              ));
+                              trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
+                                    $('<div>').addClass('truncate').text(data.query_result[0][i].description))
+                              );
+                              if (data.query_result[0][i].avgRating)
+                                    trElem.append($('<td>').addClass('align-middle').append(
+                                          $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
+                                    ).append(
+                                          $(`<span>`).text(data.query_result[0][i].avgRating)
+                                    ));
+                              else
+                                    trElem.append($('<td>').addClass('align-middle').text('N/A'));
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $(`<div class="d-flex flex-column">`).append(
-                                          $(`<p>Physical: $${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
+                                          $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>PDF: $${ data.query_result[0][i].fileCopy.price } <a target='_blank' href=\"${ data.query_result[0][i].fileCopy.filePath }\" alt='PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Read file\"></i>
+                                          $(`<p>E-book: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
                                     )
                               ));
@@ -177,7 +186,7 @@ function fetchBookList()
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
                                                             </a>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactive' : 'Activate' }\">
+                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class="bi bi-power text-white"></i>
                                                             </button>
                                                             ${ data.query_result[0][i].can_delete ? `<button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
@@ -190,6 +199,11 @@ function fetchBookList()
                         }
 
                         initToolTip();
+
+                        if (listOffset > 1 && !data.query_result[0].length)
+                        {
+                              changeList(false);
+                        }
                   }
             },
 
@@ -231,7 +245,7 @@ function changeList(isNext)
       else
       {
             $('#next_button').prop('disabled', false);
-            $('#list_offset').text(currentOffset - 1);
+            $('#list_offset').text((currentOffset - 1) ? currentOffset - 1 : 1);
             $('#prev_button').prop('disabled', currentOffset <= 2);
       }
       fetchBookList();
@@ -242,7 +256,6 @@ function selectEntry()
       $('#list_offset').text(1);
       $('#prev_button').attr('disabled', true);
       $('#next_button').attr('disabled', false);
-      $('#end_entry').text($('#entry_select').val());
       fetchBookList();
 }
 
@@ -264,10 +277,13 @@ function confirmDeleteBook(id)
 function deleteBook()
 {
       $.ajax({
-            url: '/ajax_service/book/delete_book.php',
+            url: '/ajax_service/admin/book/delete_book.php',
             type: 'DELETE',
             data: {
-                  id: sanitize(DELETE_ID)
+                  id: encodeData(DELETE_ID)
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -279,10 +295,9 @@ function deleteBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#deleteModal').modal('hide');
-                        fetchBookList();
                   }
+                  fetchBookList();
             },
             error: function (err)
             {
@@ -299,6 +314,7 @@ function deleteBook()
                   }
             }
       });
+      $('#deleteModal').modal('hide');
 }
 
 function confirmDeactivateBook(id)
@@ -310,11 +326,14 @@ function confirmDeactivateBook(id)
 function deactivateBook()
 {
       $.ajax({
-            url: '/ajax_service/book/update_book_status.php',
+            url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
             data: {
-                  id: sanitize(DEACTIVATE_ID),
+                  id: encodeData(DEACTIVATE_ID),
                   status: false
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -326,14 +345,13 @@ function deactivateBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#deactivateModal').modal('hide');
-                        fetchBookList();
                   }
+                  fetchBookList();
             },
-            error: function (error)
+            error: function (err)
             {
-                  console.error(error);
+                  console.error(err);
 
                   if (err.status >= 500)
                   {
@@ -346,6 +364,7 @@ function deactivateBook()
                   }
             }
       });
+      $('#deactivateModal').modal('hide');
 }
 
 function confirmActivateBook(id)
@@ -357,11 +376,14 @@ function confirmActivateBook(id)
 function activateBook()
 {
       $.ajax({
-            url: '/ajax_service/book/update_book_status.php',
+            url: '/ajax_service/admin/book/update_book_status.php',
             type: 'PATCH',
             data: {
-                  id: sanitize(ACTIVATE_ID),
+                  id: encodeData(ACTIVATE_ID),
                   status: true
+            },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
             },
             dataType: 'json',
             success: function (data)
@@ -373,12 +395,11 @@ function activateBook()
                   }
                   else if (data.query_result)
                   {
-                        $('#error_message').text('');
                         $('#activateModal').modal('hide');
-                        fetchBookList();
                   }
+                  fetchBookList();
             },
-            error: function (error)
+            error: function (err)
             {
                   console.error(error);
 
@@ -393,10 +414,5 @@ function activateBook()
                   }
             }
       });
+      $('#activateModal').modal('hide');
 }
-
-$("#search_form").submit(function (e)
-{
-      e.preventDefault();
-      selectEntry();
-});

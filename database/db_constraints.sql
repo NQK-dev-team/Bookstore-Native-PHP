@@ -2,6 +2,49 @@ use bookstore;
 
 -- **** Business constraints ****
 
+
+-- ** Begin of rating **
+-- This trigger forbid any insert statement to `rating` table if the user hasn't bought the book yet
+drop trigger if exists ratingInsertTrigger;
+delimiter //
+create trigger ratingInsertTrigger
+before insert on rating
+for each row
+begin
+	if not (
+    exists(select * from customerOrder join fileOrder on fileOrder.id=customerOrder.id join fileOrderContain on fileOrderContain.orderID=fileOrder.id
+    where customerOrder.status=true and customerOrder.customerID=new.customerID and fileOrderContain.bookID=new.bookID) 
+    or
+    exists(select * from customerOrder join physicalOrder on physicalOrder.id=customerOrder.id join physicalOrderContain on physicalOrderContain.orderID=physicalOrder.id
+    where customerOrder.status=true and customerOrder.customerID=new.customerID and physicalOrderContain.bookID=new.bookID)
+    ) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer hasn\'t buy this book yet, rating is not allowed!';
+    end if;
+end//
+delimiter ;
+-- ** End of rating **
+
+-- ** Begin of comment **
+-- This trigger forbid any insert statement to `comment` table if the user hasn't bought the book yet
+drop trigger if exists commentInsertTrigger;
+delimiter //
+create trigger commentInsertTrigger
+before insert on comment
+for each row
+begin
+	if not (
+    exists(select * from customerOrder join fileOrder on fileOrder.id=customerOrder.id join fileOrderContain on fileOrderContain.orderID=fileOrder.id
+    where customerOrder.status=true and customerOrder.customerID=new.customerID and fileOrderContain.bookID=new.bookID) 
+    or
+    exists(select * from customerOrder join physicalOrder on physicalOrder.id=customerOrder.id join physicalOrderContain on physicalOrderContain.orderID=physicalOrder.id
+    where customerOrder.status=true and customerOrder.customerID=new.customerID and physicalOrderContain.bookID=new.bookID)
+    ) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer hasn\'t buy this book yet, commenting is not allowed!';
+    end if;
+end//
+delimiter ;
+-- ** End of comment **
+
 -- ** Begin of customerOrder **
 -- These 2 triggers below forbid any delete or update statement to any row of `customerOrder` table that has `status` set to true (order has been purchased)
 drop trigger if exists orderBusinessConstraintDeleteTrigger;
@@ -124,6 +167,7 @@ begin
 end//
 delimiter ;
 
+-- This trigger also check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
 drop trigger if exists physicalOrderContainBusinessConstraintUpdateTrigger;
 delimiter //
 create trigger physicalOrderContainBusinessConstraintUpdateTrigger
@@ -132,7 +176,38 @@ for each row
 begin
     if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
+	else
+		begin
+			declare address varchar(1000) default null;
+			if new.destinationAddress is null then
+				select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=old.orderID;
+				if address is null then
+					SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
+				else
+					set new.destinationAddress:=address;
+				end if;
+			end if;
+        end;
     end if;
+end//
+delimiter ;
+
+-- This trigger check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
+drop trigger if exists physicalOrderContainBusinessConstraintInsertTrigger;
+delimiter //
+create trigger physicalOrderContainBusinessConstraintInsertTrigger
+before insert on physicalOrderContain
+for each row
+begin
+	declare address varchar(1000) default null;
+	if new.destinationAddress is null then
+		select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=new.orderID;
+		if address is null then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
+		else
+			set new.destinationAddress:=address;
+		end if;
+	end if;
 end//
 delimiter ;
 -- ** End of physicalOrderContain **
@@ -279,14 +354,19 @@ end//
 delimiter ;
 
 -- This trigger forbid update statements that set the end date to end earlier than it's supposed to but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the old end date)
+-- This trigger also remove any associated rows in `eventApply` table if `applyForAll` column is set from false to true
 drop trigger if exists eventDiscountBusinessConstraintUpdateTrigger;
 delimiter //
 create trigger eventDiscountBusinessConstraintUpdateTrigger
 before update on eventDiscount
 for each row
 begin
-	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.time>new.endDate and customerOrder.time<=old.endDate and customerOrder.status=true) then
+	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime>new.endDate and customerOrder.purchaseTime<=old.endDate and customerOrder.status=true) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not shorten discount event end date, there are purchased order(s) that have already used this coupon on dates that are outside of the new end date you want to set!';
+    end if;
+    
+    if !old.applyForAll and new.applyForAll then
+		delete from eventApply where eventApply.eventID=eventDiscount.id;
     end if;
 end//
 delimiter ;
@@ -518,7 +598,7 @@ create trigger customerOrderDataConstraintInsertTrigger
 before insert on customerOrder
 for each row
 begin
-	if new.time>now() then
+	if new.purchaseTime>now() then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer order time must not be the future!';
     end if;
 end//
@@ -532,7 +612,7 @@ before update on customerOrder
 for each row
 follows orderBusinessConstraintUpdateTrigger
 begin	
-	if new.time>now() then
+	if new.purchaseTime>now() then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer order time must not be the future!';
     end if;
 end//
@@ -552,166 +632,3 @@ begin
 end//
 delimiter ;
 -- ** End of eventDiscount **
-
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
--- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
--- **** Specialization/Generalization constraints ****
-
--- *** appUser super class ***
--- ** Begin of customer **
-drop trigger if exists customerSGConstraintInsertTrigger;
-delimiter //
-create trigger customerSGConstraintInsertTrigger
-before insert on customer
-for each row
-follows customerDataConstraintInsertTrigger
-begin
-	if exists(select * from admin where admin.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s ID found in admin table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists customerSGConstraintUpdateTrigger;
-delimiter //
-create trigger customerSGConstraintUpdateTrigger
-before update on customer
-for each row
-follows customerDataConstraintUpdateTrigger
-begin
-	if exists(select * from admin where admin.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s ID found in admin table!';
-    end if;
-end//
-delimiter ;
--- ** End of customer **
-
--- ** Begin of admin **
-drop trigger if exists adminSGConstraintInsertTrigger;
-delimiter //
-create trigger adminSGConstraintInsertTrigger
-before insert on admin
-for each row
-begin
-	if exists(select * from customer where customer.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s ID found in customer table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists adminSGConstraintUpdateTrigger;
-delimiter //
-create trigger adminSGConstraintUpdateTrigger
-before update on admin
-for each row
-begin
-	if exists(select * from customer where customer.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s ID found in customer table!';
-    end if;
-end//
-delimiter ;
--- ** End of admin **
--- *** appUser super class ***
-
--- *** Discount super class ***
--- ** Begin of customerDiscount **
-drop trigger if exists customerDiscountSGConstraintInsertTrigger;
-delimiter //
-create trigger customerDiscountSGConstraintInsertTrigger
-before insert on customerDiscount
-for each row
-begin
-	if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in referrerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists customerDiscountSGConstraintUpdateTrigger;
-delimiter //
-create trigger customerDiscountSGConstraintUpdateTrigger
-before update on customerDiscount
-for each row
-begin
-	if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in referrerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
--- ** End of customerDiscount **
-
--- ** Begin of referrerDiscount **
-drop trigger if exists referrerDiscountSGConstraintInsertTrigger;
-delimiter //
-create trigger referrerDiscountSGConstraintInsertTrigger
-before insert on referrerDiscount
-for each row
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists referrerDiscountSGConstraintUpdateTrigger;
-delimiter //
-create trigger referrerDiscountSGConstraintUpdateTrigger
-before update on referrerDiscount
-for each row
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from eventDiscount where eventDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Referrer discount coupon ID found in eventDiscount table!';
-    end if;
-end//
-delimiter ;
--- ** End of referrerDiscount **
-
--- ** Begin of eventDiscount **
-drop trigger if exists eventDiscountSGConstraintInsertTrigger;
-delimiter //
-create trigger eventDiscountSGConstraintInsertTrigger
-before insert on eventDiscount
-for each row
-follows eventDiscountDataConstraintInsertTrigger
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in referrerDiscount table!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists eventDiscountSGConstraintUpdateTrigger;
-delimiter //
-create trigger eventDiscountSGConstraintUpdateTrigger
-before update on eventDiscount
-for each row
-follows eventDiscountBusinessConstraintUpdateTrigger
-begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in customerDiscount table!';
-    end if;
-    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon ID found in referrerDiscount table!';
-    end if;
-end//
-delimiter ;
--- ** End of eventDiscount **
--- *** Discount super class ***

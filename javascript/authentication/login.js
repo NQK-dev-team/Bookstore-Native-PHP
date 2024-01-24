@@ -2,9 +2,9 @@ function loginHandler(e, user_type)
 {
       e.preventDefault();
 
-      const email = sanitize(document.getElementById('inputEmail').value);
-      const password = sanitize(document.getElementById('inputPassword').value);
-      const type = sanitize(user_type);
+      const email = encodeData(document.getElementById('inputEmail').value);
+      const password = encodeData(document.getElementById('inputPassword').value);
+      const type = encodeData(user_type);
 
       if (email === '')
       {
@@ -14,7 +14,8 @@ function loginHandler(e, user_type)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(email))
+            const localEmail = email.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
                   return;
@@ -58,15 +59,13 @@ function loginHandler(e, user_type)
 
                   if (data.error)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = data.error;
+                        $('#error_message_content').text(data.error);
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
                   }
                   else if (data.query_result)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = '';
+                        $('#error_message_content').text('');
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'none';
 
@@ -85,14 +84,12 @@ function loginHandler(e, user_type)
                   console.error(err);
                   if (err.status >= 500)
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = 'Server encountered error!';
+                        $('#error_message_content').text('Server encountered error!');
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
                   } else
                   {
-                        const p_elem = document.getElementById('error_message_content');
-                        p_elem.innerHTML = err.responseJSON.error;
+                        $('#error_message_content').text('err.responseJSON.error');
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
                   }

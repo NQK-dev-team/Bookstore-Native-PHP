@@ -1,13 +1,25 @@
 
 <?php
-require_once __DIR__ . '/../../tool/php/sanitizer.php';
-require_once __DIR__ . '/../../config/db_connection.php';
-require_once __DIR__ . '/../../tool/php/password.php';
+require_once __DIR__ . '/../../../tool/php/session_check.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'])) {
+if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
+      http_response_code(403);
+      echo json_encode(['error' => 'Not authorized!']);
+      exit;
+}
+
+require_once __DIR__ . '/../../../config/db_connection.php';
+require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../tool/php/converter.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      if (isset($_GET['search'])) {
             try {
-                  $email = sanitize(rawurldecode($_POST['email']));
+
+                  
+                  $search = sanitize(rawurldecode($_GET['search']));
+
+                  $search = '%' . $search . '%';
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -19,24 +31,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  // Using prepare statement (preventing SQL injection)
-                  $stmt = $conn->prepare("select * from appUser where email=?");
-                  $stmt->bind_param('s', $email);
+                  $query_result = [];
+
+                  $stmt = $conn->prepare('select name,description from category where name like ? order by name,id');
+                  $stmt->bind_param('s', $search);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                   } else {
                         $result = $stmt->get_result();
-                        if ($result->num_rows === 1)
-                              echo json_encode(['query_result' => true]);
-                        else if ($result->num_rows === 0)
-                              echo json_encode(['query_result' => false]);
+                        if ($result->num_rows > 0) {
+                              while ($row = $result->fetch_assoc()) {
+                                    $query_result[] = $row;
+                              }
+                        }
                   }
-
+                  echo json_encode(['query_result' => $query_result]);
                   $stmt->close();
-
-                  // Close connection
                   $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
