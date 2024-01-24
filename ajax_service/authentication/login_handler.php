@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/anti_csrf.php';
+require_once __DIR__ . '/../../tool/php/delete_cancel.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
@@ -93,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $_SESSION['type'] = $user_type;
                                     $_SESSION['id'] = $result['id'];
                                     generateToken();
-
+                                    deleteCancle($_SESSION['id']);
                                     echo json_encode(['query_result' => true]);
 
                                     // Missing a procedure to set status=1 when status=0 and send an email to the customer
