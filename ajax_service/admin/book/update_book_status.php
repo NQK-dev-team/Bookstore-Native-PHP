@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
       parse_str(file_get_contents('php://input'), $_PATCH);
-      if (isset($_PATCH['id'])) {
+      if (isset($_PATCH['id'], $_PATCH['status'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         if ($stmt->affected_rows > 1) {
                               http_response_code(500);
                               echo json_encode(['error' => 'Updated more than one book!']);
-                        }  else {
+                        } else {
                               echo json_encode(['query_result' => true]);
                         }
                   }
