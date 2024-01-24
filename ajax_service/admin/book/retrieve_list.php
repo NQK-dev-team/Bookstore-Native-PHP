@@ -192,8 +192,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $stmt = $conn->prepare('select count(distinct book.id) as totalBook
                   from book join author on book.id=author.bookID
-                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)');
-                  $stmt->bind_param('isss', $status, $search, $isbnSearch, $search);
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?');
+                  $stmt->bind_param('issss', $status, $search, $isbnSearch, $search, $category);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
