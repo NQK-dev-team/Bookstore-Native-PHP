@@ -48,6 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
+                  if (is_null($status)) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `Status`!']);
+                        exit;
+                  }
+
                   $queryResult = [];
                   $isbnSearch = '%' . str_replace('-', '', $search) . '%';
                   $search = '%' . $search . '%';

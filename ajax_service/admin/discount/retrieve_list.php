@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $search = sanitize(rawurldecode($_GET['search']));
-                  $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
+                  $status = $_GET['status'] ? filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN) : null;
                   $type = sanitize(rawurldecode($_GET['type']));
 
                   if (!$entry) {
@@ -42,13 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  if(!$type)
-                  {
+                  if (is_null($status)) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `Status`!']);
+                        exit;
+                  }
+
+                  if (!$type) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Missing `Coupon Type`!']);
                         exit;
-                  }
-                  else if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
+                  } else if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
                         http_response_code(400);
                         echo json_encode(['error' => '`Coupon Type` data type invalid!']);
                         exit;
