@@ -77,6 +77,7 @@ function fetchCouponList()
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
                   $('#list_offset').prop('disabled', true);
+                  $('#couponBookApply').prop('disabled', $('#btncheck1').prop('checked'));
 
                   if (data.error)
                   {
@@ -258,6 +259,7 @@ function fetchCouponList()
                   $('#next_button').prop('disabled', nextBtnDisabledProp);
                   $('#prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#list_offset').prop('disabled', true);
+                  $('#couponBookApply').prop('disabled', $('#btncheck1').prop('checked'));
 
                   console.error(err);
                   if (err.status >= 500)

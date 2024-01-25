@@ -82,6 +82,7 @@ function fetchBookList()
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
                   $('#book_list_offset').prop('disabled', true);
+                  $('#couponBookApply').prop('disabled', $('#btncheck1').prop('checked'));
 
                   if (data.error)
                   {
@@ -184,6 +185,7 @@ function fetchBookList()
                   $('#book_next_button').prop('disabled', nextBtnDisabledProp);
                   $('#book_prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#book_list_offset').prop('disabled', true);
+                  $('#couponBookApply').prop('disabled', $('#btncheck1').prop('checked'));
 
                   console.error(err);
                   if (err.status >= 500)

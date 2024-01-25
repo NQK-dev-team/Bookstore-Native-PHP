@@ -129,10 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else {
                         // Create a DateTime object for the date of birth
                         $tempDate = new DateTime($publishDate, new DateTimeZone('Asia/Ho_Chi_Minh'));
-
+                        $tempDate->setTime(0, 0, 0); // Set time to 00:00:00
                         // Get the current date
                         $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-
+                        $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
                         if ($tempDate > $currentDate) {
                               http_response_code(400);
                               echo json_encode(['error' => 'Publish date invalid!']);

@@ -14,6 +14,11 @@ require_once __DIR__ . '/../../../tool/php/delete_directory.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/notify_event.php';
 
+function map($elem)
+{
+      return sanitize(rawurldecode($elem));
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       try {
             if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
@@ -52,11 +57,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($type === '1') {
-                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['start']) || !isset($_POST['end']) || !isset($_POST['bookApply'])) {
+                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['start']) || !isset($_POST['end']) || !isset($_POST['bookApply']) || !isset($_POST['allBook'])) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Invalid data received!']);
                         exit;
                   }
+
+                  $name = sanitize(rawurldecode($_POST['name']));
+                  $discount = sanitize(rawurldecode($_POST['discount']));
+                  $start = sanitize(rawurldecode($_POST['start']));
+                  $end = sanitize(rawurldecode($_POST['end']));
+                  $bookApply = $_POST['bookApply'] ? array_map('map', explode(',', $_POST['bookApply'])) : [];
+                  $allBook = filter_var(sanitize(rawurldecode($_POST['allBook'])), FILTER_VALIDATE_BOOLEAN);
+
+                  if (!$name) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing coupon name!']);
+                        exit;
+                  }
+
+                  if (!$discount) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing discount percentage value!']);
+                        exit;
+                  } else if (!is_numeric($discount) || is_nan($discount) || $discount <= 0 || $discount > 100) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Discount percentage value invalid!']);
+                        exit;
+                  }
+
+                  if (!$start) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing start date!']);
+                        exit;
+                  }
+
+                  if (!$end) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing end date!']);
+                        exit;
+                  }
+
+                  $startDT = new DateTime($start);
+                  $startDT->setTime(0, 0, 0); // Set time to 00:00:00
+                  $endDT = new DateTime($end);
+                  $endDT->setTime(0, 0, 0); // Set time to 00:00:00
+                  $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                  $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
+
+                  if ($endDT < $currentDate) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'End date must be after or the same day as today!']);
+                        exit;
+                  }
+
+                  if ($startDT > $endDT) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Start date must be before or the same day as end date!']);
+                        exit;
+                  }
+
+                  $stmt = $conn->prepare('select exists(select * from discount where name=? and status=true) as result');
+                  $stmt->bind_param('s', $name);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  $result = $result->fetch_assoc();
+                  if ($result['result']) {
+                        echo json_encode(['error' => 'Can not create this coupon, current coupon name has already been used in another coupon!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->close();
+
+                  $conn->begin_transaction();
+                  $stmt = $conn->prepare('call addEventDiscount(?,?,?,?,?)');
+                  $stmt->bind_param('sdssi', $name, $discount, $start, $end, $allBook);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        $conn->rollback();
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  $id = $result->fetch_assoc()['newID'];
+                  $stmt->close();
+
+                  if (!$allBook) {
+                        $stmt = $conn->prepare('insert into eventApply values(?,?)');
+                        foreach ($bookApply as $book) {
+                              $stmt->bind_param('ss', $id, $book);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    $conn->rollback();
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                        }
+                        $stmt->close();
+                  }
+                  $conn->commit();
             } else if ($type === '2') {
                   if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['point'])) {
                         http_response_code(400);

@@ -116,9 +116,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                           exit;
                                     }
                                     $sub_result = $sub_stmt->get_result();
-                                    while ($sub_row = $sub_result->fetch_assoc()) {
-                                          $sub_row['edition'] = convertToOrdinal($sub_row['edition']);
-                                          $row['applyFor'][] = $sub_row;
+                                    if ($sub_result->num_rows > 0) {
+                                          while ($sub_row = $sub_result->fetch_assoc()) {
+                                                $sub_row['edition'] = convertToOrdinal($sub_row['edition']);
+                                                $row['applyFor'][] = $sub_row;
+                                          }
+                                    } else {
+                                          $row['applyFor'] = [];
                                     }
                               } else {
                                     $row['applyFor'] = true;

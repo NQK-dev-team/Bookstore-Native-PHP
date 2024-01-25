@@ -84,3 +84,22 @@ begin
     insert into referrerDiscount(id,discount,numberOfPeople) values(concat('R_DISCOUNT',counter),discount,people);
 end//
 delimiter ;
+
+drop procedure if exists addEventDiscount;
+delimiter //
+create procedure addEventDiscount(
+	in name varchar(255),
+    in discount double,
+    in startDate date,
+    in endDate date,
+    in applyForAll bool
+)
+begin
+	declare counter int default 0;
+	select cast(substr(id,11) as unsigned) into counter from eventDiscount ORDER BY cast(substr(id,11) as unsigned) DESC LIMIT 1;
+    set counter=counter+1;
+    insert into discount(id,name) values(concat('E_DISCOUNT',counter),name);
+    insert into eventDiscount(id,discount,startDate,endDate,applyForAll) values(concat('E_DISCOUNT',counter),discount,startDate,endDate,applyForAll);
+    select concat('E_DISCOUNT',counter) as newID;
+end//
+delimiter ;

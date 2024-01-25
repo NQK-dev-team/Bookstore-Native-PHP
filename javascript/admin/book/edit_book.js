@@ -336,6 +336,8 @@ function submitForm()
       {
             const localPublishDate = new Date(publishDate);
             const today = new Date();
+            localPublishDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
             if (localPublishDate > today)
             {
                   reportCustomValidity($('#publishDateInput').get(0), 'Publish date invalid!');

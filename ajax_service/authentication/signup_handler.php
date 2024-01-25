@@ -44,9 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   } else {
                         // Create a DateTime object for the date of birth
                         $dobDate = new DateTime($date, new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $dobDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         // Get the current date
                         $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         if ($dobDate > $currentDate) {
                               http_response_code(400);

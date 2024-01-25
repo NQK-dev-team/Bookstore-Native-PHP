@@ -42,8 +42,10 @@ function openAddModal()
                         <input type="date" class="form-control" id="couponEndDate">
                   </div>
                   <div class='mt-2'>
-                        <label for="couponBookApply" class="form-label">Books Applied:</label>
-                        <input readonly type="text" class="form-control pointer" id="couponBookApply" onclick="chooseBook()">
+                        <p class="form-label">Books Applied:</p>
+                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBook(event)">
+                        <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
+                        <input readonly type="text" class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()">
                   </div>`)
             );
       else if (type === 2)
@@ -81,6 +83,11 @@ function openAddModal()
       $('#addModal').modal('show');
 }
 
+function selectAllBook(e)
+{
+      $('#couponBookApply').prop('disabled', e.target.checked);
+}
+
 function addCoupon()
 {
       const type = parseInt(encodeData($('#couponSelect').val()));
@@ -96,6 +103,8 @@ function addCoupon()
       {
             const name = encodeData($('#couponName').val());
             const discount = $('#couponPercentage').val() ? parseFloat(encodeData($('#couponPercentage').val())) : '';
+            const start = encodeData($('#couponStartDate').val());
+            const end = encodeData($('#couponEndDate').val());
 
             if (!name)
             {
@@ -105,14 +114,89 @@ function addCoupon()
 
             if (discount === '')
             {
-                  reportCustomValidity($('#couponPercentage').get(0), 'Missing discount percentage!');
+                  reportCustomValidity($('#couponPercentage').get(0), 'Missing discount percentage value!');
                   return;
             }
             if (typeof discount !== 'number' || isNaN(discount) || discount <= 0 || discount > 100)
             {
-                  reportCustomValidity($('#couponPercentage').get(0), 'Discount percentage invalid!');
+                  reportCustomValidity($('#couponPercentage').get(0), 'Discount percentage value invalid!');
                   return;
             }
+
+            if (!start)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Missing start date!');
+                  return;
+            }
+
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const today = new Date();
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (!end)
+            {
+                  reportCustomValidity($('#couponEndDate').get(0), 'Missing end date!');
+                  return;
+            } else if (endDate < today)
+            {
+                  reportCustomValidity($('#couponEndDate').get(0), 'End date must be after or the same day as today!');
+                  return;
+            }
+
+            if (startDate > endDate)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Start date must be before or the same day as end date!');
+                  return;
+            }
+
+            $.ajax({
+                  url: '/ajax_service/admin/discount/add_discount.php',
+                  type: 'POST',
+                  data: {
+                        type: type,
+                        name: name,
+                        discount: discount,
+                        start: start,
+                        end: end,
+                        allBook: $('#btncheck1').prop('checked'),
+                        bookApply: bookApply.length ? ((bookApply.filter(str => str.trim() !== '')).map(str => encodeData(str))).join(',') : ''
+                  },
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+                        }
+                        else if (data.query_result)
+                        {
+                              $('#addModal').modal('hide');
+                              $('#successAddModal').modal('show');
+                        }
+                        fetchCouponList();
+                  },
+                  error: function (err)
+                  {
+                        console.error(err);
+
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
       }
       else if (type === 2)
       {

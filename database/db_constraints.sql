@@ -353,7 +353,8 @@ begin
 end//
 delimiter ;
 
--- This trigger forbid update statements that set the end date to end earlier than it's supposed to but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the old end date)
+-- This trigger forbid update statements that push the start date up but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the start end date)
+-- This trigger also forbid update statements that set the end date to end earlier than it's supposed to but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the old end date)
 -- This trigger also remove any associated rows in `eventApply` table if `applyForAll` column is set from false to true
 drop trigger if exists eventDiscountBusinessConstraintUpdateTrigger;
 delimiter //
@@ -361,6 +362,10 @@ create trigger eventDiscountBusinessConstraintUpdateTrigger
 before update on eventDiscount
 for each row
 begin
+	if old.startDate < new.startDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime<new.startDate and customerOrder.purchaseTime>=old.startDate and customerOrder.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not shorten discount event end date, there are purchased order(s) that have already used this coupon on dates that are outside of the new end date you want to set!';
+    end if;
+    
 	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime>new.endDate and customerOrder.purchaseTime<=old.endDate and customerOrder.status=true) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not shorten discount event end date, there are purchased order(s) that have already used this coupon on dates that are outside of the new end date you want to set!';
     end if;
@@ -626,8 +631,8 @@ create trigger eventDiscountDataConstraintInsertTrigger
 before insert on eventDiscount
 for each row
 begin
-	if new.endDate is not null and new.endDate<=curdate() then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon end date must be the future!';
+	if new.endDate is not null and new.endDate<curdate() then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon end date must be today or the future!';
     end if;
 end//
 delimiter ;
