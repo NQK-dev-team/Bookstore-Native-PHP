@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['entry'], $_GET['offset'], $_GET['search'], $_GET['category'])) {
+      if (isset($_GET['entry']) && isset($_GET['offset']) && isset($_GET['search']) && isset($_GET['category'])) {
             try {
 
 

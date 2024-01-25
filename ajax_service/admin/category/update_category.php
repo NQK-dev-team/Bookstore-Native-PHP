@@ -19,11 +19,7 @@ function map($elem)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset(
-            $_POST['name'],
-            $_POST['description'],
-            $_POST['id']
-      )) {
+      if (isset($_POST['name']) && isset($_POST['description']) && isset($_POST['id'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);

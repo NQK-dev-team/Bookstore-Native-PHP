@@ -30,7 +30,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $type = sanitize(rawurldecode($_POST['type']));
 
-            
+            if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
+                  http_response_code(400);
+                  echo json_encode(['error' => '`Coupon Type` data type invalid!']);
+                  exit;
+            }
+
+            if ($type === '1') {
+            } else if ($type === '2') {
+            } else if ($type === '3') {
+            }
 
             // Connect to MySQL
             $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -42,13 +51,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   exit;
             }
 
+            if ($type === '1') {
+                  
+            } else if ($type === '2') {
+                  if(!isset($_POST['discount']) || !isset($_POST['point'])) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Mising discount percentage value or accumulated point value!']);
+                        exit;
+                  }
+            } else if ($type === '3') {
+                  if (!isset($_POST['discount']) || !isset($_POST['people'])) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Mising discount percentage value or number of people value!']);
+                        exit;
+                  }
+            }
+
             $conn->close();
       } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['error' => $e->getMessage()]);
       }
-      // http_response_code(400);
-      // echo json_encode(['error' => 'Invalid data received!']);
 } else {
       http_response_code(400);
       echo json_encode(['error' => 'Invalid request method!']);

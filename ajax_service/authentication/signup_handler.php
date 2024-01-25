@@ -7,7 +7,15 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/checker.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['password'], $_POST['name'], $_POST['date'], $_POST['phone'], $_POST['address'], $_POST['gender'])) {
+      if (
+            isset($_POST['email']) &&
+            isset($_POST['password']) &&
+            isset($_POST['name']) &&
+            isset($_POST['date']) &&
+            isset($_POST['phone']) &&
+            isset($_POST['address']) &&
+            isset($_POST['gender'])
+      ) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $password = sanitize(rawurldecode($_POST['password']));

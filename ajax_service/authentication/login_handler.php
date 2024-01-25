@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../tool/php/delete_cancel.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
+      if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['type'])) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $password = sanitize(rawurldecode($_POST['password']));

@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
       parse_str(file_get_contents('php://input'), $_PATCH);
-      if (isset($_PATCH['id'], $_PATCH['status'], $_PATCH['type'])) {
+      if (isset($_PATCH['id']) && isset($_PATCH['status']) && isset($_PATCH['type'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               }
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
-                              if($result['result']){
+                              if ($result['result']) {
                                     echo json_encode(['error' => 'Can not activate this coupon, current accumulated point milestone value has already been used in another coupon!']);
                                     $stmt->close();
                                     $conn->close();
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               }
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
-                              if($result['result']){
+                              if ($result['result']) {
                                     echo json_encode(['error' => 'Can not activate this coupon, current discount percentage value has already been used in another coupon!']);
                                     $stmt->close();
                                     $conn->close();

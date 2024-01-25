@@ -14,8 +14,6 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['id'])) {
             try {
-
-
                   $id = sanitize(rawurldecode($_GET['id']));
 
                   // Connect to MySQL

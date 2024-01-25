@@ -12,10 +12,8 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['entry'], $_GET['offset'], $_GET['search'])) {
+      if (isset($_GET['entry']) && isset($_GET['offset']) && isset($_GET['search'])) {
             try {
-
-
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $search = sanitize(rawurldecode($_GET['search']));

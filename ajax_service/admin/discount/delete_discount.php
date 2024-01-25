@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
       parse_str(file_get_contents('php://input'), $_DELETE);
-      if (isset($_DELETE['id'], $_DELETE['type'])) {
+      if (isset($_DELETE['id']) && isset($_DELETE['type'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);

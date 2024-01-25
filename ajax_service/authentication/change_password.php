@@ -6,7 +6,12 @@ require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['password'], $_POST['confirmPassword'], $_POST['type'])) {
+      if (
+            isset($_POST['email']) &&
+            isset($_POST['password']) &&
+            isset($_POST['confirmPassword']) &&
+            isset($_POST['type'])
+      ) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $password = sanitize(rawurldecode($_POST['password']));
@@ -50,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'Confirm password must be at least 8 characters long!']);
                         exit;
-                  }  else {
+                  } else {
                         $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $confirmPassword);
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during confirm password format check!');

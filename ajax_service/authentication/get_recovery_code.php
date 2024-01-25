@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/random_generator.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['type'])) {
+      if (isset($_POST['email']) && isset($_POST['type'])) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $user_type = sanitize(rawurldecode($_POST['type']));

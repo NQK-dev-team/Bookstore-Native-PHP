@@ -18,20 +18,20 @@ function map($elem)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset(
-            $_POST['name'],
-            $_POST['edition'],
-            $_POST['isbn'],
-            $_POST['age'],
-            $_POST['author'],
-            $_POST['category'],
-            $_POST['publisher'],
-            $_POST['publishDate'],
-            $_POST['description'],
-            $_POST['physicalPrice'],
-            $_POST['filePrice'],
-            $_POST['inStock']
-      )) {
+      if (
+            isset($_POST['name']) &&
+            isset($_POST['edition']) &&
+            isset($_POST['isbn']) &&
+            isset($_POST['age']) &&
+            isset($_POST['author']) &&
+            isset($_POST['category']) &&
+            isset($_POST['publisher']) &&
+            isset($_POST['publishDate']) &&
+            isset($_POST['description']) &&
+            isset($_POST['physicalPrice']) &&
+            isset($_POST['filePrice']) &&
+            isset($_POST['inStock'])
+      ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
