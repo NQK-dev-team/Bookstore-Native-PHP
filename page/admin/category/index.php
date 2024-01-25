@@ -310,6 +310,8 @@ if (return_navigate_error() === 400) {
             <script src="/tool/js/tool_tip.js"></script>
             <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/admin/category/category_list.js"></script>
+            <script src="/javascript/admin/category/delete_category.js"></script>
+            <script src="/javascript/admin/category/add_or_update_category.js"></script>
       </body>
 
       </html>

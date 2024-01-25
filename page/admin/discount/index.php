@@ -361,6 +361,27 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-xl">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h2 class="modal-title fs-5">Edit coupon</h2>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <form id="updateCouponForm">
+                                          </form>
+                                          <div class='mt-3'>
+                                                <button class="btn btn-danger btn-sm" type='reset' form='addCouponForm' onclick="resetForm()">Reset</button>
+                                          </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="submit" class="btn btn-success" onclick="clearAllCustomValidity()" form="addCouponForm">Save</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
                   <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
@@ -510,6 +531,11 @@ if (return_navigate_error() === 400) {
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/admin/discount/discount_list.js"></script>
+            <script src="/javascript/admin/discount/book_list.js"></script>
+            <script src="/javascript/admin/discount/add_discount.js"></script>
+            <script src="/javascript/admin/discount/toggle_status.js"></script>
+            <script src="/javascript/admin/discount/delete_discount.js"></script>
+            <script src="/javascript/admin/discount/update_discount.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
             <script src="/tool/js/input_parser.js"></script>
       </body>
