@@ -640,12 +640,12 @@ create trigger customerDiscountDataConstraintInsertTrigger
 before insert on customerDiscount
 for each row
 begin
-	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current accumulated point milestone value has already been used in another coupon!';
-    end if;
-    
-    if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.discount=new.discount and discount.status=true) then
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-new.discount)<10e-9 and discount.status=true) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current accumulated point milestone has already been used in another coupon!';
     end if;
 end//
 delimiter ;
@@ -656,12 +656,12 @@ create trigger customerDiscountDataConstraintUpdateTrigger
 before update on customerDiscount
 for each row
 begin
-	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current accumulated point milestone value has already been used in another coupon!';
-    end if;
-    
-    if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.discount=new.discount and customerDiscount.id!=new.id and discount.status=true) then
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-new.discount)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current accumulated point milestone has already been used in another coupon!';
     end if;
 end//
 delimiter ;
@@ -674,12 +674,12 @@ create trigger referrerDiscountDataConstraintInsertTrigger
 before insert on referrerDiscount
 for each row
 begin
-	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current number of people milestone value has already been used in another coupon!';
-    end if;
-    
-    if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.discount=new.discount and discount.status=true) then
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-new.discount)<10e-9 and discount.status=true) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current number of people milestone has already been used in another coupon!';
     end if;
 end//
 delimiter ;
@@ -690,56 +690,76 @@ create trigger referrerDiscountDataConstraintUpdateTrigger
 before update on referrerDiscount
 for each row
 begin
-	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and referrerDiscount.id!=new.id and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current number of people milestone value has already been used in another coupon!';
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-new.discount)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
     end if;
     
-    if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.discount=new.discount and referrerDiscount.id!=new.id and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and referrerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current number of people milestone has already been used in another coupon!';
     end if;
 end//
 delimiter ;
 -- ** End of referrerDiscount **
 
 -- ** Begin of discount **
+drop trigger if exists discountDataConstraintInsertTrigger;
+delimiter //
+create trigger discountDataConstraintInsertTrigger
+before insert on discount
+for each row
+begin
+	if new.status then
+    if exists(select * from discount where discount.name=new.name and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Current coupon name has already been used in another coupon!';
+    end if;
+    end if;
+end//
+delimiter ;
+
 drop trigger if exists discountDataConstraintUpdateTrigger;
 delimiter //
 create trigger discountDataConstraintUpdateTrigger
 before update on discount
 for each row
 begin
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) and not old.status and new.status then
+	if new.status then
+    if exists(select * from discount where discount.id!=new.id and discount.name=new.name and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Current coupon name has already been used in another coupon!';
+    end if;
+    
+	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
 		begin
 			declare pointMileStone double default null;
             declare discountPer double default null;
             
             select discount,point into discountPer,pointMileStone from customerDiscount where customerDiscount.id=new.id;
             
-            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-pointMileStone)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current accumulated point milestone value has already been used in another coupon!';
-			end if;
-    
-			if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.discount=discountPer and customerDiscount.id!=new.id and discount.status=true) then
+            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-discountPer)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage value has already been used in another coupon!';
+			end if;
+            
+            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-pointMileStone)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current accumulated point milestone has already been used in another coupon!';
 			end if;
         end;
     end if;
     
-    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) and not old.status and new.status then
+    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
 		begin
 			declare peopleMileStone int default null;
             declare discountPer double default null;
             
             select discount,numberOfPeople into discountPer,peopleMileStone from referrerDiscount where referrerDiscount.id=new.id;
             
-            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=peopleMileStone and referrerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current number of people milestone value has already been used in another coupon!';
-			end if;
-    
-			if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.discount=discountPer and referrerDiscount.id!=new.id and discount.status=true) then
+            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-discountPer)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage value has already been used in another coupon!';
 			end if;
+            
+            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=peopleMileStone and referrerDiscount.id!=new.id and discount.status=true) then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current number of people milestone has already been used in another coupon!';
+			end if;
         end;
+    end if;
     end if;
 end//
 delimiter ;

@@ -22,19 +22,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
                   $type = sanitize(rawurldecode($_GET['type']));
 
-                  if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
+                  if (!$entry) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `Number Of Entries`!']);
+                        exit;
+                  } else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         http_response_code(400);
                         echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
                         exit;
                   }
 
-                  if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
+                  if (!$offset) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `List Number`!']);
+                        exit;
+                  } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
                         echo json_encode(['error' => '`List Number` data type invalid!']);
                         exit;
                   }
 
-                  if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
+                  if(!$type)
+                  {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `Coupon Type`!']);
+                        exit;
+                  }
+                  else if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
                         http_response_code(400);
                         echo json_encode(['error' => '`Coupon Type` data type invalid!']);
                         exit;

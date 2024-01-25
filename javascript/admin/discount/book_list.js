@@ -4,7 +4,6 @@ $(document).ready(function ()
 {
       $('#addModal').on('hidden.bs.modal', function ()
       {
-            $('#addCouponForm').empty();
             bookApply = [];
             selectAll = [];
       });

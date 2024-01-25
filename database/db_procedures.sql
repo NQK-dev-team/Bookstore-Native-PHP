@@ -52,3 +52,35 @@ begin
     select concat('BOOK',counter) as id;
 end//
 delimiter ;
+
+drop procedure if exists addCustomerDiscount;
+delimiter //
+create procedure addCustomerDiscount(
+	in name varchar(255),
+    in discount double,
+    in point double
+)
+begin
+	declare counter int default 0;
+	select cast(substr(id,11) as unsigned) into counter from customerDiscount ORDER BY cast(substr(id,11) as unsigned) DESC LIMIT 1;
+    set counter=counter+1;
+    insert into discount(id,name) values(concat('C_DISCOUNT',counter),name);
+    insert into customerDiscount(id,discount,point) values(concat('C_DISCOUNT',counter),discount,point);
+end//
+delimiter ;
+
+drop procedure if exists addReferrerDiscount;
+delimiter //
+create procedure addReferrerDiscount(
+	in name varchar(255),
+    in discount double,
+    in people int
+)
+begin
+	declare counter int default 0;
+	select cast(substr(id,11) as unsigned) into counter from referrerDiscount ORDER BY cast(substr(id,11) as unsigned) DESC LIMIT 1;
+    set counter=counter+1;
+    insert into discount(id,name) values(concat('R_DISCOUNT',counter),name);
+    insert into referrerDiscount(id,discount,numberOfPeople) values(concat('R_DISCOUNT',counter),discount,people);
+end//
+delimiter ;

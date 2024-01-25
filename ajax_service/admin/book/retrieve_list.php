@@ -22,21 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             isset($_GET['category'])
       ) {
             try {
-
-
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
-                  $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
+                  $status = $_GET['status'] ? filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN) : null;
                   $search = sanitize(rawurldecode($_GET['search']));
                   $category = sanitize(rawurldecode($_GET['category']));
 
-                  if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
+                  if (!$entry) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `Number Of Entries`!']);
+                        exit;
+                  } else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         http_response_code(400);
                         echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
                         exit;
                   }
 
-                  if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
+                  if (!$offset) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing `List Number`!']);
+                        exit;
+                  } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
                         echo json_encode(['error' => '`List Number` data type invalid!']);
                         exit;

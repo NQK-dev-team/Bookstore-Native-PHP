@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         $stmt->close();
 
                         if ($status) {
-                              $stmt = $conn->prepare('select discount,point from customerDiscount where customerDiscount.id=?');
+                              $stmt = $conn->prepare('select discount.name,customerDiscount.discount,point from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.id=?');
                               $stmt->bind_param('s', $id);
                               $isSuccess = $stmt->execute();
                               if (!$isSuccess) {
@@ -99,6 +99,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               $result = $result->fetch_assoc();
                               $discount = $result['discount'];
                               $point = $result['point'];
+                              $name = $result['name'];
+                              $stmt->close();
+
+                              $stmt = $conn->prepare('select exists(select * from discount where name=? and id!=? and status=true) as result');
+                              $stmt->bind_param('ss', $name, $id);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              if ($result['result']) {
+                                    echo json_encode(['error' => 'Can not activate this coupon, current coupon name has already been used in another coupon!']);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $stmt->close();
+
+                              $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-?)<10e-9 and customerDiscount.id!=? and discount.status=true) as result');
+                              $stmt->bind_param('ds', $discount, $id);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              if ($result['result']) {
+                                    echo json_encode(['error' => 'Can not activate this coupon, current discount percentage value has already been used in another coupon!']);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
                               $stmt->close();
 
                               $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-?)<10e-9 and customerDiscount.id!=? and discount.status=true) as result');
@@ -114,27 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
                               if ($result['result']) {
-                                    echo json_encode(['error' => 'Can not activate this coupon, current accumulated point milestone value has already been used in another coupon!']);
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $stmt->close();
-
-                              $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.discount=? and customerDiscount.id!=? and discount.status=true) as result');
-                              $stmt->bind_param('ds', $discount, $id);
-                              $isSuccess = $stmt->execute();
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $stmt->error]);
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $result = $stmt->get_result();
-                              $result = $result->fetch_assoc();
-                              if ($result['result']) {
-                                    echo json_encode(['error' => 'Can not activate this coupon, current discount percentage value has already been used in another coupon!']);
+                                    echo json_encode(['error' => 'Can not activate this coupon, current accumulated point milestone has already been used in another coupon!']);
                                     $stmt->close();
                                     $conn->close();
                                     exit;
@@ -162,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         $stmt->close();
 
                         if ($status) {
-                              $stmt = $conn->prepare('select discount,numberOfPeople from referrerDiscount where referrerDiscount.id=?');
+                              $stmt = $conn->prepare('select discount.name,referrerDiscount.discount,numberOfPeople from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.id=?');
                               $stmt->bind_param('s', $id);
                               $isSuccess = $stmt->execute();
                               if (!$isSuccess) {
@@ -176,6 +197,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               $result = $result->fetch_assoc();
                               $discount = $result['discount'];
                               $numberOfPeople = $result['numberOfPeople'];
+                              $name = $result['name'];
+                              $stmt->close();
+
+                              $stmt = $conn->prepare('select exists(select * from discount where name=? and id!=? and status=true) as result');
+                              $stmt->bind_param('ss', $name, $id);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              if ($result['result']) {
+                                    echo json_encode(['error' => 'Can not activate this coupon, current coupon name has already been used in another coupon!']);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $stmt->close();
+
+                              $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-?)<10e-9 and referrerDiscount.id!=? and discount.status=true) as result');
+                              $stmt->bind_param('ds', $discount, $id);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              if ($result['result']) {
+                                    echo json_encode(['error' => 'Can not activate this coupon, current discount percentage value has already been used in another coupon!']);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
                               $stmt->close();
 
                               $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=? and referrerDiscount.id!=? and discount.status=true) as result');
@@ -191,27 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
                               if ($result['result']) {
-                                    echo json_encode(['error' => 'Can not activate this coupon, current number of people milestone value has already been used in another coupon!']);
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $stmt->close();
-
-                              $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.discount=? and referrerDiscount.id!=? and discount.status=true) as result');
-                              $stmt->bind_param('ds', $discount, $id);
-                              $isSuccess = $stmt->execute();
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $stmt->error]);
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $result = $stmt->get_result();
-                              $result = $result->fetch_assoc();
-                              if ($result['result']) {
-                                    echo json_encode(['error' => 'Can not activate this coupon, current discount percentage value has already been used in another coupon!']);
+                                    echo json_encode(['error' => 'Can not activate this coupon, current number of people milestone has already been used in another coupon!']);
                                     $stmt->close();
                                     $conn->close();
                                     exit;
