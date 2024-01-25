@@ -7,9 +7,14 @@ $(document).ready(function ()
             event.preventDefault();
             $('#confirmUpdateModal').modal('show');
       });
+
+      $('#updateModal').on('hidden.bs.modal', function ()
+      {
+            update_id = null;
+      });
 });
 
-function openUpdateModal()
+function openUpdateModal(id)
 {
       const type = parseInt(encodeData($('#couponSelect').val()));
 
@@ -22,15 +27,15 @@ function openUpdateModal()
 
       if (type === 1)
       {
-
+            update_id = id;
       }
       else if (type === 2)
       {
-
+            update_id = id;
       }
       else if (type === 3)
       {
-
+            update_id = id;
       }
 }
 
@@ -57,9 +62,4 @@ function updateCoupon()
       {
 
       }
-}
-
-function resetForm()
-{
-      
 }

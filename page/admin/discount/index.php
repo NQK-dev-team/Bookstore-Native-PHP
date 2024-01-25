@@ -103,7 +103,7 @@ if (return_navigate_error() === 400) {
                   if ($sub_result['result']) {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick=\"openUpdateModal({$row['id']})\">
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
                               <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
@@ -114,7 +114,7 @@ if (return_navigate_error() === 400) {
                   } else {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
                               <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
@@ -372,7 +372,7 @@ if (return_navigate_error() === 400) {
                                           <form id="updateCouponForm">
                                           </form>
                                           <div class='mt-3'>
-                                                <button class="btn btn-danger btn-sm" type='reset' form='updateCouponForm' onclick="resetForm()">Reset</button>
+                                                <button class="btn btn-danger btn-sm" type='reset' form='updateCouponForm' onclick="clearForm()">Reset</button>
                                           </div>
                                     </div>
                                     <div class="modal-footer">

@@ -168,7 +168,7 @@ function fetchCouponList()
                                     trElem.append(
                                           $(`<td class='align-middle col-1'>
                                                 <div class='d-flex flex-lg-row flex-column'>
-                                                      <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                      <button onclick='openUpdateModal("${ data.query_result[0][i].id }")' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                             <i class=\"bi bi-pencil text-white\"></i>
                                                       </button>
                                                       <button onclick='${ status ? 'openDeactivateModal' : 'openActivateModal' }("${ data.query_result[0][i].id }")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactive' : 'Activate' }\">
