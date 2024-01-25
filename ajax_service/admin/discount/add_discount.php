@@ -52,17 +52,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($type === '1') {
-                  
-            } else if ($type === '2') {
-                  if(!isset($_POST['discount']) || !isset($_POST['point'])) {
+                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['start']) || !isset($_POST['end']) || !isset($_POST['bookApply'])) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Mising discount percentage value or accumulated point value!']);
+                        echo json_encode(['error' => 'Invalid data received!']);
+                        exit;
+                  }
+            } else if ($type === '2') {
+                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['point'])) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Invalid data received!']);
                         exit;
                   }
             } else if ($type === '3') {
-                  if (!isset($_POST['discount']) || !isset($_POST['people'])) {
+                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['people'])) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Mising discount percentage value or number of people value!']);
+                        echo json_encode(['error' => 'Invalid data received!']);
                         exit;
                   }
             }
