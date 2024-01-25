@@ -65,27 +65,20 @@ function fetchBookList()
       const entry = parseInt(encodeData($('#entry_select').val()));
       const search = encodeData($('#search_book').val());
       const listOffset = parseInt(encodeData($('#list_offset').text()));
-      const status = parseBool($('#flexSwitchCheckDefault').prop('checked'));
+      const status = $('#flexSwitchCheckDefault').prop('checked');
       const category = encodeData($('#categoryInput').val());
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Number Of Entries` data type invalid!');
+            $('#error_message').text('Number of entries of books invalid!');
             return;
       }
 
       if (typeof listOffset !== 'number' || isNaN(listOffset) || listOffset <= 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `List Number` data type invalid!');
-            return;
-      }
-
-      if (typeof status !== 'boolean' || (status !== true && status !== false))
-      {
-            $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Book Status` data type invalid!');
+            $('#error_message').text('Book list number invalid!');
             return;
       }
 

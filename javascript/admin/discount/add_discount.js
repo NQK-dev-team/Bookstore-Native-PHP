@@ -43,7 +43,7 @@ function openAddModal()
                   </div>
                   <div class='mt-2'>
                         <p class="form-label">Books Applied:</p>
-                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBook(event)">
+                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookAddModal(event)">
                         <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
                         <input readonly type="text" class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()">
                   </div>`)
@@ -83,7 +83,7 @@ function openAddModal()
       $('#addModal').modal('show');
 }
 
-function selectAllBook(e)
+function selectAllBookAddModal(e)
 {
       $('#couponBookApply').prop('disabled', e.target.checked);
 }

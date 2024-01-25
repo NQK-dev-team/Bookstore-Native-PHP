@@ -23,21 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   if (!$entry) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Number Of Entries`!']);
+                        echo json_encode(['error' => 'Missing number of entries of books!']);
                         exit;
                   } else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
+                        echo json_encode(['error' => 'Number of entries of books invalid!']);
                         exit;
                   }
 
                   if (!$offset) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `List Number`!']);
+                        echo json_encode(['error' => 'Missing book list number!']);
                         exit;
                   } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`List Number` data type invalid!']);
+                        echo json_encode(['error' => 'Book list number invalid!']);
                         exit;
                   }
 

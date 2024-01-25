@@ -63,6 +63,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                               exit;
                         }
                         $stmt->close();
+
+                        if ($status)
+                        {
+                              $stmt = $conn->prepare('select discount.name from eventDiscount join discount on discount.id=eventDiscount.id where eventDiscount.id=?');
+                              $stmt->bind_param('s', $id);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              $name = $result['name'];
+                              $stmt->close();
+
+                              $stmt = $conn->prepare('select exists(select * from discount where name=? and id!=? and status=true) as result');
+                              $stmt->bind_param('ss', $name, $id);
+                              $isSuccess = $stmt->execute();
+                              if (!$isSuccess) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => $stmt->error]);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              if ($result['result']) {
+                                    echo json_encode(['error' => 'Can not activate this coupon, current coupon name has already been used in another coupon!']);
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              }
+                              $stmt->close();
+                        }
                   } else if ($type === '2') {
                         $stmt = $conn->prepare('select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.id=?');
                         $stmt->bind_param('s', $id);

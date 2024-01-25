@@ -20,21 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   if (!$entry) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Number Of Entries`!']);
+                        echo json_encode(['error' => 'Missing number of entries of categories']);
                         exit;
                   }else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
+                        echo json_encode(['error' => 'Number of entries of categories invalid!']);
                         exit;
                   }
 
                   if (!$offset) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `List Number`!']);
+                        echo json_encode(['error' => 'Missing category list number!']);
                         exit;
                   } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`List Number` data type invalid!']);
+                        echo json_encode(['error' => 'Category list number invalid!']);
                         exit;
                   }
 

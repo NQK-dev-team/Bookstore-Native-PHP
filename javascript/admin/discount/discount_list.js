@@ -29,33 +29,26 @@ function fetchCouponList()
       const search = encodeData($('#search_coupon').val());
       const listOffset = parseInt(encodeData($('#list_offset').text()));
       const type = parseInt(encodeData($('#couponSelect').val()));
-      const status = parseBool($('#flexSwitchCheckDefault').prop('checked'));
+      const status = $('#flexSwitchCheckDefault').prop('checked');
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Number Of Entries` data type invalid!');
+            $('#error_message').text('Number of entries of coupons invalid!');
             return;
       }
 
       if (typeof listOffset !== 'number' || isNaN(listOffset) || listOffset <= 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `List Number` data type invalid!');
-            return;
-      }
-
-      if (typeof status !== 'boolean' || (status !== true && status !== false))
-      {
-            $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Coupon Status` data type invalid!');
+            $('#error_message').text('Coupon list number invalid!');
             return;
       }
 
       if (typeof type !== 'number' || isNaN(type) || type < 0 || type > 3)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Coupon Type` data type invalid!');
+            $('#error_message').text('Coupon type invalid!');
             return;
       }
 

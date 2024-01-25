@@ -23,14 +23,14 @@ function fetchCategoryList()
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Number Of Entries` data type invalid!');
+            $('#error_message').text('Number of entries of categories invalid!');
             return;
       }
 
       if (typeof listOffset !== 'number' || isNaN(listOffset) || listOffset <= 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `List Number` data type invalid!');
+            $('#error_message').text('Category list number invalid!');
             return;
       }
 

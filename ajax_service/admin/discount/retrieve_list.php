@@ -24,37 +24,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   if (!$entry) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Number Of Entries`!']);
+                        echo json_encode(['error' => 'Missing number of entries of coupons!']);
                         exit;
                   } else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
+                        echo json_encode(['error' => 'Number of entries of coupons invalid!']);
                         exit;
                   }
 
                   if (!$offset) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `List Number`!']);
+                        echo json_encode(['error' => 'Missing coupon list number!']);
                         exit;
                   } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`List Number` data type invalid!']);
+                        echo json_encode(['error' => 'Coupon list number invalid!']);
                         exit;
                   }
 
                   if (is_null($status)) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Status`!']);
+                        echo json_encode(['error' => 'Missing coupon status!']);
                         exit;
                   }
 
                   if (!$type) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Coupon Type`!']);
+                        echo json_encode(['error' => 'Missing coupon type!']);
                         exit;
                   } else if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`Coupon Type` data type invalid!']);
+                        echo json_encode(['error' => 'Coupon type invalid!']);
                         exit;
                   }
 

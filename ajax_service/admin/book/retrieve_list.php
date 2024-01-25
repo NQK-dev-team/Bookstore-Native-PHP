@@ -30,27 +30,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   if (!$entry) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Number Of Entries`!']);
+                        echo json_encode(['error' => 'Missing number of entries of books!']);
                         exit;
                   } else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
+                        echo json_encode(['error' => 'Number of entries of books invalid!']);
                         exit;
                   }
 
                   if (!$offset) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `List Number`!']);
+                        echo json_encode(['error' => 'Missing book list number']);
                         exit;
                   } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
-                        echo json_encode(['error' => '`List Number` data type invalid!']);
+                        echo json_encode(['error' => 'Book list number invalid!']);
                         exit;
                   }
 
                   if (is_null($status)) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing `Status`!']);
+                        echo json_encode(['error' => 'Missing book status!']);
                         exit;
                   }
 
@@ -212,6 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $stmt = $conn->prepare('select count(distinct book.id) as totalBook
                   from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?');
                   $stmt->bind_param('issss', $status, $search, $isbnSearch, $search, $category);
                   $isSuccess = $stmt->execute();

@@ -553,7 +553,6 @@ if (return_navigate_error() === 400) {
             <script src="/javascript/admin/discount/delete_discount.js"></script>
             <script src="/javascript/admin/discount/update_discount.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
-            <script src="/tool/js/input_parser.js"></script>
       </body>
 
       </html>
