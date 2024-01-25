@@ -1,13 +1,8 @@
 let bookApply = [], selectAll = [];
+let originalBookApply = [], originalSelectAll = [];
 
 $(document).ready(function ()
 {
-      $('#addModal').on('hidden.bs.modal', function ()
-      {
-            bookApply = [];
-            selectAll = [];
-      });
-
       $('#searchCategoryForm').submit(function (e)
       {
             e.preventDefault();
@@ -347,6 +342,6 @@ function chooseBook()
 
 function clearForm()
 {
-      bookApply = [];
-      selectAll = [];
+      bookApply = originalBookApply;
+      selectAll = originalSelectAll;
 }

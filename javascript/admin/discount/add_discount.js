@@ -9,6 +9,18 @@ $(document).ready(function ()
       $('#addModal').on('hidden.bs.modal', function ()
       {
             $('#addCouponForm').empty();
+            bookApply = [];
+            selectAll = [];
+            originalBookApply = [];
+            originalSelectAll = [];
+      });
+
+      $('#addModal').on('show.bs.modal', function ()
+      {
+            bookApply = [];
+            selectAll = [];
+            originalBookApply = [];
+            originalSelectAll = [];
       });
 });
 
@@ -111,6 +123,11 @@ function addCoupon()
                   reportCustomValidity($('#couponName').get(0), 'Missing coupon name!');
                   return;
             }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Coupon name must be at most 255 characters long or less!');
+                  return;
+            }
 
             if (discount === '')
             {
@@ -209,6 +226,11 @@ function addCoupon()
                   reportCustomValidity($('#couponName').get(0), 'Missing coupon name!');
                   return;
             }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Coupon name must be at most 255 characters long or less!');
+                  return;
+            }
 
             if (discount === '')
             {
@@ -284,6 +306,11 @@ function addCoupon()
             if (!name)
             {
                   reportCustomValidity($('#couponName').get(0), 'Missing coupon name!');
+                  return;
+            }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Coupon name must be at most 255 characters long or less!');
                   return;
             }
 

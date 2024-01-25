@@ -36,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if (strlen($name) > 255) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Category name must be 255 characters long or less!']);
+                        echo json_encode(['error' => 'Category name must be at most 255 characters long or less!']);
                         exit;
                   }
 
                   if ($description && strlen($description) > 500) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Category description must be 500 characters long or less!']);
+                        echo json_encode(['error' => 'Category description must be at most 500 characters long or less!']);
                         exit;
                   }
 

@@ -372,12 +372,12 @@ if (return_navigate_error() === 400) {
                                           <form id="updateCouponForm">
                                           </form>
                                           <div class='mt-3'>
-                                                <button class="btn btn-danger btn-sm" type='reset' form='addCouponForm' onclick="resetForm()">Reset</button>
+                                                <button class="btn btn-danger btn-sm" type='reset' form='updateCouponForm' onclick="resetForm()">Reset</button>
                                           </div>
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                          <button type="submit" class="btn btn-success" onclick="clearAllCustomValidity()" form="addCouponForm">Save</button>
+                                          <button type="submit" class="btn btn-success" onclick="clearAllCustomValidity()" form="updateCouponForm">Save</button>
                                     </div>
                               </div>
                         </div>
@@ -534,7 +534,23 @@ if (return_navigate_error() === 400) {
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                          <button type="button" class="btn btn-primary" onclick="updateCoupon()">Confirm</button>
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateCoupon()">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h2 class="modal-title fs-5">Changes Saved</h2>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Discount coupon updated!</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
                                     </div>
                               </div>
                         </div>

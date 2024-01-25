@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if (strlen($name) > 255) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Book name must be 255 characters long or less!']);
+                        echo json_encode(['error' => 'Book name must be at most 255 characters long or less!']);
                         exit;
                   } else if (preg_match('/[?\/]/', $name) === false) {
                         throw new Exception('Error occurred during book name format check!');
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         foreach ($author as $x) {
                               if (strlen($x) > 255) {
                                     http_response_code(400);
-                                    echo json_encode(['error' => 'Author name must be 255 characters long or less!']);
+                                    echo json_encode(['error' => 'Author name must be at most 255 characters long or less!']);
                                     exit;
                               }
                         }
@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if (strlen($publisher) > 255) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Publisher must be 255 characters long or less!']);
+                        echo json_encode(['error' => 'Publisher must be at most 255 characters long or less!']);
                         exit;
                   }
 
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if ($description && strlen($description) > 2000) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Description must be 2000 characters long or less!']);
+                        echo json_encode(['error' => 'Description must be at most 2000 characters long or less!']);
                         exit;
                   }
 

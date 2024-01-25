@@ -230,7 +230,7 @@ function submitForm()
             }
             else if (name.length > 255)
             {
-                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must be 255 characters long or less!');
+                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must be at most 255 characters long or less!');
                   return;
             }
       }
@@ -274,7 +274,7 @@ function submitForm()
       }
       else if (author.findIndex(elem => elem.length > 255) !== -1)
       {
-            reportCustomValidity($('#authorInput').get(0), 'Author name must be 255 characters long or less!');
+            reportCustomValidity($('#authorInput').get(0), 'Author name must be at most 255 characters long or less!');
             return;
       }
 
@@ -286,7 +286,7 @@ function submitForm()
       }
       else if (publisher.length > 255)
       {
-            reportCustomValidity($('#publisherInput').get(0), 'Publisher must be 255 characters long or less!');
+            reportCustomValidity($('#publisherInput').get(0), 'Publisher must be at most 255 characters long or less!');
             return;
       }
 
@@ -310,7 +310,7 @@ function submitForm()
 
       if (description.length > 2000)
       {
-            reportCustomValidity($('#descriptionInput').get(0), 'Description must be 2000 characters long or less!');
+            reportCustomValidity($('#descriptionInput').get(0), 'Description must be at most 2000 characters long or less!');
             return;
       }
 

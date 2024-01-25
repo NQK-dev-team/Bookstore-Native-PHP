@@ -74,6 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'Missing coupon name!']);
                         exit;
+                  } else if (strlen($name) > 255) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Coupon name must be at most 255 characters long or less!']);
+                        exit;
                   }
 
                   if (!$discount) {
@@ -185,6 +189,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'Missing coupon name!']);
                         exit;
+                  } else if (strlen($name) > 255) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Coupon name must be at most 255 characters long or less!']);
+                        exit;
                   }
 
                   if (!$discount) {
@@ -292,6 +300,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$name) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Missing coupon name!']);
+                        exit;
+                  } else if (strlen($name) > 255) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Coupon name must be at most 255 characters long or less!']);
                         exit;
                   }
 

@@ -81,23 +81,22 @@ function updateCategory()
       const name = encodeData($('#categoryName').val());
       const description = encodeData($('#categoryDescription').val());
 
+      $("#updateModal").modal('hide');
+
       if (name === '')
       {
-            $("#updateModal").modal('hide');
             reportCustomValidity($('#categoryName').get(0), 'Category name is empty!');
             return;
       }
       else if (name.length > 255)
       {
-            $("#updateModal").modal('hide');
-            reportCustomValidity($('#categoryName').get(0), 'Category name must be 255 characters long or less!');
+            reportCustomValidity($('#categoryName').get(0), 'Category name must be at most 255 characters long or less!');
             return;
       }
 
       if (description.length > 500)
       {
-            $("#updateModal").modal('hide');
-            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be 500 characters long or less!');
+            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be at most 500 characters long or less!');
             return;
       }
 
@@ -118,7 +117,6 @@ function updateCategory()
                   }
                   else if (data.query_result)
                   {
-                        $("#updateModal").modal('hide');
                         $('#inputModal').modal('hide');
                         $('#updateSuccessModal').modal('show');
                   }
@@ -147,23 +145,22 @@ function addCategory()
       const name = encodeData($('#categoryName').val());
       const description = encodeData($('#categoryDescription').val());
 
+      $("#addModal").modal('hide');
+
       if (name === '')
       {
-            $("#addModal").modal('hide');
             reportCustomValidity($('#categoryName').get(0), 'Category name is empty!');
             return;
       }
       else if (name.length > 255)
       {
-            $("#addModal").modal('hide');
-            reportCustomValidity($('#categoryName').get(0), 'Category name must be 255 characters long or less!');
+            reportCustomValidity($('#categoryName').get(0), 'Category name must be at most 255 characters long or less!');
             return;
       }
 
       if (description.length > 500)
       {
-            $("#addModal").modal('hide');
-            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be 500 characters long or less!');
+            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be at most 500 characters long or less!');
             return;
       }
 
@@ -184,7 +181,6 @@ function addCategory()
                   }
                   else if (data.query_result)
                   {
-                        $("#addModal").modal('hide');
                         $('#inputModal').modal('hide');
                         $('#addSuccessModal').modal('show');
                   }

@@ -37,13 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if (strlen($name) > 255) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Category name must be 255 characters long or less!']);
+                        echo json_encode(['error' => 'Category name must be at most 255 characters long or less!']);
                         exit;
                   }
 
                   if ($description && strlen($description) > 500) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Category description must be 500 characters long or less!']);
+                        echo json_encode(['error' => 'Category description must be at most 500 characters long or less!']);
                         exit;
                   }
 
@@ -71,6 +71,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if ($result->num_rows === 0) {
                         http_response_code(404);
                         echo json_encode(['error' => 'Category ID not found!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select * from category where name=? and id!=?');
+                  $stmt->bind_param('ss', $name, $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  } else if ($stmt->get_result()->num_rows !== 0) {
+                        echo json_encode(['error' => 'Category already exists!']);
                         $stmt->close();
                         $conn->close();
                         exit;
