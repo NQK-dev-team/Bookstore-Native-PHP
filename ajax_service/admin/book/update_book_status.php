@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   }
                   $result = $stmt->get_result();
                   if ($result->num_rows === 0) {
+                        http_response_code(404);
                         echo json_encode(['error' => 'Book not found!']);
                         $stmt->close();
                         $conn->close();

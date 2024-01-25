@@ -20,14 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $gender = sanitize(rawurldecode($_POST['gender']));
 
                   if (!$name) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No name provided!']);
                         exit;
                   } else if (strlen($name) > 255) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Name must be 255 characters long or less!']);
                         exit;
                   }
 
                   if (!$date) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No date of birth provided!']);
                         exit;
                   } else {
@@ -38,24 +41,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
 
                         if ($dobDate > $currentDate) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Date of birth invalid!']);
                               exit;
                         } else if (!isAgeValid($date)) {
 
+                              http_response_code(400);
                               echo json_encode(['error' => 'You must be at least 18 years old to sign up!']);
                               exit;
                         }
                   }
 
                   if (!$gender || $gender === 'null') {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No gender provided!']);
                         exit;
                   } else if ($gender !== 'M' && $gender !== 'F' && $gender !== 'O') {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Gender invalid!']);
                         exit;
                   }
 
                   if (!$phone) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No phone number provided!']);
                         exit;
                   } else {
@@ -63,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during phone number format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid phone number format!']);
                               exit;
                         }
@@ -73,26 +82,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during card number format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Card number format invalid!']);
                               exit;
                         }
                   }
 
                   if (!$email) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   } else if (strlen($email) > 255) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Email must be 255 characters long or less!']);
                         exit;
                   }
 
                   if (!$password) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No password provided!']);
                         exit;
                   } else if (strlen($password) < 8) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Password must be at least 8 characters long!']);
                         exit;
                   } else {
@@ -100,15 +115,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
                               exit;
                         }
                   }
 
                   if ($refEmail && !filter_var($refEmail, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid referrer email format!']);
                         exit;
                   } else if (strlen($refEmail) > 255) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Refferer email must be 255 characters long or less!']);
                         exit;
                   }

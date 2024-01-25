@@ -36,14 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $description = $_POST['description'] ? sanitize(rawurldecode($_POST['description'])) : null;
 
                   if (!$name) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Category name is empty!']);
                         exit;
                   } else if (strlen($name) > 255) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Category name must be 255 characters long or less!']);
                         exit;
                   }
 
                   if ($description && strlen($description) > 500) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Category description must be 500 characters long or less!']);
                         exit;
                   }
@@ -70,7 +73,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $result = $stmt->get_result();
                   if ($result->num_rows === 0) {
-                        echo json_encode(['error' => 'Invalid category ID!']);
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Category ID not found!']);
                         $stmt->close();
                         $conn->close();
                         exit;

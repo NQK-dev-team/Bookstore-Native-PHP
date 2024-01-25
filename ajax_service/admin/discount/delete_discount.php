@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   $type = sanitize(rawurldecode($_DELETE['type']));
 
                   if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`Coupon Type` data type invalid!']);
                         exit;
                   }
@@ -69,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               $conn->close();
                               exit;
                         } else if ($stmt->get_result()->fetch_assoc()['result']) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Can not delete discount coupon that has been apply on purchased order(s)!']);
                               $stmt->close();
                               $conn->close();
@@ -112,6 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               $conn->close();
                               exit;
                         } else if ($stmt->get_result()->fetch_assoc()['result']) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Can not delete discount coupon that has been apply on purchased order(s)!']);
                               $stmt->close();
                               $conn->close();
@@ -155,6 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               $conn->close();
                               exit;
                         } else if ($stmt->get_result()->fetch_assoc()['result']) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Can not delete discount coupon that has been apply on purchased order(s)!']);
                               $stmt->close();
                               $conn->close();

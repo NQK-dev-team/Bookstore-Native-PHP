@@ -24,16 +24,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $type = sanitize(rawurldecode($_GET['type']));
 
                   if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
                         exit;
                   }
 
                   if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`List Number` data type invalid!']);
                         exit;
                   }
 
                   if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`Coupon Type` data type invalid!']);
                         exit;
                   }

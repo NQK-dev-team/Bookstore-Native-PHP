@@ -53,12 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $inStock = sanitize(rawurldecode($_POST['inStock'])) ? sanitize(rawurldecode($_POST['inStock'])) : null;
 
                   if (!$name) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book name is empty!']);
                         exit;
                   } else if (preg_match('/[?\/"]/', $name) === 1) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book name must not contain \'?\', \'/\', \'"\' or \'\\\' characters!']);
                         exit;
                   } else if (strlen($name) > 255) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book name must be 255 characters long or less!']);
                         exit;
                   } else if (preg_match('/[?\/]/', $name) === false) {
@@ -67,17 +70,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if (!$edition) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book edition is empty!']);
                         exit;
                   } else if (!is_numeric($edition) || $edition <= 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book edition invalid!']);
                         exit;
                   }
 
                   if (!$isbn) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book ISBN-13 is empty!']);
                         exit;
                   } else if (preg_match('/^[0-9]{13}$/', $isbn) === 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book ISBN-13 invalid!']);
                         exit;
                   } else if (preg_match('/[?\/]/', $name) === false) {
@@ -86,16 +93,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if ($age && (!is_numeric($age) || $age <= 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Age restriction invalid!']);
                         exit;
                   }
 
                   if (!count($author)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book must have at least one author!']);
                         exit;
                   } else {
                         foreach ($author as $x) {
                               if (strlen($x) > 255) {
+                                    http_response_code(400);
                                     echo json_encode(['error' => 'Author name must be 255 characters long or less!']);
                                     exit;
                               }
@@ -103,14 +113,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if (!$publisher) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Publisher is empty!']);
                         exit;
                   } else if (strlen($publisher) > 255) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Publisher must be 255 characters long or less!']);
                         exit;
                   }
 
                   if (!$publishDate) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Publish date is empty!']);
                         exit;
                   } else {
@@ -121,27 +134,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
 
                         if ($tempDate > $currentDate) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Publish date invalid!']);
                               exit;
                         }
                   }
 
                   if ($description && strlen($description) > 2000) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Description must be 2000 characters long or less!']);
                         exit;
                   }
 
                   if ($physicalPrice && (!is_numeric($physicalPrice) || $physicalPrice <= 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Physical copy price invalid!']);
                         exit;
                   }
 
                   if ($inStock && (!is_numeric($inStock) || $inStock < 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Physical copy in stock invalid!']);
                         exit;
                   }
 
                   if ($filePrice && (!is_numeric($filePrice) || $filePrice <= 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'File copy price invalid!']);
                         exit;
                   }
@@ -164,13 +182,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
                         if (!in_array($fileMimeType, $allowedImageTypes)) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid image file!']);
                               exit;
                         } else if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Image size must be 5MB or less!']);
                               exit;
                         }
                   } else {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Missing image file!']);
                         exit;
                   }
@@ -190,6 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
                         if (!in_array($fileMimeType, $allowedFileTypes)) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid PDF file!']);
                               exit;
                         }

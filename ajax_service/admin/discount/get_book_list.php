@@ -24,11 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $category = sanitize(rawurldecode($_GET['category']));
 
                   if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
                         exit;
                   }
 
                   if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`List Number` data type invalid!']);
                         exit;
                   }

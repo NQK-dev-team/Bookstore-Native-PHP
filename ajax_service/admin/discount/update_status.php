@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   $type = sanitize(rawurldecode($_PATCH['type']));
 
                   if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
+                        http_response_code(400);
                         echo json_encode(['error' => '`Coupon Type` data type invalid!']);
                         exit;
                   }
@@ -55,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         }
                         $result = $stmt->get_result();
                         if ($result->num_rows === 0) {
+                              http_response_code(404);
                               echo json_encode(['error' => 'Coupon not found!']);
                               $stmt->close();
                               $conn->close();
@@ -74,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         }
                         $result = $stmt->get_result();
                         if ($result->num_rows === 0) {
+                              http_response_code(404);
                               echo json_encode(['error' => 'Coupon not found!']);
                               $stmt->close();
                               $conn->close();

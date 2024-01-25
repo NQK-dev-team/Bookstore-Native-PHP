@@ -14,17 +14,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $user_type = sanitize(rawurldecode($_POST['type']));
 
                   if (!$email) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   }
 
                   if (!$password) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No new password provided!']);
                         exit;
                   } else if (strlen($password) < 8) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'New password must be at least 8 characters long!']);
                         exit;
                   } else {
@@ -32,15 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
                               exit;
                         }
                   }
 
                   if (!$confirmPassword) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No confirm password provided!']);
                         exit;
                   } else if (strlen($confirmPassword) < 8) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Confirm password must be at least 8 characters long!']);
                         exit;
                   }  else {
@@ -48,21 +55,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during confirm password format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
                               exit;
                         }
                   }
 
                   if ($confirmPassword !== $password) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Passwords are not matched!']);
                         exit;
                   }
 
                   // Valid user type
                   if (!$user_type) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No user type provided!']);
                         exit;
                   } else if ($user_type !== 'admin' && $user_type !== 'customer') {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid user type!']);
                         exit;
                   }
@@ -73,7 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if ($_SESSION['recovery_state']) {
                         if ($email !== $_SESSION['recovery_email']) {
-                              echo json_encode(['error' => 'Recovery email not matched!']);
+                              http_response_code(404);
+                              echo json_encode(['error' => 'Email not found!']);
                               exit;
                         }
 
@@ -81,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
 
                         if (abs($interval) > 300) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Password changing time exceeds 5 minutes time limit, please request another recovery code and try again!']);
                               exit;
                         }
@@ -111,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => $stmt->error]);
                   } else {
                         if ($stmt->affected_rows === 0) {
-                              echo json_encode(['query_result' => false]);
+                              http_response_code(404);
+                              echo json_encode(['error' => 'Email not found!']);
                         } else {
                               change_password_mail($email, $user_type);
                               echo json_encode(['query_result' => true]);

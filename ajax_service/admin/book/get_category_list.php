@@ -14,9 +14,7 @@ require_once __DIR__ . '/../../../tool/php/converter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['search'])) {
-            try {
-
-                  
+            try {      
                   $search = sanitize(rawurldecode($_GET['search']));
 
                   $search = '%' . $search . '%';
