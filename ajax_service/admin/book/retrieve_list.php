@@ -70,13 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
-                  order by book.name,book.id limit ? offset ?');
-                  $stmt->bind_param('issssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset);
+                  order by book.name,book.id limit ? offset ?)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
+                  order by book.name,book.id limit ? offset ?)');
+                  $stmt->bind_param('issssiiisssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset, $status, $search, $isbnSearch,  $search, $entry, $offset);
                   $isSuccess = $stmt->execute();
 
                   if (!$isSuccess) {
@@ -210,12 +217,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select count(distinct book.id) as totalBook
+                  $stmt = $conn->prepare('select count(*) as totalBook from(
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
-                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?');
-                  $stmt->bind_param('issss', $status, $search, $isbnSearch, $search, $category);
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
+                  order by book.name,book.id)
+                  ) as combined');
+                  $stmt->bind_param('issssisss', $status, $search, $isbnSearch, $search, $category, $status, $search, $isbnSearch, $search);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);

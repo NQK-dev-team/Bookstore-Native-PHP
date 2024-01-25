@@ -624,20 +624,6 @@ end//
 delimiter ;
 -- ** End of customerOrder **
 
--- ** Begin of eventDiscount **
-drop trigger if exists eventDiscountDataConstraintInsertTrigger;
-delimiter //
-create trigger eventDiscountDataConstraintInsertTrigger
-before insert on eventDiscount
-for each row
-begin
-	if new.endDate is not null and new.endDate<curdate() then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon end date must be today or the future!';
-    end if;
-end//
-delimiter ;
--- ** End of eventDiscount **
-
 -- ** Begin of customerDiscount **
 drop trigger if exists customerDiscountDataConstraintInsertTrigger;
 delimiter //

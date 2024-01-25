@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   } else {
                         $result = $stmt->get_result();
                         $result = $result->fetch_assoc();
-                        $deleteDir = dirname(dirname(dirname(__DIR__)) . "/data/book/" . $result['imagePath']);
+                        $deleteDir = dirname(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $result['imagePath']);
                   }
 
                   $stmt = $conn->prepare('delete from book where id=?');

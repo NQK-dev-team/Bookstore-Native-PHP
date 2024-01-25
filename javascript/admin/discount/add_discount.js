@@ -140,12 +140,6 @@ function addCoupon()
                   return;
             }
 
-            if (!start)
-            {
-                  reportCustomValidity($('#couponStartDate').get(0), 'Missing start date!');
-                  return;
-            }
-
             const startDate = new Date(start);
             const endDate = new Date(end);
             const today = new Date();
@@ -153,11 +147,23 @@ function addCoupon()
             endDate.setHours(0, 0, 0, 0);
             today.setHours(0, 0, 0, 0);
 
+            if (!start)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Missing start date!');
+                  return;
+            }
+            else if (startDate < today)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Start date must be after or the same day as today!');
+                  return;
+            }
+
             if (!end)
             {
                   reportCustomValidity($('#couponEndDate').get(0), 'Missing end date!');
                   return;
-            } else if (endDate < today)
+            }
+            else if (endDate < today)
             {
                   reportCustomValidity($('#couponEndDate').get(0), 'End date must be after or the same day as today!');
                   return;

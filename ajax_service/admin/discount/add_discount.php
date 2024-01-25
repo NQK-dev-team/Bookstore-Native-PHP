@@ -109,6 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
                   $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
 
+                  if ($startDT < $currentDate) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Start date must be after or the same day as today!']);
+                        exit;
+                  }
+
                   if ($endDT < $currentDate) {
                         http_response_code(400);
                         echo json_encode(['error' => 'End date must be after or the same day as today!']);
