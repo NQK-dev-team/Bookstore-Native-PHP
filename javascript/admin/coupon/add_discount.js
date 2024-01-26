@@ -12,6 +12,7 @@ $(document).ready(function ()
             bookApply = [];
             //selectAll = [];
             originalBookApply = [];
+            textareaDefaultValue = '';
       });
 
       $('#addModal').on('show.bs.modal', function ()
@@ -19,6 +20,7 @@ $(document).ready(function ()
             bookApply = [];
             //selectAll = [];
             originalBookApply = [];
+            textareaDefaultValue = '';
       });
 });
 
@@ -34,6 +36,8 @@ function openAddModal()
       }
 
       if (type === 1)
+      {
+            textareaDefaultValue = '';
             $('#addCouponForm').append(
                   $(`<div>
                         <label for="couponName" class="form-label">Coupon Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
@@ -55,9 +59,10 @@ function openAddModal()
                         <p class="form-label">Books Applied:</p>
                         <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookAddModal(event)" data-default-check-state=false>
                         <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
-                        <input readonly type="text" class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()">
+                        <textarea readonly class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()" rows="5"></textarea>
                   </div>`)
             );
+      }
       else if (type === 2)
             $('#addCouponForm').append(
                   $(`<div>

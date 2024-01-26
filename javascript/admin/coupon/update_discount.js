@@ -17,6 +17,7 @@ $(document).ready(function ()
             //selectAll = [];
             originalBookApply = [];
             bookArr = [];
+            textareaDefaultValue = '';
       });
 });
 
@@ -32,7 +33,7 @@ function selectAllBookUpdateModal(e)
       else
       {
             bookApply = [...originalBookApply];
-            $('#couponBookApply').val(bookArr.length ? bookArr.join(', ') : '');
+            $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
       }
 }
 
@@ -72,6 +73,8 @@ function openUpdateModal(id)
                                     originalBookApply = [...bookApply];
                               }
 
+                              textareaDefaultValue = bookArr.length ? bookArr.join('\n') : '';
+
                               $('#updateCouponForm').append(
                                     $(`<div>
                                           <label for="couponName" class="form-label">Coupon Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
@@ -93,7 +96,7 @@ function openUpdateModal(id)
                                           <p class="form-label">Books Applied:</p>
                                           <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookUpdateModal(event)" ${ data.query_result.applyForAll ? 'checked' : '' } data-default-check-state=${ data.query_result.applyForAll }>
                                           <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
-                                          <input readonly type="text" class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()" ${ data.query_result.applyForAll ? 'disabled' : '' } value="${ bookArr.length ? bookArr.join(', ') : '' }">
+                                          <textarea rows="5" readonly class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
                                     </div>`)
                               );
 

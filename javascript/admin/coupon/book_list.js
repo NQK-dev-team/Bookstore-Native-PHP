@@ -1,6 +1,7 @@
 let bookApply = [];
 //let selectAll = [];
 let originalBookApply = [];
+let textareaDefaultValue = '';
 
 $(document).ready(function ()
 {
@@ -153,7 +154,7 @@ function fetchBookList()
                                     // if (!selectAll.includes(listOffset))
                                     // {
                                     //       selectAll.push(listOffset);
-                                          $('#checkAll').prop('checked', true);
+                                    $('#checkAll').prop('checked', true);
                                     //}
 
                               }
@@ -197,7 +198,7 @@ function fetchBookList()
 
 function selectAllBook(e)
 {
-      const arr = $('#couponBookApply').val() !== '' ? $('#couponBookApply').val().split(';').map(x => x.trim()) : [];
+      const arr = $('#couponBookApply').val() !== '' ? $('#couponBookApply').val().split('\n').map(x => x.trim()) : [];
 
       if (e.target.checked)
       {
@@ -231,13 +232,13 @@ function selectAllBook(e)
                         bookApply.splice(bookApply.indexOf($(this).attr('data-book-id')), 1);
             });
       }
-      $('#couponBookApply').val(arr.join('; '));
+      $('#couponBookApply').val(arr.join('\n'));
       $('#totalSelected').text(bookApply.length);
 }
 
 function addToList(e, id)
 {
-      const arr = $('#couponBookApply').val() !== '' ? $('#couponBookApply').val().split(';').map(x => x.trim()) : [];
+      const arr = $('#couponBookApply').val() !== '' ? $('#couponBookApply').val().split('\n').map(x => x.trim()) : [];
       if (e.target.checked)
       {
             if (!arr.includes(e.target.value))
@@ -263,7 +264,7 @@ function addToList(e, id)
                   // if (!selectAll.includes(listOffset))
                   // {
                   //       selectAll.push(listOffset);
-                        $('#checkAll').prop('checked', true);
+                  $('#checkAll').prop('checked', true);
                   //}
 
             }
@@ -292,7 +293,7 @@ function addToList(e, id)
             //       selectAll.splice(selectAll.indexOf(listOffset), 1);
             $('#checkAll').prop('checked', false);
       }
-      $('#couponBookApply').val(arr.join('; '));
+      $('#couponBookApply').val(arr.join('\n'));
       $('#totalSelected').text(bookApply.length);
 }
 
@@ -344,4 +345,5 @@ function clearForm()
       bookApply = [...originalBookApply];
       //selectAll = [];
       $('#couponBookApply').prop('disabled', ($('#btncheck1').attr('data-default-check-state') === 'true' || $('#btncheck1').attr('data-default-check-state') === '1'));
+      $('#couponBookApply').val(textareaDefaultValue);
 }
