@@ -2,6 +2,36 @@ use bookstore;
 
 -- **** Business constraints ****
 
+-- ** Begin of rating **
+-- This trigger delete the book from unpaid orders if new.status=false
+drop trigger if exists bookBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger bookBusinessConstraintUpdateTrigger
+before update on book
+for each row
+begin	
+	if not new.status then
+			DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
+            
+            DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
+                        
+            delete from fileOrder where id not in(
+				select orderID from fileOrderContain
+            );
+            
+            delete from physicalOrder where id not in(
+				select orderID from physicalOrderContain
+            );
+            
+            delete from customerOrder where id not in(
+				select id from fileOrder
+                union
+                select id from physicalOrder
+            );
+    end if;
+end//
+delimiter ;
+-- ** End of rating **
 
 -- ** Begin of rating **
 -- This trigger forbid any insert statement to `rating` table if the user hasn't bought the book yet

@@ -338,6 +338,50 @@ function updateCoupon()
                   reportCustomValidity($('#couponPoint').get(0), 'Accumulated point value invalid!');
                   return;
             }
+
+            $.ajax({
+                  url: '/ajax_service/admin/coupon/update_discount.php',
+                  type: 'POST',
+                  data: {
+                        type: type,
+                        name: name,
+                        discount: discount,
+                        point: point,
+                        id: encodeData(update_id)
+                  },
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+                        }
+                        else if (data.query_result)
+                        {
+                              $('#updateModal').modal('hide');
+                              $('#successUpdateModal').modal('show');
+                        }
+                        fetchCouponList();
+                  },
+                  error: function (err)
+                  {
+                        console.error(err);
+
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
       }
       else if (type === 3)
       {
@@ -377,5 +421,49 @@ function updateCoupon()
                   reportCustomValidity($('#couponPeople').get(0), 'Number of people value invalid!');
                   return;
             }
+
+            $.ajax({
+                  url: '/ajax_service/admin/coupon/update_discount.php',
+                  type: 'POST',
+                  data: {
+                        type: type,
+                        name: name,
+                        discount: discount,
+                        people: people,
+                        id: encodeData(update_id)
+                  },
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+                        }
+                        else if (data.query_result)
+                        {
+                              $('#updateModal').modal('hide');
+                              $('#successUpdateModal').modal('show');
+                        }
+                        fetchCouponList();
+                  },
+                  error: function (err)
+                  {
+                        console.error(err);
+
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
       }
 }

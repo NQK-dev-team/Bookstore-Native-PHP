@@ -27,12 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   exit;
             }
 
-            if (!isset($_POST['type'])) {
+            if (!isset($_POST['type'], $_POST['id'])) {
                   http_response_code(400);
                   echo json_encode(['error' => 'Missing coupon type parameter!']);
                   exit;
             }
 
+            $id = sanitize(rawurldecode($_POST['id']));
             $type = sanitize(rawurldecode($_POST['type']));
 
             if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
@@ -122,8 +123,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select exists(select * from discount where name=? and status=true) as result');
-                  $stmt->bind_param('s', $name);
+                  $stmt = $conn->prepare('select discount.name,eventDiscount.discount,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.applyForAll from discount join eventDiscount on discount.id=eventDiscount.id where discount.id=?');
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Coupon not found!']);
+                        $stmt->close();
+                        $conn->close();
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select exists(select * from discount where id!=? and name=? and status=true) as result');
+                  $stmt->bind_param('ss', $id, $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -135,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current coupon name has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current coupon name has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
@@ -143,37 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $conn->begin_transaction();
-                  $stmt = $conn->prepare('call addEventDiscount(?,?,?,?,?)');
-                  $stmt->bind_param('sdssi', $name, $discount, $start, $end, $allBook);
-                  $isSuccess = $stmt->execute();
-                  if (!$isSuccess) {
-                        $conn->rollback();
-                        http_response_code(500);
-                        echo json_encode(['error' => $stmt->error]);
-                        $stmt->close();
-                        $conn->close();
-                        exit;
-                  }
-                  $result = $stmt->get_result();
-                  $id = $result->fetch_assoc()['newID'];
-                  $stmt->close();
 
-                  if (!$allBook) {
-                        $stmt = $conn->prepare('insert into eventApply values(?,?)');
-                        foreach ($bookApply as $book) {
-                              $stmt->bind_param('ss', $id, $book);
-                              $isSuccess = $stmt->execute();
-                              if (!$isSuccess) {
-                                    $conn->rollback();
-                                    http_response_code(500);
-                                    echo json_encode(['error' => $stmt->error]);
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                        }
-                        $stmt->close();
-                  }
                   $conn->commit();
             } else if ($type === '2') {
                   if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['point'])) {
@@ -216,8 +205,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select exists(select * from discount where name=? and status=true) as result');
-                  $stmt->bind_param('s', $name);
+                  $stmt = $conn->prepare('select discount.name,customerDiscount.discount,customerDiscount.point from discount join customerDiscount on discount.id=customerDiscount.id where discount.id=?');
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Coupon not found!']);
+                        $stmt->close();
+                        $conn->close();
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select exists(select * from discount where id!=? and name=? and status=true) as result');
+                  $stmt->bind_param('ss', $id, $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -229,15 +236,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current coupon name has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current coupon name has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-?)<10e-9 and discount.status=true) as result');
-                  $stmt->bind_param('d', $discount);
+                  $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where discount.id!=? and abs(customerDiscount.discount-?)<10e-9 and discount.status=true) as result');
+                  $stmt->bind_param('sd', $id, $discount);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -249,15 +256,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current discount percentage value has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current discount percentage value has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-?)<10e-9 and discount.status=true) as result');
-                  $stmt->bind_param('d', $point);
+                  $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where discount.id!=? and abs(customerDiscount.point-?)<10e-9 and discount.status=true) as result');
+                  $stmt->bind_param('sd', $id, $point);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -269,15 +276,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current accumulated point milestone has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current accumulated point milestone has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('call addCustomerDiscount(?,?,?)');
-                  $stmt->bind_param('sdd', $name, $discount, $point);
+                  $stmt = $conn->prepare('update discount join customerDiscount on discount.id=customerDiscount.id set discount.name=?,customerDiscount.discount=?,customerDiscount.point=? where discount.id=?');
+                  $stmt->bind_param('sdds', $name, $discount, $point, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -328,8 +335,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select exists(select * from discount where name=? and status=true) as result');
-                  $stmt->bind_param('s', $name);
+                  $stmt = $conn->prepare('select discount.name,referrerDiscount.discount,referrerDiscount.numberOfPeople from discount join referrerDiscount on discount.id=referrerDiscount.id where discount.id=?');
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Coupon not found!']);
+                        $stmt->close();
+                        $conn->close();
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select exists(select * from discount where id!=? and name=? and status=true) as result');
+                  $stmt->bind_param('ss', $id, $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -341,15 +366,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current coupon name has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current coupon name has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-?)<10e-9 and discount.status=true) as result');
-                  $stmt->bind_param('d', $discount);
+                  $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where discount.id!=? and abs(referrerDiscount.discount-?)<10e-9 and discount.status=true) as result');
+                  $stmt->bind_param('sd', $id, $discount);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -361,15 +386,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current discount percentage value has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current discount percentage value has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=? and discount.status=true) as result');
-                  $stmt->bind_param('i', $people);
+                  $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where discount.id!=? and referrerDiscount.numberOfPeople=? and discount.status=true) as result');
+                  $stmt->bind_param('si', $id, $people);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
@@ -381,15 +406,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
-                        echo json_encode(['error' => 'Can not create this coupon, current number of people milestone has already been used in another coupon!']);
+                        echo json_encode(['error' => 'Can not update this coupon, current number of people milestone has already been used in another coupon!']);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('call addReferrerDiscount(?,?,?)');
-                  $stmt->bind_param('sdi', $name, $discount, $people);
+                  $stmt=$conn->prepare('update discount join referrerDiscount on discount.id=referrerDiscount.id set discount.name=?,referrerDiscount.discount=?,referrerDiscount.numberOfPeople=? where discount.id=?');
+                  $stmt->bind_param('sdis',$name,$discount,$people,$id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);
