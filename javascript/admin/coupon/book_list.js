@@ -1,5 +1,5 @@
 let bookApply = [], selectAll = [];
-let originalBookApply = [], originalSelectAll = [];
+let originalBookApply = [];
 
 $(document).ready(function ()
 {
@@ -67,7 +67,7 @@ function fetchBookList()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/admin/discount/get_book_list.php',
+            url: '/ajax_service/admin/coupon/get_book_list.php',
             method: 'GET',
             data: { entry: entry, offset: listOffset, search: search, category: category },
             dataType: 'json',
@@ -98,7 +98,7 @@ function fetchBookList()
                         {
                               const trElem = $('<tr>');
 
-                              trElem.append($(`<td class=\"align-middle text-center\"><input type='checkbox' data-book-id='${ data.query_result[0][i].id }' ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } class='pointer' name='check' value="${ data.query_result[0][i].name } - ${ data.query_result[0][i].edition }" onclick='addToList(event,"${ data.query_result[0][i].id }")'></td>`));
+                              trElem.append($(`<td class=\"align-middle text-center\"><input ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } type='checkbox' data-book-id='${ data.query_result[0][i].id }' ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } class='pointer' name='check' value="${ data.query_result[0][i].name } - ${ data.query_result[0][i].edition }" onclick='addToList(event,"${ data.query_result[0][i].id }")'></td>`));
                               trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
                               trElem.append($(`<td class=\"col-4 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
@@ -160,8 +160,6 @@ function fetchBookList()
                                     $('#checkAll').prop('checked', false);
                         } else
                               $('#checkAll').prop('checked', false);
-
-                        //$('#checkAll').val(listOffset).prop('checked', selectAll.includes(listOffset));
 
                         initToolTip();
 
@@ -343,5 +341,6 @@ function chooseBook()
 function clearForm()
 {
       bookApply = originalBookApply;
-      selectAll = originalSelectAll;
+      selectAll = [];
+      $('#couponBookApply').prop('disabled', ($('#btncheck1').attr('data-default-check-state') === 'true' || $('#btncheck1').attr('data-default-check-state') === '1'));
 }

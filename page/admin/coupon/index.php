@@ -103,7 +103,7 @@ if (return_navigate_error() === 400) {
                   if ($sub_result['result']) {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick=\"openUpdateModal({$row['id']})\">
+                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
                               <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
@@ -168,7 +168,7 @@ if (return_navigate_error() === 400) {
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Manage discount coupons of NQK Bookstore">
             <title>Manage Discount Coupons</title>
-            <link rel="stylesheet" href="/css/admin/discount/discount_list.css">
+            <link rel="stylesheet" href="/css/admin/coupon/discount_list.css">
             <?php storeToken(); ?>
       </head>
 
@@ -562,12 +562,12 @@ if (return_navigate_error() === 400) {
             <script src=" /javascript/admin/menu_after_load.js"></script>
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/input_validity.js"></script>
-            <script src="/javascript/admin/discount/discount_list.js"></script>
-            <script src="/javascript/admin/discount/book_list.js"></script>
-            <script src="/javascript/admin/discount/add_discount.js"></script>
-            <script src="/javascript/admin/discount/toggle_status.js"></script>
-            <script src="/javascript/admin/discount/delete_discount.js"></script>
-            <script src="/javascript/admin/discount/update_discount.js"></script>
+            <script src="/javascript/admin/coupon/discount_list.js"></script>
+            <script src="/javascript/admin/coupon/book_list.js"></script>
+            <script src="/javascript/admin/coupon/add_discount.js"></script>
+            <script src="/javascript/admin/coupon/toggle_status.js"></script>
+            <script src="/javascript/admin/coupon/delete_discount.js"></script>
+            <script src="/javascript/admin/coupon/update_discount.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
       </body>
 

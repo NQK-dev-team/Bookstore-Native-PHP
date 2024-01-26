@@ -26,7 +26,7 @@ function deleteCoupon()
       }
 
       $.ajax({
-            url: '/ajax_service/admin/discount/delete_discount.php',
+            url: '/ajax_service/admin/coupon/delete_discount.php',
             type: 'DELETE',
             data: {
                   id: encodeData(delete_id),

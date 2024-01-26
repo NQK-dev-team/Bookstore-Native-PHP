@@ -12,7 +12,6 @@ $(document).ready(function ()
             bookApply = [];
             selectAll = [];
             originalBookApply = [];
-            originalSelectAll = [];
       });
 
       $('#addModal').on('show.bs.modal', function ()
@@ -20,7 +19,6 @@ $(document).ready(function ()
             bookApply = [];
             selectAll = [];
             originalBookApply = [];
-            originalSelectAll = [];
       });
 });
 
@@ -55,7 +53,7 @@ function openAddModal()
                   </div>
                   <div class='mt-2'>
                         <p class="form-label">Books Applied:</p>
-                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookAddModal(event)">
+                        <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookAddModal(event)" data-default-check-state=false>
                         <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
                         <input readonly type="text" class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()">
                   </div>`)
@@ -98,6 +96,12 @@ function openAddModal()
 function selectAllBookAddModal(e)
 {
       $('#couponBookApply').prop('disabled', e.target.checked);
+      if (e.target.checked)
+      {
+            bookApply = [];
+            selectAll = [];
+            $('#couponBookApply').val('');
+      }
 }
 
 function addCoupon()
@@ -176,7 +180,7 @@ function addCoupon()
             }
 
             $.ajax({
-                  url: '/ajax_service/admin/discount/add_discount.php',
+                  url: '/ajax_service/admin/coupon/add_discount.php',
                   type: 'POST',
                   data: {
                         type: type,
@@ -261,7 +265,7 @@ function addCoupon()
             }
 
             $.ajax({
-                  url: '/ajax_service/admin/discount/add_discount.php',
+                  url: '/ajax_service/admin/coupon/add_discount.php',
                   type: 'POST',
                   data: {
                         type: type,
@@ -343,7 +347,7 @@ function addCoupon()
             }
 
             $.ajax({
-                  url: '/ajax_service/admin/discount/add_discount.php',
+                  url: '/ajax_service/admin/coupon/add_discount.php',
                   type: 'POST',
                   data: {
                         type: type,

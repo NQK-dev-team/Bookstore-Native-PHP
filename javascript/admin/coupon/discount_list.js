@@ -60,7 +60,7 @@ function fetchCouponList()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/admin/discount/retrieve_list.php',
+            url: '/ajax_service/admin/coupon/retrieve_list.php',
             method: 'GET',
             data: { entry: entry, offset: listOffset, search: search, type: type, status: status },
             dataType: 'json',
@@ -191,7 +191,7 @@ function fetchCouponList()
                                           <td class='align-middle'>${ data.query_result[0][i].point }</td>
                                           <td class='align-middle col-1'>
                                                 <div class='d-flex flex-lg-row flex-column'>
-                                                      <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                      <button onclick='openUpdateModal("${ data.query_result[0][i].id }")' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                             <i class=\"bi bi-pencil text-white\"></i>
                                                       </button>
                                                       <button onclick='${ status ? 'openDeactivateModal' : 'openActivateModal' }("${ data.query_result[0][i].id }")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\">
@@ -215,7 +215,7 @@ function fetchCouponList()
                                           <td class='align-middle'>${ data.query_result[0][i].numberOfPeople }</td>
                                           <td class='align-middle col-1'>
                                                 <div class='d-flex flex-lg-row flex-column'>
-                                                      <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
+                                                      <button onclick='openUpdateModal("${ data.query_result[0][i].id }")' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                             <i class=\"bi bi-pencil text-white\"></i>
                                                       </button>
                                                       <button onclick='${ status ? 'openDeactivateModal' : 'openActivateModal' }("${ data.query_result[0][i].id }")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\">

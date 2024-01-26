@@ -31,7 +31,7 @@ function activateCoupon()
       }
 
       $.ajax({
-            url: '/ajax_service/admin/discount/update_status.php',
+            url: '/ajax_service/admin/coupon/update_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(activate_id),
@@ -91,7 +91,7 @@ function deactivateCoupon()
       }
 
       $.ajax({
-            url: '/ajax_service/admin/discount/update_status.php',
+            url: '/ajax_service/admin/coupon/update_status.php',
             type: 'PATCH',
             data: {
                   id: encodeData(deactivate_id),
