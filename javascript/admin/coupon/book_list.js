@@ -1,4 +1,5 @@
-let bookApply = [], selectAll = [];
+let bookApply = [];
+//let selectAll = [];
 let originalBookApply = [];
 
 $(document).ready(function ()
@@ -135,7 +136,7 @@ function fetchBookList()
                               $('#book_table_body').append(trElem);
                         }
 
-                        selectAll = [];
+                        //selectAll = [];
                         if (data.query_result[1])
                         {
                               if ($('input[name="check"]:checked').length === $('input[name="check"]').length)
@@ -149,11 +150,11 @@ function fetchBookList()
                                           return;
                                     }
 
-                                    if (!selectAll.includes(listOffset))
-                                    {
-                                          selectAll.push(listOffset);
+                                    // if (!selectAll.includes(listOffset))
+                                    // {
+                                    //       selectAll.push(listOffset);
                                           $('#checkAll').prop('checked', true);
-                                    }
+                                    //}
 
                               }
                               else
@@ -200,7 +201,7 @@ function selectAllBook(e)
 
       if (e.target.checked)
       {
-            selectAll.push(parseInt(e.target.value));
+            //selectAll.push(parseInt(e.target.value));
 
             $('input[type="checkbox"][name="check"]').each(function ()
             {
@@ -216,7 +217,7 @@ function selectAllBook(e)
       }
       else
       {
-            selectAll.splice(selectAll.indexOf(parseInt(e.target.value)), 1);
+            //selectAll.splice(selectAll.indexOf(parseInt(e.target.value)), 1);
 
             $('input[type="checkbox"][name="check"]').each(function ()
             {
@@ -259,11 +260,11 @@ function addToList(e, id)
                         return;
                   }
 
-                  if (!selectAll.includes(listOffset))
-                  {
-                        selectAll.push(listOffset);
+                  // if (!selectAll.includes(listOffset))
+                  // {
+                  //       selectAll.push(listOffset);
                         $('#checkAll').prop('checked', true);
-                  }
+                  //}
 
             }
       }
@@ -287,8 +288,8 @@ function addToList(e, id)
             if (bookApply.includes(id))
                   bookApply.splice(bookApply.indexOf(id), 1);
 
-            if (selectAll.includes(listOffset))
-                  selectAll.splice(selectAll.indexOf(listOffset), 1);
+            // if (selectAll.includes(listOffset))
+            //       selectAll.splice(selectAll.indexOf(listOffset), 1);
             $('#checkAll').prop('checked', false);
       }
       $('#couponBookApply').val(arr.join('; '));
@@ -340,7 +341,7 @@ function chooseBook()
 
 function clearForm()
 {
-      bookApply = originalBookApply;
-      selectAll = [];
+      bookApply = [...originalBookApply];
+      //selectAll = [];
       $('#couponBookApply').prop('disabled', ($('#btncheck1').attr('data-default-check-state') === 'true' || $('#btncheck1').attr('data-default-check-state') === '1'));
 }

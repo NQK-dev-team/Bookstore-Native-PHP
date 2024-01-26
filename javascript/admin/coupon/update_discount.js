@@ -14,8 +14,9 @@ $(document).ready(function ()
             $('#updateCouponForm').empty();
             update_id = null;
             bookApply = [];
-            selectAll = [];
+            //selectAll = [];
             originalBookApply = [];
+            bookArr = [];
       });
 });
 
@@ -25,11 +26,12 @@ function selectAllBookUpdateModal(e)
       if (e.target.checked)
       {
             bookApply = [];
-            selectAll = [];
+            //selectAll = [];
             $('#couponBookApply').val('');
       }
       else
       {
+            bookApply = [...originalBookApply];
             $('#couponBookApply').val(bookArr.length ? bookArr.join(', ') : '');
       }
 }
@@ -65,9 +67,11 @@ function openUpdateModal(id)
                         {
                               if (!data.query_result.applyForAll)
                               {
-                                    bookArr = data.query_result.bookApply.map(elem => `${ elem.name } - ${ elem.edition }`);
-                                    bookApply = data.query_result.bookApply.map(elem => elem.id);
+                                    bookArr = [...data.query_result.bookApply.map(elem => `${ elem.name } - ${ elem.edition }`)];
+                                    bookApply = [...data.query_result.bookApply.map(elem => elem.id)];
+                                    originalBookApply = [...bookApply];
                               }
+
                               $('#updateCouponForm').append(
                                     $(`<div>
                                           <label for="couponName" class="form-label">Coupon Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
@@ -231,14 +235,144 @@ function updateCoupon()
 
       if (type === 1)
       {
+            const name = encodeData($('#couponName').val());
+            const discount = $('#couponPercentage').val() ? parseFloat(encodeData($('#couponPercentage').val())) : '';
+            const start = encodeData($('#couponStartDate').val());
+            const end = encodeData($('#couponEndDate').val());
 
+            if (!name)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Missing coupon name!');
+                  return;
+            }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Coupon name must be at most 255 characters long or less!');
+                  return;
+            }
+
+            if (discount === '')
+            {
+                  reportCustomValidity($('#couponPercentage').get(0), 'Missing discount percentage value!');
+                  return;
+            }
+            if (typeof discount !== 'number' || isNaN(discount) || discount <= 0 || discount > 100)
+            {
+                  reportCustomValidity($('#couponPercentage').get(0), 'Discount percentage value invalid!');
+                  return;
+            }
+
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const today = new Date();
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (!start)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Missing start date!');
+                  return;
+            }
+            else if (startDate < today)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Start date must be after or the same day as today!');
+                  return;
+            }
+
+            if (!end)
+            {
+                  reportCustomValidity($('#couponEndDate').get(0), 'Missing end date!');
+                  return;
+            }
+            else if (endDate < today)
+            {
+                  reportCustomValidity($('#couponEndDate').get(0), 'End date must be after or the same day as today!');
+                  return;
+            }
+
+            if (startDate > endDate)
+            {
+                  reportCustomValidity($('#couponStartDate').get(0), 'Start date must be before or the same day as end date!');
+                  return;
+            }
       }
       else if (type === 2)
       {
+            const name = encodeData($('#couponName').val());
+            const discount = $('#couponPercentage').val() ? parseFloat(encodeData($('#couponPercentage').val())) : '';
+            const point = $('#couponPoint').val() ? parseFloat(encodeData($('#couponPoint').val())) : '';
 
+            if (!name)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Missing coupon name!');
+                  return;
+            }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Coupon name must be at most 255 characters long or less!');
+                  return;
+            }
+
+            if (discount === '')
+            {
+                  reportCustomValidity($('#couponPercentage').get(0), 'Missing discount percentage value!');
+                  return;
+            }
+            else if (typeof discount !== 'number' || isNaN(discount) || discount <= 0 || discount > 100)
+            {
+                  reportCustomValidity($('#couponPercentage').get(0), 'Discount percentage value invalid!');
+                  return;
+            }
+
+            if (point === '')
+            {
+                  reportCustomValidity($('#couponPoint').get(0), 'Missing accumulated point value!');
+                  return;
+            }
+            else if (typeof point !== 'number' || isNaN(point) || point <= 0)
+            {
+                  reportCustomValidity($('#couponPoint').get(0), 'Accumulated point value invalid!');
+                  return;
+            }
       }
       else if (type === 3)
       {
+            const name = encodeData($('#couponName').val());
+            const discount = $('#couponPercentage').val() ? parseFloat(encodeData($('#couponPercentage').val())) : '';
+            const people = $('#couponPeople').val() ? parseInt(encodeData($('#couponPeople').val())) : '';
 
+            if (!name)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Missing coupon name!');
+                  return;
+            }
+            else if (name.length > 255)
+            {
+                  reportCustomValidity($('#couponName').get(0), 'Coupon name must be at most 255 characters long or less!');
+                  return;
+            }
+
+            if (discount === '')
+            {
+                  reportCustomValidity($('#couponPercentage').get(0), 'Missing discount percentage value!');
+                  return;
+            }
+            else if (typeof discount !== 'number' || isNaN(discount) || discount <= 0 || discount > 100)
+            {
+                  reportCustomValidity($('#couponPercentage').get(0), 'Discount percentage value invalid!');
+                  return;
+            }
+
+            if (people === '')
+            {
+                  reportCustomValidity($('#couponPeople').get(0), 'Missing number of people value!');
+                  return;
+            }
+            else if (typeof people !== 'number' || isNaN(people) || people <= 0)
+            {
+                  reportCustomValidity($('#couponPeople').get(0), 'Number of people value invalid!');
+                  return;
+            }
       }
 }

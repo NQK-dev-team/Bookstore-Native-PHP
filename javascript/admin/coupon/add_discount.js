@@ -10,14 +10,14 @@ $(document).ready(function ()
       {
             $('#addCouponForm').empty();
             bookApply = [];
-            selectAll = [];
+            //selectAll = [];
             originalBookApply = [];
       });
 
       $('#addModal').on('show.bs.modal', function ()
       {
             bookApply = [];
-            selectAll = [];
+            //selectAll = [];
             originalBookApply = [];
       });
 });
@@ -99,7 +99,7 @@ function selectAllBookAddModal(e)
       if (e.target.checked)
       {
             bookApply = [];
-            selectAll = [];
+            //selectAll = [];
             $('#couponBookApply').val('');
       }
 }
