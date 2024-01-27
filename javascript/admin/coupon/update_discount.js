@@ -19,22 +19,52 @@ $(document).ready(function ()
             bookArr = [];
             textareaDefaultValue = '';
       });
+
+      $('#updateModal').on('show.bs.modal', function ()
+      {
+            $('#updateCouponForm').empty();
+            update_id = null;
+            bookApply = [];
+            //selectAll = [];
+            originalBookApply = [];
+            bookArr = [];
+            textareaDefaultValue = '';
+      });
+
+      $('#dataAnomalies').on('hidden.bs.modal', function ()
+      {
+            $('#anomaliesConfirm').off('click'); // Remove the event listener   
+      });
 });
 
 function selectAllBookUpdateModal(e)
 {
-      $('#couponBookApply').prop('disabled', e.target.checked);
       if (e.target.checked)
       {
             bookApply = [];
             //selectAll = [];
             $('#couponBookApply').val('');
+            $('#couponBookApply').prop('disabled', true);
       }
       else
       {
-            bookApply = [...originalBookApply];
-            $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
+            // bookApply = [...originalBookApply];
+            // $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
+            $('#btncheck1').prop('checked', true);
+            $('#dataAnomalies').modal('show');
+            $('#anomaliesConfirm').on('click', function ()
+            {
+                  acceptAnomalies();
+                  $('#btncheck1').prop('checked', false);
+                  $('#couponBookApply').prop('disabled', false);
+            });
       }
+}
+
+function acceptAnomalies()
+{
+      bookApply = [...originalBookApply];
+      $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
 }
 
 function openUpdateModal(id)
@@ -50,8 +80,6 @@ function openUpdateModal(id)
 
       if (type === 1)
       {
-            update_id = id;
-
             $.ajax({
                   url: '/ajax_service/admin/coupon/get_discount_detail.php',
                   method: 'GET',
@@ -66,9 +94,13 @@ function openUpdateModal(id)
                         }
                         else if (data.query_result)
                         {
+                              $('#updateModal').modal('show');
+
+                              update_id = id;
+
                               if (!data.query_result.applyForAll)
                               {
-                                    bookArr = [...data.query_result.bookApply.map(elem => `${ elem.name } - ${ elem.edition }`)];
+                                    bookArr = [...data.query_result.bookApply.map(elem => `${ elem.name } - ${ elem.edition } edition`)];
                                     bookApply = [...data.query_result.bookApply.map(elem => elem.id)];
                                     originalBookApply = [...bookApply];
                               }
@@ -99,8 +131,6 @@ function openUpdateModal(id)
                                           <textarea rows="5" readonly class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
                                     </div>`)
                               );
-
-                              $('#updateModal').modal('show');
                         }
                   },
 
@@ -121,8 +151,6 @@ function openUpdateModal(id)
       }
       else if (type === 2)
       {
-            update_id = id;
-
             $.ajax({
                   url: '/ajax_service/admin/coupon/get_discount_detail.php',
                   method: 'GET',
@@ -137,6 +165,10 @@ function openUpdateModal(id)
                         }
                         else if (data.query_result)
                         {
+                              $('#updateModal').modal('show');
+
+                              update_id = id;
+
                               $('#updateCouponForm').append(
                                     $(`<div>
                                           <label for="couponName" class="form-label">Coupon Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
@@ -151,8 +183,6 @@ function openUpdateModal(id)
                                           <input type="number" class="form-control" id="couponPoint" placeholder="Enter value" value="${ data.query_result.point }">
                                     </div>`)
                               );
-
-                              $('#updateModal').modal('show');
                         }
                   },
 
@@ -173,8 +203,6 @@ function openUpdateModal(id)
       }
       else if (type === 3)
       {
-            update_id = id;
-
             $.ajax({
                   url: '/ajax_service/admin/coupon/get_discount_detail.php',
                   method: 'GET',
@@ -189,6 +217,10 @@ function openUpdateModal(id)
                         }
                         else if (data.query_result)
                         {
+                              $('#updateModal').modal('show');
+
+                              update_id = id;
+
                               $('#updateCouponForm').append(
                                     $(`<div>
                                           <label for="couponName" class="form-label">Coupon Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
@@ -203,8 +235,6 @@ function openUpdateModal(id)
                                           <input type="number" class="form-control" id="couponPoint" placeholder="Enter value" value="${ data.query_result.numberOfPeople }">
                                     </div>`)
                               );
-
-                              $('#updateModal').modal('show');
                         }
                   },
 
@@ -267,19 +297,12 @@ function updateCoupon()
 
             const startDate = new Date(start);
             const endDate = new Date(end);
-            const today = new Date();
             startDate.setHours(0, 0, 0, 0);
             endDate.setHours(0, 0, 0, 0);
-            today.setHours(0, 0, 0, 0);
 
             if (!start)
             {
                   reportCustomValidity($('#couponStartDate').get(0), 'Missing start date!');
-                  return;
-            }
-            else if (startDate < today)
-            {
-                  reportCustomValidity($('#couponStartDate').get(0), 'Start date must be after or the same day as today!');
                   return;
             }
 
@@ -288,17 +311,59 @@ function updateCoupon()
                   reportCustomValidity($('#couponEndDate').get(0), 'Missing end date!');
                   return;
             }
-            else if (endDate < today)
-            {
-                  reportCustomValidity($('#couponEndDate').get(0), 'End date must be after or the same day as today!');
-                  return;
-            }
 
             if (startDate > endDate)
             {
                   reportCustomValidity($('#couponStartDate').get(0), 'Start date must be before or the same day as end date!');
                   return;
             }
+
+            $.ajax({
+                  url: '/ajax_service/admin/coupon/update_discount.php',
+                  type: 'POST',
+                  data: {
+                        id: encodeData(update_id),
+                        type: type,
+                        name: name,
+                        discount: discount,
+                        start: start,
+                        end: end,
+                        allBook: $('#btncheck1').prop('checked'),
+                        bookApply: bookApply.length ? ((bookApply.filter(str => str.trim() !== '')).map(str => encodeData(str))).join(',') : ''
+                  },
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+                        }
+                        else if (data.query_result)
+                        {
+                              $('#updateModal').modal('hide');
+                              $('#successUpdateModal').modal('show');
+                        }
+                        fetchCouponList();
+                  },
+                  error: function (err)
+                  {
+                        console.error(err);
+
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
       }
       else if (type === 2)
       {

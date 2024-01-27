@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
 
                   if ($type === '1') {
-                        $stmt = $conn->prepare('select * from eventDiscount where id=?');
+                        $stmt = $conn->prepare('select * from eventDiscount join discount on discount.id=eventDiscount.id where eventDiscount.id=?');
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               exit;
                         } else if ($stmt->get_result()->num_rows === 0) {
                               http_response_code(404);
-                              echo json_encode(['error' => 'Discount event coupon not found!']);
+                              echo json_encode(['error' => 'Coupon not found!']);
                               $stmt->close();
                               $conn->close();
                               exit;
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         }
                         $stmt->close();
                   } else if ($type === '2') {
-                        $stmt = $conn->prepare('select * from customerDiscount where id=?');
+                        $stmt = $conn->prepare('select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.id=?');
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               exit;
                         } else if ($stmt->get_result()->num_rows === 0) {
                               http_response_code(404);
-                              echo json_encode(['error' => 'Customer discount event coupon not found!']);
+                              echo json_encode(['error' => 'Coupon not found!']);
                               exit;
                         }
                         $stmt->close();
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         }
                         $stmt->close();
                   } else if ($type === '3') {
-                        $stmt = $conn->prepare('select * from referrerDiscount where id=?');
+                        $stmt = $conn->prepare('select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.id=?');
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                               exit;
                         } else if ($stmt->get_result()->num_rows === 0) {
                               http_response_code(404);
-                              echo json_encode(['error' => 'Referrer discount coupon not found!']);
+                              echo json_encode(['error' => 'Coupon not found!']);
                               exit;
                         }
                         $stmt->close();

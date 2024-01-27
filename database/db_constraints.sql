@@ -385,26 +385,35 @@ delimiter ;
 
 -- This trigger forbid update statements that push the start date up but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the start end date)
 -- This trigger also forbid update statements that set the end date to end earlier than it's supposed to but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the old end date)
--- This trigger also remove any associated rows in `eventApply` table if `applyForAll` column is set from false to true
-drop trigger if exists eventDiscountBusinessConstraintUpdateTrigger;
+drop trigger if exists eventDiscountBusinessConstraintBeforeUpdateTrigger;
 delimiter //
-create trigger eventDiscountBusinessConstraintUpdateTrigger
+create trigger eventDiscountBusinessConstraintBeforeUpdateTrigger
 before update on eventDiscount
 for each row
 begin
 	if old.startDate < new.startDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime<new.startDate and customerOrder.purchaseTime>=old.startDate and customerOrder.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not shorten discount event end date, there are purchased order(s) that have already used this coupon on dates that are outside of the new end date you want to set!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot push up event start date due to existing purchased orders using this coupon on dates before the new start date!';
     end if;
     
 	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime>new.endDate and customerOrder.purchaseTime<=old.endDate and customerOrder.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not shorten discount event end date, there are purchased order(s) that have already used this coupon on dates that are outside of the new end date you want to set!';
-    end if;
-    
-    if !old.applyForAll and new.applyForAll then
-		delete from eventApply where eventApply.eventID=eventDiscount.id;
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot shorten event end date due to existing purchased orders using this coupon on dates after the new end date!';
     end if;
 end//
 delimiter ;
+
+-- This trigger remove any associated rows in `eventApply` table if `applyForAll` column is set from false to true
+drop trigger if exists eventDiscountBusinessConstraintAfterUpdateTrigger;
+delimiter //
+create trigger eventDiscountBusinessConstraintAfterUpdateTrigger
+after update on eventDiscount
+for each row
+begin
+    if new.applyForAll then
+		delete from eventApply where eventApply.eventID=new.id;
+    end if;
+end//
+delimiter ;
+
 -- ** End of eventDiscount **
 
 -- ** Begin of eventApply **
@@ -425,7 +434,7 @@ begin
         )
     )
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this discount_event-book row, the discount event has been used on purchased order(s) and the book is also in that/those order(s)!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this row, the discount event has been used on purchased orders and the book is also in those orders!';
     end if;
 end//
 delimiter ;

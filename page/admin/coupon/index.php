@@ -555,6 +555,23 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
+                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h2 class="modal-title fs-5">Warning</h2>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Changing from applying to all books to only a number of books can cause data anomalies, do you really want to do this?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id='anomaliesConfirm'>Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
             </section>
             <?php
             require_once __DIR__ . '/../../../layout/footer.php';

@@ -100,7 +100,7 @@ function fetchBookList()
                         {
                               const trElem = $('<tr>');
 
-                              trElem.append($(`<td class=\"align-middle text-center\"><input ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } type='checkbox' data-book-id='${ data.query_result[0][i].id }' ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } class='pointer' name='check' value="${ data.query_result[0][i].name } - ${ data.query_result[0][i].edition }" onclick='addToList(event,"${ data.query_result[0][i].id }")'></td>`));
+                              trElem.append($(`<td class=\"align-middle text-center\"><input ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } type='checkbox' data-book-id='${ data.query_result[0][i].id }' ${ bookApply.includes(data.query_result[0][i].id) ? 'checked' : '' } class='pointer' name='check' value="${ data.query_result[0][i].name } - ${ data.query_result[0][i].edition } edition" onclick='addToList(event,"${ data.query_result[0][i].id }")'></td>`));
                               trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
                               trElem.append($(`<td class=\"col-4 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
