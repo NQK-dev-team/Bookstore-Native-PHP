@@ -563,7 +563,7 @@ if (return_navigate_error() === 400) {
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
-                                          <p>Changing from applying to all books to only a number of books can cause data anomalies, do you really want to do this?</p>
+                                          <p>Changing from applying to all books to only a number of books can cause incorrect data presentation when performing statistical analysis, do you really want to do this?</p>
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
