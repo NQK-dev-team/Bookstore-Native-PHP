@@ -43,6 +43,7 @@ create table customer(
     check(point>=0),
     referrer varchar(20),
     status boolean not null default true,
+    deleteTime datetime,
     foreign key (id) references appUser(id) on delete cascade on update cascade,
     foreign key (referrer) references customer(id) on delete set null on update cascade
 );
@@ -137,8 +138,10 @@ create table customerOrder(
     totalDiscount double not null,
     check(totalDiscount>=0),
     customerID varchar(20) not null,
+    orderCode varchar(16) unique,
     foreign key (customerID) references customer(id) on delete cascade on update cascade,
-    check((status and purchaseTime is not null) or (!status and purchaseTime is null))
+    check((status and purchaseTime is not null) or (!status and purchaseTime is null)),
+    check((status and orderCode is not null) or (!status and orderCode is null))
 );
 
 create table physicalOrder(

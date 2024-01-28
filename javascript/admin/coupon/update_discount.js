@@ -37,34 +37,89 @@ $(document).ready(function ()
       });
 });
 
-function selectAllBookUpdateModal(e)
+function selectAllBookUpdateModal(e, type)
 {
-      if (e.target.checked)
+      if (type === 1)
       {
-            bookApply = [];
-            //selectAll = [];
-            $('#couponBookApply').val('');
-            $('#couponBookApply').prop('disabled', true);
-      }
-      else
-      {
-            // bookApply = [...originalBookApply];
-            // $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
-            $('#btncheck1').prop('checked', true);
-            $('#dataAnomalies').modal('show');
-            $('#anomaliesConfirm').on('click', function ()
+            if (e.target.checked)
             {
-                  acceptAnomalies();
-                  $('#btncheck1').prop('checked', false);
-                  $('#couponBookApply').prop('disabled', false);
-            });
+                  if (originalBookApply.length)
+                  {
+                        $('#btncheck1').prop('checked', false);
+                        $('#dataAnomalies').modal('show');
+                        $('#anomaliesConfirm').on('click', function ()
+                        {
+                              acceptAnomalies(1, true);
+                              $('#btncheck1').prop('checked', true);
+                        });
+                  }
+                  else
+                  {
+                        bookApply = [];
+                        //selectAll = [];
+                        $('#couponBookApply').val('');
+                        $('#couponBookApply').prop('disabled', true);
+                  }
+            }
+            else if (!e.target.checked)
+            {
+                  if (originalBookApply.length)
+                  {
+                        bookApply = [...originalBookApply];
+                        $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
+                        $('#couponBookApply').prop('disabled', false);
+                  }
+                  else
+                  {
+                        $('#btncheck1').prop('checked', true);
+                        $('#dataAnomalies').modal('show');
+                        $('#anomaliesConfirm').on('click', function ()
+                        {
+                              acceptAnomalies(1, false);
+                              $('#btncheck1').prop('checked', false);
+                        });
+                  }
+            }
+      }
+      else if (type === 2)
+      {
+            if (originalBookApply.length)
+            {
+                  $('#dataAnomalies').modal('show');
+                  $('#anomaliesConfirm').on('click', function ()
+                  {
+                        acceptAnomalies(2, null);
+                  });
+            }
+            else
+                  chooseBook();
       }
 }
 
-function acceptAnomalies()
+function acceptAnomalies(type, checked)
 {
-      bookApply = [...originalBookApply];
-      $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
+      if (type === 1)
+      {
+            bookApply = [];
+            $('#couponBookApply').val('');
+            $('#couponBookApply').prop('disabled', checked);
+            // if (checked)
+            // {
+            //       bookApply = [];
+            //       //selectAll = [];
+            //       $('#couponBookApply').val('');
+            //       $('#couponBookApply').prop('disabled', true);
+            // }
+            // else
+            // {
+            //       bookApply = [];
+            //       $('#couponBookApply').val('');
+            // }
+      }
+      else if (type === 2)
+      {
+            chooseBook();
+      }
 }
 
 function openUpdateModal(id)
@@ -126,9 +181,9 @@ function openUpdateModal(id)
                                     </div>
                                     <div class='mt-2'>
                                           <p class="form-label">Books Applied:</p>
-                                          <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookUpdateModal(event)" ${ data.query_result.applyForAll ? 'checked' : '' } data-default-check-state=${ data.query_result.applyForAll }>
+                                          <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookUpdateModal(event,1)" ${ data.query_result.applyForAll ? 'checked' : '' } data-default-check-state=${ data.query_result.applyForAll }>
                                           <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
-                                          <textarea rows="5" readonly class="form-control pointer mt-2" id="couponBookApply" onclick="chooseBook()" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
+                                          <textarea rows="5" readonly class="form-control pointer mt-2" id="couponBookApply" onclick="selectAllBookUpdateModal(null,2)" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
                                     </div>`)
                               );
                         }
