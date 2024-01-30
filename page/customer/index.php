@@ -23,13 +23,13 @@ if (return_navigate_error() === 400) {
                   require_once __DIR__ . '/../../error/500.php';
                   exit;
             }
-            $elem = $conn->prepare('select book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice from book inner join author on book.id = author.bookID
+            $elem = $conn->prepare('select book.id, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from book inner join author on book.id = author.bookID
                                                                                                                                                                                   join fileCopy on book.id = fileCopy.id
                                                                                                                                                                                   join physicalCopy on book.id = physicalCopy.id');
             $elem->execute();
             $elem = $elem->get_result();
 
-            $featured = $conn->prepare('select distinct physicalOrders.bookID, pSales, fSales, (pSales + fSales)  as sales, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice from customerOrder join (select sum(amount) as pSales, physicalOrder.id as id, bookID from physicalOrder join physicalOrderContain on physicalOrder.id = physicalOrderContain.orderID group by bookID) as physicalOrders on customerOrder.id = physicalOrders.id 
+            $featured = $conn->prepare('select distinct physicalOrders.bookID, pSales, fSales, (pSales + fSales)  as sales, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from customerOrder join (select sum(amount) as pSales, physicalOrder.id as id, bookID from physicalOrder join physicalOrderContain on physicalOrder.id = physicalOrderContain.orderID group by bookID) as physicalOrders on customerOrder.id = physicalOrders.id 
                                                                                                                                                                                                                                               join (select count(orderID) as fSales, fileOrder.id as id from fileOrder join fileOrderContain on fileOrder.id = fileOrderContain.orderID group by bookID) as fileOrders on customerOrder.id = fileOrders.id
                                                                                                                                                                                                                                               join author on physicalOrders.bookID = author.bookID
                                                                                                                                                                                                                                               join book on book.id = physicalOrders.bookID
@@ -81,7 +81,10 @@ if (return_navigate_error() === 400) {
                         color: gray;
                   }
                   .pic {
-                        height:auto;
+                        height: 28rem;
+                  }
+                  a{
+                        text-decoration: none;
                   }
             </style>
       </head>
@@ -99,16 +102,33 @@ if (return_navigate_error() === 400) {
                                           echo"<div class=\"grid-container\">";
                                           while($row=$featured->fetch_assoc()){
                                                 // insert a card for link here
-                                                 echo "<div class=\"card mb-3 border-light\">";
-                                                      // insert picture here
-                                                      echo "<img class=\"pic\" src=\"https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg\">";
+                                                $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
+                                                echo "<div class=\"card mb-3 border-light\">";
+                                                      echo "<img class=\"pic\" ".$row["pic"].">";
                                                       echo "<div class=\"card-body\">";
+                                                            echo "<a href=\"book-deatil?bookID=".normalizeURL(rawurlencode($row["bookID"]))."\""; 
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
                                                             echo "<p class=\"author\">".$row["authorName"]."</p>";
                                                             echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
                                                             echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
-                                                            // echo "<p>"."Ratings: ".$row["stars"]."/5"."</p>";
-                                                            // insert ratings here
+                                                            $cnt = 1;
+                                                            $res="";
+                                                            while($cnt <= 5){
+                                                                  if ($cnt > $row["star"]){
+                                                                        if($cnt - $row["star"] > 0 && $cnt - $row["star"] < 1){
+                                                                              $res .= "<i class=\"bi bi-star-half\"></i>";
+                                                                        }
+                                                                        else{
+                                                                              $res .= "<i class=\"bi bi-star\"></i>";
+                                                                        }
+                                                                  }
+                                                                  else {
+                                                                        $res .= "<i class=\"bi bi-star-fill\"></i>";
+                                                                  }
+                                                                  $cnt++;
+                                                            }
+                                                            echo $res."(".$row["star"].")";
+                                                            echo "</a>";
                                                       echo "</div>";
                                                 echo "</div>";
                                            }
@@ -124,16 +144,33 @@ if (return_navigate_error() === 400) {
                                           echo"<div class=\"grid-container\">";
                                           while($row=$elem->fetch_assoc()){
                                                 // insert a card for link here
+                                                $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                                                  echo "<div class=\"card mb-3 border-light\">";
-                                                      // insert picture here
-                                                      echo "<img class=\"pic\" src=\"https://static.vecteezy.com/system/resources/thumbnails/002/219/582/small_2x/illustration-of-book-icon-free-vector.jpg\">";
+                                                      echo "<img class=\"pic\" ".$row["pic"].">";
                                                       echo "<div class=\"card-body\">";
+                                                            echo "<a href=\"book-deatil?bookID=".normalizeURL(rawurlencode($row["id"]))."\""; 
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
                                                             echo "<p class=\"author\">".$row["authorName"]."</p>";
                                                             echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
                                                             echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
-                                                            // echo "<p>"."Ratings: ".$row["stars"]."/5"."</p>";
-                                                            // insert ratings here
+                                                            $cnt = 1;
+                                                            $res="";
+                                                            while($cnt <= 5){
+                                                                  if ($cnt > $row["star"]){
+                                                                        if($cnt - $row["star"] > 0 && $cnt - $row["star"] < 1){
+                                                                              $res .= "<i class=\"bi bi-star-half\"></i>";
+                                                                        }
+                                                                        else{
+                                                                              $res .= "<i class=\"bi bi-star\"></i>";
+                                                                        }
+                                                                  }
+                                                                  else {
+                                                                        $res .= "<i class=\"bi bi-star-fill\"></i>";
+                                                                  }
+                                                                  $cnt++;
+                                                            }
+                                                            echo $res."(".$row["star"].")";
+                                                            echo "</a>";
                                                       echo "</div>";
                                                 echo "</div>";
                                            }
