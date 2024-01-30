@@ -18,20 +18,20 @@ function map($elem)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset(
-            $_POST['name'],
-            $_POST['edition'],
-            $_POST['isbn'],
-            $_POST['age'],
-            $_POST['author'],
-            $_POST['category'],
-            $_POST['publisher'],
-            $_POST['publishDate'],
-            $_POST['description'],
-            $_POST['physicalPrice'],
-            $_POST['filePrice'],
-            $_POST['inStock']
-      )) {
+      if (
+            isset($_POST['name']) &&
+            isset($_POST['edition']) &&
+            isset($_POST['isbn']) &&
+            isset($_POST['age']) &&
+            isset($_POST['author']) &&
+            isset($_POST['category']) &&
+            isset($_POST['publisher']) &&
+            isset($_POST['publishDate']) &&
+            isset($_POST['description']) &&
+            isset($_POST['physicalPrice']) &&
+            isset($_POST['filePrice']) &&
+            isset($_POST['inStock'])
+      ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
                   $age = sanitize(rawurldecode($_POST['age'])) ? sanitize(rawurldecode($_POST['age'])) : null;
                   $author =  $_POST['author'] ? array_map('map', explode(',', $_POST['author'])) : [];
-                  $category = $_POST['category'] ? array_map('map', explode(',', $_POST['category'])) : [];
+                  $category = $_POST['category'] ? array_map('map', explode("\n", rawurldecode($_POST['category']))) : [];
                   $publisher = sanitize(rawurldecode($_POST['publisher']));
                   $publishDate = sanitize(rawurldecode($_POST['publishDate']));
                   $description = sanitize(rawurldecode($_POST['description'])) ? sanitize(rawurldecode($_POST['description'])) : null;
@@ -53,13 +53,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $inStock = sanitize(rawurldecode($_POST['inStock'])) ? sanitize(rawurldecode($_POST['inStock'])) : null;
 
                   if (!$name) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book name is empty!']);
                         exit;
-                  } else if (preg_match('/[?\/]/', $name) === 1) {
-                        echo json_encode(['error' => 'Book name must not contain \'?\', \'/\' or \'\\\' characters!']);
+                  } else if (preg_match('/[?\/"]/', $name) === 1) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Book name must not contain \'?\', \'/\', \'"\' or \'\\\' characters!']);
                         exit;
                   } else if (strlen($name) > 255) {
-                        echo json_encode(['error' => 'Book name must be 255 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Book name must be at most 255 characters long or less!']);
                         exit;
                   } else if (preg_match('/[?\/]/', $name) === false) {
                         throw new Exception('Error occurred during book name format check!');
@@ -67,17 +70,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if (!$edition) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book edition is empty!']);
                         exit;
                   } else if (!is_numeric($edition) || $edition <= 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book edition invalid!']);
                         exit;
                   }
 
                   if (!$isbn) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book ISBN-13 is empty!']);
                         exit;
                   } else if (preg_match('/^[0-9]{13}$/', $isbn) === 0) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book ISBN-13 invalid!']);
                         exit;
                   } else if (preg_match('/[?\/]/', $name) === false) {
@@ -86,62 +93,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if ($age && (!is_numeric($age) || $age <= 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Age restriction invalid!']);
                         exit;
                   }
 
                   if (!count($author)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Book must have at least one author!']);
                         exit;
                   } else {
                         foreach ($author as $x) {
                               if (strlen($x) > 255) {
-                                    echo json_encode(['error' => 'Author name must be 255 characters long or less!']);
+                                    http_response_code(400);
+                                    echo json_encode(['error' => 'Author name must be at most 255 characters long or less!']);
                                     exit;
                               }
                         }
                   }
 
                   if (!$publisher) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Publisher is empty!']);
                         exit;
                   } else if (strlen($publisher) > 255) {
-                        echo json_encode(['error' => 'Publisher must be 255 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Publisher must be at most 255 characters long or less!']);
                         exit;
                   }
 
                   if (!$publishDate) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Publish date is empty!']);
                         exit;
                   } else {
                         // Create a DateTime object for the date of birth
                         $tempDate = new DateTime($publishDate, new DateTimeZone('Asia/Ho_Chi_Minh'));
-
+                        $tempDate->setTime(0, 0, 0); // Set time to 00:00:00
                         // Get the current date
                         $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
-
+                        $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
                         if ($tempDate > $currentDate) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Publish date invalid!']);
                               exit;
                         }
                   }
 
                   if ($description && strlen($description) > 2000) {
-                        echo json_encode(['error' => 'Description must be 2000 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Description must be at most 2000 characters long or less!']);
                         exit;
                   }
 
                   if ($physicalPrice && (!is_numeric($physicalPrice) || $physicalPrice <= 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Physical copy price invalid!']);
                         exit;
                   }
 
                   if ($inStock && (!is_numeric($inStock) || $inStock < 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Physical copy in stock invalid!']);
                         exit;
                   }
 
                   if ($filePrice && (!is_numeric($filePrice) || $filePrice <= 0)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'File copy price invalid!']);
                         exit;
                   }
@@ -164,13 +182,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
                         if (!in_array($fileMimeType, $allowedImageTypes)) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid image file!']);
                               exit;
                         } else if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Image size must be 5MB or less!']);
                               exit;
                         }
                   } else {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Missing image file!']);
                         exit;
                   }
@@ -190,6 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
                         if (!in_array($fileMimeType, $allowedFileTypes)) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid PDF file!']);
                               exit;
                         }

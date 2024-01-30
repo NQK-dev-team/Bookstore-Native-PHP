@@ -1,7 +1,7 @@
 let originalImg = null, originalName = null, originalEdition = null,
       originalISBN = null, originalAge = null, originalPublisher = null,
       originalPublishDate = null, originalPhysicalPrice = null, originalFilePrice = null,
-      originalPhysicalInStock = null, originalAuthor = null, originalCategory = null, originalDescription = null;
+      originalPhysicalInStock = null, originalAuthor = null, originalDescription = null;
 
 let newImg = null, newFile = null, removeFile = false;
 
@@ -20,7 +20,7 @@ $(document).ready(() =>
       originalFilePrice = $('#filePriceInput').val();
       originalPhysicalInStock = $('#inStockInput').val();
       originalAuthor = $('#authorInput').val();
-      originalCategory = $('#categoryInput').val();
+      //originalCategory = $('#categoryInput').val();
       originalDescription = $('#descriptionInput').val();
 
       $('#errorModal').on('hidden.bs.modal', function ()
@@ -130,14 +130,14 @@ function getCategory(search)
                                     $(`
                                     <div class='d-flex flex-sm-row flex-column w-100'>
                                           <div class="form-check mx-auto check_box">
-                                                <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i].name }" id="category_${ i + 1 }" ${ $('#categoryInput').val().includes(data.query_result[i].name) ? 'checked' : '' }>
+                                                <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i].name }" id="category_${ i + 1 }" ${ $('#categoryInput').val().split('\n').includes(data.query_result[i].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ i + 1 }">
                                                       ${ data.query_result[i].name }
                                                       <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i].description ? data.query_result[i].description : 'N/A' }"></i>
                                                 </label>
                                           </div>
                                           <div class="form-check mx-auto check_box">
-                                                <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i + 1].name }" id="category_${ i + 2 }" ${ $('#categoryInput').val().includes(data.query_result[i + 1].name) ? 'checked' : '' }>
+                                                <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[i + 1].name }" id="category_${ i + 2 }" ${ $('#categoryInput').val().split('\n').includes(data.query_result[i + 1].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ i + 2 }">
                                                       ${ data.query_result[i + 1].name }
                                                       <i class="bi bi-question-circle help ms-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[i + 1].description ? data.query_result[i + 1].description : 'N/A' }"></i>
@@ -153,7 +153,7 @@ function getCategory(search)
                                     $(`
                                     <div class='d-flex flex-sm-row flex-column w-100'>
                                           <div class="form-check mx-auto check_box">
-                                                <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[data.query_result.length - 1].name }" id="category_${ data.query_result.length }" ${ $('#categoryInput').val().includes(data.query_result[data.query_result.length - 1].name) ? 'checked' : '' }>
+                                                <input onchange="setCategory(event)" class="form-check-input pointer" type="checkbox" value="${ data.query_result[data.query_result.length - 1].name }" id="category_${ data.query_result.length }" ${ $('#categoryInput').val().split('\n').includes(data.query_result[data.query_result.length - 1].name) ? 'checked' : '' }>
                                                 <label class="form-check-label" for="category_${ data.query_result.length }">
                                                       ${ data.query_result[data.query_result.length - 1].name }
                                                 </label>
@@ -204,14 +204,14 @@ function setRemoveFile(e)
 
 function setCategory(e)
 {
-      const arr = $('#categoryInput').val() !== '' ? $('#categoryInput').val().split(',').map(x => x.trim()) : [];
+      const arr = $('#categoryInput').val() !== '' ? $('#categoryInput').val().split('\n').map(x => x.trim()) : [];
       if (e.target.checked)
       {
             if (!arr.includes(e.target.value))
             {
                   arr.push(e.target.value);
                   arr.sort();
-                  $('#categoryInput').val(arr.join(', '));
+                  $('#categoryInput').val(arr.join('\n'));
             }
       }
       else
@@ -220,7 +220,7 @@ function setCategory(e)
             {
                   arr.splice(arr.indexOf(e.target.value), 1);
                   arr.sort();
-                  $('#categoryInput').val(arr.join(', '));
+                  $('#categoryInput').val(arr.join('\n'));
             }
 
       }
@@ -241,7 +241,7 @@ function submitForm()
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
       const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
       const author = $('#authorInput').val() !== '' ? (($('#authorInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
-      const category = $('#categoryInput').val() !== '' ? (($('#categoryInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
+      const category = encodeData($('#categoryInput').val());//$('#categoryInput').val() !== '' ? (($('#categoryInput').val().split(';')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
       const publisher = encodeData($('#publisherInput').val());
       const publishDate = encodeData($('#publishDateInput').val());
       const physicalPrice = encodeData($('#physicalPriceInput').val()) === '' ? '' : parseFloat(encodeData($('#physicalPriceInput').val()));
@@ -249,8 +249,10 @@ function submitForm()
       const filePrice = encodeData($('#filePriceInput').val()) === '' ? '' : parseFloat(encodeData($('#filePriceInput').val()));
       const description = encodeData($('#descriptionInput').val());
 
-      const rawAuthor = $('#authorInput').val() !== '' ? ($('#authorInput').val().split(',')).filter(str => str.trim() !== '') : [];
-      const rawCategory = $('#categoryInput').val() !== '' ? ($('#categoryInput').val().split(',')).filter(str => str.trim() !== '') : [];
+      let rawAuthor = $('#authorInput').val() !== '' ? ($('#authorInput').val().split(',')).filter(str => str.trim() !== '') : [];
+      let rawCategory = $('#categoryInput').val() !== '' ? ($('#categoryInput').val().split('\n')).filter(str => str.trim() !== '') : [];
+      rawAuthor = rawAuthor.sort();
+      rawCategory = rawCategory.sort();
 
       if (name === '')
       {
@@ -260,15 +262,15 @@ function submitForm()
       else
       {
             const regex = /[?/\\]/;
-            const localName = name.replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\');
+            const localName = name.replace(/%2F/g, '/').replace(/%3F/g, '?').replace(/%5C/g, '\\').replace(/%22/g, '\"');
             if (regex.test(localName))
             {
-                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\' or \'\\\' characters!');
+                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must not contain \'?\', \'/\', \'\"\' or \'\\\' characters!');
                   return;
             }
             else if (name.length > 255)
             {
-                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must be 255 characters long or less!');
+                  reportCustomValidity($('#bookNameInput').get(0), 'Book name must be at most 255 characters long or less!');
                   return;
             }
       }
@@ -312,7 +314,7 @@ function submitForm()
       }
       else if (author.findIndex(elem => elem.length > 255) !== -1)
       {
-            reportCustomValidity($('#authorInput').get(0), 'Author name must be 255 characters long or less!');
+            reportCustomValidity($('#authorInput').get(0), 'Author name must be at most 255 characters long or less!');
             return;
       }
 
@@ -323,7 +325,7 @@ function submitForm()
       }
       else if (publisher.length > 255)
       {
-            reportCustomValidity($('#publisherInput').get(0), 'Publisher must be 255 characters long or less!');
+            reportCustomValidity($('#publisherInput').get(0), 'Publisher must be at most 255 characters long or less!');
             return;
       }
 
@@ -336,6 +338,8 @@ function submitForm()
       {
             const localPublishDate = new Date(publishDate);
             const today = new Date();
+            localPublishDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
             if (localPublishDate > today)
             {
                   reportCustomValidity($('#publishDateInput').get(0), 'Publish date invalid!');
@@ -345,7 +349,7 @@ function submitForm()
 
       if (description.length > 2000)
       {
-            reportCustomValidity($('#descriptionInput').get(0), 'Description must be 2000 characters long or less!');
+            reportCustomValidity($('#descriptionInput').get(0), 'Description must be at most 2000 characters long or less!');
             return;
       }
 
@@ -491,6 +495,7 @@ function submitForm()
                         originalImg = $('#bookImage').prop('src');
                         originalName = $('#bookNameInput').val();
                         originalEdition = $('#editionInput').val();
+                        $('#isbnInput').val(formatISBN($('#isbnInput').val()));
                         originalISBN = $('#isbnInput').val();
                         originalAge = $('#ageInput').val();
                         originalPublisher = $('#publisherInput').val();
@@ -499,7 +504,7 @@ function submitForm()
                         originalFilePrice = $('#filePriceInput').val();
                         originalPhysicalInStock = $('#inStockInput').val();
                         originalAuthor = rawAuthor.join(', ');
-                        originalCategory = rawCategory.join(', ');
+                        originalCategory = rawCategory.join('\n');
                         $('#authorInput').val(originalAuthor);
                         $('#categoryInput').val(originalCategory);
                         originalDescription = $('#descriptionInput').val();

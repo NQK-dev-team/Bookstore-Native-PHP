@@ -7,7 +7,7 @@ function formatISBN($isbn)
 
       // Check if the ISBN is 13 digits long
       if (strlen($isbn) == 13) {
-            // Format as 3-5-2-3-1
+            // Format as 3-1-2-6-1
             return substr($isbn, 0, 3) . '-' . substr($isbn, 3, 1) . '-' . substr($isbn, 4, 2) . '-' . substr($isbn, 6, 6) . '-' . substr($isbn, 12, 1);
       }
 

@@ -48,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
                   $result = $stmt->get_result();
                   if ($result->num_rows === 0) {
+                        http_response_code(404);
                         echo json_encode(['error' => 'Book not found!']);
                         $stmt->close();
                         $conn->close();
@@ -69,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   if ($result['result']) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Can not delete book that has been purchased!']);
                         $stmt->close();
                         exit;
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   } else {
                         $result = $stmt->get_result();
                         $result = $result->fetch_assoc();
-                        $deleteDir = dirname(dirname(dirname(__DIR__)) . "/data/book/" . $result['imagePath']);
+                        $deleteDir = dirname(dirname(dirname(dirname(__DIR__))) . "/data/book/" . $result['imagePath']);
                   }
 
                   $stmt = $conn->prepare('delete from book where id=?');

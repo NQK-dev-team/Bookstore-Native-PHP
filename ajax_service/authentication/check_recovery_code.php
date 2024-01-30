@@ -3,22 +3,25 @@
 require_once __DIR__ . '/../../tool/php/sanitizer.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['code'])) {
+      if (isset($_POST['email']) && isset($_POST['code'])) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $code = sanitize(rawurldecode($_POST['code']));
 
                   // Validate email
                   if (!$email) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   }
 
                   // Validate code
                   if (!$code) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No recovery code provided!']);
                         exit;
                   } else {
@@ -26,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during recovery code format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid recovery code format!']);
                               exit;
                         }
@@ -48,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     echo json_encode(['error' => 'Recovery code incorrect!']);
                               }
                         } else {
-                              echo json_encode(['error' => 'Recovery email not matched!']);
+                              http_response_code(404);
+                              echo json_encode(['error' => 'Email not found!']);
                         }
                   } else {
                         http_response_code(500);

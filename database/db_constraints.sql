@@ -2,6 +2,36 @@ use bookstore;
 
 -- **** Business constraints ****
 
+-- ** Begin of rating **
+-- This trigger delete the book from unpaid orders if new.status=false
+drop trigger if exists bookBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger bookBusinessConstraintUpdateTrigger
+before update on book
+for each row
+begin	
+	if not new.status then
+			DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
+            
+            DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
+                        
+            delete from fileOrder where id not in(
+				select orderID from fileOrderContain
+            );
+            
+            delete from physicalOrder where id not in(
+				select orderID from physicalOrderContain
+            );
+            
+            delete from customerOrder where id not in(
+				select id from fileOrder
+                union
+                select id from physicalOrder
+            );
+    end if;
+end//
+delimiter ;
+-- ** End of rating **
 
 -- ** Begin of rating **
 -- This trigger forbid any insert statement to `rating` table if the user hasn't bought the book yet
@@ -353,23 +383,37 @@ begin
 end//
 delimiter ;
 
--- This trigger forbid update statements that set the end date to end earlier than it's supposed to but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the old end date)
--- This trigger also remove any associated rows in `eventApply` table if `applyForAll` column is set from false to true
-drop trigger if exists eventDiscountBusinessConstraintUpdateTrigger;
+-- This trigger forbid update statements that push the start date up but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the start end date)
+-- This trigger also forbid update statements that set the end date to end earlier than it's supposed to but the discount coupon has already been used on purchased order(s) on the truncated dates (which are still at the range of the old end date)
+drop trigger if exists eventDiscountBusinessConstraintBeforeUpdateTrigger;
 delimiter //
-create trigger eventDiscountBusinessConstraintUpdateTrigger
+create trigger eventDiscountBusinessConstraintBeforeUpdateTrigger
 before update on eventDiscount
 for each row
 begin
-	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime>new.endDate and customerOrder.purchaseTime<=old.endDate and customerOrder.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not shorten discount event end date, there are purchased order(s) that have already used this coupon on dates that are outside of the new end date you want to set!';
+	if old.startDate < new.startDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime<new.startDate and customerOrder.purchaseTime>=old.startDate and customerOrder.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot push up event start date due to existing purchased orders using this coupon on dates before the new start date!';
     end if;
     
-    if !old.applyForAll and new.applyForAll then
-		delete from eventApply where eventApply.eventID=eventDiscount.id;
+	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime>new.endDate and customerOrder.purchaseTime<=old.endDate and customerOrder.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot shorten event end date due to existing purchased orders using this coupon on dates after the new end date!';
     end if;
 end//
 delimiter ;
+
+-- This trigger remove any associated rows in `eventApply` table if `applyForAll` column is set from false to true
+drop trigger if exists eventDiscountBusinessConstraintAfterUpdateTrigger;
+delimiter //
+create trigger eventDiscountBusinessConstraintAfterUpdateTrigger
+after update on eventDiscount
+for each row
+begin
+    if new.applyForAll then
+		delete from eventApply where eventApply.eventID=new.id;
+    end if;
+end//
+delimiter ;
+
 -- ** End of eventDiscount **
 
 -- ** Begin of eventApply **
@@ -390,7 +434,7 @@ begin
         )
     )
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this discount_event-book row, the discount event has been used on purchased order(s) and the book is also in that/those order(s)!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this row, the discount event has been used on purchased orders and the book is also in those orders!';
     end if;
 end//
 delimiter ;
@@ -619,16 +663,134 @@ end//
 delimiter ;
 -- ** End of customerOrder **
 
--- ** Begin of eventDiscount **
-drop trigger if exists eventDiscountDataConstraintInsertTrigger;
+-- ** Begin of customerDiscount **
+drop trigger if exists customerDiscountDataConstraintInsertTrigger;
 delimiter //
-create trigger eventDiscountDataConstraintInsertTrigger
-before insert on eventDiscount
+create trigger customerDiscountDataConstraintInsertTrigger
+before insert on customerDiscount
 for each row
 begin
-	if new.endDate is not null and new.endDate<=curdate() then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Event discount coupon end date must be the future!';
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-new.discount)<10e-9 and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current accumulated point milestone has already been used in another coupon!';
     end if;
 end//
 delimiter ;
--- ** End of eventDiscount **
+
+drop trigger if exists customerDiscountDataConstraintUpdateTrigger;
+delimiter //
+create trigger customerDiscountDataConstraintUpdateTrigger
+before update on customerDiscount
+for each row
+begin
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-new.discount)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+
+	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current accumulated point milestone has already been used in another coupon!';
+    end if;
+end//
+delimiter ;
+-- ** End of customerDiscount **
+
+-- ** Begin of referrerDiscount **
+drop trigger if exists referrerDiscountDataConstraintInsertTrigger;
+delimiter //
+create trigger referrerDiscountDataConstraintInsertTrigger
+before insert on referrerDiscount
+for each row
+begin
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-new.discount)<10e-9 and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current number of people milestone has already been used in another coupon!';
+    end if;
+end//
+delimiter ;
+
+drop trigger if exists referrerDiscountDataConstraintUpdateTrigger;
+delimiter //
+create trigger referrerDiscountDataConstraintUpdateTrigger
+before update on referrerDiscount
+for each row
+begin
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-new.discount)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
+    end if;
+    
+	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and referrerDiscount.id!=new.id and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current number of people milestone has already been used in another coupon!';
+    end if;
+end//
+delimiter ;
+-- ** End of referrerDiscount **
+
+-- ** Begin of discount **
+drop trigger if exists discountDataConstraintInsertTrigger;
+delimiter //
+create trigger discountDataConstraintInsertTrigger
+before insert on discount
+for each row
+begin
+	if new.status then
+    if exists(select * from discount where discount.name=new.name and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Current coupon name has already been used in another coupon!';
+    end if;
+    end if;
+end//
+delimiter ;
+
+drop trigger if exists discountDataConstraintUpdateTrigger;
+delimiter //
+create trigger discountDataConstraintUpdateTrigger
+before update on discount
+for each row
+begin
+	if new.status then
+    if exists(select * from discount where discount.id!=new.id and discount.name=new.name and discount.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Current coupon name has already been used in another coupon!';
+    end if;
+    
+	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
+		begin
+			declare pointMileStone double default null;
+            declare discountPer double default null;
+            
+            select discount,point into discountPer,pointMileStone from customerDiscount where customerDiscount.id=new.id;
+            
+            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-discountPer)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage value has already been used in another coupon!';
+			end if;
+            
+            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-pointMileStone)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current accumulated point milestone has already been used in another coupon!';
+			end if;
+        end;
+    end if;
+    
+    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
+		begin
+			declare peopleMileStone int default null;
+            declare discountPer double default null;
+            
+            select discount,numberOfPeople into discountPer,peopleMileStone from referrerDiscount where referrerDiscount.id=new.id;
+            
+            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-discountPer)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage value has already been used in another coupon!';
+			end if;
+            
+            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=peopleMileStone and referrerDiscount.id!=new.id and discount.status=true) then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current number of people milestone has already been used in another coupon!';
+			end if;
+        end;
+    end if;
+    end if;
+end//
+delimiter ;
+-- ** End of discount **

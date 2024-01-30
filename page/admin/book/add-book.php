@@ -87,7 +87,7 @@ if (return_navigate_error() === 400) {
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="categoryInput" class="form-label">Category:</label>
-                                                      <input readonly onclick="openCategoryModal()" type="text" class="form-control pointer" id="categoryInput">
+                                                      <textarea rows="4" readonly onclick="openCategoryModal()" class="form-control pointer" id="categoryInput"></textarea>
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="publisherInput" class="form-label">Publisher:<span class='fw-bold text-danger'>&nbsp;*</span></label>

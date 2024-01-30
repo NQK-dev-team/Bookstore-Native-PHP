@@ -4,9 +4,10 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/anti_csrf.php';
+require_once __DIR__ . '/../../tool/php/delete_cancel.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['password'], $_POST['type'])) {
+      if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['type'])) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $password = sanitize(rawurldecode($_POST['password']));
@@ -14,18 +15,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Validate email
                   if (!$email) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   }
 
                   // Validate password
                   if (!$password) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No password provided!']);
                         exit;
                   } else if (strlen($password) < 8) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Password must be at least 8 characters long!']);
                         exit;
                   } else {
@@ -33,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
                               exit;
                         }
@@ -41,9 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Valid user type
                   if (!$user_type) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No user type provided!']);
                         exit;
                   } else if ($user_type !== 'admin' && $user_type !== 'customer') {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid user type!']);
                         exit;
                   }
@@ -93,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $_SESSION['type'] = $user_type;
                                     $_SESSION['id'] = $result['id'];
                                     generateToken();
-
+                                    deleteCancle($_SESSION['id']);
                                     echo json_encode(['query_result' => true]);
 
                                     // Missing a procedure to set status=1 when status=0 and send an email to the customer

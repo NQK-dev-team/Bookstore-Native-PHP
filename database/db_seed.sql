@@ -257,11 +257,11 @@ insert into discount(id,name,status) values('E_DISCOUNT1','Black Friday Sales',t
 
 insert into customerDiscount(id,point,discount) values('C_DISCOUNT1',50,5),('C_DISCOUNT2',100,7),('C_DISCOUNT3',200,10);
 insert into referrerDiscount(id,numberOfPeople,discount) values('R_DISCOUNT1',3,2),('R_DISCOUNT2',5,5),('R_DISCOUNT3',10,7);
-insert into eventDiscount(id,discount,startDate,endDate,applyForAll) values('E_DISCOUNT1',30,date_sub(now(),interval 3 day),date_add(now(),interval 10 day),true),
-('E_DISCOUNT2',35,date_sub(now(),interval 1 day),date_add(now(),interval 7 day),false),
-('E_DISCOUNT3',25,date_sub(now(),interval 2 day),date_add(now(),interval 9 day),false),
-('E_DISCOUNT4',40,date_sub(now(),interval 2 day),date_add(now(),interval 7 day),false),
-('E_DISCOUNT5',20,date_sub(now(),interval 8 day),date_add(now(),interval 3 day),false);
+insert into eventDiscount(id,discount,startDate,endDate,applyForAll) values('E_DISCOUNT1',30,date_sub(curdate(),interval 3 day),date_add(curdate(),interval 10 day),true),
+('E_DISCOUNT2',35,date_sub(curdate(),interval 1 day),date_add(curdate(),interval 7 day),false),
+('E_DISCOUNT3',25,date_sub(curdate(),interval 2 day),date_add(curdate(),interval 9 day),false),
+('E_DISCOUNT4',40,date_sub(curdate(),interval 2 day),date_add(curdate(),interval 7 day),false),
+('E_DISCOUNT5',20,date_sub(curdate(),interval 8 day),date_add(curdate(),interval 3 day),false);
 
 insert into eventApply(eventID,bookID) values('E_DISCOUNT2','BOOK4'),('E_DISCOUNT2','BOOK5'),('E_DISCOUNT2','BOOK7'),('E_DISCOUNT2','BOOK12'),('E_DISCOUNT2','BOOK13'),('E_DISCOUNT2','BOOK17');
 insert into eventApply(eventID,bookID) values('E_DISCOUNT3','BOOK10'),('E_DISCOUNT3','BOOK20');

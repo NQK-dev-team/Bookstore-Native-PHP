@@ -29,12 +29,12 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/authentication/">Book</a></li>
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/authentication/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
-                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/authentication/">Discount</a></li>';
+                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/authentication/">Coupon</a></li>';
                                                 else
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/book/">Book</a></li>
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/category/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/customer/">Customer</a></li>
-                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/discount/">Discount</a></li>';
+                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/coupon/">Coupon</a></li>';
                                                 ?>
                                           </ul>
                                     </li>
@@ -55,6 +55,16 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                 ?>
                                           </ul>
                                     </li>
+                                    <?php
+                                    if (!check_session())
+                                          echo '<li class="nav-item ms-2">
+                                                      <a class="nav-link fs-5" href="/admin/authentication/" id="policy_nav">Policy</a>
+                                                </li>';
+                                    else
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
+                                          </li>";
+                                    ?>
                                     <?php
                                     if (!check_session())
                                           echo '<li class="nav-item ms-2">

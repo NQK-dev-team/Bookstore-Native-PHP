@@ -19,11 +19,7 @@ function map($elem)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset(
-            $_POST['name'],
-            $_POST['description'],
-            $_POST['id']
-      )) {
+      if (isset($_POST['name']) && isset($_POST['description']) && isset($_POST['id'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -36,15 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $description = $_POST['description'] ? sanitize(rawurldecode($_POST['description'])) : null;
 
                   if (!$name) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Category name is empty!']);
                         exit;
                   } else if (strlen($name) > 255) {
-                        echo json_encode(['error' => 'Category name must be 255 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Category name must be at most 255 characters long or less!']);
                         exit;
                   }
 
                   if ($description && strlen($description) > 500) {
-                        echo json_encode(['error' => 'Category description must be 500 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Category description must be at most 500 characters long or less!']);
                         exit;
                   }
 
@@ -70,7 +69,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $result = $stmt->get_result();
                   if ($result->num_rows === 0) {
-                        echo json_encode(['error' => 'Invalid category ID!']);
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Category ID not found!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select * from category where name=? and id!=?');
+                  $stmt->bind_param('ss', $name, $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  } else if ($stmt->get_result()->num_rows !== 0) {
+                        echo json_encode(['error' => 'Category already exists!']);
                         $stmt->close();
                         $conn->close();
                         exit;

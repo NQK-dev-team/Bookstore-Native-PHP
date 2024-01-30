@@ -11,15 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Validate email
                   if (!$email) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   }
 
                   if ($_SESSION['recovery_email'] !== $email) {
-                        echo json_encode(['error' => 'Recovery email not matched!']);
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Email not found!']);
                         exit;
                   }
 

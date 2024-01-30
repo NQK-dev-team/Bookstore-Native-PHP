@@ -176,6 +176,9 @@ if (return_navigate_error() === 400) {
             <title>Edit Book</title>
             <link rel="stylesheet" href="/css/admin/book/book_detail.css">
             <?php storeToken(); ?>
+            <script>
+                  let originalCategory = `<?php echo implode("\n", $query_result['category']); ?>`;
+            </script>
       </head>
 
       <body>
@@ -233,7 +236,7 @@ if (return_navigate_error() === 400) {
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="categoryInput" class="form-label">Category:</label>
-                                                      <input readonly onclick="openCategoryModal()" type="text" class="form-control pointer" id="categoryInput" value="<?php echo implode(', ', $query_result['category']); ?>">
+                                                      <textarea readonly onclick="openCategoryModal()" rows="4" class="form-control pointer" id="categoryInput"><?php echo implode("\n", $query_result['category']); ?></textarea>
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="publisherInput" class="form-label">Publisher:<span class='fw-bold text-danger'>&nbsp;*</span></label>
@@ -385,6 +388,7 @@ if (return_navigate_error() === 400) {
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/input_validity.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
+            <script src="/tool/js/formatter.js"></script>
       </body>
 
       </html>

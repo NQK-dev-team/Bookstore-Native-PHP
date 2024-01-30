@@ -55,9 +55,9 @@ if (return_navigate_error() === 400) {
                   $idx++;
                   $row['description'] = $row['description'] ? $row['description'] : 'N/A';
                   $elem .= '<tr>';
-                  $elem .= '<th scope="row">' . $idx . '</th>';
-                  $elem .= '<td class="col-1">' . $row['name'] . '</td>';
-                  $elem .= '<td><div class="truncate">' . $row['description'] . '</div></td>';
+                  $elem .= '<td class="align-middle">' . $idx . '</td>';
+                  $elem .= '<td class="col-1 align-middle">' . $row['name'] . '</td>';
+                  $elem .= '<td class="align-middle"><div class="truncate">' . $row['description'] . '</div></td>';
                   $elem .= '<td class="align-middle col-1">';
                   $elem .= "<div class='d-flex flex-lg-row flex-column'>";
                   $elem .= '<button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal(\'' . $row['id'] . '\')"><i class="bi bi-pencil text-white"></i></button>';
@@ -151,9 +151,17 @@ if (return_navigate_error() === 400) {
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">1</p>
+                                    <p id="start_entry">
+                                          <?php
+                                          if ($totalEntries === 0) echo '0';
+                                          else echo '1'; ?>
+                                    </p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">10</p>
+                                    <p id="end_entry">
+                                          <?php
+                                          if ($totalEntries < 10) echo $totalEntries;
+                                          else echo '10'; ?>
+                                    </p>
                                     <p>&nbsp;of&nbsp;</p>
                                     <p id="total_entries"><?php echo $totalEntries; ?></p>
                                     <p>&nbsp;entries</p>
@@ -275,11 +283,11 @@ if (return_navigate_error() === 400) {
                                     </div>
                                     <div class="modal-body d-flex flex-column">
                                           <div class="mb-3">
-                                                <label for="categoryName" class="form-label fw-medium">Category Name</label>
+                                                <label for="categoryName" class="form-label fw-medium">Category Name:<span class="fw-bold text-danger">&nbsp;*</span></label>
                                                 <input type="text" class="form-control" id="categoryName" placeholder="Enter name">
                                           </div>
                                           <div class="mb-3">
-                                                <label for="categoryDescription" class="form-label fw-medium">Category Description</label>
+                                                <label for="categoryDescription" class="form-label fw-medium">Category Description:</label>
                                                 <textarea class="form-control" id="categoryDescription" rows="5" maxlength="500"></textarea>
                                           </div>
                                           <div>
@@ -302,6 +310,8 @@ if (return_navigate_error() === 400) {
             <script src="/tool/js/tool_tip.js"></script>
             <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/admin/category/category_list.js"></script>
+            <script src="/javascript/admin/category/delete_category.js"></script>
+            <script src="/javascript/admin/category/add_or_update_category.js"></script>
       </body>
 
       </html>

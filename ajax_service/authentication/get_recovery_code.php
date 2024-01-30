@@ -6,25 +6,29 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/random_generator.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['email'], $_POST['type'])) {
+      if (isset($_POST['email']) && isset($_POST['type'])) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
                   $user_type = sanitize(rawurldecode($_POST['type']));
 
                   // Validate email
                   if (!$email) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   }
 
                   // Valid user type
                   if (!$user_type) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No user type provided!']);
                         exit;
                   } else if ($user_type !== 'admin' && $user_type !== 'customer') {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Invalid user type!']);
                         exit;
                   }
@@ -53,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $result = $stmt->get_result();
                         $result = $result->num_rows;
                         if ($result === 0) {
+                              http_response_code(404);
                               echo json_encode(['error' => 'Email not found!']);
                         } else if ($result === 1) {
                               echo json_encode(['query_result' => true]);

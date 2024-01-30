@@ -14,22 +14,43 @@ require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['entry'], $_GET['offset'], $_GET['status'], $_GET['search'])) {
+      if (
+            isset($_GET['entry']) &&
+            isset($_GET['offset']) &&
+            isset($_GET['status']) &&
+            isset($_GET['search']) &&
+            isset($_GET['category'])
+      ) {
             try {
-
-                  
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
-                  $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
+                  $status = $_GET['status'] ? filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN) : null;
                   $search = sanitize(rawurldecode($_GET['search']));
+                  $category = sanitize(rawurldecode($_GET['category']));
 
-                  if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
-                        echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
+                  if (!$entry) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing number of entries of books!']);
+                        exit;
+                  } else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Number of entries of books invalid!']);
                         exit;
                   }
 
-                  if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
-                        echo json_encode(['error' => '`List Number` data type invalid!']);
+                  if (!$offset) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing book list number']);
+                        exit;
+                  } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Book list number invalid!']);
+                        exit;
+                  }
+
+                  if (is_null($status)) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing book status!']);
                         exit;
                   }
 
@@ -37,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $isbnSearch = '%' . str_replace('-', '', $search) . '%';
                   $search = '%' . $search . '%';
                   $offset = ($offset - 1) * $entry;
+                  $category = '%' . $category . '%';
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -48,11 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id limit ? offset ?)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
-                  order by book.name,book.id limit ? offset ?');
-                  $stmt->bind_param('isssii', $status, $search, $isbnSearch,  $search, $entry, $offset);
+                  order by book.name,book.id limit ? offset ?)');
+                  $stmt->bind_param('issssiiisssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset, $status, $search, $isbnSearch,  $search, $entry, $offset);
                   $isSuccess = $stmt->execute();
 
                   if (!$isSuccess) {
@@ -186,10 +217,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select count(distinct book.id) as totalBook
+                  $stmt = $conn->prepare('select count(*) as totalBook from(
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
-                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)');
-                  $stmt->bind_param('isss', $status, $search, $isbnSearch, $search);
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
+                  order by book.name,book.id)
+                  ) as combined');
+                  $stmt->bind_param('issssisss', $status, $search, $isbnSearch, $search, $category, $status, $search, $isbnSearch, $search);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);

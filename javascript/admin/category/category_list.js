@@ -1,5 +1,3 @@
-let delete_id = null, update_id = null, originalName = null, originalDescription = null;
-
 $(document).ready(function ()
 {
       initToolTip();
@@ -9,36 +7,10 @@ $(document).ready(function ()
             $('#error_message').text('');
       });
 
-      $('#deleteModal').on('hidden.bs.modal', function ()
-      {
-            delete_id = null;
-      });
-
       $('#search_form').submit(function (event)
       {
             event.preventDefault();
             selectEntry();
-      });
-
-      $('#inputModal').on('hidden.bs.modal', function ()
-      {
-            update_id = null;
-            $('#inputModalConfirm').off('click'); // Remove the event listener
-            $('#inputModalTitle').text('');
-            originalName = null;
-            originalDescription = null;
-            $('#categoryName').val(originalName);
-            $('#categoryDescription').val(originalDescription);
-      });
-
-      $('#updateSuccessModal').on('hidden.bs.modal', function ()
-      {
-            fetchCategoryList();
-      });
-
-      $('#addSuccessModal').on('hidden.bs.modal', function ()
-      {
-            fetchCategoryList();
       });
 });
 
@@ -51,14 +23,14 @@ function fetchCategoryList()
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Number Of Entries` data type invalid!');
+            $('#error_message').text('Number of entries of categories invalid!');
             return;
       }
 
       if (typeof listOffset !== 'number' || isNaN(listOffset) || listOffset <= 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `List Number` data type invalid!');
+            $('#error_message').text('Category list number invalid!');
             return;
       }
 
@@ -100,9 +72,9 @@ function fetchCategoryList()
                         {
                               const trElem = $('<tr>');
 
-                              trElem.append($(`<th scope="row">${ (listOffset - 1) * entry + i + 1 }</th>`));
-                              trElem.append($(`<td class="col-1">${ data.query_result[0][i].name }</td>`));
-                              trElem.append($(`<td><div class="truncate">${ data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A' }</div></td>`));
+                              trElem.append($(`<td class="align-middle">${ (listOffset - 1) * entry + i + 1 }</td>`));
+                              trElem.append($(`<td class="col-1 align-middle">${ data.query_result[0][i].name }</td>`));
+                              trElem.append($(`<td class="align-middle"><div class="truncate">${ data.query_result[0][i].description ? data.query_result[0][i].description : 'N/A' }</div></td>`));
                               trElem.append(
                                     $(`
                                     <td class="align-middle col-1">
@@ -176,241 +148,4 @@ function selectEntry()
       $('#prev_button').attr('disabled', true);
       $('#next_button').attr('disabled', false);
       fetchCategoryList();
-}
-
-function openEditModal(id)
-{
-      $.ajax({
-            url: '/ajax_service/admin/category/get_detail.php',
-            method: 'GET',
-            data: { id: encodeData(id) },
-            dataType: 'json',
-            success: function (data)
-            {
-                  if (data.error)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(data.error);
-                  }
-                  else if (data.query_result)
-                  {
-                        $('#inputModalTitle').text('Edit Category');
-                        $('#inputModalConfirm').on('click', () => { $('#updateModal').modal('show'); });;
-                        $("#inputModal").modal('show');
-                        $('#categoryName').val(data.query_result.name);
-                        originalName = data.query_result.name;
-                        $('#categoryDescription').val(data.query_result.description);
-                        originalDescription = data.query_result.description;
-                        update_id = id;
-                  }
-            },
-
-            error: function (err)
-            {
-                  console.error(err);
-                  if (err.status >= 500)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text('Server encountered error!');
-                  } else
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(err.responseJSON.error);
-                  }
-            }
-      })
-}
-
-function openAddModal()
-{
-      $('#inputModalTitle').text('Add Category');
-      $('#inputModalConfirm').on('click', () => { $('#addModal').modal('show'); });
-      $("#inputModal").modal('show');
-}
-
-function confirmDelete(id)
-{
-      delete_id = id;
-      $("#deleteModal").modal('show');
-}
-
-function deleteCategory()
-{
-      $.ajax({
-            url: '/ajax_service/admin/category/delete_category.php',
-            type: 'DELETE',
-            data: {
-                  id: encodeData(delete_id)
-            },
-            headers: {
-                  'X-CSRF-Token': CSRF_TOKEN
-            },
-            dataType: 'json',
-            success: function (data)
-            {
-                  if (data.error)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(data.error);
-                  }
-                  else if (data.query_result)
-                  {
-                        $('#deleteModal').modal('hide');
-                  }
-                  fetchCategoryList();
-            },
-            error: function (err)
-            {
-                  console.error(err);
-
-                  if (err.status >= 500)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text('Server encountered error!');
-                  } else
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(err.responseJSON.error);
-                  }
-            }
-      });
-      $("#deleteModal").modal('hide');
-}
-
-function updateCategory()
-{
-      clearAllCustomValidity();
-
-      const name = encodeData($('#categoryName').val());
-      const description = encodeData($('#categoryDescription').val());
-
-      if (name === '')
-      {
-            $("#updateModal").modal('hide');
-            reportCustomValidity($('#categoryName').get(0), 'Category name is empty!');
-            return;
-      }
-      else if (name.length > 255)
-      {
-            $("#updateModal").modal('hide');
-            reportCustomValidity($('#categoryName').get(0), 'Category name must be 255 characters long or less!');
-            return;
-      }
-
-      if (description.length > 500)
-      {
-            $("#updateModal").modal('hide');
-            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be 500 characters long or less!');
-            return;
-      }
-
-      $.ajax({
-            url: '/ajax_service/admin/category/update_category.php',
-            method: 'POST',
-            data: { id: encodeData(update_id), name: name, description: description },
-            dataType: 'json',
-            headers: {
-                  'X-CSRF-Token': CSRF_TOKEN
-            },
-            success: function (data)
-            {
-                  if (data.error)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(data.error);
-                  }
-                  else if (data.query_result)
-                  {
-                        $("#updateModal").modal('hide');
-                        $('#inputModal').modal('hide');
-                        $('#updateSuccessModal').modal('show');
-                  }
-            },
-
-            error: function (err)
-            {
-                  console.error(err);
-                  if (err.status >= 500)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text('Server encountered error!');
-                  } else
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(err.responseJSON.error);
-                  }
-            }
-      })
-}
-
-function addCategory()
-{
-      clearAllCustomValidity();
-
-      const name = encodeData($('#categoryName').val());
-      const description = encodeData($('#categoryDescription').val());
-
-      if (name === '')
-      {
-            $("#addModal").modal('hide');
-            reportCustomValidity($('#categoryName').get(0), 'Category name is empty!');
-            return;
-      }
-      else if (name.length > 255)
-      {
-            $("#addModal").modal('hide');
-            reportCustomValidity($('#categoryName').get(0), 'Category name must be 255 characters long or less!');
-            return;
-      }
-
-      if (description.length > 500)
-      {
-            $("#addModal").modal('hide');
-            reportCustomValidity($('#categoryDescription').get(0), 'Category description must be 500 characters long or less!');
-            return;
-      }
-
-      $.ajax({
-            url: '/ajax_service/admin/category/add_category.php',
-            method: 'POST',
-            data: { name: name, description: description },
-            dataType: 'json',
-            headers: {
-                  'X-CSRF-Token': CSRF_TOKEN
-            },
-            success: function (data)
-            {
-                  if (data.error)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(data.error);
-                  }
-                  else if (data.query_result)
-                  {
-                        $("#addModal").modal('hide');
-                        $('#inputModal').modal('hide');
-                        $('#addSuccessModal').modal('show');
-                  }
-            },
-
-            error: function (err)
-            {
-                  console.error(err);
-                  if (err.status >= 500)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text('Server encountered error!');
-                  } else
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(err.responseJSON.error);
-                  }
-            }
-      })
-}
-
-function resetForm()
-{
-      $('#categoryName').val(originalName);
-      $('#categoryDescription').val(originalDescription);
 }

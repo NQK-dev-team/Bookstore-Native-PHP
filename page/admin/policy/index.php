@@ -23,8 +23,8 @@ if (return_navigate_error() === 400) {
             <link rel="stylesheet" href="/css/preset_style.css">
 
             <meta name="author" content="Nghia Duong">
-            <meta name="description" content="Manage discount coupons of NQK Bookstore">
-            <title>Manage Coupons</title>
+            <meta name="description" content="Manage NQK Bookstore policies">
+            <title>Manage Policies</title>
       </head>
 
       <body>

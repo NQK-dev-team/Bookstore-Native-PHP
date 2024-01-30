@@ -12,21 +12,29 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['entry'], $_GET['offset'], $_GET['search'])) {
+      if (isset($_GET['entry']) && isset($_GET['offset']) && isset($_GET['search'])) {
             try {
-
-
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $search = sanitize(rawurldecode($_GET['search']));
 
-                  if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
-                        echo json_encode(['error' => '`Number Of Entries` data type invalid!']);
+                  if (!$entry) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing number of entries of categories']);
+                        exit;
+                  }else if (!is_numeric($entry) || is_nan($entry) || $entry < 0) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Number of entries of categories invalid!']);
                         exit;
                   }
 
-                  if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
-                        echo json_encode(['error' => '`List Number` data type invalid!']);
+                  if (!$offset) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Missing category list number!']);
+                        exit;
+                  } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Category list number invalid!']);
                         exit;
                   }
 

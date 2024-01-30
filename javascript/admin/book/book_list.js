@@ -30,6 +30,34 @@ $(document).ready(function ()
             e.preventDefault();
             selectEntry();
       });
+
+      $('#searchCategoryForm').submit(function (e)
+      {
+            e.preventDefault();
+            selectEntry();
+      });
+
+      $('#categoryDropDown').on('hidden.bs.dropdown', function ()
+      {
+            selectEntry();
+      });
+
+      $('#categoryInput').on('input', function ()
+      {
+            let filter = $(this).val().toUpperCase();
+
+            $('.categories li').each(function ()
+            {
+                  let txtValue = $(this).text();
+                  if (txtValue.toUpperCase().indexOf(filter) > -1)
+                  {
+                        $(this).show();
+                  } else
+                  {
+                        $(this).hide();
+                  }
+            });
+      });
 });
 
 function fetchBookList()
@@ -37,26 +65,20 @@ function fetchBookList()
       const entry = parseInt(encodeData($('#entry_select').val()));
       const search = encodeData($('#search_book').val());
       const listOffset = parseInt(encodeData($('#list_offset').text()));
-      const status = parseBool($('#flexSwitchCheckDefault').prop('checked'));
+      const status = $('#flexSwitchCheckDefault').prop('checked');
+      const category = encodeData($('#categoryInput').val());
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Number Of Entries` data type invalid!');
+            $('#error_message').text('Number of entries of books invalid!');
             return;
       }
 
       if (typeof listOffset !== 'number' || isNaN(listOffset) || listOffset <= 0)
       {
             $('#errorModal').modal('show');
-            $('#error_message').text('Selected `List Number` data type invalid!');
-            return;
-      }
-
-      if (typeof status !== 'boolean' || (status !== true && status !== false))
-      {
-            $('#errorModal').modal('show');
-            $('#error_message').text('Selected `Book Status` data type invalid!');
+            $('#error_message').text('Book list number invalid!');
             return;
       }
 
@@ -70,7 +92,7 @@ function fetchBookList()
       $.ajax({
             url: '/ajax_service/admin/book/retrieve_list.php',
             method: 'GET',
-            data: { entry: entry, offset: listOffset, status: status, search: search },
+            data: { entry: entry, offset: listOffset, status: status, search: search, category: category },
             dataType: 'json',
             success: function (data)
             {
@@ -181,7 +203,7 @@ function fetchBookList()
                               ));
 
                               trElem.append(
-                                    $(`<td class='align-middle'>
+                                    $(`<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -401,7 +423,7 @@ function activateBook()
             },
             error: function (err)
             {
-                  console.error(error);
+                  console.error(err);
 
                   if (err.status >= 500)
                   {
@@ -415,4 +437,11 @@ function activateBook()
             }
       });
       $('#activateModal').modal('hide');
+}
+
+function chooseCategory(e)
+{
+      $('#categoryInput').val(e.target.innerText);
+      $('#categoryInput').trigger('input');
+      selectEntry();
 }

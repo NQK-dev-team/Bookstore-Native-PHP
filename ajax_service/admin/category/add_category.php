@@ -19,10 +19,7 @@ function map($elem)
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset(
-            $_POST['name'],
-            $_POST['description']
-      )) {
+      if (isset($_POST['name']) && isset($_POST['description'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -34,15 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $description = $_POST['description'] ? sanitize(rawurldecode($_POST['description'])) : null;
 
                   if (!$name) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'Category name is empty!']);
                         exit;
                   } else if (strlen($name) > 255) {
-                        echo json_encode(['error' => 'Category name must be 255 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Category name must be at most 255 characters long or less!']);
                         exit;
                   }
 
                   if ($description && strlen($description) > 500) {
-                        echo json_encode(['error' => 'Category description must be 500 characters long or less!']);
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Category description must be at most 500 characters long or less!']);
                         exit;
                   }
 

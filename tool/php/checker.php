@@ -5,6 +5,8 @@ function isAgeValid($input)
       // Assuming $input is the date of birth in 'Y-m-d' format
       $dob = new DateTime($input, new DateTimeZone('Asia/Ho_Chi_Minh'));
       $today = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+      $dob->setTime(0, 0, 0); // Set time to 00:00:00
+      $today->setTime(0, 0, 0); // Set time to 00:00:00
       $age = $today->format('Y') - $dob->format('Y');
 
       // Check if the birthday has occurred this year

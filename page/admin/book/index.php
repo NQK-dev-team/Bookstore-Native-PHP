@@ -218,7 +218,7 @@ if (return_navigate_error() === 400) {
                                     $sub_result = $sub_stmt->get_result();
                                     $sub_result = $sub_result->fetch_assoc();
                                     if ($sub_result['result'])
-                                          $elem .= "<td class='align-middle'>
+                                          $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -229,7 +229,7 @@ if (return_navigate_error() === 400) {
                                                       </div>
                                                 </td>";
                                     else
-                                          $elem .= "<td class='align-middle'>
+                                          $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
                                                             <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
                                                                   <i class=\"bi bi-pencil text-white\"></i>
@@ -261,6 +261,22 @@ if (return_navigate_error() === 400) {
                   $result = $stmt->get_result();
                   $result = $result->fetch_assoc();
                   $totalEntries = $result['totalBook'];
+            }
+            $stmt->close();
+
+            $stmt = $conn->prepare('select name from category order by name,id');
+            $isSuccess = $stmt->execute();
+            if (!$isSuccess) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $categoryList = '';
+            $result = $stmt->get_result();
+            while ($row = $result->fetch_assoc()) {
+                  $categoryList .= "<li class='categoryHover pointer' onclick='chooseCategory(event)'>{$row['name']}</li>";
             }
             $stmt->close();
             $conn->close();
@@ -315,6 +331,30 @@ if (return_navigate_error() === 400) {
                         </div>
                         <div class="mt-2">
                               <div class="d-flex align-items-center">
+                                    <p class="mb-0 me-2">Category</p>
+                                    <div>
+                                          <div class="dropdown" id='categoryDropDown'>
+                                                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                      Select category
+                                                </button>
+                                                <ul class="dropdown-menu dropdownCategory">
+                                                      <div class="container">
+                                                            <form id='searchCategoryForm'>
+                                                                  <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
+                                                            </form>
+                                                      </div>
+                                                      <div class='categories w-100 container mt-2'>
+                                                            <?php
+                                                            echo $categoryList;
+                                                            ?>
+                                                      </div>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="mt-2">
+                              <div class="d-flex align-items-center">
                                     <p class="mb-0 me-2">Show</p>
                                     <div>
                                           <select id="entry_select" class="form-select pointer" aria-label="Entry selection" onchange="selectEntry()">
@@ -362,9 +402,17 @@ if (return_navigate_error() === 400) {
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">1</p>
+                                    <p id="start_entry">
+                                          <?php
+                                          if ($totalEntries === 0) echo '0';
+                                          else echo '1'; ?>
+                                    </p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">10</p>
+                                    <p id="end_entry">
+                                          <?php
+                                          if ($totalEntries < 10) echo $totalEntries;
+                                          else echo '10'; ?>
+                                    </p>
                                     <p>&nbsp;of&nbsp;</p>
                                     <p id="total_entries"><?php echo $totalEntries; ?></p>
                                     <p>&nbsp;entries</p>
@@ -451,7 +499,6 @@ if (return_navigate_error() === 400) {
             ?>
             <script src="/javascript/admin/menu_after_load.js"></script>
             <script src="/javascript/admin/book/book_list.js"></script>
-            <script src="/tool/js/input_parser.js"></script>
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
       </body>

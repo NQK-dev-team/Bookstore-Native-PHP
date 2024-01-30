@@ -10,7 +10,7 @@
       width: 100%;
       max-width: 125px;
       height: auto;
-      min-width:80px;
+      min-width: 80px;
 }
 
 .group_button {
@@ -28,4 +28,22 @@
       -webkit-line-clamp: 10;
       /* Number of lines to show before ellipsis */
       -webkit-box-orient: vertical;
+}
+
+#categoryList {
+      max-height: 50px;
+      overflow-y: auto;
+}
+
+.dropdownCategory {
+      width: 400px;
+}
+
+.categories {
+      max-height: 250px;
+      overflow-y: auto;
+}
+
+.categoryHover:hover {
+      background-color: #adadad;
 }
