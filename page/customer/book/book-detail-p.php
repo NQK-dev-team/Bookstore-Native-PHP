@@ -32,13 +32,13 @@ if (return_navigate_error() === 400) {
             book.description,
             book.imagePath,
             author.authorName,
-            filecopy.price
+            physicalcopy.price
         FROM 
             book
         JOIN 
             author ON book.id = author.bookid
         JOIN 
-            filecopy ON book.id = filecopy.id
+        physicalcopy ON book.id = physicalcopy.id
         WHERE 
             book.status = 1
         ORDER BY 
@@ -101,7 +101,7 @@ if (return_navigate_error() === 400) {
                                     else{
                                           echo '<p class="h6">' . $book['edition'] . 'th edition</p>';
                                     }
-                                    echo '<p class="h3 text-danger">Digital copy: ' . $book['price'] . '$</p>';
+                                    echo '<p class="h3 text-danger">Physical copy: ' . $book['price'] . '$</p>';
                                     echo '<p class="text-warning">';
                                     if($book['avgRating'] <1){
                                           echo '<i class="bi bi-star-half"></i>';
@@ -182,9 +182,9 @@ if (return_navigate_error() === 400) {
                                           name=""
                                           id=""
                                           class="btn btn-info col-9 text-light col-md-3 m-3"
-                                          href="book-detail-page-p?bookID=' . $book['id'] . '"
+                                          href="book-detail?bookID=' . normalizeURL(rawurlencode($book['id'])) . '"
                                           role="button"
-                                          >Physical copy</a
+                                          >Digital copy</a
                                     >';
                                     
                                     echo '</div>';
