@@ -30,12 +30,12 @@ if (return_navigate_error() === 400) {
             $elem = $elem->get_result();
 
             $featured = $conn->prepare('select distinct book.id, pSales, fSales, (pSales + fSales)  as sales, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from book left join (select sum(amount) as pSales, physicalOrderContain.bookID from physicalOrderContain group by bookID) as physicalOrders on book.id = physicalOrders.bookID
-                                                                                                                                                                                                                                                                       right join (select count(orderID) as fSales, fileOrderContain.bookID from fileOrderContain group by bookID) as fileOrders on book.id = fileOrders.bookID
-                                                                                                                                                                                                                                                                        join author on physicalOrders.bookID = author.bookID
+                                                                                                                                                                                                                                                                        right join (select count(orderID) as fSales, fileOrderContain.bookID from fileOrderContain group by bookID) as fileOrders on book.id = fileOrders.bookID
+                                                                                                                                                                                                                                                                        join author on book.id = author.bookID
                                                                                                                                                                                                                                                                         join fileCopy on book.id = fileCopy.id
                                                                                                                                                                                                                                                                         join physicalCopy on book.id = physicalCopy.id
-                                                                                                                                                                                                                                                                        order by sales DESC
-                                                                                                                                                                                                                                                                        limit 3');
+                                                                                                                                                                                                                                                            order by sales DESC
+                                                                                                                                                                                                                                                            limit 3');
             $featured->execute();
             $featured = $featured->get_result();
 
@@ -105,7 +105,7 @@ if (return_navigate_error() === 400) {
                                                 // insert a card for link here
                                                 $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                                                 echo "<div class=\"card mb-3 border-light\">";
-                                                echo "<a href=\"book\book-detail-page?bookID=".normalizeURL(rawurlencode($row["bookID"]))."\">"; 
+                                                echo "<a href=\"book\book-detail-page?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
                                                       echo "<img class=\"pic\" ".$row["pic"].">";
                                                       echo "<div class=\"card-body\">";
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
