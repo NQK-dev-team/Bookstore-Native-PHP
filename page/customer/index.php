@@ -82,6 +82,7 @@ if (return_navigate_error() === 400) {
                   }
                   .pic {
                         height: 28rem;
+                        width: 100%;
                   }
                   a{
                         text-decoration: none;
