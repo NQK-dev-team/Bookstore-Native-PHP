@@ -85,6 +85,7 @@ if (return_navigate_error() === 400) {
                   }
                   a{
                         text-decoration: none;
+                        color: black;
                   }
             </style>
       </head>
@@ -104,9 +105,9 @@ if (return_navigate_error() === 400) {
                                                 // insert a card for link here
                                                 $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                                                 echo "<div class=\"card mb-3 border-light\">";
+                                                echo "<a href=\"book\book-detail-page?bookID=".normalizeURL(rawurlencode($row["bookID"]))."\">"; 
                                                       echo "<img class=\"pic\" ".$row["pic"].">";
                                                       echo "<div class=\"card-body\">";
-                                                            echo "<a href=\"book-deatil?bookID=".normalizeURL(rawurlencode($row["bookID"]))."\""; 
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
                                                             echo "<p class=\"author\">".$row["authorName"]."</p>";
                                                             echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
@@ -128,8 +129,8 @@ if (return_navigate_error() === 400) {
                                                                   $cnt++;
                                                             }
                                                             echo $res."(".$row["star"].")";
-                                                            echo "</a>";
                                                       echo "</div>";
+                                                echo "</a>";
                                                 echo "</div>";
                                            }
                                           echo "</div>";
@@ -145,10 +146,10 @@ if (return_navigate_error() === 400) {
                                           while($row=$elem->fetch_assoc()){
                                                 // insert a card for link here
                                                 $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
-                                                 echo "<div class=\"card mb-3 border-light\">";
+                                                 echo "<div class=\"card mb-3 border-light\">"; 
+                                                 echo "<a href=\"book\book-detail-page?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
                                                       echo "<img class=\"pic\" ".$row["pic"].">";
                                                       echo "<div class=\"card-body\">";
-                                                            echo "<a href=\"book-deatil?bookID=".normalizeURL(rawurlencode($row["id"]))."\""; 
                                                             echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
                                                             echo "<p class=\"author\">".$row["authorName"]."</p>";
                                                             echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
@@ -170,8 +171,9 @@ if (return_navigate_error() === 400) {
                                                                   $cnt++;
                                                             }
                                                             echo $res."(".$row["star"].")";
-                                                            echo "</a>";
+                                                            
                                                       echo "</div>";
+                                                echo "</a>";
                                                 echo "</div>";
                                            }
                                           echo "</div>";
