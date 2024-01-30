@@ -182,7 +182,7 @@ if (return_navigate_error() === 400) {
                                           name=""
                                           id=""
                                           class="btn btn-info col-9 text-light col-md-3 m-3"
-                                          href="book-detail-page-p.php?bookID=' . $book['id'] . '"
+                                          href="book-detail-page-p?bookID=' . $book['id'] . '"
                                           role="button"
                                           >Physical copy</a
                                     >';

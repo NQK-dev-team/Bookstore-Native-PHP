@@ -243,7 +243,7 @@ if (return_navigate_error() === 400) {
                         name=""
                         id=""
                         class="btn btn-primary d-flex justify-content-center align-items-center"
-                        href="book-detail-page.php?bookID=' . $row['id'] . '"
+                        href="book-detail-page?bookID=' . $row['id'] . '"
                         role="button"
                         >Learn more</a>';
 
