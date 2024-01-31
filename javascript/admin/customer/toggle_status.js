@@ -57,7 +57,6 @@ function deactivateCustomer()
                   }
             }
       });
-      $('#deactivateModal').modal('hide');
 }
 
 function activateCustomer()
@@ -97,5 +96,4 @@ function activateCustomer()
                   }
             }
       });
-      $('#activateModal').modal('hide');
 }
