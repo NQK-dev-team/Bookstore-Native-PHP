@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $search = sanitize(rawurldecode($_GET['search']));
-                  $status = $_GET['status'] ? filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN) : null;
+                  $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
                   $type = sanitize(rawurldecode($_GET['type']));
 
                   if (!$entry) {
@@ -39,12 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Coupon list number invalid!']);
-                        exit;
-                  }
-
-                  if (is_null($status)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Missing coupon status!']);
                         exit;
                   }
 
