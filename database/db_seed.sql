@@ -25,8 +25,10 @@ INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
 insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,'1142369875'),('CUSTOMER2','CUSTOMER1',27.8692,'1245369870'),('CUSTOMER3','CUSTOMER1',27.8692,'4100335874');
-insert into customer (id,referrer,point,cardNumber,status) values('CUSTOMER4',null,0,null,true),('CUSTOMER5',null,0,null,true),('CUSTOMER6',null,0,null,true),('CUSTOMER7',null,0,null,true),('CUSTOMER8',null,0,null,true),('CUSTOMER9',null,0,null,true),
-('CUSTOMER10',null,0,null,false),('CUSTOMER11',null,0,null,false),('CUSTOMER12',null,0,null,false),('CUSTOMER13',null,0,null,false),('CUSTOMER14',null,0,null,false);
+insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4',null,0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
+('CUSTOMER10',null,0,null,false,null),('CUSTOMER11',null,0,null,false,null),('CUSTOMER12',null,0,null,false,null),('CUSTOMER13',null,0,null,false,null),('CUSTOMER14',null,0,null,false,null);
+
+-- select * from appUser join customer on customer.id=appUser.id where customer.id='CUSTOMER9';
 
 -- Insert `book` table
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publishDate`, `status`, `imagePath`) VALUES ('BOOK1', 'The Joy of PHP', '1', '9781522792147', '3', '4', 'CreateSpace Independent Publishing Platform', '2012-12-13', '1','demo/BOOK1/The Joy of PHP.png');
