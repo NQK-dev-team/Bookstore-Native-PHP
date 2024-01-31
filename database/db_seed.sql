@@ -1,18 +1,32 @@
 use bookstore;
 
 -- Inser `appUser` table
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER1', 'khoa', '2000-12-12', '211 Ly Thuong Kiet', '0932758467', 'khoa.liang.nqk.demo@gmail.com', '$2y$10$i02L1Lm2q0EgMmC/Kn0P4.wu.on0YHz0O7kP7bFlKJfj.2pmyT7yC','M'); -- password: #Khoa123456789
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER2', 'quang', '2002-12-12', '211 Ly Thuong Kiet', '0932758489', 'quang.nguyen.nqk.demo@gmail.com', '$2y$10$kTOjZHdB0QtOHwSmY8zhHe8qXGSmS.Zy1Xqkd4Qm9UpKQj9goxAyW','M'); -- password: #Quang123456789
-INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER3', 'nghia', '2002-6-12', '211 Ly Thuong Kiet', '0932758421', 'nghia.duong.nqk.demo@gmail.com', '$2y$10$3YI2xOzAgOJk6MM7RjWSYuP3yVFjatU3iWXR.gMpMp1OEKir.sbCe','M'); -- password: #Nghia123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER1', 'luong anh khoa', '2000-12-12', '211 Ly Thuong Kiet', '0932758467', 'khoa.liang.nqk.demo@gmail.com', '$2y$10$i02L1Lm2q0EgMmC/Kn0P4.wu.on0YHz0O7kP7bFlKJfj.2pmyT7yC','M'); -- password: #Khoa123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER2', 'nguyen minh quang', '2002-12-12', '211 Ly Thuong Kiet', '0932758489', 'quang.nguyen.nqk.demo@gmail.com', '$2y$10$kTOjZHdB0QtOHwSmY8zhHe8qXGSmS.Zy1Xqkd4Qm9UpKQj9goxAyW','M'); -- password: #Quang123456789
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER3', 'duong nguyen nguyen nghia', '2002-6-12', '211 Ly Thuong Kiet', '0932758421', 'nghia.duong.nqk.demo@gmail.com', '$2y$10$3YI2xOzAgOJk6MM7RjWSYuP3yVFjatU3iWXR.gMpMp1OEKir.sbCe','M'); -- password: #Nghia123456789
 INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('ADMIN1', 'admin1', '2002-6-12', '211 Ly Thuong Kiet', '0932758512', 'admin1.manager.nqk.demo@gmail.com', '$2y$10$yx/MyymkEUBh//fN6VmjCuNOXcMXYbMBUUcUKWUx.N.bcWpfq4vzS','M'); -- password: #Admin123456789
 INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('ADMIN2', 'admin2', '2002-6-12', '211 Ly Thuong Kiet', '0932758874', 'admin2.manager.nqk.demo@gmail.com', '$2y$10$W97eotcF/htqkI3xA.0i9usQqaiGgKdd6oEMnEvkzT5auwaZLN3/e','M'); -- password: #Admin123456789
+
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER4', 'test1', '2002-1-12', '211 Ly Thuong Kiet', '0032758421', 'test1@gmail.com', 'test123456789','M'); -- used for testing the list of customer feature only
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER5', 'test2', '2002-2-28', '211 Ly Thuong Kiet', '0193275841', 'test2@gmail.com', 'test123456789','M'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER6', 'test3', '2000-2-29', '211 Ly Thuong Kiet', '0232758421', 'test3@gmail.com', 'test123456789','F'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER7', 'test4', '2002-3-12', '211 Ly Thuong Kiet', '0332758421', 'test4@gmail.com', 'test123456789','F'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER8', 'test5', '2002-5-12', '211 Ly Thuong Kiet', '0432758421', 'test5@gmail.com', 'test123456789','O'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER9', 'test6', '2002-1-12', '211 Ly Thuong Kiet', '0532758421', 'test6@gmail.com', 'test123456789','O'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER10', 'test7', '2002-1-12', null, null, null, null,'M'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER11', 'test8', '2002-1-12', null, null, null, null,'M'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER12', 'test9', '2002-1-12', null, null, null, null,'F'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER13', 'test10', '2002-1-12', null, null, null, null,'F'); -- used for testing the list of customer featureonly
+INSERT INTO appUser (`id`, `name`, `dob`, `address`, `phone`, `email`, `password`, `gender`) VALUES ('CUSTOMER14', 'test11', '2002-1-12', null, null, null, null,'O'); -- used for testing the list of customer featureonly
 
 -- Insert `admin` table
 INSERT INTO admin (`id`) VALUES ('ADMIN1');
 INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
-insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,1142369875),('CUSTOMER2','CUSTOMER1',27.8692,1245369870),('CUSTOMER3','CUSTOMER1',27.8692,4100335874);
+insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,'1142369875'),('CUSTOMER2','CUSTOMER1',27.8692,'1245369870'),('CUSTOMER3','CUSTOMER1',27.8692,'4100335874');
+insert into customer (id,referrer,point,cardNumber,status) values('CUSTOMER4',null,0,null,true),('CUSTOMER5',null,0,null,true),('CUSTOMER6',null,0,null,true),('CUSTOMER7',null,0,null,true),('CUSTOMER8',null,0,null,true),('CUSTOMER9',null,0,null,true),
+('CUSTOMER10',null,0,null,false),('CUSTOMER11',null,0,null,false),('CUSTOMER12',null,0,null,false),('CUSTOMER13',null,0,null,false),('CUSTOMER14',null,0,null,false);
 
 -- Insert `book` table
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publishDate`, `status`, `imagePath`) VALUES ('BOOK1', 'The Joy of PHP', '1', '9781522792147', '3', '4', 'CreateSpace Independent Publishing Platform', '2012-12-13', '1','demo/BOOK1/The Joy of PHP.png');

@@ -24,7 +24,7 @@ create table appUser(
     address varchar(1000),
     phone varchar(10) unique,
     email varchar(255) unique,
-    password varchar(255) not null,
+    password varchar(255),
     check(length(password)>=8),
     imagePath varchar(1000),
     gender varchar(1) not null,
@@ -39,7 +39,7 @@ create table admin(
 create table customer(
 	id varchar(20) primary key,
     cardNumber varchar(16),
-    point double default 0,
+    point double default 0 not null,
     check(point>=0),
     referrer varchar(20),
     status boolean not null default true,

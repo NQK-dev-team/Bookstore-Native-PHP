@@ -1,0 +1,15 @@
+#search_customer {
+      padding-left: 35px !important;
+}
+
+.search_form {
+      max-width: 500px;
+}
+
+.group_button {
+      max-width: 180px;
+}
+
+.pointer:hover {
+      cursor: pointer;
+}

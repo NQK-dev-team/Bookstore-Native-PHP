@@ -603,14 +603,18 @@ begin
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
             end if;
 		end if;
+        
+		if new.password is null then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s account password is null!';
+        end if;
     else
 		if (select status from customer where customer.id=new.id) then
-			if new.email is null then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s email is null!';
-			end if;
-        
 			if new.phone is null then
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number is null!';
+			end if;
+            
+            if new.password is null then
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s account password is null!';
 			end if;
         end if;
         
@@ -668,6 +672,10 @@ begin
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin must be at least 18 years old or older!';
         end if;
     end if;
+    
+    if (select password from appUser where appUser.id=new.id) is null then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s password is null!';
+    end if;
 end//
 delimiter ;
 -- ** End of admin **
@@ -679,10 +687,6 @@ create trigger customerDataConstraintInsertTrigger
 before insert on customer
 for each row
 begin
-	if new.cardNumber is not null and not new.cardNumber REGEXP '^[0-9]{8,16}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number format is not valid!';
-    end if;
-    
     if new.status then
 		if (select email from appUser where appUser.id=new.id) is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s email is null!';
@@ -690,6 +694,10 @@ begin
         
         if (select phone from appUser where appUser.id=new.id) is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number is null!';
+        end if;
+        
+        if (select password from appUser where appUser.id=new.id) is null then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s password is null!';
         end if;
     end if;
     
@@ -710,6 +718,10 @@ begin
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer must be at least 18 years old or older!';
         end if;
     end if;
+    
+    if new.cardNumber is not null and not new.cardNumber REGEXP '^[0-9]{8,16}$' then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number format is not valid!';
+    end if;
 end//
 delimiter ;
 
@@ -721,7 +733,11 @@ before update on customer
 for each row
 begin	
 	if new.cardNumber is not null and not new.cardNumber REGEXP '^[0-9]{8,16}$' then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number format is not valid!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s card number format is not valid!';
+    end if;
+    
+    if new.status and (select email from appUser where appUser.id=new.id) is null then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This customer information has been deleted, activating the account is not allowed since it can cause potential problems!';
     end if;
 end//
 delimiter ;
