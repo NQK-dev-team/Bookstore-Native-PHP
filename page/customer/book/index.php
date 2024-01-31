@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../tool/php/role_check.php';
+require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 
 if (return_navigate_error() === 400) {
       http_response_code(400);
@@ -170,69 +171,70 @@ if (return_navigate_error() === 400) {
                   // Output other fields as needed...
                   echo '<p class="card-text">Written by: ' . $row['authorName'] . '</p>';
                   echo '<p class="card-text text-warning">';
-                  if($row['avgRating'] <1){
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 1 && $row['avgRating'] <1.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 1.5 && $row['avgRating'] <2){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 2 && $row['avgRating'] <2.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 2.5 && $row['avgRating'] <3){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 3 && $row['avgRating'] <3.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 3.5 && $row['avgRating'] <4){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 4 && $row['avgRating'] <4.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 4.5 && $row['avgRating'] <5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                  }
+                  // if($row['avgRating'] <1){
+                  //       echo '<i class="bi bi-star-half"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 1 && $row['avgRating'] <1.5){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 1.5 && $row['avgRating'] <2){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-half"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 2 && $row['avgRating'] <2.5){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 2.5 && $row['avgRating'] <3){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-half"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 3 && $row['avgRating'] <3.5){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 3.5 && $row['avgRating'] <4){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-half"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 4 && $row['avgRating'] <4.5){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star"></i>';
+                  // }
+                  // elseif($row['avgRating'] >= 4.5 && $row['avgRating'] <5){
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-fill"></i>';
+                  //       echo '<i class="bi bi-star-half"></i>';
+                  // }
+                  displayRatingStars($row['avgRating']);
                   echo '</p>';
                   echo '<p class="card-text">Digital copy: ' . $row['price'] . '$</p>';
                   // echo '<div class="card-body d-flex justify-content-center align-items-center">' 
