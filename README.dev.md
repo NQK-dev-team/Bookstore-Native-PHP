@@ -29,17 +29,17 @@ For others OSes visit `https://github.com/FiloSottile/mkcert` for specific insta
 **Step 1:** Open window search and type `Task Scheduler`<br><br>
 **Step 2:** Look to `Actions` menu and choose `Create Task`<br><br>
 **Step 3:** At `General` tab, enter `Name` and `Description` field, also set `Configure for` to your current Windows version<br><br>
-**Step 4:** At `Triggers` tab, click on `New` and set up the trigger configuration as follow:<br>
-Step 4.1: Choose `On a schedule` in the `Begin the task` field<br>
-Step 4.2: Choose `Daily` in `Settings`<br>
-Step 4.3: Choose the `Start` date (first day to begin using the task) and time (execute the task every day at that time). Also, you can check `Synchronize across time zones` option<br>
-Step 4.4: Check `Repeat task every` and set to 15 minutes or any value you want, check `for a duration of:` and set to 1 day or any value you want<br>
-Step 4.5: Check `Stop task if it runs longer than:` and set to 2 hours or any value you want<br>
-Step 4.6 (optional): You can set the expire time of the task by checking `Expire` field and set the value<br>
+**Step 4:** At `Triggers` tab, click on `New` and set up the trigger configuration as follow:<br><br>
+Step 4.1: Choose `On a schedule` in the `Begin the task` field<br><br>
+Step 4.2: Choose `Daily` in `Settings`<br><br>
+Step 4.3: Choose the `Start` date (first day to begin using the task) and time (execute the task every day at that time). Also, you can check `Synchronize across time zones` option<br><br>
+Step 4.4: Check `Repeat task every` and set to 15 minutes or any value you want, check `for a duration of:` and set to 1 day or any value you want<br><br>
+Step 4.5: Check `Stop task if it runs longer than:` and set to 2 hours or any value you want<br><br>
+Step 4.6 (optional): You can set the expire time of the task by checking `Expire` field and set the value<br><br>
 Step 4.7: Check `Enable`<br><br>
-**Step 5:** At `Actions` tab, click on `New`, default `Action` should be `Start a program` if not, set it back. Then follow these steps<br>
-Step 5.1: `Program/script` value should be the location of `php.exe` file of xampp (example `C:\xampp\php\php.exe`)<br>
-Step 5.2: `Start in (optional):` value should be the location of `cron` directory of this project (example `C:\example_path\cron\`)<br>
+**Step 5:** At `Actions` tab, click on `New`, default `Action` should be `Start a program` if not, set it back. Then follow these steps<br><br>
+Step 5.1: `Program/script` value should be the location of `php.exe` file of xampp (example `C:\xampp\php\php.exe`)<br><br>
+Step 5.2: `Start in (optional):` value should be the location of `cron` directory of this project (example `C:\example_path\cron\`)<br><br>
 Step 5.3: `Add arguments (optional):` value will be the `delete_account.php` file<br><br>
 **Step 6:** Repeate step 5 but replace with the `discount_notify.php` file at step 5.3<br><br>
 **Step 7:** At `Conditions` tab check `Start the task only if the computer is on AC power` and uncheck `Stop if the computer switches to battery power` (the second field is optional)<br><br>
