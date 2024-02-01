@@ -15,7 +15,7 @@
 **Step 1:** Open window powershell as administrator<br><br>
 **Step 2:** Type `choco install mkcert`<br><br>
 **Step 3:** Type `mkcert -install`<br><br>
-For others OSes visit `https://github.com/FiloSottile/mkcert` for specific installation steps<br><br>
+###### For others OSes visit `https://github.com/FiloSottile/mkcert` for specific installation steps<br><br>
 
 ### Set up SMTP Gmail server
 
@@ -45,7 +45,7 @@ Step 5.3: `Add arguments (optional):` value will be the `delete_account.php` fil
 **Step 7:** At `Conditions` tab check `Start the task only if the computer is on AC power` and uncheck `Stop if the computer switches to battery power` (the second field is optional)<br><br>
 **Step 8:** At `Settings` check these fields: `Allows task to be run on demand`, `Run task as soon as possible after a scheduled start is missed`, `Stop the task if it runs longer than:` (2 hours or any value), `If the running task does not end when requested, force it to stop`, `If the task is not scheduled to run again, delete it after:` (30 days or any value), `If the task is already running, then the following rule applies:` (Do not start a new instance)<br><br>
 **Step 9:** Save the config<br><br>
-For other OSes, you can look up on the internet for the set up steps<br><br>
+###### For other OSes, you can look up on the internet for the set up steps<br><br>
 
 ### Steps to config apache server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
 
