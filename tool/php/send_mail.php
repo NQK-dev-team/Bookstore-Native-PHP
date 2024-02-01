@@ -101,7 +101,7 @@ function deactivate_mail($email)
             throw new Exception('Failed to add address: ' . $e->getMessage());
       }
 
-      $mail->Subject = 'Account Delete Request Submitted!';
+      $mail->Subject = 'Account Deactivated!';
       $mail->Body    = "You account has been deactivated. To reactivate it, simply logining in!";
       $mail->AltBody = "You account has been deactivated. To reactivate it, simply logining in!";
 
@@ -121,7 +121,7 @@ function activate_mail($email)
             throw new Exception('Failed to add address: ' . $e->getMessage());
       }
 
-      $mail->Subject = 'Account Delete Request Submitted!';
+      $mail->Subject = 'Account Reactivated!';
       $mail->Body    = "You account has been reactivated, happy shopping!";
       $mail->AltBody = "You account has been reactivated, happy shopping!";
 
@@ -130,7 +130,7 @@ function activate_mail($email)
       }
 }
 
-function delete_mail($email)
+function delete_mail($email, $type)
 {
       global $mail;
 
@@ -141,9 +141,15 @@ function delete_mail($email)
             throw new Exception('Failed to add address: ' . $e->getMessage());
       }
 
-      $mail->Subject = 'Account Delete Request Submitted!';
-      $mail->Body    = "You account will be deleted in 14 days, you can cancel the process by loging in!";
-      $mail->AltBody = "You account will be deleted in 14 days, you can cancel the process by loging in!";
+      if ($type === 1) {
+            $mail->Subject = 'Account Delete Request Submitted!';
+            $mail->Body    = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back in those upcoming days!";
+            $mail->AltBody = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back in those upcoming days!";
+      } else if ($type === 2) {
+            $mail->Subject = 'Account Deleted!';
+            $mail->Body    = "You account has been deleted, come back again soon!";
+            $mail->AltBody = "You account has been deleted, come back again soon!";
+      }
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);

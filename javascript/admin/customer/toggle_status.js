@@ -114,6 +114,8 @@ function activateCustomer()
                         $('#errorModal').modal('show');
                         $('#error_message').text(data.error);
                   }
+                  else if (data.query_result === 100)
+                        $('#deleteCancelNotifyModal').modal('show');
                   fetchCustomerList();
             },
             error: function (err)
