@@ -61,10 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         http_response_code(403);
                         echo json_encode(['error' => 'This customer information has been deleted, activating the account is not allowed since it can cause potential problems!']);
                         exit;
-                  } else if (!$status && $email) {
-                        deactivate_mail($email);
-                  } else if ($status && $email) {
-                        activate_mail($email);
                   }
 
                   $stmt = null;
@@ -81,11 +77,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         if ($stmt->affected_rows > 1) {
                               http_response_code(500);
                               echo json_encode(['error' => 'Updated more than one customer!']);
-                        } else {
-                              echo json_encode(['query_result' => true]);
                         }
                   }
                   $stmt->close();
+
+                  if (!$status && $email) {
+                        deactivate_mail($email);
+                  } else if ($status && $email) {
+                        activate_mail($email);
+                  }
+
+                  echo json_encode(['query_result' => true]);
 
                   $conn->close();
             } catch (Exception $e) {
