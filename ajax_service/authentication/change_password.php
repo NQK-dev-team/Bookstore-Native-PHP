@@ -5,6 +5,13 @@ require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (
             isset($_POST['email']) &&
@@ -94,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               exit;
                         }
 
-                        $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $current_time = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
 
                         if (abs($interval) > 300) {

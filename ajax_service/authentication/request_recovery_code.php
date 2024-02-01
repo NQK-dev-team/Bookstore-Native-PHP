@@ -4,6 +4,13 @@ require_once __DIR__ . '/../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/random_generator.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email'])) {
             try {
@@ -31,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!session_start())
                         throw new Exception('Error occurred during starting session!');
                   $_SESSION['recovery_code'] = $code;
-                  $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                  $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                   echo json_encode(['query_result' => true]);
             } catch (Exception $e) {
                   http_response_code(500);

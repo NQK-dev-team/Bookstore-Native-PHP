@@ -6,6 +6,13 @@ require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/checker.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (
             isset($_POST['email']) &&
@@ -43,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else {
                         // Create a DateTime object for the date of birth
-                        $dobDate = new DateTime($date, new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $dobDate = new DateTime($date, new DateTimeZone($_ENV['TIMEZONE']));
                         $dobDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         // Get the current date
-                        $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $currentDate = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         if ($dobDate > $currentDate) {

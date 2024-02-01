@@ -12,6 +12,14 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$dotenv->load();
+
+
 function map($elem)
 {
       return sanitize(rawurldecode($elem));
@@ -128,10 +136,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else {
                         // Create a DateTime object for the date of birth
-                        $tempDate = new DateTime($publishDate, new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $tempDate = new DateTime($publishDate, new DateTimeZone($_ENV['TIMEZONE']));
                         $tempDate->setTime(0, 0, 0); // Set time to 00:00:00
                         // Get the current date
-                        $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $currentDate = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
                         if ($tempDate > $currentDate) {
                               http_response_code(400);
@@ -284,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $id = null;
 
-                  $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                  $currentDateTime = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                   $currentDateTime = $currentDateTime->format('YmdHis');
                   $imageExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
                   $imageFile = "{$name}-{$currentDateTime}.{$imageExtension}";

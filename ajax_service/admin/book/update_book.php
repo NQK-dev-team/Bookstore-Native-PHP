@@ -12,6 +12,13 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$dotenv->load();
+
 
 function map($elem)
 {
@@ -138,11 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else {
                         // Create a DateTime object for the date of birth
-                        $tempDate = new DateTime($publishDate, new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $tempDate = new DateTime($publishDate, new DateTimeZone($_ENV['TIMEZONE']));
                         $tempDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         // Get the current date
-                        $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $currentDate = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         if ($tempDate > $currentDate) {
@@ -347,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
-                              $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $currentDateTime = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                               $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
                               $imageDir = null;
@@ -644,7 +651,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
-                              $currentDateTime = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $currentDateTime = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                               $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileDir = null;
 
