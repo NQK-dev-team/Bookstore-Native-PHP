@@ -93,7 +93,7 @@ function fetchCustomerList()
                                                       `<button onclick='openDeactivateModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>`
                                                       :
                                                       `<button onclick='openActivateModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-success text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Activate\"><i class=\"bi bi-power\"></i></button>` }
-                                          <button onclick='openDeleteModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>
+                                          ${ data.query_result[0][i].deleteTime ? '' : `<button onclick='openDeleteModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>` }
                                           `
                                           )
                                           }

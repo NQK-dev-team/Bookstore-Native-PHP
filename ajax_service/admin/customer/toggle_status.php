@@ -11,7 +11,7 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-
+require_once __DIR__ . '/../../../tool/php/send_mail.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
       parse_str(file_get_contents('php://input'), $_PATCH);
@@ -61,9 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         http_response_code(403);
                         echo json_encode(['error' => 'This customer information has been deleted, activating the account is not allowed since it can cause potential problems!']);
                         exit;
+                  } else if (!$status && $email) {
+                        deactivate_mail($email);
+                  } else if ($status && $email) {
+                        activate_mail($email);
                   }
 
-                  $stmt = $conn->prepare('update customer set status=? where id=?');
+                  $stmt = null;
+                  if ($status)
+                        $stmt = $conn->prepare('update customer set status=?,deleteTime=null where id=?');
+                  else
+                        $stmt = $conn->prepare('update customer set status=? where id=?');
                   $stmt->bind_param('is', $status, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -78,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         }
                   }
                   $stmt->close();
+
                   $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
