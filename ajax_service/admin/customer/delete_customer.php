@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
                         // Remove image directory
                         if ($imagePath) {
-                              rrmdir(__DIR__ . '/../../../data/user/customer/' . $imagePath);
+                              rrmdir(dirname(__DIR__ . '/../../../data/user/customer/' . $imagePath));
                         }
 
                         delete_mail($email, 2);
