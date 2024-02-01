@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   }
 
                   $stmt = $conn->prepare('select email,deleteTime from customer join appUser on appUser.id=customer.id where appUser.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select email,deleteTime from customer join appUser on appUser.id=customer.id where appUser.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -66,10 +72,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   }
 
                   $stmt = null;
-                  if ($status)
+                  if ($status) {
                         $stmt = $conn->prepare('update customer set status=?,deleteTime=null where id=?');
-                  else
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `update customer set status=?,deleteTime=null where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                  } else {
                         $stmt = $conn->prepare('update customer set status=? where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `update customer set status=? where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                  }
                   $stmt->bind_param('is', $status, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

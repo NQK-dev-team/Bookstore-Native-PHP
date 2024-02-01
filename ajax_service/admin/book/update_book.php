@@ -244,6 +244,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Check for existing book
 
                   $stmt = $conn->prepare('select * from book where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -264,6 +270,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select * from book where id!=? and name=? and edition=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where id!=? and name=? and edition=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ssi', $id, $name, $edition);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -283,6 +295,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select * from book where id!=? and isbn=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where id!=? and isbn=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $id, $isbn);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -310,6 +328,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $imageFile = null;
 
                         $stmt = $conn->prepare('select imagePath from book where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select imagePath from book where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -355,6 +379,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $stmt->close();
 
                               $stmt = $conn->prepare('update book set imagePath=? where id=?');
+                              if (!$stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `update book set imagePath=? where id=?` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $stmt->bind_param('ss', $imageFile, $id);
                               $isSuccess = $stmt->execute();
 
@@ -380,6 +410,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('update book set name=?,edition=?,isbn=?,publisher=?,publishDate=?,ageRestriction=?,description=? where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update book set name=?,edition=?,isbn=?,publisher=?,publishDate=?,ageRestriction=?,description=? where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ssssssss', $name, $edition, $isbn, $publisher, $publishDate, $age, $description, $id);
                   $isSuccess = $stmt->execute();
 
@@ -403,6 +439,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('delete from author where bookID=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `delete from author where bookID=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -416,6 +458,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('insert into author(bookID,authorName) values(?,?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `insert into author(bookID,authorName) values(?,?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   foreach ($author as $x) {
                         if ($x) {
                               $stmt->bind_param('ss', $id, $x);
@@ -434,6 +482,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('delete from belong where bookID=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `delete from belong where bookID=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -449,6 +503,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (count($category)) {
                         $categoryID = [];
                         $stmt = $conn->prepare('select id from category where name=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select id from category where name=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         foreach ($category as $x) {
                               if ($x) {
                                     $stmt->bind_param('s', $x);
@@ -479,6 +539,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('insert into belong(bookID,categoryID) values(?,?)');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `insert into belong(bookID,categoryID) values(?,?)` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         foreach ($categoryID as $x) {
                               $stmt->bind_param('ss', $id, $x);
                               $isSuccess = $stmt->execute();
@@ -496,6 +562,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('update physicalCopy set price=?,inStock=? where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update physicalCopy set price=?,inStock=? where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('dis', $physicalPrice, $inStock, $id);
                   $isSuccess = $stmt->execute();
 
@@ -519,6 +591,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('update fileCopy set price=? where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update fileCopy set price=? where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ds', $filePrice, $id);
                   $isSuccess = $stmt->execute();
 
@@ -547,6 +625,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $pdfFile = null;
 
                         $stmt = $conn->prepare('select filePath from fileCopy where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select filePath from fileCopy where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -591,6 +675,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $stmt->close();
 
                               $stmt = $conn->prepare('update fileCopy set filePath=? where id=?');
+                              if (!$stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `update fileCopy set filePath=? where id=?` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $stmt->bind_param('ss', $pdfFile, $id);
                               $isSuccess = $stmt->execute();
 
@@ -616,6 +706,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                   } else if ($removeFile) {
                         $stmt = $conn->prepare('update fileCopy set filePath=null where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `update fileCopy set filePath=null where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {

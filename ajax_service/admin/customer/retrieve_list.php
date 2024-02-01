@@ -60,6 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
 
                   $stmt = $conn->prepare('select name,email,phone,dob,gender,point,cardNumber,address,appUser.id,deleteTime from appUser join customer on customer.id=appUser.id where status=? and (name like ? or email like ? or phone like ? or cardNumber like ?) order by point desc,name,email,customer.id limit ? offset ?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select name,email,phone,dob,gender,point,cardNumber,address,appUser.id,deleteTime from appUser join customer on customer.id=appUser.id where status=? and (name like ? or email like ? or phone like ? or cardNumber like ?) order by point desc,name,email,customer.id limit ? offset ?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('issssii', $status,  $search, $search, $search, $search, $entry, $offset);
                   $isSuccess = $stmt->execute();
 
@@ -84,6 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select count(*) as total from appUser join customer on customer.id=appUser.id where status=? and (name like ? or email like ? or phone like ? or cardNumber like ?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select count(*) as total from appUser join customer on customer.id=appUser.id where status=? and (name like ? or email like ? or phone like ? or cardNumber like ?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('issss', $status, $search, $search, $search, $search);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

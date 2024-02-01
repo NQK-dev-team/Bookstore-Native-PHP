@@ -45,6 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
                   if ($type === '1') {
                         $stmt = $conn->prepare('select * from eventDiscount join discount on discount.id=eventDiscount.id where eventDiscount.id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select * from eventDiscount join discount on discount.id=eventDiscount.id where eventDiscount.id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -61,6 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -79,6 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('delete from discount where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `delete from discount where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -91,6 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
                   } else if ($type === '2') {
                         $stmt = $conn->prepare('select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select * from customerDiscount join discount on discount.id=customerDiscount.id where customerDiscount.id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -105,6 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?)  as result');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?)  as result` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -123,6 +153,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('delete from discount where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `delete from discount where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -135,6 +171,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
                   } else if ($type === '3') {
                         $stmt = $conn->prepare('select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -149,6 +191,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -167,6 +215,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('delete from discount where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `delete from discount where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {

@@ -121,6 +121,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $hashedPassword = hash_password($password);
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare("UPDATE appUser SET password=? WHERE email=?");
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `UPDATE appUser SET password=? WHERE email=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $hashedPassword, $email);
                   $isSuccess = $stmt->execute();
 

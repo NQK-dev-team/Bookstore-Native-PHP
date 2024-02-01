@@ -230,6 +230,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Check for existing book
 
                   $stmt = $conn->prepare('select * from book where name=? and edition=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where name=? and edition=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('si', $name, $edition);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -249,6 +255,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select * from book where isbn=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where isbn=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $isbn);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -280,6 +292,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $pdfFile = isset($_FILES['pdf']) ? "{$name}-{$currentDateTime}.pdf" : null;
 
                   $stmt = $conn->prepare('call addBook(?,?,?,?,?,?,?,?,?,?,?,?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `call addBook(?,?,?,?,?,?,?,?,?,?,?,?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sisissssdids', $name, $edition, $isbn, $age, $publisher, $publishDate, $description, $imageFile, $physicalPrice, $inStock, $filePrice, $pdfFile);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -299,6 +317,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('insert into author(bookID,authorName) values(?,?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `insert into author(bookID,authorName) values(?,?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   foreach ($author as $x) {
                         if ($x) {
                               $stmt->bind_param('ss', $id, $x);
@@ -319,6 +343,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (count($category)) {
                         $categoryID = [];
                         $stmt = $conn->prepare('select id from category where name=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select id from category where name=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         foreach ($category as $x) {
                               if ($x) {
                                     $stmt->bind_param('s', $x);
@@ -349,6 +379,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('insert into belong(bookID,categoryID) values(?,?)');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `insert into belong(bookID,categoryID) values(?,?)` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         foreach ($categoryID as $x) {
                               $stmt->bind_param('ss', $id, $x);
                               $isSuccess = $stmt->execute();

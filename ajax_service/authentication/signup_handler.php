@@ -153,6 +153,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare('select exists(select * from appUser where phone=?) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from appUser where phone=?) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $phone);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -173,6 +179,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from appUser where email=?) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from appUser where email=?) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $email);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -194,6 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if ($refEmail) {
                         $stmt = $conn->prepare('select exists(select * from appUser where email=?) as result');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select exists(select * from appUser where email=?) as result` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $refEmail);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -219,6 +237,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $hashedPassword = hash_password($password);
                   $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?,?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `call addCustomer(?,?,?,?,?,?,?,?,?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail, $gender);
                   $isSuccess = $stmt->execute();
 

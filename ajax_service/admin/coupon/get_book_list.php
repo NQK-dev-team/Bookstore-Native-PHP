@@ -69,6 +69,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   from book join author on book.id=author.bookID
                   where book.status=true and book.name like ?
                   order by book.name,book.id limit ? offset ?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=true and book.name like ? and category.name like ?
+                  order by book.name,book.id limit ? offset ?)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=true and book.name like ?
+                  order by book.name,book.id limit ? offset ?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ssiisii', $search, $category, $entry, $offset, $search, $entry, $offset);
                   $isSuccess = $stmt->execute();
 
@@ -86,6 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $id = $row['id'];
 
                               $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -129,6 +153,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   where book.status=true and book.name like ?
                   order by book.name,book.id)
                   ) as combined');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select count(*) as totalBook from(
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=true and book.name like ? and category.name like ?
+                  order by book.name,book.id)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=true and book.name like ?
+                  order by book.name,book.id)
+                  ) as combined` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sss', $search, $category, $search);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

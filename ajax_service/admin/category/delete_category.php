@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
 
                   $stmt = $conn->prepare('delete from category where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `delete from category where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 

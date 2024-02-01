@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   }
 
                   $stmt = $conn->prepare('select * from book where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -57,6 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('update book set status=? where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update book set status=? where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('is', $status, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

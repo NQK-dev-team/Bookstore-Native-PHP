@@ -110,6 +110,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('select eventDiscount.startDate,eventDiscount.endDate from discount join eventDiscount on discount.id=eventDiscount.id where discount.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select eventDiscount.startDate,eventDiscount.endDate from discount join eventDiscount on discount.id=eventDiscount.id where discount.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -133,6 +139,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from discount where id!=? and name=? and status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from discount where id!=? and name=? and status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $id, $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -153,6 +165,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select (? < ? and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=? and customerOrder.purchaseTime<? and customerOrder.purchaseTime>=? and customerOrder.status=true)) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select (? < ? and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=? and customerOrder.purchaseTime<? and customerOrder.purchaseTime>=? and customerOrder.status=true)) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sssss', $oldStartDate, $start, $id, $start, $oldStartDate);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -173,6 +191,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select (? > ? and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=? and customerOrder.purchaseTime>? and customerOrder.purchaseTime<=? and customerOrder.status=true)) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select (? > ? and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=? and customerOrder.purchaseTime>? and customerOrder.purchaseTime<=? and customerOrder.status=true)) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sssss', $oldEndDate, $end, $id, $end, $oldEndDate);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -194,6 +218,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $conn->begin_transaction();
                   $stmt = $conn->prepare('update discount join eventDiscount on discount.id=eventDiscount.id set discount.name=?,eventDiscount.discount=?,eventDiscount.startDate=?,eventDiscount.endDate=?,eventDiscount.applyForAll=? where eventDiscount.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update discount join eventDiscount on discount.id=eventDiscount.id set discount.name=?,eventDiscount.discount=?,eventDiscount.startDate=?,eventDiscount.endDate=?,eventDiscount.applyForAll=? where eventDiscount.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sdssis', $name, $discount, $start, $end, $allBook, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -208,6 +238,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if (!$allBook) {
                         $stmt = $conn->prepare('delete from eventApply where eventID=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `delete from eventApply where eventID=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -221,6 +257,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
 
                         $stmt = $conn->prepare('insert into eventApply(eventID,bookID) values(?,?)');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `dinsert into eventApply(eventID,bookID) values(?,?)` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         foreach ($bookApply as $bookID) {
                               $stmt->bind_param('ss', $id, $bookID);
                               $isSuccess = $stmt->execute();
@@ -279,6 +321,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('select * from discount join customerDiscount on discount.id=customerDiscount.id where discount.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from discount join customerDiscount on discount.id=customerDiscount.id where discount.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -299,6 +347,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from discount where id!=? and name=? and status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from discount where id!=? and name=? and status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $id, $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -319,6 +373,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where discount.id!=? and abs(customerDiscount.discount-?)<10e-9 and discount.status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where discount.id!=? and abs(customerDiscount.discount-?)<10e-9 and discount.status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sd', $id, $discount);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -339,6 +399,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where discount.id!=? and abs(customerDiscount.point-?)<10e-9 and discount.status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where discount.id!=? and abs(customerDiscount.point-?)<10e-9 and discount.status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sd', $id, $point);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -359,6 +425,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('update discount join customerDiscount on discount.id=customerDiscount.id set discount.name=?,customerDiscount.discount=?,customerDiscount.point=? where discount.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update discount join customerDiscount on discount.id=customerDiscount.id set discount.name=?,customerDiscount.discount=?,customerDiscount.point=? where discount.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sdds', $name, $discount, $point, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -411,6 +483,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('select * from discount join referrerDiscount on discount.id=referrerDiscount.id where discount.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from discount join referrerDiscount on discount.id=referrerDiscount.id where discount.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -431,6 +509,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from discount where id!=? and name=? and status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from discount where id!=? and name=? and status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $id, $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -451,6 +535,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where discount.id!=? and abs(referrerDiscount.discount-?)<10e-9 and discount.status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where discount.id!=? and abs(referrerDiscount.discount-?)<10e-9 and discount.status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sd', $id, $discount);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -471,6 +561,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where discount.id!=? and referrerDiscount.numberOfPeople=? and discount.status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where discount.id!=? and referrerDiscount.numberOfPeople=? and discount.status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('si', $id, $people);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -491,6 +587,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('update discount join referrerDiscount on discount.id=referrerDiscount.id set discount.name=?,referrerDiscount.discount=?,referrerDiscount.numberOfPeople=? where discount.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update discount join referrerDiscount on discount.id=referrerDiscount.id set discount.name=?,referrerDiscount.discount=?,referrerDiscount.numberOfPeople=? where discount.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sdis', $name, $discount, $people, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

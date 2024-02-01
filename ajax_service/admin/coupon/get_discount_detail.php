@@ -38,6 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   if ($type === '1') {
                         $stmt = $conn->prepare('select discount.name,eventDiscount.discount,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.applyForAll from discount join eventDiscount on discount.id=eventDiscount.id where discount.id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select discount.name,eventDiscount.discount,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.applyForAll from discount join eventDiscount on discount.id=eventDiscount.id where discount.id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -60,6 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                         if (!$queryResult['applyForAll']) {
                               $stmt = $conn->prepare('select book.id,book.name,book.edition from book join eventApply on eventApply.bookID=book.id where eventApply.eventID=?');
+                              if (!$stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select book.id,book.name,book.edition from book join eventApply on eventApply.bookID=book.id where eventApply.eventID=?` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $stmt->bind_param('s', $id);
                               $isSuccess = $stmt->execute();
                               if (!$isSuccess) {
@@ -77,6 +89,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         }
                   } else if ($type === '2') {
                         $stmt = $conn->prepare('select discount.name,customerDiscount.discount,customerDiscount.point from discount join customerDiscount on discount.id=customerDiscount.id where discount.id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select discount.name,customerDiscount.discount,customerDiscount.point from discount join customerDiscount on discount.id=customerDiscount.id where discount.id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -98,6 +116,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $stmt->close();
                   } else if ($type === '3') {
                         $stmt = $conn->prepare('select discount.name,referrerDiscount.discount,referrerDiscount.numberOfPeople from discount join referrerDiscount on discount.id=referrerDiscount.id where discount.id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select discount.name,referrerDiscount.discount,referrerDiscount.numberOfPeople from discount join referrerDiscount on discount.id=referrerDiscount.id where discount.id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
