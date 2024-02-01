@@ -43,7 +43,7 @@ create table customer(
     check(point>=0),
     referrer varchar(20),
     status boolean not null default true,
-    deleteTime datetime,
+    deleteTime datetime, -- when current datetime>=delete time, set email and phone to null
     foreign key (id) references appUser(id) on delete cascade on update cascade,
     foreign key (referrer) references customer(id) on delete set null on update cascade
 );
@@ -213,7 +213,8 @@ create table eventDiscount(
     endDate date not null,
     check(startDate<=endDate),
     applyForAll boolean default false, -- true means all the books are discounted by applying this coupon, false means only a number of books are discounted
-    foreign key (id) references discount(id) on delete cascade on update cascade
+    foreign key (id) references discount(id) on delete cascade on update cascade,
+    isNotify boolean not null default false -- use for cron job to know whether or not it should send an email to notify all the customers
 );
 
 create table eventApply(

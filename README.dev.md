@@ -7,6 +7,7 @@
 ### Composer version: 2.6.6
 
 ### Install all required packages using Composer: `composer install`
+
 ###### To fix `The zip extension and unzip/7z commands are both missing` error, go to your PHP 8.3.0 installation folder, find the php.ini file and uncomment this line `;extension=zip`
 
 ### Install mkcert (for Windows OS):
@@ -14,6 +15,7 @@
 **Step 1:** Open window powershell as administrator<br><br>
 **Step 2:** Type `choco install mkcert`<br><br>
 **Step 3:** Type `mkcert -install`<br><br>
+For others OSes visit `https://github.com/FiloSottile/mkcert` for specific installation steps<br><br>
 
 ### Set up SMTP Gmail server
 
@@ -21,6 +23,29 @@
 **Step 2:** Go to `Security` tab<br><br>
 **Step 3:** Click on `2-Step Verification` tab and enable it if you haven't. Then scroll down and choose `App passwords`<br><br>
 **Step 4:** Enter `App name` and click `Create`. You will receive an app password (this will be use in the `.env` file later on, so save it)<br><br>
+
+### Set up cron job (for Windows OS)
+
+**Step 1:** Open window search and type `Task Scheduler`<br><br>
+**Step 2:** Look to `Actions` menu and choose `Create Task`<br><br>
+**Step 3:** At `General` tab, enter `Name` and `Description` field, also set `Configure for` to your current Windows version<br><br>
+**Step 4:** At `Triggers` tab, click on `New` and set up the trigger configuration as follow:<br>
+Step 4.1: Choose `On a schedule` in the `Begin the task` field<br>
+Step 4.2: Choose `Daily` in `Settings`<br>
+Step 4.3: Choose the `Start` date (first day to begin using the task) and time (execute the task every day at that time). Also, you can check `Synchronize across time zones` option<br>
+Step 4.4: Check `Repeat task every` and set to 15 minutes or any value you want, check `for a duration of:` and set to 1 day or any value you want<br>
+Step 4.5: Check `Stop task if it runs longer than:` and set to 2 hours or any value you want<br>
+Step 4.6 (optional): You can set the expire time of the task by checking `Expire` field and set the value<br>
+Step 4.7: Check `Enable`<br><br>
+**Step 5:** At `Actions` tab, click on `New`, default `Action` should be `Start a program` if not, set it back. Then follow these steps<br>
+Step 5.1: `Program/script` value should be the location of `php.exe` file of xampp (example `C:\xampp\php\php.exe`)<br>
+Step 5.2: `Start in (optional):` value should be the location of `cron` directory of this project (example `C:\example_path\cron\`)<br>
+Step 5.3: `Add arguments (optional):` value will be the `delete_account.php` file<br><br>
+**Step 6:** Repeate step 5 but replace with the `discount_notify.php` file at step 5.3<br><br>
+**Step 7:** At `Conditions` tab check `Start the task only if the computer is on AC power` and uncheck `Stop if the computer switches to battery power` (the second field is optional)<br><br>
+**Step 8:** At `Settings` check these fields: `Allows task to be run on demand`, `Run task as soon as possible after a scheduled start is missed`, `Stop the task if it runs longer than:` (2 hours or any value), `If the running task does not end when requested, force it to stop`, `If the task is not scheduled to run again, delete it after:` (30 days or any value), `If the task is already running, then the following rule applies:` (Do not start a new instance)<br><br>
+**Step 9:** Save the config<br><br>
+For other OSes, you can look up on the internet for the set up steps<br><br>
 
 ### Steps to config apache server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
 
@@ -125,6 +150,16 @@ ServerAlias https://www.test.bookstore.com
     </Directory>
 
     <Directory "C:\example_path\vendor">
+        AllowOverride none
+        Require all denied
+    </Directory>
+
+    <Directory "C:\example_path\tool\php">
+        AllowOverride none
+        Require all denied
+    </Directory>
+
+    <Directory "C:\example_path\cron">
         AllowOverride none
         Require all denied
     </Directory>
