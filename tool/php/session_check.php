@@ -20,8 +20,14 @@ function check_session()
             if (!session_start()) return false;
       }
 
-      if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']) && ($_SESSION['type'] === 'admin' || $_SESSION['type'] === 'customer')) return verifyUserID($_SESSION['id']);
-      else return false;
+      if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']) && ($_SESSION['type'] === 'admin' || $_SESSION['type'] === 'customer')) {
+            if (verifyUserID($_SESSION['id']))
+                  return true;
+            else {
+                  $_SESSION = [];
+                  return false;
+            }
+      } else return false;
 }
 
 ?>

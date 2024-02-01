@@ -56,3 +56,8 @@
 .categoryHover:hover {
       background-color: #adadad;
 }
+
+.book-list {
+      max-height: 300px !important;
+      overflow-y: auto;
+}

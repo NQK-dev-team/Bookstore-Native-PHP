@@ -129,7 +129,8 @@ function signUpHandler(event)
       if (refEmail !== '')
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(refEmail))
+            const localEmail = refEmail.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputRefEmail').get(0), "Referrer email format invalid!");
                   return;

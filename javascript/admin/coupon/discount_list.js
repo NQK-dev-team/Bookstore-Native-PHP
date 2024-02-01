@@ -158,7 +158,7 @@ function fetchCouponList()
                                           }
                                           trElem.append($(
                                                 `<td class='align-middle col-5'>
-                                                      <div class='d-flex flex-column'>
+                                                      <div class='d-flex flex-column book-list'>
                                                       ${ array }
                                                       </div>
                                                 </td>`

@@ -62,7 +62,7 @@ if (return_navigate_error() === 400) {
                   if ($row['applyForAll']) {
                         $elem .= "<td class='align-middle col-5'><strong>All Books</strong></td>";
                   } else {
-                        $elem .= "<td class='align-middle col-5'><div class='d-flex flex-column'>";
+                        $elem .= "<td class='align-middle col-5'><div class='d-flex flex-column book-list'>";
                         $sub_stmt = $conn->prepare('SELECT book.id,book.name,book.edition,book.status FROM book join eventApply on book.id=eventApply.bookID where eventApply.eventID=? order by book.name,book.edition,book.id');
                         $sub_stmt->bind_param('s', $row['id']);
                         $isSuccess = $sub_stmt->execute();
@@ -563,7 +563,7 @@ if (return_navigate_error() === 400) {
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
-                                          <p>Changing from applying to all books to only a number of books can cause data anomalies, do you really want to do this?</p>
+                                          <p>Changing books applied for this coupon can cause incorrect data presentation when performing statistical analysis, do you really want to do this?</p>
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>

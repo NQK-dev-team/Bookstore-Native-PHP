@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             try {
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
-                  $status = $_GET['status'] ? filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN) : null;
+                  $status =filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
                   $search = sanitize(rawurldecode($_GET['search']));
                   $category = sanitize(rawurldecode($_GET['category']));
 
@@ -45,12 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   } else if (!is_numeric($offset) || is_nan($offset) || $offset <= 0) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Book list number invalid!']);
-                        exit;
-                  }
-
-                  if (is_null($status)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Missing book status!']);
                         exit;
                   }
 
