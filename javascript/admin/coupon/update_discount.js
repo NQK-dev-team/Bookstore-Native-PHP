@@ -184,7 +184,14 @@ function openUpdateModal(id)
                                           <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookUpdateModal(event,1)" ${ data.query_result.applyForAll ? 'checked' : '' } data-default-check-state=${ data.query_result.applyForAll }>
                                           <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
                                           <textarea rows="5" readonly class="form-control pointer mt-2" id="couponBookApply" onclick="selectAllBookUpdateModal(null,2)" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
-                                    </div>`)
+                                    </div>
+                                    ${ new Date(data.query_result.startDate) <= new Date() ?
+                                                `<div class="form-check mt-3">
+                                          <input class="form-check-input pointer" type="checkbox" id="notifyAgain">
+                                          <label class="form-check-label fw-medium" for="notifyAgain">
+                                                Notify Again
+                                          </label>
+                                    </div>`: '' }`)
                               );
                         }
                   },
@@ -384,7 +391,8 @@ function updateCoupon()
                         start: start,
                         end: end,
                         allBook: $('#btncheck1').prop('checked'),
-                        bookApply: bookApply.length ? ((bookApply.filter(str => str.trim() !== '')).map(str => encodeData(str))).join(',') : ''
+                        bookApply: bookApply.length ? ((bookApply.filter(str => str.trim() !== '')).map(str => encodeData(str))).join(',') : '',
+                        notifyAgain: $('#notifyAgain').prop('checked')
                   },
                   headers: {
                         'X-CSRF-Token': CSRF_TOKEN
