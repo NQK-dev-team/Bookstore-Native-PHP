@@ -13,7 +13,7 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 // Include Composer's autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 // Load environment variables from .env file
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/random_generator.php';
 
 // Include Composer's autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 // Load environment variables from .env file
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
@@ -27,6 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
+                  if (!session_start())
+                        throw new Exception('Error occurred during starting session!');
+                  
                   if ($_SESSION['recovery_email'] !== $email) {
                         http_response_code(404);
                         echo json_encode(['error' => 'Email not found!']);
@@ -35,8 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $code = generateRandomString();
                   recovery_mail($email, $code);
-                  if (!session_start())
-                        throw new Exception('Error occurred during starting session!');
                   $_SESSION['recovery_code'] = $code;
                   $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                   echo json_encode(['query_result' => true]);

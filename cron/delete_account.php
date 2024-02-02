@@ -38,6 +38,11 @@ try {
       $result = $stmt->get_result();
       $total = $result->num_rows;
       $stmt2 = $conn->prepare("update appUser join customer on appUser.id = customer.id set email=null,phone=null,deleteTime=null,cardNumber=null,referrer=null,imagePath=null,address=null,password=null,name='ACCOUNT REMOVED' where customer.id=?");
+      if (!$stmt2) {
+            $logMessage = $currentDateTime . " - MySQL Query `update appUser join customer on appUser.id = customer.id set email=null,phone=null,deleteTime=null,cardNumber=null,referrer=null,imagePath=null,address=null,password=null,name='ACCOUNT REMOVED' where customer.id=?` Preparation Failed!\n";
+            file_put_contents(__DIR__ . '\delete_account.log', $logMessage, FILE_APPEND);
+            exit;
+      }
       while ($row = $result->fetch_assoc()) {
             // Send delete mail
             delete_mail($row['email'], 2);

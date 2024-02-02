@@ -58,7 +58,7 @@ function enterEmail(e, user_type)
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'none';
 
-                        globalEmail = email;
+                        globalEmail = email.replace(/%40/g, '@');
                         $('#recovery_email_form').css('display', 'none');
                         $('#recovery_password_form').css('display', 'none');
                         $('#recovery_code_form').css('display', 'flex');
@@ -99,7 +99,8 @@ function requestRecoveryCode()
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(globalEmail))
+            const localEmail = globalEmail.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
@@ -174,7 +175,8 @@ function enterCode(e)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(globalEmail))
+            const localEmail = globalEmail.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');
@@ -269,7 +271,8 @@ function changePassword(e, user_type)
       else
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(globalEmail))
+            const localEmail = globalEmail.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   $('#error_message_content_2').text('Email format invalid!');
                   const error_message = document.getElementById('recovery_fail_2');

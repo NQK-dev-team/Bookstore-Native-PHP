@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 
 // Include Composer's autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 // Load environment variables from .env file
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
@@ -89,6 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'Invalid user type!']);
                         exit;
                   }
+
+                  if (!session_start())
+                        throw new Exception('Error occurred during starting session!');
 
                   if (!isset($_SESSION['recovery_email'], $_SESSION['recovery_state'], $_SESSION['recovery_state_set_time']) || !$_SESSION['recovery_email'] || !$_SESSION['recovery_state'] || !$_SESSION['recovery_state_set_time']) {
                         http_response_code(500);
