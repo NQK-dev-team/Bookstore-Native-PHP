@@ -18,26 +18,6 @@ $(document).ready(() =>
       });
 });
 
-window.addEventListener('beforeunload', function (event)
-{
-      const expr = $('#bookNameInput').val() !== ''
-            || $('#bookImage').attr('src')
-            || $('#editionInput').val() !== ''
-            || $('#isbnInput').val() !== ''
-            || $('#ageInput').val() !== ''
-            || $('#publisherInput').val() !== ''
-            || $('#publishDateInput').val() !== ''
-            || $('#physicalPriceInput').val() !== ''
-            || $('#inStockInput').val() !== ''
-            || $('#filePriceInput').val() !== ''
-            || $('#authorInput').val() !== ''
-            || $('#categoryInput').val() !== ''
-            || newImage || newFile;
-
-      if (expr && !isSuccess)
-            event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-});
-
 function resetForm()
 {
       $('#bookNameInput').val('');
