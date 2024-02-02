@@ -184,11 +184,10 @@ function fetchBookList()
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $('<div>').addClass('truncate').text(data.query_result[0][i].description))
                               );
+
                               if (data.query_result[0][i].avgRating)
-                                    trElem.append($('<td>').addClass('align-middle').append(
-                                          $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
-                                    ).append(
-                                          $(`<span>`).text(data.query_result[0][i].avgRating)
+                                    trElem.append($('<td>').addClass('align-middle col-1').append(
+                                          $(`<span><span class='text-warning'>${ displayRatingStars(data.query_result[0][i].avgRating) }</span>&nbsp;(${ data.query_result[0][i].avgRating })</span>`)
                                     ));
                               else
                                     trElem.append($('<td>').addClass('align-middle').text('N/A'));
