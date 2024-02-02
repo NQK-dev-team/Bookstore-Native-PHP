@@ -165,23 +165,24 @@ if (return_navigate_error() === 400) {
                                                             echo "<p class=\"author\">".$row["authorName"]."</p>";
                                                             echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
                                                             echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
-                                                            $cnt = 1;
-                                                            $res="";
-                                                            while($cnt <= 5){
-                                                                  if ($cnt > $row["star"]){
-                                                                        if($cnt - $row["star"] > 0 && $cnt - $row["star"] < 1){
-                                                                              $res .= "<i class=\"bi bi-star-half\"></i>";
-                                                                        }
-                                                                        else{
-                                                                              $res .= "<i class=\"bi bi-star\"></i>";
-                                                                        }
-                                                                  }
-                                                                  else {
-                                                                        $res .= "<i class=\"bi bi-star-fill\"></i>";
-                                                                  }
-                                                                  $cnt++;
-                                                            }
-                                                            echo $res."(".$row["star"].")";
+                                                            // $cnt = 1;
+                                                            // $res="";
+                                                            // while($cnt <= 5){
+                                                            //       if ($cnt > $row["star"]){
+                                                            //             if($cnt - $row["star"] > 0 && $cnt - $row["star"] < 1){
+                                                            //                   $res .= "<i class=\"bi bi-star-half\"></i>";
+                                                            //             }
+                                                            //             else{
+                                                            //                   $res .= "<i class=\"bi bi-star\"></i>";
+                                                            //             }
+                                                            //       }
+                                                            //       else {
+                                                            //             $res .= "<i class=\"bi bi-star-fill\"></i>";
+                                                            //       }
+                                                            //       $cnt++;
+                                                            // }
+                                                            echo displayRatingStars($row["star"]);
+                                                            echo "(".$row["star"].")";
                                                             
                                                       echo "</div>";
                                                 echo "</a>";
