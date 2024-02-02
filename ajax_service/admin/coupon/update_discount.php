@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($type === '1') {
-                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['start']) || !isset($_POST['end']) || !isset($_POST['bookApply']) || !isset($_POST['allBook'])) {
+                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['start']) || !isset($_POST['end']) || !isset($_POST['bookApply']) || !isset($_POST['allBook']) || !isset($_POST['notifyAgain'])) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Invalid data received!']);
                         exit;
@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $end = sanitize(rawurldecode($_POST['end']));
                   $bookApply = $_POST['bookApply'] ? array_map('map', explode(',', $_POST['bookApply'])) : [];
                   $allBook = filter_var(sanitize(rawurldecode($_POST['allBook'])), FILTER_VALIDATE_BOOLEAN);
+                  $notifyAgain = filter_var(sanitize(rawurldecode($_POST['notifyAgain'])), FILTER_VALIDATE_BOOLEAN);
 
                   if (!$name) {
                         http_response_code(400);
@@ -274,6 +275,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $conn->close();
                                     exit;
                               }
+                        }
+                        $stmt->close();
+                  }
+
+                  if ($notifyAgain) {
+                        $stmt = $conn->prepare('update eventDiscount set isNotify=false where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `update eventDiscount set isNotify=false where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                        $stmt->bind_param('s', $id);
+                        $isSuccess = $stmt->execute();
+                        if (!$isSuccess) {
+                              $conn->rollback();
+                              http_response_code(500);
+                              echo json_encode(['error' => $stmt->error]);
+                              $stmt->close();
+                              $conn->close();
+                              exit;
                         }
                         $stmt->close();
                   }
