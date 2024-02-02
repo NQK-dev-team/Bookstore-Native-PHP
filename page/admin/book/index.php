@@ -16,6 +16,7 @@ if (return_navigate_error() === 400) {
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
+      require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 
       try {
             // Connect to MySQL
@@ -157,12 +158,12 @@ if (return_navigate_error() === 400) {
                               </td>";
                               $row['description'] = $row['description'] ? $row['description'] : 'N/A';
                               $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$row['description']}</div></td>";
-                              if ($row['avgRating'])
-                                    $elem .= "<td class=\"align-middle\">
-                                          <i class=\"bi bi-star-fill text-warning\"></i>
-                                          <span>{$row['avgRating']}</span>
+                              if ($row['avgRating']) {
+                                    $func_res = displayRatingStars($row['avgRating']);
+                                    $elem .= "<td class=\"align-middle col-1\">
+                                          <span><span class='text-warning'>{$func_res}</span>&nbsp;({$row['avgRating']})</span>
                                     </td>";
-                              else
+                              } else
                                     $elem .= "<td class=\"align-middle\">
                                           N/A
                                     </td>";
@@ -550,6 +551,7 @@ if (return_navigate_error() === 400) {
             <script src="/javascript/admin/book/book_list.js"></script>
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
+            <script src="/tool/js/ratingStars.js"></script>
       </body>
 
       </html>
