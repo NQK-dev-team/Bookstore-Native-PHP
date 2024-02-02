@@ -13,7 +13,14 @@ function verifyUserID($id)
             return false;
       }
 
-      $stmt = $conn->prepare('select exists(select * from appUser join admin on admin.id=appUser.id where admin.id=?) as result;');
+      $stmt = $conn->prepare('select exists(select * from appUser join admin on admin.id=appUser.id where admin.id=?) as result');
+      if (!$stmt) {
+            http_response_code(500);
+            echo 'SQL statement error when verifying user ID!';
+            //echo json_encode(['error' => 'Query `select exists(select * from appUser join admin on admin.id=appUser.id where admin.id=?) as result` preparation failed!']);
+            $conn->close();
+            exit;
+      }
       $stmt->bind_param('s', $id);
       $isSuccess = $stmt->execute();
 
@@ -38,7 +45,14 @@ function verifyUserID($id)
             return true;
       }
 
-      $stmt = $conn->prepare('select exists(select * from appUser join customer on customer.id=appUser.id where customer.id=? and status=true) as result;');
+      $stmt = $conn->prepare('select exists(select * from appUser join customer on customer.id=appUser.id where customer.id=? and status=true) as result');
+      if (!$stmt) {
+            http_response_code(500);
+            echo 'SQL statement error when verifying user ID!';
+            //echo json_encode(['error' => 'Query `select exists(select * from appUser join customer on customer.id=appUser.id where customer.id=? and status=true) as result` preparation failed!']);
+            $conn->close();
+            exit;
+      }
       $stmt->bind_param('s', $id);
       $isSuccess = $stmt->execute();
       if (!$isSuccess) {

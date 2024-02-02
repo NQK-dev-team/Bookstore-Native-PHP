@@ -32,6 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $query_result = [];
 
                   $stmt = $conn->prepare('select name,description from category where name like ? order by name,id');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select name,description from category where name like ? order by name,id` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $search);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

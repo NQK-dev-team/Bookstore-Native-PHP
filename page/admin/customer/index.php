@@ -24,6 +24,12 @@ if (return_navigate_error() === 400) {
             }
 
             $stmt = $conn->prepare("SELECT COUNT(*) as result FROM customer where status=true");
+            if (!$stmt) {
+                  http_response_code(500);
+                  echo json_encode(['error' => 'Query `SELECT COUNT(*) as result FROM customer where status=true` preparation failed!']);
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -36,6 +42,12 @@ if (return_navigate_error() === 400) {
             $elem = '';
 
             $stmt = $conn->prepare('select name,email,phone,dob,gender,point,cardNumber,address,appUser.id from appUser join customer on customer.id=appUser.id where status=true order by point desc,name,email,customer.id limit 10');
+            if (!$stmt) {
+                  http_response_code(500);
+                  echo json_encode(['error' => 'Query `select name,email,phone,dob,gender,point,cardNumber,address,appUser.id from appUser join customer on customer.id=appUser.id where status=true order by point desc,name,email,customer.id limit 10` preparation failed!']);
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);

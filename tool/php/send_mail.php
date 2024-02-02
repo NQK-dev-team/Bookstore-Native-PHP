@@ -176,4 +176,43 @@ function delete_cancel_mail($email)
       }
 }
 
+function discount_notify($email, $eventName, $discount, $type, $books)
+{
+      global $mail;
+
+      try {
+            $mail->clearAllRecipients();
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add address: ' . $e->getMessage());
+      }
+
+      $mail->Subject = "{$eventName} is here!";
+
+      if ($type === 1) {
+            $mail->Body = "<strong>{$discount}% sales for all books, hurry up and grab what you want!</strong>";
+            $mail->AltBody = "{$discount}% sales for all books, hurry up and grab what you want!";
+      } else if ($type === 2) {
+            $mail->Body = "<strong>{$discount}% sales for these following books</strong><br>";
+            $mail->AltBody = "{$discount}% sales for these following books\n";
+      }
+
+      if($type===2)
+      {
+            foreach ($books as $book) {
+                  $mail->Body .= "<p>{$book}</p>";
+                  $mail->AltBody .= "{$book}\n";
+            }
+            $mail->Body .= "<br>";
+            $mail->AltBody .= "\n";
+      }
+
+      $mail->Body.="<p>Happy Shopping!</p>";
+      $mail->AltBody .= "Happy Shopping!\n";
+
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
+}
+
 ?>

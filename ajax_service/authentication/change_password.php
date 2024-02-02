@@ -5,6 +5,13 @@ require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (
             isset($_POST['email']) &&
@@ -83,6 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
+                  if (!session_start())
+                        throw new Exception('Error occurred during starting session!');
+
                   if (!isset($_SESSION['recovery_email'], $_SESSION['recovery_state'], $_SESSION['recovery_state_set_time']) || !$_SESSION['recovery_email'] || !$_SESSION['recovery_state'] || !$_SESSION['recovery_state_set_time']) {
                         http_response_code(500);
                         echo json_encode(['error' => 'Server can\'t find information about client\'s recovery request!']);
@@ -94,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               exit;
                         }
 
-                        $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $current_time = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
 
                         if (abs($interval) > 300) {
@@ -121,6 +131,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $hashedPassword = hash_password($password);
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare("UPDATE appUser SET password=? WHERE email=?");
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `UPDATE appUser SET password=? WHERE email=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $hashedPassword, $email);
                   $isSuccess = $stmt->execute();
 

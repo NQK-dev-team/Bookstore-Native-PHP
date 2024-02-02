@@ -55,6 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
 
                   $stmt = $conn->prepare('select * from category where name like ? order by name,id limit ? offset ?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from category where name like ? order by name,id limit ? offset ?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sii', $search, $entry, $offset);
                   $isSuccess = $stmt->execute();
 
@@ -70,6 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select count(*) as total from category where name like ?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select count(*) as total from category where name like ?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $search);
                   $isSuccess = $stmt->execute();
 

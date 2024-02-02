@@ -39,6 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
 
                   $stmt = $conn->prepare('select email,status,deleteTime,imagePath from customer join appUser on appUser.id=customer.id where customer.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select email,status,deleteTime,imagePath from customer join appUser on appUser.id=customer.id where customer.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -71,6 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
 
                   $stmt = $conn->prepare('select exists(select * from customerOrder where customerID=? and customerOrder.status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from customerOrder where customerID=? and customerOrder.status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -85,6 +97,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
                   if ($result) {
                         $stmt = $conn->prepare('update customer set status=false,deleteTime=date_add(now(),interval 14 day) where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `update customer set status=false,deleteTime=date_add(now(),interval 14 day) where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -100,6 +118,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                         echo json_encode(['query_result' => 1]);
                   } else {
                         $stmt = $conn->prepare('delete from appUser where id=?');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `delete from appUser where id=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -113,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
                         // Remove image directory
                         if ($imagePath) {
-                              rrmdir(__DIR__ . '/../../../data/user/customer/' . $imagePath);
+                              rrmdir(dirname(__DIR__ . '/../../../data/user/customer/' . $imagePath));
                         }
 
                         delete_mail($email, 2);

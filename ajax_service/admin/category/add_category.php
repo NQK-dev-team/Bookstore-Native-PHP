@@ -57,6 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('select * from category where name=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from category where name=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $name);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -74,6 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('insert into category (name,description) values (?,?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `insert into category (name,description) values (?,?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $name, $description);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

@@ -35,6 +35,12 @@ if (return_navigate_error() === 400) {
                   $query_result = null;
 
                   $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -61,6 +67,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select authorName from author where bookID=? order by authorName,authorIdx` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -83,6 +95,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select category.name from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select category.name from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 
@@ -105,6 +123,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select price,inStock from physicalCopy where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 
@@ -127,6 +151,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select price,filePath from fileCopy where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 

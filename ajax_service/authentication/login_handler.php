@@ -71,10 +71,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt = NULL;
                   if ($user_type === "admin") {
                         $stmt = $conn->prepare("select appUser.id,appUser.password from appUser join admin on admin.id=appUser.id where appUser.email=?");
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select appUser.id,appUser.password from appUser join admin on admin.id=appUser.id where appUser.email=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $email);
                         $isSuccess = $stmt->execute();
                   } else if ($user_type === "customer") {
                         $stmt = $conn->prepare("select appUser.id,appUser.password from appUser join customer on customer.id=appUser.id where appUser.email=?");
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select appUser.id,appUser.password from appUser join customer on customer.id=appUser.id where appUser.email=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $email);
                         $isSuccess = $stmt->execute();
                   }
@@ -111,6 +123,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if ($user_type === "customer") {
                         $stmt = $conn->prepare('select status,deleteTime from customer join appUser on appUser.id=customer.id where customer.id=? and email is not null and phone is not null');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select status,deleteTime from customer join appUser on appUser.id=customer.id where customer.id=? and email is not null and phone is not null` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $id);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -134,6 +152,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         if (!$customerStatus) {
                               $stmt = $conn->prepare('update customer join appUser on appUser.id=customer.id set status=true,deleteTime=null where customer.id=? and email is not null and phone is not null');
+                              if (!$stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `update customer join appUser on appUser.id=customer.id set status=true,deleteTime=null where customer.id=? and email is not null and phone is not null` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $stmt->bind_param('s', $id);
                               $isSuccess = $stmt->execute();
                               if (!$isSuccess) {

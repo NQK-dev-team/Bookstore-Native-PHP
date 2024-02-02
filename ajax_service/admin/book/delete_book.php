@@ -37,6 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
 
                   $stmt = $conn->prepare('select * from book where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from book where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -58,6 +64,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 
                   $stmt = $conn->prepare('select(exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select(exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
+    or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $id, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -80,6 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   $deleteDir = null;
 
                   $stmt = $conn->prepare('select imagePath from book where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select imagePath from book where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -95,6 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   }
 
                   $stmt = $conn->prepare('delete from book where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `delete from book where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 

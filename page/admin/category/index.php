@@ -25,6 +25,12 @@ if (return_navigate_error() === 400) {
             }
 
             $stmt = $conn->prepare("SELECT COUNT(*) as total FROM category");
+            if (!$stmt) {
+                  http_response_code(500);
+                  echo json_encode(['error' => 'Query `SELECT COUNT(*) as total FROM category` preparation failed!']);
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
 
             if (!$isSuccess) {
@@ -40,6 +46,12 @@ if (return_navigate_error() === 400) {
 
 
             $stmt = $conn->prepare("SELECT * FROM category order by name,id LIMIT 10");
+            if (!$stmt) {
+                  http_response_code(500);
+                  echo json_encode(['error' => 'Query `SELECT * FROM category order by name,id LIMIT 10` preparation failed!']);
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
