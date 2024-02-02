@@ -181,7 +181,7 @@ if (return_navigate_error() === 400) {
                                                             //       }
                                                             //       $cnt++;
                                                             // }
-                                                            echo displayRatingStars($row["star"]);
+                                                            echo '<span class="text-warning">'.displayRatingStars($row["star"]).'</span>';
                                                             echo "(".$row["star"].")";
                                                             
                                                       echo "</div>";
