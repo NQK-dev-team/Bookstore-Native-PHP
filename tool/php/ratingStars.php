@@ -56,12 +56,19 @@ function displayRatingStars($avgRating) {
         echo '<i class="bi bi-star-fill"></i>';
         echo '<i class="bi bi-star"></i>';
   }
-  elseif($avgRating >= 4.5 && $avgRating <5){
+  elseif($avgRating >= 4.5 && $avgRating <4.8){
         echo '<i class="bi bi-star-fill"></i>';
         echo '<i class="bi bi-star-fill"></i>';
         echo '<i class="bi bi-star-fill"></i>';
         echo '<i class="bi bi-star-fill"></i>';
         echo '<i class="bi bi-star-half"></i>';
+  }
+  elseif($avgRating >= 4.8){
+      echo '<i class="bi bi-star-fill"></i>';
+      echo '<i class="bi bi-star-fill"></i>';
+      echo '<i class="bi bi-star-fill"></i>';
+      echo '<i class="bi bi-star-fill"></i>';
+      echo '<i class="bi bi-star-fill"></i>';
   }
 }
 ?>
