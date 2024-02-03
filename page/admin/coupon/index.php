@@ -29,7 +29,7 @@ if (return_navigate_error() === 400) {
             $stmt = $conn->prepare("SELECT COUNT(*) as total FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true");
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `SELECT COUNT(*) as total FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true` preparation failed!']);
+                  require_once __DIR__ . '/../../../error/500.php';
                   $conn->close();
                   exit;
             }
@@ -49,7 +49,7 @@ if (return_navigate_error() === 400) {
             $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true order by startDate desc,endDate desc,discount,id limit 10");
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true order by startDate desc,endDate desc,discount,id limit 10` preparation failed!']);
+                  require_once __DIR__ . '/../../../error/500.php';
                   $conn->close();
                   exit;
             }
@@ -78,7 +78,7 @@ if (return_navigate_error() === 400) {
                         $sub_stmt = $conn->prepare('SELECT book.id,book.name,book.edition,book.status FROM book join eventApply on book.id=eventApply.bookID where eventApply.eventID=? order by book.name,book.edition,book.id');
                         if (!$sub_stmt) {
                               http_response_code(500);
-                              echo json_encode(['error' => 'Query `SELECT book.id,book.name,book.edition,book.status FROM book join eventApply on book.id=eventApply.bookID where eventApply.eventID=? order by book.name,book.edition,book.id` preparation failed!']);
+                              require_once __DIR__ . '/../../../error/500.php';
                               $conn->close();
                               exit;
                         }
@@ -108,7 +108,7 @@ if (return_navigate_error() === 400) {
                   $sub_stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result');
                   if (!$sub_stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result` preparation failed!']);
+                        require_once __DIR__ . '/../../../error/500.php';
                         $conn->close();
                         exit;
                   }
@@ -158,7 +158,7 @@ if (return_navigate_error() === 400) {
             $stmt = $conn->prepare('select name from category order by name,id');
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `select name from category order by name,id` preparation failed!']);
+                  require_once __DIR__ . '/../../../error/500.php';
                   $conn->close();
                   exit;
             }

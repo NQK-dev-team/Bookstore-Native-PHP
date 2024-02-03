@@ -19,7 +19,8 @@ function map($elem)
       return sanitize(rawurldecode($elem));
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+      parse_str(file_get_contents('php://input'), $_PUT);
       try {
             if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                   http_response_code(403);
@@ -27,14 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   exit;
             }
 
-            if (!isset($_POST['type'], $_POST['id'])) {
+            if (!isset($_PUT['type'], $_PUT['id'])) {
                   http_response_code(400);
                   echo json_encode(['error' => 'Missing coupon type parameter!']);
                   exit;
             }
 
-            $id = sanitize(rawurldecode($_POST['id']));
-            $type = sanitize(rawurldecode($_POST['type']));
+            $id = sanitize(rawurldecode($_PUT['id']));
+            $type = sanitize(rawurldecode($_PUT['type']));
 
             if (!is_numeric($type) || is_nan($type) || ($type !== '1' && $type !== '2' && $type !== '3')) {
                   http_response_code(400);
@@ -53,19 +54,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($type === '1') {
-                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['start']) || !isset($_POST['end']) || !isset($_POST['bookApply']) || !isset($_POST['allBook']) || !isset($_POST['notifyAgain'])) {
+                  if (!isset($_PUT['name']) || !isset($_PUT['discount']) || !isset($_PUT['start']) || !isset($_PUT['end']) || !isset($_PUT['bookApply']) || !isset($_PUT['allBook']) || !isset($_PUT['notifyAgain'])) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Invalid data received!']);
                         exit;
                   }
 
-                  $name = sanitize(rawurldecode($_POST['name']));
-                  $discount = sanitize(rawurldecode($_POST['discount']));
-                  $start = sanitize(rawurldecode($_POST['start']));
-                  $end = sanitize(rawurldecode($_POST['end']));
-                  $bookApply = $_POST['bookApply'] ? array_map('map', explode(',', $_POST['bookApply'])) : [];
-                  $allBook = filter_var(sanitize(rawurldecode($_POST['allBook'])), FILTER_VALIDATE_BOOLEAN);
-                  $notifyAgain = filter_var(sanitize(rawurldecode($_POST['notifyAgain'])), FILTER_VALIDATE_BOOLEAN);
+                  $name = sanitize(rawurldecode($_PUT['name']));
+                  $discount = sanitize(rawurldecode($_PUT['discount']));
+                  $start = sanitize(rawurldecode($_PUT['start']));
+                  $end = sanitize(rawurldecode($_PUT['end']));
+                  $bookApply = $_PUT['bookApply'] ? array_map('map', explode(',', $_PUT['bookApply'])) : [];
+                  $allBook = filter_var(sanitize(rawurldecode($_PUT['allBook'])), FILTER_VALIDATE_BOOLEAN);
+                  $notifyAgain = filter_var(sanitize(rawurldecode($_PUT['notifyAgain'])), FILTER_VALIDATE_BOOLEAN);
 
                   if (!$name) {
                         http_response_code(400);
@@ -302,15 +303,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $conn->commit();
             } else if ($type === '2') {
-                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['point'])) {
+                  if (!isset($_PUT['name']) || !isset($_PUT['discount']) || !isset($_PUT['point'])) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Invalid data received!']);
                         exit;
                   }
 
-                  $name = sanitize(rawurldecode($_POST['name']));
-                  $discount = sanitize(rawurldecode($_POST['discount']));
-                  $point = sanitize(rawurldecode($_POST['point']));
+                  $name = sanitize(rawurldecode($_PUT['name']));
+                  $discount = sanitize(rawurldecode($_PUT['discount']));
+                  $point = sanitize(rawurldecode($_PUT['point']));
 
                   if (!$name) {
                         http_response_code(400);
@@ -464,15 +465,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
                   $stmt->close();
             } else if ($type === '3') {
-                  if (!isset($_POST['name']) || !isset($_POST['discount']) || !isset($_POST['people'])) {
+                  if (!isset($_PUT['name']) || !isset($_PUT['discount']) || !isset($_PUT['people'])) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Invalid data received!']);
                         exit;
                   }
 
-                  $name = sanitize(rawurldecode($_POST['name']));
-                  $discount = sanitize(rawurldecode($_POST['discount']));
-                  $people = sanitize(rawurldecode($_POST['people']));
+                  $name = sanitize(rawurldecode($_PUT['name']));
+                  $discount = sanitize(rawurldecode($_PUT['discount']));
+                  $people = sanitize(rawurldecode($_PUT['people']));
 
                   if (!$name) {
                         http_response_code(400);

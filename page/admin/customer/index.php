@@ -14,6 +14,8 @@ if (return_navigate_error() === 400) {
 
       $_SESSION['update_book_id'] = null;
 
+      require_once __DIR__ . '/../../../config/db_connection.php';
+
       try {
             $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
@@ -26,7 +28,7 @@ if (return_navigate_error() === 400) {
             $stmt = $conn->prepare("SELECT COUNT(*) as result FROM customer where status=true");
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `SELECT COUNT(*) as result FROM customer where status=true` preparation failed!']);
+                  require_once __DIR__ . '/../../../error/500.php';
                   $conn->close();
                   exit;
             }
@@ -44,7 +46,7 @@ if (return_navigate_error() === 400) {
             $stmt = $conn->prepare('select name,email,phone,dob,gender,point,cardNumber,address,appUser.id from appUser join customer on customer.id=appUser.id where status=true order by point desc,name,email,customer.id limit 10');
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `select name,email,phone,dob,gender,point,cardNumber,address,appUser.id from appUser join customer on customer.id=appUser.id where status=true order by point desc,name,email,customer.id limit 10` preparation failed!']);
+                  require_once __DIR__ . '/../../../error/500.php';
                   $conn->close();
                   exit;
             }

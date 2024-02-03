@@ -6,9 +6,12 @@ use bookstore;
 
 -- Important --
 create table pointConfig(
-	pointConversionRate double primary key
+	locker char(1) primary key,
+	pointConversionRate double not null,
+    check (locker='X'),
+    check (pointConversionRate>0)
 );
-insert into pointConfig values(10);
+insert into pointConfig values('X',10);
 -- Important --
 
 create table category(

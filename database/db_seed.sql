@@ -28,8 +28,6 @@ insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.3
 insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4',null,0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
 ('CUSTOMER10',null,0,null,false,null),('CUSTOMER11',null,0,null,false,null),('CUSTOMER12',null,0,null,false,null),('CUSTOMER13',null,0,null,false,null),('CUSTOMER14',null,0,null,false,null);
 
--- select * from appUser join customer on customer.id=appUser.id where customer.id='CUSTOMER9';
-
 -- Insert `book` table
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publishDate`, `status`, `imagePath`) VALUES ('BOOK1', 'The Joy of PHP', '1', '9781522792147', '3', '4', 'CreateSpace Independent Publishing Platform', '2012-12-13', '1','demo/BOOK1/The Joy of PHP.png');
 INSERT INTO `bookstore`.`book` (`id`, `name`, `edition`, `isbn`, `ageRestriction`, `avgRating`, `publisher`, `publishDate`, `status`, `imagePath`) VALUES ('BOOK2', 'Models: Attract Women Through Honesty', '3', '9781463750350', '13', '4.7', 'CreateSpace Independent Publishing Platform', '2012-12-30', '1','demo/BOOK2/Models Attract Women Through Honesty.png');

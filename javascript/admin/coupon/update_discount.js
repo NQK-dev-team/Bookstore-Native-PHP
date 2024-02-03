@@ -382,7 +382,7 @@ function updateCoupon()
 
             $.ajax({
                   url: '/ajax_service/admin/coupon/update_discount.php',
-                  type: 'POST',
+                  type: 'PUT',
                   data: {
                         id: encodeData(update_id),
                         type: type,
@@ -469,7 +469,7 @@ function updateCoupon()
 
             $.ajax({
                   url: '/ajax_service/admin/coupon/update_discount.php',
-                  type: 'POST',
+                  type: 'PUT',
                   data: {
                         type: type,
                         name: name,
@@ -552,7 +552,7 @@ function updateCoupon()
 
             $.ajax({
                   url: '/ajax_service/admin/coupon/update_discount.php',
-                  type: 'POST',
+                  type: 'PUT',
                   data: {
                         type: type,
                         name: name,

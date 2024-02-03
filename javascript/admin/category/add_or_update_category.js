@@ -102,7 +102,7 @@ function updateCategory()
 
       $.ajax({
             url: '/ajax_service/admin/category/update_category.php',
-            method: 'POST',
+            method: 'PUT',
             data: { id: encodeData(update_id), name: name, description: description },
             dataType: 'json',
             headers: {

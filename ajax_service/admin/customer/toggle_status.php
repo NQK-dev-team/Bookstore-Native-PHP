@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
 
                   if ($status && !$email) {
                         http_response_code(403);
-                        echo json_encode(['error' => 'This customer information has been deleted, activating the account is not allowed since it can cause potential problems!']);
+                        echo json_encode(['error' => 'This customer information has been deleted, no changes are allowed!']);
                         exit;
                   }
 
