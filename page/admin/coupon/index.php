@@ -186,7 +186,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -253,7 +253,7 @@ if (return_navigate_error() === 400) {
                               <div class="mt-2">
                                     <div class="form-check form-switch">
                                           <label class="form-check-label text-success" for="flexSwitchCheckDefault" id="switch_label">Choose active coupons</label>
-                                          <input class="form-check-input pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked onchange="updateSwitchLabel()">
+                                          <input title='Coupon status' class="form-check-input pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked onchange="updateSwitchLabel()">
                                     </div>
                               </div>
                         </div>
@@ -303,7 +303,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -319,7 +319,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -336,7 +336,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -353,7 +353,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -370,7 +370,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -391,7 +391,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -412,7 +412,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -445,16 +445,18 @@ if (return_navigate_error() === 400) {
                                                                               Select category
                                                                         </button>
                                                                         <ul class="dropdown-menu dropdownCategory">
-                                                                              <div class="container">
+                                                                              <li class="container">
                                                                                     <form id='searchCategoryForm'>
                                                                                           <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
                                                                                     </form>
-                                                                              </div>
-                                                                              <div class='categories w-100 container mt-2'>
-                                                                                    <?php
-                                                                                    echo $categoryList;
-                                                                                    ?>
-                                                                              </div>
+                                                                              </li>
+                                                                              <li>
+                                                                                    <ul class='categories w-100 container mt-2'>
+                                                                                          <?php
+                                                                                          echo $categoryList;
+                                                                                          ?>
+                                                                                    </ul>
+                                                                              </li>
                                                                         </ul>
                                                                   </div>
                                                             </div>
@@ -483,7 +485,7 @@ if (return_navigate_error() === 400) {
                                                 <table class="table table-hover border border-2 table-bordered mt-4 w-100">
                                                       <thead>
                                                             <tr>
-                                                                  <th scope="col" class="text-center"><input type='checkbox' class='pointer' id='checkAll' onclick="selectAllBook(event)"></th>
+                                                                  <th scope="col" class="text-center"><input title='Select all books' type='checkbox' class='pointer' id='checkAll' onclick="selectAllBook(event)"></th>
                                                                   <th scope="col">#</th>
                                                                   <th scope="col">Name</th>
                                                                   <th scope="col">Edition</th>
@@ -519,7 +521,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -536,7 +538,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -552,7 +554,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -569,7 +571,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -585,7 +587,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

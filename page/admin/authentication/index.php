@@ -9,7 +9,7 @@ $_SESSION['update_book_id'] = null;
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
       <?php

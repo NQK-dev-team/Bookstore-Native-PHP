@@ -79,7 +79,7 @@ if (return_navigate_error() === 400) {
                   $elem .= "<td class='align-middle col-1'>{$row['cardNumber']}</td>";
                   $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <a class='btn btn-sm btn-info text-white' href='./detail?id={$row['id']}' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a>
+                              <a title='Visit customer detailed information page' class='btn btn-sm btn-info text-white' href='./detail?id={$row['id']}' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a>
                               <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>
                               <button onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>
                         </div>
@@ -96,7 +96,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -204,7 +204,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -220,7 +220,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -237,7 +237,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -254,7 +254,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -271,7 +271,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteNotifyModal1" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteNotifyModal1" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -287,7 +287,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteNotifyModal2" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteNotifyModal2" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -303,7 +303,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteCancelNotifyModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteCancelNotifyModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

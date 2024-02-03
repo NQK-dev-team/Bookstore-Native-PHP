@@ -7,7 +7,7 @@ $_SESSION['update_book_id'] = null;
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
       <?php
@@ -114,7 +114,7 @@ $_SESSION['update_book_id'] = null;
                   </form>
             </div>
 
-            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel">
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">

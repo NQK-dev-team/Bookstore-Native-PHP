@@ -9,6 +9,44 @@ require_once __DIR__ . '/../../tool/php/send_mail.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['type'])) {
             try {
+                  if (!session_set_cookie_params([
+                        'lifetime' => 3 * 24 * 60 * 60,
+                        'path' => '/',
+                        'domain' => '',
+                        'secure' => true,
+                        'httponly' => true,
+                        'samesite' => 'Strict'
+                  ])) throw new Exception('Error occurred during setting up session attributes!');
+
+                  if (!session_start())
+                        throw new Exception('Error occurred during starting session!');
+
+                  if (isset($_SESSION['login_cool_down']) && $_SESSION['login_cool_down'] < time()) {
+                        $_SESSION['login_try'] = 0;
+                        unset($_SESSION['login_cool_down']);
+                  }
+
+                  if (!isset($_SESSION['login_try'])) $_SESSION['login_try'] = 0;
+                  else if ($_SESSION['login_try'] >= 5) {
+                        http_response_code(429);
+                        if (!isset($_SESSION['login_cool_down'])) {
+                              $_SESSION['login_cool_down'] = time() + 300;
+                              echo json_encode(['error' => 'Too many login attempts, try again after 5 minutes!']);
+                        } else {
+                              $remainingSeconds = $_SESSION['login_cool_down'] - time();
+                              $minutes = floor($remainingSeconds / 60);
+                              $seconds = $remainingSeconds % 60;
+
+                              if ($minutes > 0) {
+                                    echo json_encode(['error' => 'Too many login attempts, try again after ' . $minutes . ' minutes and ' . $seconds . ' seconds!']);
+                              } else {
+                                    echo json_encode(['error' => 'Too many login attempts, try again after ' . $seconds . ' seconds!']);
+                              }
+                        }
+                        exit;
+                  }
+
+
                   $email = sanitize(rawurldecode($_POST['email']));
                   $password = sanitize(rawurldecode($_POST['password']));
                   $user_type = sanitize(rawurldecode($_POST['type']));
@@ -94,29 +132,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $result = $stmt->get_result();
                         if ($result->num_rows === 0) {
                               echo json_encode(['error' => 'Email or password incorrect!']);
+                              $_SESSION['login_try']++;
+                              $stmt->close();
+                              $conn->close();
+                              exit;
                         } else {
                               $result = $result->fetch_assoc();
-                              if (!verify_password($password, $result['password']))
+                              if (!verify_password($password, $result['password'])) {
                                     echo json_encode(['error' => 'Email or password incorrect!']);
-                              else {
-                                    if (!session_set_cookie_params([
-                                          'lifetime' => 3 * 24 * 60 * 60,
-                                          'path' => '/',
-                                          'domain' => '',
-                                          'secure' => true,
-                                          'httponly' => true,
-                                          'samesite' => 'Strict'
-                                    ])) throw new Exception('Error occurred during setting up session attributes!');
-
-                                    if (!session_start())
-                                          throw new Exception('Error occurred during starting session!');
-
+                                    $_SESSION['login_try']++;
+                                    $stmt->close();
+                                    $conn->close();
+                                    exit;
+                              } else {
                                     $id = $result['id'];
                               }
                         }
                   } else {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
                   }
                   // Close statement
                   $stmt->close();
@@ -186,6 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   generateToken();
 
                   echo json_encode(['query_result' => true]);
+                  $_SESSION['login_try'] = 0;
 
                   // Close connection
                   $conn->close();

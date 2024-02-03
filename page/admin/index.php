@@ -13,7 +13,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php

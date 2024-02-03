@@ -5,7 +5,7 @@ if (check_session()) header('Location: /');
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
       <?php
@@ -112,7 +112,7 @@ if (check_session()) header('Location: /');
                   </form>
             </div>
 
-            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel">
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">

@@ -89,7 +89,7 @@ function loginHandler(e, user_type)
                         error_message.style.display = 'flex';
                   } else
                   {
-                        $('#error_message_content').text('err.responseJSON.error');
+                        $('#error_message_content').text(err.responseJSON.error);
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
                   }

@@ -10,7 +10,7 @@
                   <div class="text-center h-100 w-100">
                         <h3>Follow us</h3>
                         <div class="d-flex align-items-center justify-content-center">
-                              <a href="https://github.com/NQK-dev-team" class="me-1">
+                              <a aria-label='NQK group github' href="https://github.com/NQK-dev-team" class="me-1">
                                     <svg fill="#ffffff" height="30px" width="30px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -19,7 +19,7 @@
                                           </g>
                                     </svg>
                               </a>
-                              <a href="#" class="mx-1">
+                              <a aria-label='Dummy link' href="#" class="mx-1">
                                     <svg fill="#ffffff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-143 145 512 512" xml:space="preserve" stroke="#ffffff">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

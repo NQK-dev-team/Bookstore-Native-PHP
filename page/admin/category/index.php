@@ -88,7 +88,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -113,7 +113,7 @@ if (return_navigate_error() === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Book Category List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -187,7 +187,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -203,7 +203,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -220,7 +220,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -237,7 +237,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -254,7 +254,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addSuccessModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="addSuccessModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -270,7 +270,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -286,7 +286,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="inputModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="inputModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
                                     <div class="modal-header">

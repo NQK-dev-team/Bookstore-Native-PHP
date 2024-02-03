@@ -48,7 +48,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -80,7 +80,7 @@ if (return_navigate_error() === 400) {
                                           </div>
                                           <div class='d-flex align-items-md-center mt-2 flex-md-row flex-column'>
                                                 <p class='mb-0'>Convert</p>
-                                                <input type='number' id='pointConversionRate' class='form-control mx-md-2 my-md-0 my-2' value="<?php echo $percentage; ?>">
+                                                <input title='Point conversion rate' type='number' id='pointConversionRate' class='form-control mx-md-2 my-md-0 my-2' value="<?php echo $percentage; ?>">
                                                 <p class='mb-0'>% of total order price into accumulated points</p>
                                                 <div class='mt-md-0 mt-2'>
                                                       <button onclick="clearAllCustomValidity()" type='submit' class='btn btn-sm btn-light border border-1 border-dark rounded-pill ms-md-2'>Change</button>
@@ -90,7 +90,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -106,7 +106,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

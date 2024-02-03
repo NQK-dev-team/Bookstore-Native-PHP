@@ -192,7 +192,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -299,7 +299,7 @@ if (return_navigate_error() === 400) {
                                                             <div class="d-flex flex-column h-100">
                                                                   <span class="form-label">
                                                                         E-book file (current file
-                                                                        <a id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
+                                                                        <a title="PDF File" id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
                                                                               <i class="bi bi-file-earmark-fill text-secondary"></i>
                                                                         </a>):
                                                                   </span>
@@ -328,7 +328,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </form>
                   </div>
-                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -339,7 +339,7 @@ if (return_navigate_error() === 400) {
                                           <div class='w-100 mt-2 mb-4'>
                                                 <label class="form-label" for='searchCategoryInput'>Search category:</label>
                                                 <form id="category_search_form" class="d-flex align-items-center w-100 search_form mx-auto" role="search">
-                                                      <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                      <button aria-label='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                             <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -360,7 +360,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -377,7 +377,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -393,7 +393,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

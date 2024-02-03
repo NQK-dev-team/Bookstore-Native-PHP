@@ -7,7 +7,7 @@ if (check_session()) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
       <?php

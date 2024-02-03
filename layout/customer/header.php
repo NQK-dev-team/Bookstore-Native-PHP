@@ -8,7 +8,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                   <div class="container-fluid px-0">
                         <a class="navbar-brand d-flex align-items-center ms-2" href="/">
                               <!-- <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" id="logo_img"></img> -->
-                              <img src="/image/logo.png" id="logo_img"></img>
+                              <img src="/image/logo.png" id="logo_img" title="NQK Bookstore demo logo"></img>
                               <p class="mb-0 ms-2">NQK Bookstore</p>
                         </a>
                         <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,7 +17,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                         <div class="collapse navbar-collapse mt-2 mt-lg-0 me-lg-2 bg-white px-3" id="navbarSupportedContent">
                               <!-- Missing search functionality -->
                               <form class="d-flex align-items-center ms-lg-3 w-100 search_form_customer mt-lg-0 mt-2" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button aria-label="Search button" class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
