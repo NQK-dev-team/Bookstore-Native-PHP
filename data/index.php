@@ -8,6 +8,13 @@ if (check_session() && $_SESSION['type'] === 'admin') {
       $requestedUri = sanitize(rawurldecode($_SERVER['REQUEST_URI']));
       $filePath = dirname(__DIR__) . $requestedUri;
 
+      $realPath = realpath($filePath);
+      if ($realPath === false || strpos($realPath, __DIR__) !== 0) {
+            echo json_encode(['error' => 'Invalid file path!']);
+            http_response_code(400);
+            exit;
+      }
+
       $contentType = mime_content_type($filePath);
       if ($contentType === false) {
             echo json_encode(['error' => 'File not found or something is wrong!']);
@@ -54,9 +61,7 @@ if (check_session() && $_SESSION['type'] === 'admin') {
             exit;
       } else if ($contentType === 'application/pdf') {
             if (check_session() && $_SESSION['type'] === 'customer') {
-            }
-            else
-            {
+            } else {
                   echo json_encode(['error' => 'Not authenticated!']);
                   http_response_code(401);
                   exit;
