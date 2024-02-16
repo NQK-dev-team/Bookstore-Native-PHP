@@ -11,3 +11,11 @@ function reportCustomValidity(elem, message)
       elem.setCustomValidity(message);
       elem.reportValidity();
 }
+
+$(document).ready(function ()
+{
+      $('input, textarea').on('input change', function ()
+      {
+            this.setCustomValidity('');
+      });
+});

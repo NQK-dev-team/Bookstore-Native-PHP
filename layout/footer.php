@@ -1,13 +1,13 @@
 <section id="footer">
       <div class="container py-2 h-100">
             <div class="d-flex align-items-center justify-content-center flex-column flex-lg-row h-100">
-                  <div class="text-center h-100 w-100">
+                  <div class="text-center h-100 w-100 me-lg-3 me-xxl-5">
                         <h3>About us</h3>
                         <p>
                               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                         </p>
                   </div>
-                  <div class="text-center h-100 w-100">
+                  <div class="text-center h-100 w-100 ms-lg-3 ms-xxl-5">
                         <h3>Follow us</h3>
                         <div class="d-flex align-items-center justify-content-center">
                               <a aria-label='NQK group github' href="https://github.com/NQK-dev-team" class="me-1">
