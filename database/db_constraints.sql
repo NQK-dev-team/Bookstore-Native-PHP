@@ -607,7 +607,11 @@ begin
 		if new.password is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s account password is null!';
         end if;
-    else
+        
+        if new.address is null then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s address is null!';
+        end if;
+    elseif exists(select * from customer where customer.id=new.id) then
 		if (select status from customer where customer.id=new.id) then
 			if new.phone is null then
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer\'s phone number is null!';
@@ -675,6 +679,10 @@ begin
     
     if (select password from appUser where appUser.id=new.id) is null then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s password is null!';
+    end if;
+    
+    if (select address from appUser where appUser.id=new.id) is null then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Admin\'s address is null!';
     end if;
 end//
 delimiter ;
