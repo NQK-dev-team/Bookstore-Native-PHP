@@ -14,7 +14,7 @@ function reportCustomValidity(elem, message)
 
 $(document).ready(function ()
 {
-      $('input, textarea').on('input change', function ()
+      $('input, textarea, select').on('input change', function ()
       {
             this.setCustomValidity('');
       });
