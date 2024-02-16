@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isset($_POST['description']) &&
             isset($_POST['physicalPrice']) &&
             isset($_POST['filePrice']) &&
-            isset($_POST['inStock'])
+            isset($_POST['inStock']) &&
+            isset($_FILES['image'])
       ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
@@ -175,32 +176,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $allowedImageTypes = ['image/jpeg', 'image/png'];
                   $allowedFileTypes = ['application/pdf'];
 
-                  if (isset($_FILES['image'])) {
-                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                        if ($finfo === false) {
-                              throw new Exception("Failed to open fileinfo database!");
-                        }
-                        $fileMimeType = finfo_file($finfo, $_FILES['image']['tmp_name']);
-                        if ($fileMimeType === false) {
-                              throw new Exception("Failed to get the MIME type of the image file!");
-                        }
-                        $finfoCloseResult = finfo_close($finfo);
-                        if (!$finfoCloseResult) {
-                              throw new Exception("Failed to close fileinfo resource!");
-                        }
+                  $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                  if ($finfo === false) {
+                        throw new Exception("Failed to open fileinfo database!");
+                  }
+                  $fileMimeType = finfo_file($finfo, $_FILES['image']['tmp_name']);
+                  if ($fileMimeType === false) {
+                        throw new Exception("Failed to get the MIME type of the image file!");
+                  }
+                  $finfoCloseResult = finfo_close($finfo);
+                  if (!$finfoCloseResult) {
+                        throw new Exception("Failed to close fileinfo resource!");
+                  }
 
-                        if (!in_array($fileMimeType, $allowedImageTypes)) {
-                              http_response_code(400);
-                              echo json_encode(['error' => 'Invalid image file!']);
-                              exit;
-                        } else if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-                              http_response_code(400);
-                              echo json_encode(['error' => 'Image size must be 5MB or less!']);
-                              exit;
-                        }
-                  } else {
+                  if (!in_array($fileMimeType, $allowedImageTypes)) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Missing image file!']);
+                        echo json_encode(['error' => 'Invalid image file!']);
+                        exit;
+                  } else if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Image size must be 5MB or less!']);
                         exit;
                   }
 
