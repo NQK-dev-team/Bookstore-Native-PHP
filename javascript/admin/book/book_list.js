@@ -204,8 +204,8 @@ function fetchBookList()
                               trElem.append(
                                     $(`<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
-                                                                  <i class=\"bi bi-pencil text-white\"></i>
+                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                                  <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
                                                             <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class="bi bi-power text-white"></i>
