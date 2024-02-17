@@ -29,10 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
-                  } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Invalid email format!']);
-                        exit;
                   }
 
                   if (!$password) {

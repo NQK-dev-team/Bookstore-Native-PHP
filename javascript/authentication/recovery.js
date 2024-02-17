@@ -24,16 +24,6 @@ function enterEmail(e, user_type)
             reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
       }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = email.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
-                  return;
-            }
-      }
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
@@ -100,18 +90,6 @@ function requestRecoveryCode()
             error_message.style.display = 'flex';
             return;
       }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = globalEmail.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  $('#error_message_content_2').text('Email format invalid!');
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
-                  return;
-            }
-      }
 
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
@@ -175,18 +153,6 @@ function enterCode(e)
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
-      }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = globalEmail.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  $('#error_message_content_2').text('Email format invalid!');
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
-                  return;
-            }
       }
 
       if (code === '')
@@ -271,18 +237,6 @@ function changePassword(e, user_type)
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
-      }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = globalEmail.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  $('#error_message_content_2').text('Email format invalid!');
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
-                  return;
-            }
       }
 
       if (password === '')

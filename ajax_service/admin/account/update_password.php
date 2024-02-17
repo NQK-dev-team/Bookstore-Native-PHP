@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
                   $result = $stmt->get_result()->fetch_assoc()['password'];
-                  if (verify_password($oldPassword, $result)) {
+                  if (!verify_password($oldPassword, $result)) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Current password not correct!']);
                         $stmt->close();

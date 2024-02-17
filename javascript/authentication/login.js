@@ -16,35 +16,11 @@ function loginHandler(e, user_type)
             reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
       }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = email.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
-                  return;
-            }
-      }
 
       if (password === '')
       {
             reportCustomValidity($('#inputPassword').get(0), "Password field is empty!");
             return;
-      }
-      else if (password.length < 8)
-      {
-            reportCustomValidity($('#inputPassword').get(0), "Password must be at least 8 characters long!");
-            return;
-      }
-      else
-      {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/;
-            if (!regex.test(password))
-            {
-                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!");
-                  return;
-            }
       }
 
       $('*').addClass('wait');
