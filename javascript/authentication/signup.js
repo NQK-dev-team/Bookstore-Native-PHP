@@ -22,6 +22,7 @@ function signUpHandler(event)
       const card = encodeData(document.getElementById('inputCard').value);
       const refEmail = encodeData(document.getElementById('inputRefEmail').value);
       const gender = encodeData(document.getElementById('inputGender').value);
+      const confirmPassword = encodeData(document.getElementById('confirmPassword').value);
 
       if (name === '')
       {
@@ -126,6 +127,17 @@ function signUpHandler(event)
             }
       }
 
+      if (confirmPassword === '')
+      {
+            reportCustomValidity($('#confirmPassword').get(0), "Confirm password field is empty!");
+            return;
+      }
+      else if (confirmPassword !== password)
+      {
+            reportCustomValidity($('#confirmPassword').get(0), "Confirm password does not match!");
+            return;
+      }
+
       if (refEmail !== '')
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
@@ -149,7 +161,7 @@ function signUpHandler(event)
       $.ajax({
             url: '/ajax_service/authentication/signup_handler.php',
             method: 'POST',
-            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, confirmPassword: confirmPassword, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
             dataType: 'json',
             success: function (data)
             {

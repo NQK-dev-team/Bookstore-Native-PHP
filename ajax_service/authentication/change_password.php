@@ -58,24 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'No confirm password provided!']);
                         exit;
-                  } else if (strlen($confirmPassword) < 8) {
+                  } else if ($confirmPassword !== $password) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Confirm password must be at least 8 characters long!']);
-                        exit;
-                  } else {
-                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/', $confirmPassword);
-                        if ($matchResult === false) {
-                              throw new Exception('Error occurred during confirm password format check!');
-                        } else if ($matchResult === 0) {
-                              http_response_code(400);
-                              echo json_encode(['error' => 'Confirm password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!']);
-                              exit;
-                        }
-                  }
-
-                  if ($confirmPassword !== $password) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Passwords are not matched!']);
+                        echo json_encode(['error' => 'Confirm new password does not match!']);
                         exit;
                   }
 

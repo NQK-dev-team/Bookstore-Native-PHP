@@ -20,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isset($_POST['name']) &&
             isset($_POST['date']) &&
             isset($_POST['phone']) &&
-            isset($_POST['address']) &&
-            isset($_POST['gender'])
+            isset($_POST['gender']) &&
+            isset($_POST['confirmPassword'])
       ) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
@@ -29,10 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $name = sanitize(rawurldecode($_POST['name']));
                   $date = sanitize(rawurldecode($_POST['date']));
                   $phone = sanitize(rawurldecode($_POST['phone']));
-                  $address = $_POST['address'] ? sanitize(rawurldecode($_POST['address'])) : null;
-                  $card = $_POST['card'] ? sanitize(rawurldecode($_POST['card'])) : null;
-                  $refEmail = $_POST['refEmail'] ? sanitize(rawurldecode($_POST['refEmail'])) : null;
+                  $address = (isset($_POST['address']) && $_POST['address']) ? sanitize(rawurldecode($_POST['address'])) : null;
+                  $card = (isset($_POST['card']) && $_POST['card']) ? sanitize(rawurldecode($_POST['card'])) : null;
+                  $refEmail = (isset($_POST['refEmail']) && $_POST['refEmail']) ? sanitize(rawurldecode($_POST['refEmail'])) : null;
                   $gender = sanitize(rawurldecode($_POST['gender']));
+                  $confirmPassword = sanitize(rawurldecode($_POST['confirmPassword']));
 
                   if (!$name) {
                         http_response_code(400);
@@ -136,6 +137,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!']);
                               exit;
                         }
+                  }
+
+                  if (!$confirmPassword) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Confirm password not provided!']);
+                        exit;
+                  } else if ($confirmPassword !== $password) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Confirm password does not match!']);
+                        exit;
                   }
 
                   if ($refEmail && !filter_var($refEmail, FILTER_VALIDATE_EMAIL)) {

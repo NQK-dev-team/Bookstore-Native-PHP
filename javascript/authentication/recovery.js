@@ -5,6 +5,8 @@ $(document).ready(function ()
       {
             window.location.href = "/authentication/";
       });
+
+      initToolTip();
 });
 
 let globalEmail = null;
@@ -306,26 +308,9 @@ function changePassword(e, user_type)
             reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm new password field is empty!");
             return;
       }
-      else if (confirmPassword.length < 8)
+      else if (confirmPassword != password)
       {
-            reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm password must be at least 8 characters long!");
-            return;
-      }
-      else
-      {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/;
-            if (!regex.test(confirmPassword))
-            {
-                  reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!");
-                  return;
-            }
-      }
-
-      if (password !== confirmPassword)
-      {
-            $('#error_message_content_3').text('Passwords are not matched!');
-            const error_message = document.getElementById('recovery_fail_3');
-            error_message.style.display = 'flex';
+            reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm new password does not match!");
             return;
       }
 

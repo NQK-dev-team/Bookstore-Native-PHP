@@ -118,7 +118,14 @@ if (check_session()) header('Location: /');
                                     <label for="inputPassword" class="fs-4 fw-medium">Password</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
                               </div>
-                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character">
+                              <input autocomplete="on" type="password" class="form-control" id="inputPassword" placeholder="Enter password" name="password" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
+                        </div>
+                        <div class="form-group mt-3">
+                              <div class="d-flex">
+                                    <label for="confirmPassword" class="fs-4 fw-medium">Confirm Password</label>
+                                    <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>
+                              </div>
+                              <input autocomplete="on" type="password" class="form-control" id="confirmPassword" placeholder="Enter password" name="confirmPassword">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputRefEmail" class="fs-4 fw-medium">Refferer email</label>
