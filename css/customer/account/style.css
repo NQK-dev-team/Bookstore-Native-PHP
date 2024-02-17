@@ -1,0 +1,26 @@
+.block {
+      width: 80%;
+}
+
+.custom_image {
+      max-width: 300px;
+      height: auto;
+}
+
+#personalInfoForm {
+      display: flex;
+}
+
+#passwordForm {
+      display: none;
+}
+
+#historyPurchase {
+      display: none;
+}
+
+@media only screen and (max-width:575px) {
+      .block {
+            width: 90%;
+      }
+}
