@@ -98,7 +98,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group">
                               <label for="inputNewPassword" class="fs-4 fw-medium">New password</label>
-                              <input autocomplete="on" type="password" class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
+                              <input autocomplete="on" type="password" class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputConfirmNewPassword" class="fs-4 fw-medium">Confirm new password</label>
