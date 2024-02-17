@@ -13,7 +13,7 @@ if ($return_status_code === 400) {
 } else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
-      $_SESSION['update_book_id'] = null;
+      unset($_SESSION['update_book_id']);
 
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
@@ -99,7 +99,7 @@ if ($return_status_code === 400) {
                                     <hr class='mx-2'>
                               </div>
                               <div class='flex-column w-100 flex-grow-1 d-flex'>
-                                    <input type="email" autocomplete="email" name="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
+                                    <input placeholder="This field should be hidden" type="email" autocomplete="email" name="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
                                     <div class="my-2 px-4">
                                           <label for="currentPasswordInput" class="form-label fw-medium">Current Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                           <input val='' type="password" class="form-control" id="currentPasswordInput" placeholder="Enter current password" autocomplete="current-password">

@@ -15,7 +15,7 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../tool/php/formatter.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
 
-      $_SESSION['update_book_id'] = null;
+      unset($_SESSION['update_book_id']);
 
       require_once __DIR__ . '/../../../config/db_connection.php';
 

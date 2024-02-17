@@ -2,6 +2,7 @@
 require_once __DIR__ . '../../../../tool/php/session_check.php';
 
 if (check_session()) header('Location: /');
+unset($_SESSION['update_book_id']);
 ?>
 
 <!DOCTYPE html>

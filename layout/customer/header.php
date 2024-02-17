@@ -36,34 +36,31 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           <a class="nav-link fs-5" href="/book/" id="book_nav">Books</a>
                                     </li>
                                     <?php
-                                    if (!check_session())
+                                    if (!check_session()) {
                                           echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5" href="/authentication/" id="wishlist_nav">Wishlist</a>
+                                                      <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="wishlist_nav">Wishlist</a>
                                                 </li>';
-                                    else
                                           echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5" href="/wishlist/" id="wishlist_nav">Wishlist</a>
+                                                      <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="cart_nav">Cart</a>
                                                 </li>';
-                                    ?>
-                                    <?php
-                                    if (!check_session())
-                                          echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5" href="/authentication/" id="cart_nav">Cart</a>
-                                                </li>';
-                                    else
-                                          echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5" href="/wishlist/" id="cart_nav">Cart</a>
-                                                </li>';
-                                    ?>
-                                    <?php
-                                    if (!check_session())
                                           echo '<li class="nav-item ms-2">
-                                                      <a class="nav-link fs-5" href="/authentication/" id="signin_nav">Sign in</a>
+                                                      <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
-                                    else
+                                    } else {
+                                          echo '<li class="nav-item mx-2">
+                                                      <a class="nav-link fs-5 text-nowrap" href="/wishlist/" id="wishlist_nav">Wishlist</a>
+                                                </li>';
+                                          echo '<li class="nav-item mx-2">
+                                                      <a class="nav-link fs-5 text-nowrap" href="/wishlist/" id="cart_nav">Cart</a>
+                                                </li>';
                                           echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5\" href=\"/account/\" id=\"profile_nav\">Profile</a>
+                                                <a class=\"nav-link fs-5 text-nowrap\" href=\"/account/\" id=\"profile_nav\">Profile</a>
                                           </li>";
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5 text-danger text-nowrap\" href=\"/ajax_service/authentication/logout\">Sign Out</a>
+                                          </li>";
+                                    }
+                                    unset($_SESSION['update_book_id']);
                                     ?>
                               </ul>
                         </div>

@@ -56,24 +56,24 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           </ul>
                                     </li>
                                     <?php
-                                    if (!check_session())
+                                    if (!check_session()) {
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/admin/authentication/" id="policy_nav">Policy</a>
                                                 </li>';
-                                    else
-                                          echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
-                                          </li>";
-                                    ?>
-                                    <?php
-                                    if (!check_session())
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/admin/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
-                                    else
+                                    } else {
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
+                                          </li>";
                                           echo "<li class=\"nav-item ms-2\">
                                                 <a class=\"nav-link fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Profile</a>
                                           </li>";
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5 text-danger text-nowrap\" href=\"/ajax_service/authentication/logout\">Sign Out</a>
+                                          </li>";
+                                    }
                                     ?>
                               </ul>
                         </div>

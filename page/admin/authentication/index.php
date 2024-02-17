@@ -5,7 +5,7 @@ if (check_session()) {
       header('Location: /admin/');
 }
 
-$_SESSION['update_book_id'] = null;
+unset($_SESSION['update_book_id']);
 ?>
 
 <!DOCTYPE html>
