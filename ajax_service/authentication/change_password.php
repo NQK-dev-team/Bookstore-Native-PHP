@@ -114,6 +114,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $hashedPassword = hash_password($password);
+                  if ($hashedPassword === false) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing failed!']);
+                        $conn->close();
+                        exit;
+                  } else if (is_null($hashedPassword)) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing algorithm invalid!']);
+                        $conn->close();
+                        exit;
+                  }
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare("UPDATE appUser SET password=? WHERE email=?");
                   if (!$stmt) {

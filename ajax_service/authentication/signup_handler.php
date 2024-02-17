@@ -250,10 +250,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
                   }
 
+                  $hashedPassword = hash_password($password);
+                  if ($hashedPassword === false) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing failed!']);
+                        $conn->close();
+                        exit;
+                  } else if (is_null($hashedPassword)) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing algorithm invalid!']);
+                        $conn->close();
+                        exit;
+                  }
+
                   // Begin transaction
                   $conn->begin_transaction();
 
-                  $hashedPassword = hash_password($password);
                   $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?,?)');
                   if (!$stmt) {
                         http_response_code(500);
