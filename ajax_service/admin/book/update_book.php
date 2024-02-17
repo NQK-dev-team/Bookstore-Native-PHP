@@ -354,6 +354,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
+                              $stmt->close();
+
                               $currentDateTime = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                               $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileExtension = $_FILES['image']['type'] === 'image/png' ? 'png' : 'jpeg';
@@ -382,8 +384,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $conn->close();
                                     throw new Exception("Error occurred during moving image file!");
                               }
-
-                              $stmt->close();
 
                               $stmt = $conn->prepare('update book set imagePath=? where id=?');
                               if (!$stmt) {
@@ -651,6 +651,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $result = $stmt->get_result();
                               $result = $result->fetch_assoc();
 
+                              $stmt->close();
+
                               $currentDateTime = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                               $currentDateTime = $currentDateTime->format('YmdHis');
                               $fileDir = null;
@@ -678,8 +680,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $conn->close();
                                     throw new Exception("Error occurred during moving PDF file!");
                               }
-
-                              $stmt->close();
 
                               $stmt = $conn->prepare('update fileCopy set filePath=? where id=?');
                               if (!$stmt) {
