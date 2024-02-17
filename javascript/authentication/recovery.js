@@ -7,6 +7,8 @@ $(document).ready(function ()
       });
 
       initToolTip();
+
+      $('#inputEmail').focus();
 });
 
 let globalEmail = null;

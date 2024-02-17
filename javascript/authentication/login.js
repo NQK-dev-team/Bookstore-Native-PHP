@@ -1,3 +1,8 @@
+$(document).ready(function ()
+{ 
+      $('#inputEmail').focus();
+});
+
 function loginHandler(e, user_type)
 {
       e.preventDefault();

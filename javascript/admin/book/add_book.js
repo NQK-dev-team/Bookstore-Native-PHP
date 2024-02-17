@@ -16,6 +16,8 @@ $(document).ready(() =>
       {
             window.location.href = '/admin/book/';
       });
+
+      $('#bookNameInput').focus();
 });
 
 function resetForm()

@@ -309,7 +309,7 @@ if ($return_status_code === 400) {
                                                                         <div class="d-flex align-items-center">
                                                                               <?php if ($query_result['fileCopy']['filePath'])
                                                                                     echo '<div class=\'me-3\'>
-                                                                                    <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                                                                    <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1">
                                                                                     <label class="btn btn-outline-danger btn-sm" for="btncheck1">Remove file</label>
                                                                               </div>';
                                                                               ?>

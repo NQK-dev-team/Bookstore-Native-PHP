@@ -7,6 +7,8 @@ $(document).ready(function ()
       });
 
       initToolTip();
+
+      $('#inputName').focus();
 });
 
 function signUpHandler(event)
