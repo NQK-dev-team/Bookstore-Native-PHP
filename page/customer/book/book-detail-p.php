@@ -4,13 +4,15 @@ use Dotenv\Parser\Value;
 
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
-      require __DIR__ . '/../../error/400.php';
-} else if (return_navigate_error() === 403) {
+      require_once __DIR__ . '/../../../error/400.php';
+} else if ($return_status_code === 403) {
       http_response_code(403);
-      require __DIR__ . '/../../error/403.php';
-} else {
+      require_once __DIR__ . '/../../../error/403.php';
+} else if ($return_status_code === 200) {
             require_once __DIR__ . '/../../../config/db_connection.php';
             require_once __DIR__ . '/../../../tool/php/converter.php';
             require_once __DIR__ . '/../../../tool/php/formatter.php';

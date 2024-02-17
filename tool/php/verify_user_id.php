@@ -4,6 +4,8 @@ require_once __DIR__ . '/../../config/db_connection.php';
 
 function verifyUserID($id)
 {
+      if (is_null($id)) return false;
+      
       global $db_host, $db_user, $db_password, $db_database, $db_port;
       // Connect to MySQL
       $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
