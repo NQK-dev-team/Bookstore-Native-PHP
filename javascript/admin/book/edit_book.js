@@ -5,6 +5,8 @@ let originalImg = null, originalName = null, originalEdition = null,
 
 let newImg = null, newFile = null, removeFile = false;
 
+let imageError = false, pdfError = false;
+
 $(document).ready(() =>
 {
       initToolTip();
@@ -75,9 +77,12 @@ function resetForm()
 
       $('#imgeFileErrorMessage').text('');
       $('#imgeFileError').addClass('d-none').removeClass('d-flex');
+      imageError = false;
 
       $('#pdfFileError1').addClass('d-none');
       $('#pdfFileError2').addClass('d-none');
+      $('#pdfFileError3').addClass('d-none');
+      pdfError = false;
 }
 
 function openCategoryModal()
@@ -208,7 +213,8 @@ function setCategory(e)
 function confirmSubmitForm(e)
 {
       e.preventDefault();
-      $('#confirmModal').modal('show');
+      if (!imageError && !pdfError)
+            $('#confirmModal').modal('show');
 }
 
 function submitForm()
@@ -350,19 +356,19 @@ function submitForm()
             return;
       }
 
-      let isOK = true;
-
       if (newImg && newImg.type !== 'image/jpeg' && newImg.type !== 'image/png')
       {
             $('#imgeFileErrorMessage').text('Invalid image file!');
             $('#imgeFileError').removeClass('d-none').addClass('d-flex');
-            isOK = false;
+            imageError = true;
+            return;
       }
       else if (newImg && newImg.size > 5 * 1024 * 1024)
       {
             $('#imgeFileErrorMessage').text('Image size must be 5MB or less!');
             $('#imgeFileError').removeClass('d-none').addClass('d-flex');
-            isOK = false;
+            imageError = true;
+            return;
       }
       else
       {
@@ -373,20 +379,20 @@ function submitForm()
       if (removeFile && newFile)
       {
             $('#pdfFileError2').removeClass('d-none');
-            isOK = false;
+            pdfError = true;
+            return;
       }
       else if (newFile && newFile.type !== 'application/pdf')
       {
             $('#pdfFileError1').removeClass('d-none');
-            isOK = false;
+            pdfError = true;
+            return;
       }
       else
       {
             $('#pdfFileError1').addClass('d-none');
             $('#pdfFileError2').addClass('d-none');
       }
-
-      if (!isOK) return;
 
       const postData = new FormData();
       postData.append('name', name);
@@ -524,6 +530,19 @@ function submitForm()
 function setNewImage(e)
 {
       const file = e.target.files;
+      if (file.length > 1)
+      {
+            $('#imgeFileErrorMessage').text('Only submit 1 image file!');
+            $('#imgeFileError').removeClass('d-none').addClass('d-flex');
+            imageError = true;
+            return;
+      }
+      else
+      {
+            $('#imgeFileErrorMessage').text('');
+            $('#imgeFileError').removeClass('d-flex').addClass('d-none');
+            imageError = false;
+      }
       $('#imageFileName').text(file.length === 1 ? file[0].name : '');
       newImg = file.length === 1 ? file[0] : null;
 
@@ -545,6 +564,17 @@ function setNewImage(e)
 function setNewFile(e)
 {
       const file = e.target.files;
+      if (file.length > 1)
+      {
+            $('#pdfFileError3').removeClass('d-none');
+            pdfError = true;
+            return;
+      }
+      else
+      {
+            $('#pdfFileError3').addClass('d-none');
+            pdfError = false;
+      }
       $('#pdfFileName').text(file.length === 1 ? file[0].name : '');
       newFile = file.length === 1 ? file[0] : null;
 }

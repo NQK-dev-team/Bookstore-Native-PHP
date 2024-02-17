@@ -187,6 +187,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $allowedFileTypes = ['application/pdf'];
 
                   if (isset($_FILES['image'])) {
+                        if (is_array($_FILES['image']['name'])) {
+                              http_response_code(400);
+                              echo json_encode(['error' => 'Only submit 1 image file!']);
+                              exit;
+                        }
+
                         $finfo = finfo_open(FILEINFO_MIME_TYPE);
                         if ($finfo === false) {
                               throw new Exception("Failed to open fileinfo database!");
@@ -215,6 +221,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($removeFile) {
                               http_response_code(400);
                               echo json_encode(['error' => 'Conflict request, please choose either removing the current file or uploading a new one, not both!']);
+                              exit;
+                        }
+
+                        if (is_array($_FILES['pdf']['name'])) {
+                              http_response_code(400);
+                              echo json_encode(['error' => 'Only submit 1 PDF file!']);
                               exit;
                         }
 

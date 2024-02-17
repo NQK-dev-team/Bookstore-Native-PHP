@@ -319,9 +319,10 @@ if ($return_status_code === 400) {
                                                                               </label>
                                                                         </div>
                                                                   </div>
-                                                                  <p class="mt-2" id="pdfFileName"></p>
+                                                                  <p class="mt-1" id="pdfFileName"></p>
                                                                   <p id="pdfFileError1" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
                                                                   <p id="pdfFileError2" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Conflict request, please choose either removing the current file or uploading a new one, not both!</p>
+                                                                  <p id="pdfFileError3" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Only submit 1 PDF file!</p>
                                                             </div>
                                                       </div>
                                                 </div>

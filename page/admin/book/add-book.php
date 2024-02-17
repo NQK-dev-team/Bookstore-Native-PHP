@@ -129,8 +129,9 @@ if ($return_status_code === 400) {
                                                                               Browse
                                                                         </label>
                                                                   </div>
-                                                                  <p class="mt-2" id="pdfFileName"></p>
+                                                                  <p class="mt-1" id="pdfFileName"></p>
                                                                   <p id="pdfFileError1" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
+                                                                  <p id="pdfFileError2" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Only submit 1 PDF file!</p>
                                                             </div>
                                                       </div>
                                                 </div>

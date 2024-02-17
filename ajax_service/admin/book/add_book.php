@@ -173,6 +173,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
+                  if (is_array($_FILES['image']['name'])) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Only submit 1 image file!']);
+                        exit;
+                  }
+
                   $allowedImageTypes = ['image/jpeg', 'image/png'];
                   $allowedFileTypes = ['application/pdf'];
 
@@ -200,6 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   if (isset($_FILES['pdf'])) {
+                        if (is_array($_FILES['pdf']['name'])) {
+                              http_response_code(400);
+                              echo json_encode(['error' => 'Only submit 1 PDF file!']);
+                              exit;
+                        }
+
                         $finfo = finfo_open(FILEINFO_MIME_TYPE);
                         if ($finfo === false) {
                               throw new Exception("Failed to open fileinfo database!");
