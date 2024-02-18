@@ -99,7 +99,8 @@ if ($return_status_code === 400) {
                                     <hr class='mx-2'>
                               </div>
                               <div class='flex-column w-100 flex-grow-1 d-flex'>
-                                    <input placeholder="This field should be hidden" type="email" autocomplete="email" name="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
+                                    <label for="dummy_email" class='d-none'>Dummy Email (Should be hidden)</label>
+                                    <input type="email" autocomplete="email" id="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
                                     <div class="my-2 px-4">
                                           <label for="currentPasswordInput" class="form-label fw-medium">Current Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                           <input val='' type="password" class="form-control" id="currentPasswordInput" placeholder="Enter current password" autocomplete="current-password">
