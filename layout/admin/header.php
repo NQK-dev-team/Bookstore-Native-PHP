@@ -68,7 +68,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                 <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
                                           </li>";
                                           echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Profile</a>
+                                                <a class=\"nav-link fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Account</a>
                                           </li>";
                                           echo "<li class=\"nav-item ms-2\">
                                                 <a class=\"nav-link fs-5 text-danger text-nowrap\" href=\"/ajax_service/authentication/logout\">Sign Out</a>

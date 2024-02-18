@@ -8,6 +8,8 @@ $(document).ready(function ()
             {
                   $('#personalInfoForm').css('display', 'flex');
                   $('#passwordForm').css('display', 'none');
+                  $('#historyPurchase').css('display', 'none');
+                  $('#otherTab').css('display', 'none');
                   mode = 1;
                   resetForm();
             }
@@ -19,9 +21,35 @@ $(document).ready(function ()
             {
                   $('#personalInfoForm').css('display', 'none');
                   $('#passwordForm').css('display', 'flex');
+                  $('#historyPurchase').css('display', 'none');
+                  $('#otherTab').css('display', 'none');
                   mode = 2;
                   resetForm();
                   $('#currentPasswordInput').focus();
+            }
+      });
+
+      document.getElementById('btnradio3').addEventListener('change', function ()
+      {
+            if (this.checked)
+            {
+                  $('#historyPurchase').css('display', 'flex');
+                  $('#personalInfoForm').css('display', 'none');
+                  $('#passwordForm').css('display', 'none');
+                  $('#otherTab').css('display', 'none');
+                  mode = 3;
+            }
+      });
+
+      document.getElementById('btnradio4').addEventListener('change', function ()
+      {
+            if (this.checked)
+            {
+                  $('#otherTab').css('display', 'flex');
+                  $('#historyPurchase').css('display', 'none');
+                  $('#personalInfoForm').css('display', 'none');
+                  $('#passwordForm').css('display', 'none');
+                  mode = 4;
             }
       });
 
@@ -36,7 +64,19 @@ $(document).ready(function ()
       resetForm();
 
       initToolTip();
+
+      window.addEventListener('resize', trackScreenWidth);
+
+      trackScreenWidth();
 });
+
+function trackScreenWidth()
+{
+      if (window.innerWidth < 768)
+            $('#btn-grp').removeClass('btn-group').addClass('btn-group-vertical');
+      else
+            $('#btn-grp').addClass('btn-group').removeClass('btn-group-vertical');
+}
 
 function setNewImage(e)
 {

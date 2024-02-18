@@ -83,7 +83,7 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div class='d-flex w-100 h-100 flex-column'>
-                        <div class="btn-group block mx-auto mt-4 overflow-auto hideBrowserScrollbar" role="group" aria-label="Radio toggle button group">
+                        <div class="btn-group block mx-auto mt-4 overflow-auto" role="group" aria-label="Radio toggle button group" id='btn-grp'>
                               <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked>
                               <label class="btn btn-outline-primary" for="btnradio1">Personal Information</label>
 
@@ -92,6 +92,27 @@ if ($return_status_code === 400) {
 
                               <input type="radio" class="btn-check" name="btnradio" id="btnradio2">
                               <label class="btn btn-outline-primary" for="btnradio2">Change Password</label>
+
+                              <input type="radio" class="btn-check" name="btnradio" id="btnradio4">
+                              <label class="btn btn-outline-primary" for="btnradio4">Other</label>
+                        </div>
+                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='historyPurchase'>
+                              <div>
+                                    <h1 class='fs-3 ms-3 mt-3'>History Purchases</h1>
+                                    <hr class='mx-2'>
+                              </div>
+                              <div class='w-100 flex-grow-1 overflow-auto mb-2 overflow-auto'>
+
+                              </div>
+                        </div>
+                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='otherTab'>
+                              <div>
+                                    <h1 class='fs-3 ms-3 mt-3'>Other</h1>
+                                    <hr class='mx-2'>
+                              </div>
+                              <div class='w-100 flex-grow-1 overflow-auto mb-2 overflow-auto'>
+
+                              </div>
                         </div>
                         <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='passwordForm'>
                               <div>
@@ -99,7 +120,8 @@ if ($return_status_code === 400) {
                                     <hr class='mx-2'>
                               </div>
                               <div class='flex-column w-100 flex-grow-1 d-flex'>
-                                    <input type="email" autocomplete="email" name="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
+                                    <label for="dummy_email" class='d-none'>Dummy Email (Should be hidden)</label>
+                                    <input type="email" autocomplete="email" id="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
                                     <div class="my-2 px-4">
                                           <label for="currentPasswordInput" class="form-label fw-medium">Current Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                           <input val='' type="password" class="form-control" id="currentPasswordInput" placeholder="Enter current password" autocomplete="current-password">

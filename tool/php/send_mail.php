@@ -10,7 +10,7 @@ function create_new_account_mail($email)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Account Created!';
@@ -30,7 +30,7 @@ function referrer_mail($refEmail, $email)
             $mail->clearAllRecipients();
             $mail->addAddress($refEmail);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Referrer Acknowledge';
@@ -50,7 +50,7 @@ function recovery_mail($email, $code)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Recovery Code (No Reply)';
@@ -73,7 +73,7 @@ function change_password_mail($email, $user_type)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Password Changed!';
@@ -98,7 +98,7 @@ function deactivate_mail($email)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Account Deactivated!';
@@ -118,7 +118,7 @@ function activate_mail($email)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Account Reactivated!';
@@ -138,7 +138,7 @@ function delete_mail($email, $type)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       if ($type === 1) {
@@ -164,7 +164,7 @@ function delete_cancel_mail($email)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = 'Account Delete Cancel!';
@@ -184,7 +184,7 @@ function discount_notify($email, $eventName, $discount, $type, $books)
             $mail->clearAllRecipients();
             $mail->addAddress($email);
       } catch (Exception $e) {
-            throw new Exception('Failed to add address: ' . $e->getMessage());
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
       $mail->Subject = "{$eventName} is here!";
@@ -197,8 +197,7 @@ function discount_notify($email, $eventName, $discount, $type, $books)
             $mail->AltBody = "{$discount}% sales for these following books\n";
       }
 
-      if($type===2)
-      {
+      if ($type === 2) {
             foreach ($books as $book) {
                   $mail->Body .= "<p>{$book}</p>";
                   $mail->AltBody .= "{$book}\n";
@@ -207,8 +206,33 @@ function discount_notify($email, $eventName, $discount, $type, $books)
             $mail->AltBody .= "\n";
       }
 
-      $mail->Body.="<p>Happy Shopping!</p>";
+      $mail->Body .= "<p>Happy Shopping!</p>";
       $mail->AltBody .= "Happy Shopping!\n";
+
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
+}
+
+function personal_info_change($email, $user_type)
+{
+      global $mail;
+
+      try {
+            $mail->clearAllRecipients();
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
+      }
+
+      $mail->Subject = 'Account Personal Information Changed!';
+      if ($user_type === 'customer') {
+            $mail->Body    = "You account personal information has been changed. If you did not perform this action, contact an admin immediately!";
+            $mail->AltBody = "You account personal information has been changed. If you did not perform this action, contact an admin immediately!";
+      } else if ($user_type === 'admin') {
+            $mail->Body    = "You account personal information has been changed. If you did not perform this action, contact the database administrator immediately!";
+            $mail->AltBody = "You account personal information has been changed. If you did not perform this action, contact the database administrator immediately!";
+      }
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);

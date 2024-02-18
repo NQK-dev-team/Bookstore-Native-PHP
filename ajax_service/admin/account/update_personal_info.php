@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/checker.php';
+require_once __DIR__ . '/../../../tool/php/send_mail.php';
 
 // Include Composer's autoloader
 require_once __DIR__ . '/../../../vendor/autoload.php';
@@ -262,7 +263,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $conn->commit();
+
+                  $stmt = $conn->prepare('select email from appUser join admin on admin.id=appUser.id where admin.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select email from appUser join admin on admin.id=appUser.id where admin.id=?` preparation failed!']);
+                        exit;
+                  }
+                  $stmt->bind_param('s', $_SESSION['id']);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  $result = $result->fetch_assoc();
+                  $email = $result['email'];
+                  $stmt->close();
                   $conn->close();
+                  personal_info_change($email, 'admin');
                   echo json_encode(['query_result' => true]);
             } catch (Exception $e) {
                   http_response_code(500);

@@ -16,7 +16,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                         </button>
                         <div class="collapse navbar-collapse mt-2 mt-lg-0 me-lg-2 bg-white px-3" id="navbarSupportedContent">
                               <!-- Missing search functionality -->
-                              <form class="d-flex align-items-center ms-lg-3 w-100 search_form_customer mt-lg-0 mt-2" role="search" id="search_form">
+                              <form class="d-flex align-items-center w-100 search_form_customer mt-lg-0 mt-2" role="search" id="search_form">
                                     <button aria-label="Search button" class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -54,7 +54,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                       <a class="nav-link fs-5 text-nowrap" href="/wishlist/" id="cart_nav">Cart</a>
                                                 </li>';
                                           echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5 text-nowrap\" href=\"/account/\" id=\"profile_nav\">Profile</a>
+                                                <a class=\"nav-link fs-5 text-nowrap\" href=\"/account/\" id=\"profile_nav\">Account</a>
                                           </li>";
                                           echo "<li class=\"nav-item ms-2\">
                                                 <a class=\"nav-link fs-5 text-danger text-nowrap\" href=\"/ajax_service/authentication/logout\">Sign Out</a>

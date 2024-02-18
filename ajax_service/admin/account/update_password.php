@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/password.php';
+require_once __DIR__ . '/../../../tool/php/send_mail.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
@@ -77,10 +78,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select password from appUser join admin on admin.id=appUser.id where admin.id=?');
+                  $stmt = $conn->prepare('select password,email from appUser join admin on admin.id=appUser.id where admin.id=?');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select password from appUser join admin on admin.id=appUser.id where admin.id=?` preparation failed!']);
+                        echo json_encode(['error' => 'Query `select password,email from appUser join admin on admin.id=appUser.id where admin.id=?` preparation failed!']);
                         exit;
                   }
                   $stmt->bind_param('s', $_SESSION['id']);
@@ -92,8 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         $conn->close();
                         exit;
                   }
-                  $result = $stmt->get_result()->fetch_assoc()['password'];
-                  if (!verify_password($oldPassword, $result)) {
+                  $result = $stmt->get_result();
+                  $result = $result->fetch_assoc();
+                  $password = $result['password'];
+                  $email = $result['email'];
+                  if (!verify_password($oldPassword, $password)) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Current password not correct!']);
                         $stmt->close();
@@ -132,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
                   $stmt->close();
+                  change_password_mail($email, 'admin');
                   echo json_encode(['query_result' => true]);
                   $conn->close();
             } catch (Exception $e) {
