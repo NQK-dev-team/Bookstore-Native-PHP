@@ -74,8 +74,8 @@ if ($return_status_code === 400) {
                   $elem .= '<td class="align-middle"><div class="truncate">' . $row['description'] . '</div></td>';
                   $elem .= '<td class="align-middle col-1">';
                   $elem .= "<div class='d-flex flex-lg-row flex-column'>";
-                  $elem .= '<button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal(\'' . $row['id'] . '\')"><i class="bi bi-pencil text-white"></i></button>';
-                  $elem .= '<button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="btn btn-danger btn-sm mt-2 mt-lg-0" onclick="confirmDelete(\'' . $row['id'] . '\')"><i class="bi bi-trash text-white"></i></button>';
+                  $elem .= '<button title="edit category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal(\'' . $row['id'] . '\')"><i class="bi bi-pencil text-white"></i></button>';
+                  $elem .= '<button title="delete category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="btn btn-danger btn-sm mt-2 mt-lg-0" onclick="confirmDelete(\'' . $row['id'] . '\')"><i class="bi bi-trash text-white"></i></button>';
                   $elem .= "</div>";
                   $elem .= '</td>';
                   $elem .= '</tr>';
@@ -115,7 +115,7 @@ if ($return_status_code === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Book Category List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button title='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title="search category" title='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

@@ -79,8 +79,8 @@ function fetchCategoryList()
                                     $(`
                                     <td class="align-middle col-1">
                                           <div class='d-flex flex-lg-row flex-column'>
-                                                <button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal('${ data.query_result[0][i].id }')"><i class="bi bi-pencil text-white"></i></button>
-                                                <button data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="btn btn-danger btn-sm mt-2 mt-lg-0" onclick="confirmDelete('${ data.query_result[0][i].id }')"><i class="bi bi-trash text-white"></i></button>
+                                                <button title="edit category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal('${ data.query_result[0][i].id }')"><i class="bi bi-pencil text-white"></i></button>
+                                                <button title="delete category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="btn btn-danger btn-sm mt-2 mt-lg-0" onclick="confirmDelete('${ data.query_result[0][i].id }')"><i class="bi bi-trash text-white"></i></button>
                                           </div>
                                     </td>
                                     `)

@@ -218,11 +218,11 @@ if ($return_status_code === 400) {
                                           $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
                                           $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
                                           $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $elem .= "<p>E-book: {$sub_row['price']} <a $target {$sub_row['filePath']} alt='$alt'>
+                                          $elem .= "<p>E-book: {$sub_row['price']} <a title='read PDF file' $target {$sub_row['filePath']} alt='$alt'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
                                           </a></p>";
                                     } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p>E-book: N/A <a href='#' alt='No PDF file'>
+                                          $elem .= "<p>E-book: N/A <a title='no PDF file' href='#' alt='No PDF file'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
                                           </a></p>";
                               } else {
@@ -259,10 +259,10 @@ if ($return_status_code === 400) {
                                     if ($sub_result['result'])
                                           $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
                                                                   <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
-                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                                                            <button title='deactivate book' onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                                                   <i class=\"bi bi-power text-white\"></i>
                                                             </button>
                                                       </div>
@@ -270,13 +270,13 @@ if ($return_status_code === 400) {
                                     else
                                           $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
                                                                   <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
-                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                                                            <button title='deactivate book' onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                                                   <i class=\"bi bi-power text-white\"></i>
                                                             </button>
-                                                            <button onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
+                                                            <button title='delete book' onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
                                                                   <i class=\"bi bi-trash text-white\"></i>
                                                             </button>
                                                       </div>
@@ -364,7 +364,7 @@ if ($return_status_code === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Book List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title='submit search form' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

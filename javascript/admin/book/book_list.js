@@ -195,7 +195,7 @@ function fetchBookList()
                                     $(`<div class="d-flex flex-column">`).append(
                                           $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>E-book: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+                                          $(`<p>E-book: ${ data.query_result[0][i].fileCopy.price } <a title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? "read PDF file" : 'no PDF file' }\" ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
                                     )
@@ -204,13 +204,13 @@ function fetchBookList()
                               trElem.append(
                                     $(`<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
                                                                   <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm'>
+                                                            <button title=\"${ status ? 'deactivate book' : 'activate book' }\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class="bi bi-power text-white"></i>
                                                             </button>
-                                                            ${ data.query_result[0][i].can_delete ? `<button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
+                                                            ${ data.query_result[0][i].can_delete ? `<button title=\"delete book\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class=\"bi bi-trash text-white\"></i>
                                                             </button>`: '' }
                                                       </div>
