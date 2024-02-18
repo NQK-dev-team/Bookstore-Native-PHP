@@ -143,8 +143,8 @@ function delete_mail($email, $type)
 
       if ($type === 1) {
             $mail->Subject = 'Account Delete Request Submitted!';
-            $mail->Body    = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back in those upcoming days!";
-            $mail->AltBody = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back in those upcoming days!";
+            $mail->Body    = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back before the delete day!";
+            $mail->AltBody = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back before the delete day!";
       } else if ($type === 2) {
             $mail->Subject = 'Account Deleted!';
             $mail->Body    = "You account has been deleted, come back again soon!";

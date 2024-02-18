@@ -158,7 +158,7 @@ if ($return_status_code === 400) {
                         </div>
                         <div class="w-100 overflow-x-auto">
                               <table class="table table-hover border border-2 table-bordered mt-4 w-100">
-                                    <thead>
+                                    <thead id="table_header">
                                           <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Name</th>
@@ -167,7 +167,7 @@ if ($return_status_code === 400) {
                                                 <th scope="col">Date of Birth</th>
                                                 <th scope="col">Address</th>
                                                 <th scope="col">Gender</th>
-                                                <th scope="col">Accumulated Points</th>
+                                                <th scope="col" class='text-nowrap'>Accumulated Points</th>
                                                 <th scope="col">Card Number</th>
                                                 <th scope="col">Action</th>
                                           </tr>

@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $row['email'] = $row['email'] ? $row['email'] : 'N/A';
                               $row['phone'] = $row['phone'] ? $row['phone'] : 'N/A';
                               $row['dob'] = MDYDateFormat($row['dob']);
+                              $row['deleteTime'] = $row['deleteTime'] ? MDYDateFormat($row['deleteTime']) : null;
                               $row['address'] = $row['address'] ? $row['address'] : 'N/A';
                               $row['gender'] = $row['gender'] === 'M' ? 'Male' : ($row['gender'] === 'F' ? 'Female' : 'Other');
                               $row['point'] = round($row['point'], 2);

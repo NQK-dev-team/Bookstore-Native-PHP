@@ -82,6 +82,8 @@ function fetchCustomerList()
                               trElem.append($(`<td class="align-middle">${ data.query_result[0][i].gender }</td>`));
                               trElem.append($(`<td class="align-middle">${ data.query_result[0][i].point }</td>`));
                               trElem.append($(`<td class="align-middle col-1">${ data.query_result[0][i].cardNumber }</td>`));
+                              if (!status)
+                                    trElem.append($(`<td class="align-middle col-1">${ data.query_result[0][i].deleteTime ? data.query_result[0][i].deleteTime : 'N/A' }</td>`));
                               trElem.append(
                                     $(`
                                     <td class="align-middle col-1">
@@ -169,8 +171,39 @@ function selectEntry()
 function updateSwitchLabel()
 {
       if ($('#flexSwitchCheckDefault').prop('checked'))
+      {
             $('#switch_label').text('Choose active customers').addClass('text-success').removeClass('text-secondary');
+            $('#table_header').empty();
+            $('#table_header').append($(`<tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col">Date of Birth</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Gender</th>
+                                                <th scope="col" class='text-nowrap'>Accumulated Points</th>
+                                                <th scope="col">Card Number</th>
+                                                <th scope="col">Action</th>
+                                          </tr>`));
+      }
       else
+      {
             $('#switch_label').text('Choose inactive customers').addClass('text-secondary').removeClass('text-success');
+            $('#table_header').empty();
+            $('#table_header').append($(`<tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Phone Number</th>
+                                                <th scope="col">Date of Birth</th>
+                                                <th scope="col">Address</th>
+                                                <th scope="col">Gender</th>
+                                                <th scope="col" class='text-nowrap'>Accumulated Points</th>
+                                                <th scope="col">Card Number</th>
+                                                <th scope="col">Delete Date</th>
+                                                <th scope="col">Action</th>
+                                          </tr>`));
+      }
       selectEntry();
 }
