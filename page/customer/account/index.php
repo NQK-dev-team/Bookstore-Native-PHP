@@ -450,7 +450,6 @@ if ($return_status_code === 400) {
             <script src="/tool/js/dob_checker.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
             <script src="/tool/js/encoder.js"></script>
-            <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/customer/account/script.js"></script>
             <script src="/tool/js/ratingStars.js"></script>
       </body>

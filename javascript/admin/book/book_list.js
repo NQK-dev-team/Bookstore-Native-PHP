@@ -58,6 +58,7 @@ $(document).ready(function ()
                   }
             });
       });
+      fetchBookList();
 });
 
 function fetchBookList()

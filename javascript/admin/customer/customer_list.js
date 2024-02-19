@@ -12,6 +12,7 @@ $(document).ready(function ()
             event.preventDefault();
             selectEntry();
       });
+      fetchCustomerList();
 });
 
 function fetchCustomerList()
@@ -88,17 +89,14 @@ function fetchCustomerList()
                                     $(`
                                     <td class="align-middle col-1">
                                           <div class='d-flex flex-lg-row flex-column'>
-                                          ${ data.query_result[0][i].email === 'N/A' ? '' : (
-                                                `
                                           <a class='btn btn-sm btn-info text-white' href='./detail?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a>
+                                          ${ data.query_result[0][i].email === 'N/A' ? '' : (`
                                           ${ status ?
-                                                      `<button onclick='openDeactivateModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>`
-                                                      :
-                                                      `<button onclick='openActivateModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-success text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Activate ${ data.query_result[0][i].deleteTime ? 'and cancel deletion' : '' }\"><i class=\"bi bi-power\"></i></button>` }
+                                                `<button onclick='openDeactivateModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>`
+                                                :
+                                                `<button onclick='openActivateModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-success text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Activate ${ data.query_result[0][i].deleteTime ? 'and cancel deletion' : '' }\"><i class=\"bi bi-power\"></i></button>` }
                                           ${ data.query_result[0][i].deleteTime ? '' : `<button onclick='openDeleteModal(\"${ data.query_result[0][i].id }\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>` }
-                                          `
-                                          )
-                                          }
+                                          `) }
                                           </div>
                                     </td>
                                     `)
