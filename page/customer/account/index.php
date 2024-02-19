@@ -426,6 +426,7 @@ if ($return_status_code === 400) {
                                                                               <th scope="col">Rating</th>
                                                                               <th scope="col">Price</th>
                                                                               <th scope="col">Ammount</th>
+                                                                              <th scope="col" class='text-nowrap'>Destination Address</th>
                                                                         </tr>
                                                                   </thead>
                                                                   <tbody id="physical_table_body">

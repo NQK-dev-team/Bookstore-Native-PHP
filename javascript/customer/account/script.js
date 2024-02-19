@@ -750,6 +750,7 @@ async function orderDetail(code, time, price, discount)
                                           temp += `<td class='align-middle'></td>`;
                                     temp += `<td class=\"align-middle\">$${ data.query_result[i].price }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].amount } ${ data.query_result[i].amount === 1 ? 'copy' : 'copies' }</td>`;
+                                    temp += `<td class=\"align-middle\">${ data.query_result[i].destinationAddress }</td>`;
 
                                     $('#physical_table_body').append($('<tr>').append(temp));
                               }
