@@ -86,6 +86,21 @@ if ($return_status_code === 400) {
                         text-decoration: none;
                         color: black;
                   }
+                  @media (min-width: 767.98px) { .card-body {
+                  max-height: 205px; /* Adjust this value as needed */
+                  overflow: auto; /* Add a scrollbar if the content is too long */
+                  } 
+                  .card-body::-webkit-scrollbar {
+                  display: none;
+                  }
+            }
+            .heading-decord{
+                  font-weight: bold;
+                  padding: 20px;
+            }
+            .bgr-col{
+                  background-color: #F8F8FF;
+            }
             </style>
       </head>
 
@@ -95,18 +110,19 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div>
-                        <h1 class="text-center">Welcome to our shop</h1>
-                        <h2>Featured books</h2>
+                        <h1 class="text-center heading-decord">Welcome to our shop!</h1>
+                        <h2 class="text-center heading-decord">Featured books</h2>
+                        
                               <?php
                                     if($featured->num_rows > 0){
-                                          echo"<div class=\"container\">";
-                                          echo '<div class="row justify-content-center align-items-center g-2 m-3">';
+                                          echo '<div class= "container border border-dark rounded bgr-col">';
+                                          echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
                                           while($row=$featured->fetch_assoc()){
                                                 // insert a card for link here
                                                 echo '<div class="col-9 col-md-4">';
                                                 $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
                                                 echo '<div class="card w-75 mx-auto d-block">';
-                                                echo "<a href=\"book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
+                                                echo "<a href=\"book/book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
                                                 echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
                                                      echo "<div class=\"card-body\">";
                                                            echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
@@ -145,9 +161,9 @@ if ($return_status_code === 400) {
                                           echo "Some error occured!";
                                     }
                               ?>
-                        <h2>Browse book</h2>
+                        <h2 class="text-center heading-decord">Browse book</h2>
                               <?php
-                              echo '<div class="container">';
+                              echo '<div class="container border border-dark rounded bgr-col mb-3">';
                                     for ($i = 1; $i <= $elem->num_rows; $i++) {
                                           if ($i % 4 == 1) {
                                                 echo '<div class="row justify-content-center align-items-center g-2 m-3">';
@@ -156,8 +172,8 @@ if ($return_status_code === 400) {
                                           $row = $elem->fetch_assoc();
                                           // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                                           $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
-                                                                        echo '<div class="card w-75 mx-auto d-block">';
-                                                                         echo "<a href=\"book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
+                                                                        echo '<div class="card w-75 mx-auto d-block ">';
+                                                                         echo "<a href=\"book/book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
                                                                          echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
                                                                               echo "<div class=\"card-body\">";
                                                                                     echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
