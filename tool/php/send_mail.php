@@ -14,8 +14,8 @@ function create_new_account_mail($email)
       }
 
       $mail->Subject = 'Account Created!';
-      $mail->Body    = "You account has been created successfully, you can now use this email address to login NQK Bookstore website!";
-      $mail->AltBody = "You account has been created successfully, you can now use this email address to login NQK Bookstore website!";
+      $mail->Body    = "Your account has been created successfully, you can now use this email address to login NQK Bookstore website!";
+      $mail->AltBody = "Your account has been created successfully, you can now use this email address to login NQK Bookstore website!";
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
@@ -34,8 +34,8 @@ function referrer_mail($refEmail, $email)
       }
 
       $mail->Subject = 'Referrer Acknowledge';
-      $mail->Body    = "You account has been set to be the referrer of user <strong>{$email}</strong>!";
-      $mail->AltBody = "You account has been set to be the referrer of user {$email}!";
+      $mail->Body    = "Your account has been set to be the referrer of user <strong>{$email}</strong>!";
+      $mail->AltBody = "Your account has been set to be the referrer of user {$email}!";
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
@@ -105,8 +105,8 @@ function deactivate_mail($email)
       }
 
       $mail->Subject = 'Account Deactivated!';
-      $mail->Body    = "You account has been deactivated. To reactivate it, simply logining in!";
-      $mail->AltBody = "You account has been deactivated. To reactivate it, simply logining in!";
+      $mail->Body    = "Your account has been deactivated. To reactivate it, simply logining in!";
+      $mail->AltBody = "Your account has been deactivated. To reactivate it, simply logining in!";
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
@@ -125,8 +125,8 @@ function activate_mail($email)
       }
 
       $mail->Subject = 'Account Reactivated!';
-      $mail->Body    = "You account has been reactivated, happy shopping!";
-      $mail->AltBody = "You account has been reactivated, happy shopping!";
+      $mail->Body    = "Your account has been reactivated, happy shopping!";
+      $mail->AltBody = "Your account has been reactivated, happy shopping!";
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
@@ -146,12 +146,12 @@ function delete_mail($email, $type)
 
       if ($type === 1) {
             $mail->Subject = 'Account Delete Request Submitted!';
-            $mail->Body    = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back before the delete day!";
-            $mail->AltBody = "You account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back before the delete day!";
+            $mail->Body    = "Your account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back before the delete day!";
+            $mail->AltBody = "Your account has been deactivated and will be deleted in 14 days, you can cancel the process simply by loging back before the delete day!";
       } else if ($type === 2) {
             $mail->Subject = 'Account Deleted!';
-            $mail->Body    = "You account has been deleted, come back again soon!";
-            $mail->AltBody = "You account has been deleted, come back again soon!";
+            $mail->Body    = "Your account has been deleted, come back again soon!";
+            $mail->AltBody = "Your account has been deleted, come back again soon!";
       }
 
       if (!$mail->send()) {
@@ -171,8 +171,8 @@ function delete_cancel_mail($email)
       }
 
       $mail->Subject = 'Account Delete Process Cancel!';
-      $mail->Body    = "You account delete process has been cancelled, happy shopping!";
-      $mail->AltBody = "You account delete process has been cancelled, happy shopping!";
+      $mail->Body    = "Your account delete process has been cancelled, happy shopping!";
+      $mail->AltBody = "Your account delete process has been cancelled, happy shopping!";
 
       if (!$mail->send()) {
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
@@ -230,11 +230,11 @@ function personal_info_change($email, $user_type)
 
       $mail->Subject = 'Account Personal Information Changed!';
       if ($user_type === 'customer') {
-            $mail->Body    = "You account personal information has been changed. If you did not perform this action, contact an admin immediately!";
-            $mail->AltBody = "You account personal information has been changed. If you did not perform this action, contact an admin immediately!";
+            $mail->Body    = "Your account personal information has been changed. If you did not perform this action, contact an admin immediately!";
+            $mail->AltBody = "Your account personal information has been changed. If you did not perform this action, contact an admin immediately!";
       } else if ($user_type === 'admin') {
-            $mail->Body    = "You account personal information has been changed. If you did not perform this action, contact the database administrator immediately!";
-            $mail->AltBody = "You account personal information has been changed. If you did not perform this action, contact the database administrator immediately!";
+            $mail->Body    = "Your account personal information has been changed. If you did not perform this action, contact the database administrator immediately!";
+            $mail->AltBody = "Your account personal information has been changed. If you did not perform this action, contact the database administrator immediately!";
       }
 
       if (!$mail->send()) {
@@ -242,4 +242,63 @@ function personal_info_change($email, $user_type)
       }
 }
 
+function remove_old_email($email, $newEmail)
+{
+      global $mail;
+
+      try {
+            $mail->clearAllRecipients();
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
+      }
+
+      $mail->Subject = 'Email Changed!';
+      $mail->Body    = "Your current NQK Bookstore email has been changed to {$newEmail} by an admin. Use this new email to login the website from now on. If you did not request this action, contact an admin immediately!";
+      $mail->AltBody = "Your current NQK Bookstore email has been changed to {$newEmail} by an admin. Use this new email to login the website from now on. If you did not request this action, contact an admin immediately!";
+
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
+}
+
+function appoint_new_email($email)
+{
+      global $mail;
+
+      try {
+            $mail->clearAllRecipients();
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
+      }
+
+      $mail->Subject = 'Email Changed!';
+      $mail->Body    = "This email has been appointed to become the email for an existing user of NQK Bookstore by an admin. If you did not request this action, contact an admin immediately!";
+      $mail->AltBody = "This email has been appointed to become the email for an existing user of NQK Bookstore by an admin. If you did not request this action, contact an admin immediately!";
+
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
+}
+
+function phone_change($email, $phone)
+{
+      global $mail;
+
+      try {
+            $mail->clearAllRecipients();
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
+      }
+
+      $mail->Subject = 'Phone Number Changed!';
+      $mail->Body    = "Your account phone number has been changed to <strong>{$phone}</strong> by an admin. If you did not request this action, contact an admin immediately!";
+      $mail->AltBody = "Your account phone number has been changed to {$phone} by an admin. If you did not request this action, contact an admin immediately!";
+
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
+}
 ?>
