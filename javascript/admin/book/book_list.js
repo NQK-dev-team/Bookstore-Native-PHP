@@ -126,7 +126,7 @@ function fetchBookList()
                               );
                               trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
-                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].isbn }</td>`));
+                              trElem.append($(`<td class=\"align-middle text-nowrap\">${ data.query_result[0][i].isbn }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].ageRestriction }</td>`));
 
                               if (data.query_result[0][i].author.length)
@@ -136,11 +136,11 @@ function fetchBookList()
                                     {
                                           if (data.query_result[0][i].author.length === 1)
                                           {
-                                                div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                div.append($('<p>').addClass('mb-0').addClass('text-nowrap').text(data.query_result[0][i].author[j]));
                                           }
                                           else
                                           {
-                                                div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                div.append($('<p>').addClass('mb-0').addClass('text-nowrap').text(data.query_result[0][i].author[j]));
                                           }
                                     }
                                     trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(div));
@@ -155,15 +155,15 @@ function fetchBookList()
                                     {
                                           if (data.query_result[0][i].category.length === 1)
                                           {
-                                                div.append($(`<p class='mb-0'>
-                                                      ${ data.query_result[0][i].category[j].name }
+                                                div.append($(`<p class='mb-0 text-nowrap'>
+                                                      ${ data.query_result[0][i].category[j].name }&nbsp;
                                                       <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
                                           }
                                           else
                                           {
-                                                div.append($(`<p>
-                                                      ${ data.query_result[0][i].category[j].name }
+                                                div.append($(`<p class='text-nowrap'>
+                                                      ${ data.query_result[0][i].category[j].name }&nbsp;
                                                       <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
                                           }
@@ -177,7 +177,7 @@ function fetchBookList()
                                     $('<div>').addClass('d-flex').addClass('flex-column').append(
                                           $('<p>').text(data.query_result[0][i].publisher)
                                     ).append(
-                                          $('<p>').text(data.query_result[0][i].publishDate)
+                                          $('<p>').addClass('text-nowrap').text(data.query_result[0][i].publishDate)
                                     )
                               ));
 
@@ -187,15 +187,15 @@ function fetchBookList()
 
                               if (data.query_result[0][i].avgRating)
                                     trElem.append($('<td>').addClass('align-middle col-1').append(
-                                          $(`<span><span class='text-warning'>${ displayRatingStars(data.query_result[0][i].avgRating) }</span>&nbsp;(${ data.query_result[0][i].avgRating })</span>`)
+                                          $(`<span class='text-nowrap'><span class='text-warning'>${ displayRatingStars(data.query_result[0][i].avgRating) }</span>&nbsp;(${ data.query_result[0][i].avgRating })</span>`)
                                     ));
                               else
                                     trElem.append($('<td>').addClass('align-middle').text('N/A'));
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $(`<div class="d-flex flex-column">`).append(
-                                          $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
+                                          $(`<p class='text-nowrap'>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>E-book: ${ data.query_result[0][i].fileCopy.price } <a title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? "read PDF file" : 'no PDF file' }\" ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+                                          $(`<p class='text-nowrap'>E-book: ${ data.query_result[0][i].fileCopy.price } <a title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? "read PDF file" : 'no PDF file' }\" ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
                                     )

@@ -64,7 +64,7 @@ if ($return_status_code === 400) {
                               $elem .= "<td class=\"align-middle\"><img {$row['imagePath']} alt=\"book image\" class=\"book_image\"></img></td>";
                               $elem .= "<td class=\"col-2 align-middle\">{$row['name']}</td>";
                               $elem .= "<td class=\"align-middle\">{$row['edition']}</td>";
-                              $elem .= "<td class=\"align-middle\">{$row['isbn']}</td>";
+                              $elem .= "<td class=\"align-middle text-nowrap\">{$row['isbn']}</td>";
                               $elem .= "<td class=\"align-middle\">{$row['ageRestriction']}</td>";
 
                               $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
@@ -90,11 +90,11 @@ if ($return_status_code === 400) {
                                           <div class='d-flex flex-column'>";
                                           while ($sub_row = $sub_result->fetch_assoc()) {
                                                 if ($sub_result->num_rows === 1)
-                                                      $elem .= "<p class='mb-0'>
+                                                      $elem .= "<p class='mb-0 text-nowrap'>
                                                       {$sub_row['authorName']}
                                                 </p>";
                                                 else
-                                                      $elem .= "<p>
+                                                      $elem .= "<p class='text-nowrap'>
                                                       {$sub_row['authorName']}
                                                 </p>";
                                           }
@@ -130,13 +130,13 @@ if ($return_status_code === 400) {
                                           while ($sub_row = $sub_result->fetch_assoc()) {
                                                 $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
                                                 if ($sub_result->num_rows === 1)
-                                                      $elem .= "<p class='mb-0'>
-                                                      {$sub_row['name']}
+                                                      $elem .= "<p class='mb-0 text-nowrap'>
+                                                      {$sub_row['name']}&nbsp;
                                                       <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
                                                 </p>";
                                                 else
-                                                      $elem .= "<p>
-                                                      {$sub_row['name']}
+                                                      $elem .= "<p class='text-nowrap'>
+                                                      {$sub_row['name']}&nbsp;
                                                       <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
                                                 </p>";
                                           }
@@ -153,7 +153,7 @@ if ($return_status_code === 400) {
                                           <p>
                                                 {$row['publisher']}
                                           </a>
-                                          <p>
+                                          <p class='text-nowrap'>
                                                 {$row['publishDate']}   
                                           </p>
                                     </div>
@@ -163,7 +163,7 @@ if ($return_status_code === 400) {
                               if ($row['avgRating']) {
                                     $func_res = displayRatingStars($row['avgRating']);
                                     $elem .= "<td class=\"align-middle col-1\">
-                                          <span><span class='text-warning'>{$func_res}</span>&nbsp;({$row['avgRating']})</span>
+                                          <span class='text-nowrap'><span class='text-warning'>{$func_res}</span>&nbsp;({$row['avgRating']})</span>
                                     </td>";
                               } else
                                     $elem .= "<td class=\"align-middle\">
@@ -187,9 +187,9 @@ if ($return_status_code === 400) {
                                           $sub_row = $sub_result->fetch_assoc();
                                           $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
                                           $sub_row['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
-                                          $elem .= "<p>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
+                                          $elem .= "<p class='text-nowrap'>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
                                     } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p>Physical: N/A (in stock: N/A)</p>";
+                                          $elem .= "<p class='text-nowrap'>Physical: N/A (in stock: N/A)</p>";
                               } else {
                                     http_response_code(500);
                                     require_once __DIR__ . '/../../../error/500.php';
@@ -218,11 +218,11 @@ if ($return_status_code === 400) {
                                           $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
                                           $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
                                           $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $elem .= "<p>E-book: {$sub_row['price']} <a title='read PDF file' $target {$sub_row['filePath']} alt='$alt'>
+                                          $elem .= "<p class='text-nowrap'>E-book: {$sub_row['price']} <a title='read PDF file' $target {$sub_row['filePath']} alt='$alt'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
                                           </a></p>";
                                     } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p>E-book: N/A <a title='no PDF file' href='#' alt='No PDF file'>
+                                          $elem .= "<p class='text-nowrap'>E-book: N/A <a title='no PDF file' href='#' alt='No PDF file'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
                                           </a></p>";
                               } else {
@@ -435,7 +435,7 @@ if ($return_status_code === 400) {
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Edition</th>
                                                 <th scope="col">ISBN-13</th>
-                                                <th scope="col">Age Restriction</th>
+                                                <th scope="col" class='text-nowrap'>Age Restriction</th>
                                                 <th scope="col">Author</th>
                                                 <th scope="col">Category</th>
                                                 <th scope="col">Publisher</th>
