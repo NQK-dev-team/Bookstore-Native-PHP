@@ -89,6 +89,18 @@ if ($return_status_code === 400) {
                         text-decoration: none;
                         color: black;
                   }
+                  @media (min-width: 767.98px) { .card-body {
+                  max-height: 205px; /* Adjust this value as needed */
+                  overflow: auto; /* Add a scrollbar if the content is too long */
+                  } 
+                  .card-body::-webkit-scrollbar {
+                  display: none;
+                  }
+            }
+            .heading-decord{
+                  font-weight: bold;
+                  padding: 20px;
+            }
             </style>
       </head>
 
@@ -97,7 +109,7 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../../layout/customer/header.php';
             ?>
             <section id="page">
-            <h1 style="text-align: center;">Customer book page</h1>
+            <h1 class="heading-decord" style="text-align: center;">Our collection</h1>
       <div class="container">
             <div class="row">
                   <div class="col-12 col-md-4">
