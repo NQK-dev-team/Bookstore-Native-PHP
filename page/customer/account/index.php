@@ -221,7 +221,7 @@ if ($return_status_code === 400) {
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
                                                       <label for="emailInput" class="form-label fw-medium">Email:</label>
-                                                      <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled>
+                                                      <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled placeholder="Enter email address">
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
                                                       <label for="phoneInput" class="form-label fw-medium">Phone:<span class='fw-bold text-danger'>&nbsp;*</span></label>
