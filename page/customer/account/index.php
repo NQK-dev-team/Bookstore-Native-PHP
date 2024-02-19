@@ -83,7 +83,7 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div class='d-flex w-100 h-100 flex-column'>
-                        <div class="btn-group block mx-auto mt-4 overflow-auto" role="group" aria-label="Radio toggle button group" id='btn-grp'>
+                        <div class="btn-group block mx-auto mt-4" role="group" aria-label="Radio toggle button group" id='btn-grp'>
                               <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked>
                               <label class="btn btn-outline-primary" for="btnradio1">Personal Information</label>
 
@@ -96,25 +96,72 @@ if ($return_status_code === 400) {
                               <input type="radio" class="btn-check" name="btnradio" id="btnradio4">
                               <label class="btn btn-outline-primary" for="btnradio4">Other</label>
                         </div>
-                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='historyPurchase'>
+                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='historyPurchase'>
                               <div>
                                     <h1 class='fs-3 ms-3 mt-3'>History Purchases</h1>
                                     <hr class='mx-2'>
                               </div>
-                              <div class='w-100 flex-grow-1 overflow-auto mb-2 overflow-auto'>
+                              <div class='w-100 flex-grow-1 mb-2 d-flex flex-column'>
+                                    <div class='d-flex px-4'>
+                                          <p class='fw-medium'>Current Accummulated Points:&nbsp;</p>
+                                          <p id="current_point" class='text-success'></p>
+                                    </div>
+                                    <div class='px-4'>
+                                          <form class="d-flex align-items-center w-100 search_form mt-2" role="search" id="search_order_form">
+                                                <button title='search order' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                      <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
+                                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                            <g id="SVGRepo_iconCarrier">
+                                                                  <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
+                                                            </g>
+                                                      </svg>
+                                                </button>
 
+                                                <input id="search_order" class="form-control me-2" type="search" placeholder="Search by order code" aria-label="Search">
+                                          </form>
+
+                                          <label for="orderDateInput" class="form-label fw-medium mt-3">Order Date:</label>
+                                          <input autocomplete="off" type="date" class="form-control search_form" id="orderDateInput" onchange='findOrder()'>
+                                    </div>
+                                    <div class='w-100 flex-grow-1 mt-4 px-2 overflow-x-auto'>
+                                          <table class="table table-hover border border-2 table-bordered w-100">
+                                                <thead>
+                                                      <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Order Code</th>
+                                                            <th scope="col">Purchase Time</th>
+                                                            <th scope="col">Total Price</th>
+                                                            <th scope="col">Total Discount</th>
+                                                            <th scope="col">Book</th>
+                                                            <th scope="col">Action</th>
+                                                      </tr>
+                                                </thead>
+                                                <tbody id="table_body">
+                                                </tbody>
+                                          </table>
+                                    </div>
                               </div>
                         </div>
-                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='otherTab'>
+                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='otherTab'>
                               <div>
                                     <h1 class='fs-3 ms-3 mt-3'>Other</h1>
                                     <hr class='mx-2'>
                               </div>
-                              <div class='w-100 flex-grow-1 overflow-auto mb-2 overflow-auto'>
-
+                              <div class='w-100 flex-grow-1 mb-2 px-4'>
+                                    <div>
+                                          <p class='fw-medium mb-0'>Deactivate Account</p>
+                                          <p>(You account will be disabled. To activate it, simply login)</p>
+                                          <button class='btn btn-sm btn-secondary' onclick="$('#deactivateModal').modal('show');">Deactivate Account</button>
+                                    </div>
+                                    <div class='mt-5'>
+                                          <p class='fw-medium mb-0'>Delete Account</p>
+                                          <p>(Your account will be deleted automatically after 14 days. Before this, you can login and the process will be cancelled)</p>
+                                          <button class='btn btn-sm btn-danger' onclick="$('#deleteModal').modal('show');">Delete Account</button>
+                                    </div>
                               </div>
                         </div>
-                        <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='passwordForm'>
+                        <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='passwordForm'>
                               <div>
                                     <h1 class='fs-3 ms-3 mt-3'>Change Password</h1>
                                     <hr class='mx-2'>
@@ -143,7 +190,7 @@ if ($return_status_code === 400) {
                                     </div>
                               </div>
                         </form>
-                        <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 overflow-auto flex-column' id='personalInfoForm'>
+                        <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='personalInfoForm'>
                               <div>
                                     <h1 class='fs-3 ms-3 mt-3'>Personal Information</h1>
                                     <hr class='mx-2'>
@@ -169,23 +216,23 @@ if ($return_status_code === 400) {
                                     <div class="col-lg-7 col-12">
                                           <div class='w-100 d-flex flex-column h-100'>
                                                 <div class="mt-auto mb-2 px-lg-5 px-3">
-                                                      <label for="nameInput" class="form-label">Name:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                      <label for="nameInput" class="form-label fw-medium">Name:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input autocomplete="name" type="text" class="form-control" id="nameInput" data-initial-value="<?php echo $result['name']; ?>" placeholder="Enter name">
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
-                                                      <label for="emailInput" class="form-label">Email:</label>
+                                                      <label for="emailInput" class="form-label fw-medium">Email:</label>
                                                       <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled>
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
-                                                      <label for="phoneInput" class="form-label">Phone:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                      <label for="phoneInput" class="form-label fw-medium">Phone:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input autocomplete="tel" type="tel" class="form-control" id="phoneInput" data-initial-value="<?php echo $result['phone']; ?>" placeholder="Enter phone number">
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
-                                                      <label for="dobInput" class="form-label">Date Of Birth:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                      <label for="dobInput" class="form-label fw-medium">Date Of Birth:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input autocomplete="bday" type="date" class="form-control" id="dobInput" data-initial-value="<?php echo $result['dob']; ?>">
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
-                                                      <label for="genderInput" class="form-label">Gender:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                      <label for="genderInput" class="form-label fw-medium">Gender:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <select autocomplete="sex" class="form-select" aria-label="Select gender" id='genderInput' data-initial-value="<?php echo $result['gender']; ?>">
                                                             <option value=null>Choose your gender</option>
                                                             <option <?php if ($result['gender'] === 'M') echo 'selected'; ?> value="M">Male</option>
@@ -194,7 +241,7 @@ if ($return_status_code === 400) {
                                                       </select>
                                                 </div>
                                                 <div class="mb-auto mt-2 px-lg-5 px-3">
-                                                      <label for="addressInput" class="form-label">Address:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                      <label for="addressInput" class="form-label fw-medium">Address:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input autocomplete="off" type="text" class="form-control" id="addressInput" data-initial-value="<?php echo $result['address']; ?>" placeholder="Enter address">
                                                 </div>
                                           </div>
@@ -275,6 +322,125 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h2 class="modal-title fs-5">Confirm Deactivation</h2>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Are you sure you want to disable your account?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deactivateAccount()">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h2 class="modal-title fs-5">Confirm Deletion</h2>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <p>Are you sure you want to delete your account?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="deleteAccount()">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="modalLabel">
+                        <div class="modal-dialog modal-dialog-centered modal-xl-custom modal-dialog-scrollable">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <div class='d-flex'>
+                                                <h2 class="modal-title fs-5">Order:&nbsp;</h2>
+                                                <h2 class="modal-title fs-5 fw-normal" id='orderID'></h2>
+                                          </div>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-column">
+                                          <div class='d-flex'>
+                                                <p class='fw-medium'>Order Time:&nbsp;</p>
+                                                <p id='orderTime'></p>
+                                          </div>
+                                          <div class='d-flex'>
+                                                <p class='fw-medium'>Total Price:&nbsp;</p>
+                                                <p id='orderPrice'></p>
+                                          </div>
+                                          <div class='d-flex'>
+                                                <p class='fw-medium'>Total Discount:&nbsp;</p>
+                                                <p id='orderDiscount'></p>
+                                          </div>
+
+                                          <div class='mt-4'>
+                                                <div class='flex-column' id='fileCopyDisplay'>
+                                                      <h5>File Copies</h5>
+                                                      <div class="w-100 overflow-x-auto">
+                                                            <table class="table table-hover border border-2 table-bordered w-100">
+                                                                  <thead>
+                                                                        <tr>
+                                                                              <th scope="col">#</th>
+                                                                              <th scope="col">Image</th>
+                                                                              <th scope="col">Name</th>
+                                                                              <th scope="col">Edition</th>
+                                                                              <th scope="col">ISBN-13</th>
+                                                                              <th scope="col" class='text-nowrap'>Age Restriction</th>
+                                                                              <th scope="col">Author</th>
+                                                                              <th scope="col">Category</th>
+                                                                              <th scope="col">Publisher</th>
+                                                                              <th scope="col">Description</th>
+                                                                              <th scope="col">Rating</th>
+                                                                              <th scope="col">Price</th>
+                                                                              <th scope="col">Action</th>
+                                                                        </tr>
+                                                                  </thead>
+                                                                  <tbody id="file_table_body">
+                                                                  </tbody>
+                                                            </table>
+                                                      </div>
+                                                </div>
+                                                <div class='flex-column mt-3' id='physicalCopyDisplay'>
+                                                      <h5>Physical Copies</h5>
+                                                      <div class="w-100 overflow-x-auto">
+                                                            <table class="table table-hover border border-2 table-bordered w-100">
+                                                                  <thead>
+                                                                        <tr>
+                                                                              <th scope="col">#</th>
+                                                                              <th scope="col">Image</th>
+                                                                              <th scope="col">Name</th>
+                                                                              <th scope="col">Edition</th>
+                                                                              <th scope="col">ISBN-13</th>
+                                                                              <th scope="col" class='text-nowrap'>Age Restriction</th>
+                                                                              <th scope="col">Author</th>
+                                                                              <th scope="col">Category</th>
+                                                                              <th scope="col">Publisher</th>
+                                                                              <th scope="col">Description</th>
+                                                                              <th scope="col">Rating</th>
+                                                                              <th scope="col">Price</th>
+                                                                              <th scope="col">Ammount</th>
+                                                                        </tr>
+                                                                  </thead>
+                                                                  <tbody id="physical_table_body">
+                                                                  </tbody>
+                                                            </table>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
             </section>
             <?php
             require_once __DIR__ . '/../../../layout/footer.php';
@@ -286,6 +452,7 @@ if ($return_status_code === 400) {
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/customer/account/script.js"></script>
+            <script src="/tool/js/ratingStars.js"></script>
       </body>
 
       </html>

@@ -2,7 +2,7 @@ use bookstore;
 
 -- **** Business constraints ****
 
--- ** Begin of rating **
+-- ** Begin of book **
 -- This trigger delete the book from unpaid orders if new.status=false
 drop trigger if exists bookBusinessConstraintUpdateTrigger;
 delimiter //
@@ -31,13 +31,13 @@ begin
     end if;
 end//
 delimiter ;
--- ** End of rating **
+-- ** End of book **
 
 -- ** Begin of rating **
 -- This trigger forbid any insert statement to `rating` table if the user hasn't bought the book yet
-drop trigger if exists ratingInsertTrigger;
+drop trigger if exists ratingInsertTrigger1;
 delimiter //
-create trigger ratingInsertTrigger
+create trigger ratingInsertTrigger1
 before insert on rating
 for each row
 begin
@@ -50,6 +50,28 @@ begin
     ) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer hasn\'t buy this book yet, rating is not allowed!';
     end if;
+end//
+delimiter ;
+
+-- This trigger update average rating of the book after insertion
+drop trigger if exists ratingInsertTrigger2;
+delimiter //
+create trigger ratingInsertTrigger2
+after insert on rating
+for each row
+begin
+	update book set avgRating=round((select total(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
+end//
+delimiter ;
+
+-- This trigger update average rating of the book after update
+drop trigger if exists ratingUpdateTrigger;
+delimiter //
+create trigger ratingUpdateTrigger
+after update on rating
+for each row
+begin
+	update book set avgRating=round((select total(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
 end//
 delimiter ;
 -- ** End of rating **
