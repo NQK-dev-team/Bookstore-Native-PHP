@@ -724,6 +724,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               }
                         }
                   } else if ($removeFile) {
+                        $stmt = $conn->prepare('select exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=? and customerOrder.status=true) as result');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=? and customerOrder.status=true) as result` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                        $stmt->bind_param('s', $id);
+                        $isSuccess = $stmt->execute();
+                        if (!$isSuccess) {
+                              http_response_code(500);
+                              echo json_encode(['error' => $stmt->error]);
+                              $stmt->close();
+                              $conn->rollback();
+                              $conn->close();
+                              exit;
+                        } else {
+                              $result = $stmt->get_result();
+                              $result = $result->fetch_assoc();
+                              $stmt->close();
+
+                              if ($result['result'] === 1) {
+                                    http_response_code(400);
+                                    echo json_encode(['error' => 'This file copy is in an order that has been paid for, you can\'t remove it PDF file, only replacements allowed!']);
+                                    $conn->rollback();
+                                    $conn->close();
+                                    exit;
+                              }
+                        }
+
                         $stmt = $conn->prepare('update fileCopy set filePath=null where id=?');
                         if (!$stmt) {
                               http_response_code(500);

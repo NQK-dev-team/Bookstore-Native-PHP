@@ -324,6 +324,19 @@ begin
     end if;
 end//
 delimiter ;
+
+-- This trigger prevent remove filePath if a customer has bought the file copy
+drop trigger if exists fileCopyBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger fileCopyBusinessConstraintUpdateTrigger
+before update on fileCopy
+for each row
+begin
+	if new.filePath is null and exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=new.id and customerOrder.status=true) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This file copy is in an order that has been paid for, you can\'t remove it PDF file!';
+    end if;
+end//
+delimiter ;
 -- ** End of fileCopy **
 
 -- ** Begin of physicalCopy **
