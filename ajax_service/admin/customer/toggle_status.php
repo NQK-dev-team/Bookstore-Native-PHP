@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   $deleteTime = $result['deleteTime'];
                   $stmt->close();
 
-                  if ($status && !$email) {
+                  if (!$status && !$email) {
                         http_response_code(403);
                         echo json_encode(['error' => 'This customer information has been deleted, no changes are allowed!']);
                         exit;
