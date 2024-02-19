@@ -83,6 +83,9 @@ function change_password_mail($email, $user_type)
       } else if ($user_type === 'admin') {
             $mail->Body    = "Your password has been changed successfully. If you did not perform this action, contact the database administrator immediately!";
             $mail->AltBody = "Your password has been changed successfully. If you did not perform this action, contact the database administrator immediately!";
+      } else if ($user_type === 'admin->customer') {
+            $mail->Body    = "Your password has been changed successfully by an admin. If you did not request this action, contact an admin immediately!";
+            $mail->AltBody = "Your password has been changed successfully by an admin. If you did not request this action, contact an admin immediately!";
       }
 
       if (!$mail->send()) {
@@ -167,7 +170,7 @@ function delete_cancel_mail($email)
             throw new Exception('Failed to add email address: ' . $e->getMessage());
       }
 
-      $mail->Subject = 'Account Delete Cancel!';
+      $mail->Subject = 'Account Delete Process Cancel!';
       $mail->Body    = "You account delete process has been cancelled, happy shopping!";
       $mail->AltBody = "You account delete process has been cancelled, happy shopping!";
 
