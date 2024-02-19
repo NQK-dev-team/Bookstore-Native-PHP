@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
                   $imagePath = $result['imagePath'];
                   $stmt->close();
 
-                  if ($status && !$email) {
+                  if (!$status && !$email) {
                         http_response_code(400);
                         echo json_encode(['error' => 'This customer information has already been deleted!']);
                         $conn->close();

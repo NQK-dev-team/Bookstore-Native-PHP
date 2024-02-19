@@ -82,8 +82,8 @@ if ($return_status_code === 400) {
                   $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
                               <a title='Visit customer detailed information page' class='btn btn-sm btn-info text-white' href='./detail?id={$row['id']}' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a>
-                              <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>
-                              <button onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>
+                              <button title='deactivate customer' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>
+                              <button title='delete customer' onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>
                         </div>
                   </td>";
                   $elem .= "</tr>";
@@ -123,7 +123,7 @@ if ($return_status_code === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Customer List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title='search customer' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

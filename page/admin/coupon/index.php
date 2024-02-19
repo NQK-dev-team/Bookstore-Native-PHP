@@ -129,10 +129,10 @@ if ($return_status_code === 400) {
                   if ($sub_result['result']) {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
+                              <button title='Edit coupon' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
-                              <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                              <button title='Deactivate coupon' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                     <i class=\"bi bi-power text-white\"></i>
                               </button>
                         </div>
@@ -140,13 +140,13 @@ if ($return_status_code === 400) {
                   } else {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
+                              <button title='Edit coupon' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
-                              <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                              <button title='Deactivate coupon' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                     <i class=\"bi bi-power text-white\"></i>
                               </button>
-                              <button onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
+                              <button title='Delete coupon' onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
                                     <i class=\"bi bi-trash text-white\"></i>
                               </button>
                         </div>
@@ -213,7 +213,7 @@ if ($return_status_code === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Discount Coupon List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title='search coupon' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -426,7 +426,7 @@ if ($return_status_code === 400) {
                                                 <div>
                                                       <label class="form-label" for='searchBookInput'>Search Books:</label>
                                                       <form id="book_search_form" class="d-flex align-items-center w-100" role="search">
-                                                            <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                            <button title='search book' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                                   <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

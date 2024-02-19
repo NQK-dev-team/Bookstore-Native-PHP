@@ -1,7 +1,12 @@
-let mode = null, newImg = null;
+let mode = null, customerID = null;
 
 $(document).ready(function ()
 {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if (urlParams.has('id'))
+            customerID = urlParams.get('id');
+
       document.getElementById('btnradio1').addEventListener('change', function ()
       {
             if (this.checked)
@@ -9,7 +14,6 @@ $(document).ready(function ()
                   $('#personalInfoForm').css('display', 'flex');
                   $('#passwordForm').css('display', 'none');
                   $('#historyPurchase').css('display', 'none');
-                  $('#otherTab').css('display', 'none');
                   mode = 1;
                   resetForm();
             }
@@ -22,10 +26,9 @@ $(document).ready(function ()
                   $('#personalInfoForm').css('display', 'none');
                   $('#passwordForm').css('display', 'flex');
                   $('#historyPurchase').css('display', 'none');
-                  $('#otherTab').css('display', 'none');
                   mode = 2;
                   resetForm();
-                  $('#currentPasswordInput').focus();
+                  $('#newPasswordInput').focus();
             }
       });
 
@@ -36,21 +39,8 @@ $(document).ready(function ()
                   $('#historyPurchase').css('display', 'flex');
                   $('#personalInfoForm').css('display', 'none');
                   $('#passwordForm').css('display', 'none');
-                  $('#otherTab').css('display', 'none');
                   mode = 3;
                   findOrder();
-            }
-      });
-
-      document.getElementById('btnradio4').addEventListener('change', function ()
-      {
-            if (this.checked)
-            {
-                  $('#otherTab').css('display', 'flex');
-                  $('#historyPurchase').css('display', 'none');
-                  $('#personalInfoForm').css('display', 'none');
-                  $('#passwordForm').css('display', 'none');
-                  mode = 4;
             }
       });
 
@@ -93,45 +83,16 @@ function trackScreenWidth()
             $('#btn-grp').addClass('btn-group').removeClass('btn-group-vertical');
 }
 
-function setNewImage(e)
-{
-      const file = e.target.files;
-      $('#imageFileName').text(file.length === 1 ? file[0].name : '');
-      newImg = file.length === 1 ? file[0] : null;
-
-      if (file.length === 1)
-      {
-            const reader = new FileReader();
-
-            reader.onload = function (e)
-            {
-                  $('#userImage').attr('src', e.target.result);
-            };
-
-            reader.readAsDataURL(file[0]);
-      }
-      else
-            $('#userImage').attr('src', originalImg);
-}
-
 function resetForm()
 {
       if (mode === 1)
       {
-            $('#nameInput').val($('#nameInput').data('initial-value'));
+            $('#userImage').attr('src', $('#userImage').data('initial-src'));
             $('#emailInput').val($('#emailInput').data('initial-value'));
             $('#phoneInput').val($('#phoneInput').data('initial-value'));
-            $('#addressInput').val($('#addressInput').data('initial-value'));
-            $('#dobInput').val($('#dobInput').data('initial-value'));
-            $('#genderInput').val($('#genderInput').data('initial-value'));
-            $('#userImage').prop('src', $('#userImage').data('initial-src'));
-            $('#imageFileName').text('');
-            $('#imageInput').val('');
-            newImg = null;
       }
       else if (mode === 2)
       {
-            $('#currentPasswordInput').val('');
             $('#newPasswordInput').val('');
             $('#confirmPasswordInput').val('');
       }
@@ -146,41 +107,30 @@ function saveChange()
             $('#confirmPasswordModal').modal('show');
 }
 
-function changePersonalInfo()
+function changeCustomerInfo()
 {
-      const name = encodeData($('#nameInput').val());
-      const phone = encodeData($('#phoneInput').val());
-      const address = encodeData($('#addressInput').val());
-      const dob = encodeData($('#dobInput').val());
-      const gender = encodeData($('#genderInput').val());
+      const email = encodeData(document.getElementById('emailInput').value);
+      const phone = encodeData(document.getElementById('phoneInput').value);
 
-      if (newImg && newImg.type !== 'image/jpeg' && newImg.type !== 'image/png')
+      if (email === '')
       {
-            $('#imgeFileErrorMessage').text('Invalid image file!');
-            $('#imgeFileError').removeClass('d-none').addClass('d-flex');
-            return;
-      }
-      else if (newImg && newImg.size > 5 * 1024 * 1024)
-      {
-            $('#imgeFileErrorMessage').text('Image size must be 5MB or less!');
-            $('#imgeFileError').removeClass('d-none').addClass('d-flex');
+            reportCustomValidity($('#emailInput').get(0), "Email field is empty!");
             return;
       }
       else
       {
-            $('#imgeFileErrorMessage').text('');
-            $('#imgeFileError').addClass('d-none').removeClass('d-flex');
-      }
-
-      if (name === '')
-      {
-            reportCustomValidity($('#nameInput').get(0), "Name field is empty!");
-            return;
-      }
-      else if (name.length > 255)
-      {
-            reportCustomValidity($('#nameInput').get(0), "Name must be 255 characters long or less!");
-            return;
+            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+            const localEmail = email.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
+            {
+                  reportCustomValidity($('#emailInput').get(0), "Email format invalid!");
+                  return;
+            }
+            else if (email.length > 255)
+            {
+                  reportCustomValidity($('#emailInput').get(0), "Email must be 255 characters long or less!");
+                  return;
+            }
       }
 
       if (phone === '')
@@ -198,72 +148,27 @@ function changePersonalInfo()
             }
       }
 
-      if (address === '')
-      {
-            reportCustomValidity($('#addressInput').get(0), "Address field is empty!");
-            return;
-      }
-      else if (address.length > 1000)
-      {
-            reportCustomValidity($('#addressInput').get(0), "Address must be 1000 characters long or less!");
-            return;
-      }
-
-      if (dob === '')
-      {
-            reportCustomValidity($('#dobInput').get(0), "Date of birth field is empty!");
-            return;
-      }
-      else if (!isDobValid(dob))
-      {
-            reportCustomValidity($('#dobInput').get(0), "Date of birth invalid!");
-            return;
-      }
-      else if (!isAgeValid(dob))
-      {
-            reportCustomValidity($('#dobInput').get(0), "You must be at least 18 years old to sign up!");
-            return;
-      }
-
-      if (gender === 'null')
-      {
-            reportCustomValidity($('#genderInput').get(0), "Gender field is empty!");
-            return;
-      }
-      else if (gender !== 'F' && gender !== 'M' && gender !== 'O')
-      {
-            reportCustomValidity($('#genderInput').get(0), "Invalid gender!");
-            return;
-      }
-
-      const postData = new FormData();
-      postData.append('name', name);
-      postData.append('phone', phone);
-      postData.append('address', address);
-      postData.append('dob', dob);
-      postData.append('gender', gender);
-      postData.append('image', newImg);
-
       $('*').addClass('wait');
       $('button, input').prop('disabled', true);
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/customer/account/update_personal_info.php',
-            method: 'POST',
-            data: postData,
+            url: '/ajax_service/admin/customer/update_info.php',
+            method: 'PUT',
+            data: { email, phone, id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
-            contentType: false,
-            processData: false,
             dataType: 'json',
             success: function (data)
             {
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
 
                   if (data.error)
                   {
@@ -273,16 +178,8 @@ function changePersonalInfo()
                   else if (data.query_result)
                   {
                         $('#successModal').modal('show');
-
-                        $('#nameInput').data('initial-value', $('#nameInput').val());
+                        $('#emailInput').data('initial-value', $('#emailInput').val());
                         $('#phoneInput').data('initial-value', $('#phoneInput').val());
-                        $('#addressInput').data('initial-value', $('#addressInput').val());
-                        $('#dobInput').data('initial-value', $('#dobInput').val());
-                        $('#genderInput').data('initial-value', $('#genderInput').val());
-                        $('#userImage').data('initial-src', $('#userImage').prop('src'));
-                        $('#imageFileName').text('');
-                        $('#imageInput').val('');
-                        newImg = null;
                   }
             },
 
@@ -291,7 +188,13 @@ function changePersonalInfo()
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
+
+                  $('#newPasswordInput').val('');
+                  $('#confirmPasswordInput').val('');
 
                   console.error(err);
                   if (err.status >= 500)
@@ -309,15 +212,8 @@ function changePersonalInfo()
 
 function changePassword()
 {
-      const oldPassword = encodeData($('#currentPasswordInput').val());
       const newPassword = encodeData($('#newPasswordInput').val());
       const confirmPassword = encodeData($('#confirmPasswordInput').val());
-
-      if (oldPassword === '')
-      {
-            reportCustomValidity($('#currentPasswordInput').get(0), "Current password field is empty!");
-            return;
-      }
 
       if (newPassword === '')
       {
@@ -355,9 +251,9 @@ function changePassword()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/customer/account/update_password.php',
+            url: '/ajax_service/admin/customer/update_password.php',
             method: 'PUT',
-            data: { oldPassword, newPassword, confirmPassword },
+            data: { newPassword, confirmPassword, id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -367,7 +263,10 @@ function changePassword()
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
 
                   if (data.error)
                   {
@@ -377,7 +276,6 @@ function changePassword()
                   else if (data.query_result)
                   {
                         $('#successModal').modal('show');
-                        $('#currentPasswordInput').val('');
                         $('#newPasswordInput').val('');
                         $('#confirmPasswordInput').val('');
                   }
@@ -388,7 +286,13 @@ function changePassword()
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
+
+                  $('#newPasswordInput').val('');
+                  $('#confirmPasswordInput').val('');
 
                   console.error(err);
                   if (err.status >= 500)
@@ -404,110 +308,6 @@ function changePassword()
       })
 }
 
-function deactivateAccount()
-{
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
-
-      $.ajax({
-            url: '/ajax_service/customer/account/deactivate_account.php',
-            method: 'PATCH',
-            headers: {
-                  'X-CSRF-Token': CSRF_TOKEN
-            },
-            dataType: 'json',
-            success: function (data)
-            {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
-
-                  if (data.error)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(data.error);
-                  }
-                  else if (data.query_result)
-                  {
-                        window.location.href = '/';
-                  }
-            },
-
-            error: function (err)
-            {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
-
-                  console.error(err);
-                  if (err.status >= 500)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text('Server encountered error!');
-                  } else
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(err.responseJSON.error);
-                  }
-            }
-      });
-}
-
-function deleteAccount()
-{
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
-
-      $.ajax({
-            url: '/ajax_service/customer/account/delete_account.php',
-            method: 'DELETE',
-            headers: {
-                  'X-CSRF-Token': CSRF_TOKEN
-            },
-            dataType: 'json',
-            success: function (data)
-            {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
-
-                  if (data.error)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(data.error);
-                  }
-                  else if (data.query_result)
-                  {
-                        window.location.href = '/';
-                  }
-            },
-
-            error: function (err)
-            {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
-
-                  console.error(err);
-                  if (err.status >= 500)
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text('Server encountered error!');
-                  } else
-                  {
-                        $('#errorModal').modal('show');
-                        $('#error_message').text(err.responseJSON.error);
-                  }
-            }
-      });
-}
-
 function findOrder()
 {
       const search = encodeData($('#search_order').val().replace('/-/g', ''));
@@ -518,16 +318,19 @@ function findOrder()
       $('a').addClass('disable_link');
 
       $.ajax({
-            url: '/ajax_service/customer/account/get_order_list.php',
+            url: '/ajax_service/admin/customer/get_order_list.php',
             method: 'GET',
-            data: { code: search, date: date },
+            data: { code: search, date: date, id: encodeData(customerID) },
             dataType: 'json',
             success: function (data)
             {
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
 
                   if (data.error)
                   {
@@ -570,7 +373,10 @@ function findOrder()
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
 
                   console.error(err);
                   if (err.status >= 500)
@@ -600,9 +406,9 @@ async function orderDetail(code, time, price, discount)
       let failed = false;
 
       await $.ajax({
-            url: '/ajax_service/customer/account/file_order_detail.php',
+            url: '/ajax_service/admin/customer/file_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: code.replace('/-/g', ''), id: encodeData(customerID) },
             dataType: 'json',
             success: function (data)
             {
@@ -676,7 +482,10 @@ async function orderDetail(code, time, price, discount)
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
 
                   console.error(err);
                   if (err.status >= 500)
@@ -694,9 +503,9 @@ async function orderDetail(code, time, price, discount)
       if (failed) return;
 
       await $.ajax({
-            url: '/ajax_service/customer/account/physical_order_detail.php',
+            url: '/ajax_service/admin/customer/physical_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: code.replace('/-/g', ''), id: encodeData(customerID) },
             dataType: 'json',
             success: function (data)
             {
@@ -769,7 +578,10 @@ async function orderDetail(code, time, price, discount)
                   $('*').removeClass('wait');
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
-                  $('#emailInput').prop('disabled', true);
+                  $('#nameInput').prop('disabled', true);
+                  $('#dobInput').prop('disabled', true);
+                  $('#genderInput').prop('disabled', true);
+                  $('#addressInput').prop('disabled', true);
 
                   console.error(err);
                   if (err.status >= 500)
@@ -789,7 +601,10 @@ async function orderDetail(code, time, price, discount)
       $('*').removeClass('wait');
       $('button, input').prop('disabled', false);
       $('a').removeClass('disable_link');
-      $('#emailInput').prop('disabled', true);
+      $('#nameInput').prop('disabled', true);
+      $('#dobInput').prop('disabled', true);
+      $('#genderInput').prop('disabled', true);
+      $('#addressInput').prop('disabled', true);
 
       $('#orderModal').modal('show');
 }

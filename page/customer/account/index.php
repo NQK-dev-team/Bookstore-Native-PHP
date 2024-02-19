@@ -221,7 +221,7 @@ if ($return_status_code === 400) {
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
                                                       <label for="emailInput" class="form-label fw-medium">Email:</label>
-                                                      <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled>
+                                                      <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled placeholder="Enter email address">
                                                 </div>
                                                 <div class="my-2 px-lg-5 px-3">
                                                       <label for="phoneInput" class="form-label fw-medium">Phone:<span class='fw-bold text-danger'>&nbsp;*</span></label>
@@ -426,6 +426,7 @@ if ($return_status_code === 400) {
                                                                               <th scope="col">Rating</th>
                                                                               <th scope="col">Price</th>
                                                                               <th scope="col">Ammount</th>
+                                                                              <th scope="col" class='text-nowrap'>Destination Address</th>
                                                                         </tr>
                                                                   </thead>
                                                                   <tbody id="physical_table_body">
@@ -450,7 +451,6 @@ if ($return_status_code === 400) {
             <script src="/tool/js/dob_checker.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
             <script src="/tool/js/encoder.js"></script>
-            <script src="/tool/js/input_validity.js"></script>
             <script src="/javascript/customer/account/script.js"></script>
             <script src="/tool/js/ratingStars.js"></script>
       </body>

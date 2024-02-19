@@ -2,13 +2,9 @@
 <?php
 require_once __DIR__ . '/../../../tool/php/session_check.php';
 
-if (!check_session()) {
+if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
       http_response_code(403);
       echo json_encode(['error' => 'Not authorized!']);
-      exit;
-} else if ($_SESSION['type'] !== 'customer') {
-      http_response_code(400);
-      echo json_encode(['error' => 'Bad request!']);
       exit;
 }
 
@@ -18,8 +14,9 @@ require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['code'])) {
+      if (isset($_GET['code'], $_GET['id'])) {
             try {
+                  $id = sanitize(rawurldecode($_GET['id']));
                   $code = sanitize(rawurldecode(str_replace('-', '', $_GET['code'])));
 
                   // Connect to MySQL
@@ -32,23 +29,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
+                  $stmt=$conn->prepare('select * from customer where id=?');
+                  if(!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from customer where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->bind_param('s',$id);
+                  if(!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result=$stmt->get_result();
+                  if($result->num_rows===0) {
+                        http_response_code(404);
+                        echo json_encode(['error' => 'Customer not found!']);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->close();
+
                   $finalResult = [];
 
-                  $stmt = $conn->prepare('select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
-                  from book join physicalOrderContain on physicalOrderContain.bookID=book.id
-                  join physicalCopy on physicalCopy.id=book.id
-                  join customerOrder on customerOrder.id=physicalOrderContain.orderID
+                  $stmt = $conn->prepare('select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,book.id,fileCopy.price,fileCopy.filePath
+                  from book join fileOrderContain on fileOrderContain.bookID=book.id
+                  join fileCopy on fileCopy.id=book.id
+                  join customerOrder on customerOrder.id=fileOrderContain.orderID
                   where customerOrder.orderCode=? and customerOrder.customerID=? and customerOrder.status=true order by name,book.id');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
-                  from book join physicalOrderContain on physicalOrderContain.bookID=book.id
-                  join physicalCopy on physicalCopy.id=book.id
-                  join customerOrder on customerOrder.id=physicalOrderContain.orderID
+                        echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,book.id,fileCopy.price,fileCopy.filePath
+                  from book join fileOrderContain on fileOrderContain.bookID=book.id
+                  join fileCopy on fileCopy.id=book.id
+                  join customerOrder on customerOrder.id=fileOrderContain.orderID
                   where customerOrder.orderCode=? and customerOrder.customerID=? and customerOrder.status=true order by name,book.id` preparation failed!']);
                         exit;
                   }
-                  $stmt->bind_param('ss', $code, $_SESSION['id']);
+                  $stmt->bind_param('ss', $code, $id);
                   if (!$stmt->execute()) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
@@ -62,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $row['publishDate'] = MDYDateFormat($row['publishDate']);
                         $row['edition'] = convertToOrdinal($row['edition']);
                         $row['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+                        $row['filePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath']));
 
                         $sub_stmt = $conn->prepare('select authorName from author join book on author.bookID=book.id where author.bookID=?');
                         if (!$sub_stmt) {

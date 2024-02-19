@@ -36,10 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select email,deleteTime from customer join appUser on appUser.id=customer.id where appUser.id=?');
+                  $stmt = $conn->prepare('select email,deleteTime,phone from customer join appUser on appUser.id=customer.id where appUser.id=?');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select email,deleteTime from customer join appUser on appUser.id=customer.id where appUser.id=?` preparation failed!']);
+                        echo json_encode(['error' => 'Query `select email,deleteTime,phone from customer join appUser on appUser.id=customer.id where appUser.id=?` preparation failed!']);
                         $conn->close();
                         exit;
                   }
@@ -63,9 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   $result = $result->fetch_assoc();
                   $email = $result['email'];
                   $deleteTime = $result['deleteTime'];
+                  $phone = $result['phone'];
                   $stmt->close();
 
-                  if ($status && !$email) {
+                  if (!$status && !$email) {
                         http_response_code(403);
                         echo json_encode(['error' => 'This customer information has been deleted, no changes are allowed!']);
                         exit;
@@ -73,6 +74,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
 
                   $stmt = null;
                   if ($status) {
+                        if (!$email) {
+                              http_response_code(400);
+                              echo json_encode(['error' => 'Customer email is not provided, can not reactivate this customer!']);
+                              $conn->close();
+                              exit;
+                        }
+                        if (!$phone) {
+                              http_response_code(400);
+                              echo json_encode(['error' => 'Customer phone number is not provided, can not reactivate this customer!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt = $conn->prepare('update customer set status=?,deleteTime=null where id=?');
                         if (!$stmt) {
                               http_response_code(500);
