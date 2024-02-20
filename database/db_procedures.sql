@@ -103,3 +103,4 @@ begin
     select concat('E_DISCOUNT',counter) as newID;
 end//
 delimiter ;
+

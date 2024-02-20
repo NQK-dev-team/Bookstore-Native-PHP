@@ -220,19 +220,19 @@ end//
 delimiter ;
 
 -- This trigger also check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
-drop trigger if exists physicalOrderContainBusinessConstraintUpdateTrigger;
+drop trigger if exists physicalOrderBusinessConstraintUpdateTrigger;
 delimiter //
-create trigger physicalOrderContainBusinessConstraintUpdateTrigger
-before update on physicalOrderContain
+create trigger physicalOrderBusinessConstraintUpdateTrigger
+before update on physicalOrder
 for each row
 begin
-    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.id) then
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
 	else
 		begin
 			declare address varchar(1000) default null;
 			if new.destinationAddress is null then
-				select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=old.orderID;
+				select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=old.id;
 				if address is null then
 					SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
 				else
@@ -245,15 +245,15 @@ end//
 delimiter ;
 
 -- This trigger check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
-drop trigger if exists physicalOrderContainBusinessConstraintInsertTrigger;
+drop trigger if exists physicalOrderBusinessConstraintInsertTrigger;
 delimiter //
-create trigger physicalOrderContainBusinessConstraintInsertTrigger
-before insert on physicalOrderContain
+create trigger physicalOrderBusinessConstraintInsertTrigger
+before insert on physicalOrder
 for each row
 begin
 	declare address varchar(1000) default null;
 	if new.destinationAddress is null then
-		select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=new.orderID;
+		select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=new.id;
 		if address is null then
 			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
 		else
