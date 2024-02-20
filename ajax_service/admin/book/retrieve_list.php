@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             try {
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
-                  $status = $_GET['status'] ? filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN) : null;
+                  $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);
                   $search = sanitize(rawurldecode($_GET['search']));
                   $category = sanitize(rawurldecode($_GET['category']));
 
@@ -48,12 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  if (is_null($status)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Missing book status!']);
-                        exit;
-                  }
-
                   $queryResult = [];
                   $isbnSearch = '%' . str_replace('-', '', $search) . '%';
                   $search = '%' . $search . '%';
@@ -70,7 +64,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  $stmt = null;
+
+                  if ($category === '%%') {
+                        $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -83,7 +80,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id limit ? offset ?)');
-                  $stmt->bind_param('issssiiisssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset, $status, $search, $isbnSearch,  $search, $entry, $offset);
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id limit ? offset ?)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
+                  order by book.name,book.id limit ? offset ?)` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                        $stmt->bind_param('issssiiisssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset, $status, $search, $isbnSearch,  $search, $entry, $offset);
+                  } else {
+                        $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id limit ? offset ?)');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id limit ? offset ?)` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                        $stmt->bind_param('issssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset);
+                  }
                   $isSuccess = $stmt->execute();
 
                   if (!$isSuccess) {
@@ -107,6 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                               $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
+    or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('ss', $id, $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -122,6 +164,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $queryResult[$idx]['can_delete'] = !$sub_result['result'];
 
                               $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select authorName from author where bookID=? order by authorName,authorIdx` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -143,6 +191,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $sub_stmt->close();
 
                               $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -167,6 +221,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $sub_stmt->close();
 
                               $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select price,inStock from physicalCopy where id=?` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -189,6 +249,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               $sub_stmt->close();
 
                               $sub_stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    echo json_encode(['error' => 'Query `select price,filePath from fileCopy where id=?` preparation failed!']);
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -217,7 +283,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
                   $stmt->close();
 
-                  $stmt = $conn->prepare('select count(*) as totalBook from(
+                  if ($category === '%%') {
+                        $stmt = $conn->prepare('select count(*) as totalBook from(
                         (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
@@ -232,7 +299,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id)
                   ) as combined');
-                  $stmt->bind_param('issssisss', $status, $search, $isbnSearch, $search, $category, $status, $search, $isbnSearch, $search);
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select count(*) as totalBook from(
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id)
+                  
+                  union
+                  
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
+                  order by book.name,book.id)
+                  ) as combined` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                        $stmt->bind_param('issssisss', $status, $search, $isbnSearch, $search, $category, $status, $search, $isbnSearch, $search);
+                  } else {
+                        $stmt = $conn->prepare('select count(*) as totalBook from(
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id)
+                  ) as combined');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select count(*) as totalBook from(
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  from book join author on book.id=author.bookID
+                  join belong on belong.bookID=book.id
+                  join category on category.id=belong.categoryID
+                  where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?) and category.name like ?
+                  order by book.name,book.id)
+                  ) as combined` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
+                        $stmt->bind_param('issss', $status, $search, $isbnSearch, $search, $category);
+                  }
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);

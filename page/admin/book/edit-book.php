@@ -2,13 +2,15 @@
 require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
       require_once __DIR__ . '/../../../error/400.php';
-} else if (return_navigate_error() === 403) {
+} else if ($return_status_code === 403) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
-} else {
+} else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
       if (isset($_GET['id'])) {
@@ -35,6 +37,12 @@ if (return_navigate_error() === 400) {
                   $query_result = null;
 
                   $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        require_once __DIR__ . '/../../../error/500.php';
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -61,6 +69,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        require_once __DIR__ . '/../../../error/500.php';
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -83,6 +97,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select category.name from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        require_once __DIR__ . '/../../../error/500.php';
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 
@@ -105,6 +125,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        require_once __DIR__ . '/../../../error/500.php';
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 
@@ -127,6 +153,12 @@ if (return_navigate_error() === 400) {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        require_once __DIR__ . '/../../../error/500.php';
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
 
@@ -162,7 +194,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -269,7 +301,7 @@ if (return_navigate_error() === 400) {
                                                             <div class="d-flex flex-column h-100">
                                                                   <span class="form-label">
                                                                         E-book file (current file
-                                                                        <a id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
+                                                                        <a title="PDF File" id='pdfPath' data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'Read file' : 'No PDF file' ?>" <?php echo $query_result['fileCopy']['filePath']; ?> <?php if ($query_result['fileCopy']['filePath'] !== '') echo "target=\"_blank\""; ?> alt='<?php echo $query_result['fileCopy']['filePath'] !== '' ? 'PDF file' : 'No PDF file' ?>'>
                                                                               <i class="bi bi-file-earmark-fill text-secondary"></i>
                                                                         </a>):
                                                                   </span>
@@ -277,7 +309,7 @@ if (return_navigate_error() === 400) {
                                                                         <div class="d-flex align-items-center">
                                                                               <?php if ($query_result['fileCopy']['filePath'])
                                                                                     echo '<div class=\'me-3\'>
-                                                                                    <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
+                                                                                    <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1">
                                                                                     <label class="btn btn-outline-danger btn-sm" for="btncheck1">Remove file</label>
                                                                               </div>';
                                                                               ?>
@@ -287,9 +319,10 @@ if (return_navigate_error() === 400) {
                                                                               </label>
                                                                         </div>
                                                                   </div>
-                                                                  <p class="mt-2" id="pdfFileName"></p>
+                                                                  <p class="mt-1" id="pdfFileName"></p>
                                                                   <p id="pdfFileError1" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
                                                                   <p id="pdfFileError2" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Conflict request, please choose either removing the current file or uploading a new one, not both!</p>
+                                                                  <p id="pdfFileError3" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Only submit 1 PDF file!</p>
                                                             </div>
                                                       </div>
                                                 </div>
@@ -298,7 +331,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </form>
                   </div>
-                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -309,7 +342,7 @@ if (return_navigate_error() === 400) {
                                           <div class='w-100 mt-2 mb-4'>
                                                 <label class="form-label" for='searchCategoryInput'>Search category:</label>
                                                 <form id="category_search_form" class="d-flex align-items-center w-100 search_form mx-auto" role="search">
-                                                      <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                      <button aria-label='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                             <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -330,7 +363,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -347,7 +380,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -363,7 +396,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

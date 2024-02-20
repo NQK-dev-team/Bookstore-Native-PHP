@@ -18,8 +18,9 @@ function map($elem)
       return sanitize(rawurldecode($elem));
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      if (isset($_POST['name']) && isset($_POST['description']) && isset($_POST['id'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+      parse_str(file_get_contents('php://input'), $_PUT);
+      if (isset($_PUT['name']) && isset($_PUT['description']) && isset($_PUT['id'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -27,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $id = sanitize(rawurldecode($_POST['id']));
-                  $name = sanitize(rawurldecode($_POST['name']));
-                  $description = $_POST['description'] ? sanitize(rawurldecode($_POST['description'])) : null;
+                  $id = sanitize(rawurldecode($_PUT['id']));
+                  $name = sanitize(rawurldecode($_PUT['name']));
+                  $description = $_PUT['description'] ? sanitize(rawurldecode($_PUT['description'])) : null;
 
                   if (!$name) {
                         http_response_code(400);
@@ -58,6 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $stmt = $conn->prepare('select * from category where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from category where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -78,6 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select * from category where name=? and id!=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select * from category where name=? and id!=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $name, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -95,6 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('update category set name=?,description=? where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update category set name=?,description=? where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sss', $name, $description, $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

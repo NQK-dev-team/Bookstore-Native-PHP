@@ -45,7 +45,7 @@
 }
 
 .dropdownCategory {
-      width: 300px;
+      width: 250px;
 }
 
 .categories {
@@ -55,4 +55,15 @@
 
 .categoryHover:hover {
       background-color: #adadad;
+}
+
+.book-list {
+      max-height: 300px !important;
+      overflow-y: auto;
+}
+
+#notifyAgain {
+      width: 1rem;
+      height: 1rem;
+      border: 1px solid gray;
 }

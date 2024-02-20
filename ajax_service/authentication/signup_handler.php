@@ -6,6 +6,13 @@ require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/checker.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (
             isset($_POST['email']) &&
@@ -13,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isset($_POST['name']) &&
             isset($_POST['date']) &&
             isset($_POST['phone']) &&
-            isset($_POST['address']) &&
-            isset($_POST['gender'])
+            isset($_POST['gender']) &&
+            isset($_POST['confirmPassword'])
       ) {
             try {
                   $email = sanitize(rawurldecode($_POST['email']));
@@ -22,10 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $name = sanitize(rawurldecode($_POST['name']));
                   $date = sanitize(rawurldecode($_POST['date']));
                   $phone = sanitize(rawurldecode($_POST['phone']));
-                  $address = $_POST['address'] ? sanitize(rawurldecode($_POST['address'])) : null;
-                  $card = $_POST['card'] ? sanitize(rawurldecode($_POST['card'])) : null;
-                  $refEmail = $_POST['refEmail'] ? sanitize(rawurldecode($_POST['refEmail'])) : null;
+                  $address = (isset($_POST['address']) && $_POST['address']) ? sanitize(rawurldecode($_POST['address'])) : null;
+                  $card = (isset($_POST['card']) && $_POST['card']) ? sanitize(rawurldecode($_POST['card'])) : null;
+                  $refEmail = (isset($_POST['refEmail']) && $_POST['refEmail']) ? sanitize(rawurldecode($_POST['refEmail'])) : null;
                   $gender = sanitize(rawurldecode($_POST['gender']));
+                  $confirmPassword = sanitize(rawurldecode($_POST['confirmPassword']));
 
                   if (!$name) {
                         http_response_code(400);
@@ -43,11 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else {
                         // Create a DateTime object for the date of birth
-                        $dobDate = new DateTime($date, new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $dobDate = new DateTime($date, new DateTimeZone($_ENV['TIMEZONE']));
                         $dobDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         // Get the current date
-                        $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $currentDate = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                         if ($dobDate > $currentDate) {
@@ -121,14 +129,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'Password must be at least 8 characters long!']);
                         exit;
                   } else {
-                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password);
+                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/', $password);
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
                               http_response_code(400);
-                              echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
+                              echo json_encode(['error' => 'Password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!']);
                               exit;
                         }
+                  }
+
+                  if (!$confirmPassword) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Confirm password not provided!']);
+                        exit;
+                  } else if ($confirmPassword !== $password) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Confirm password does not match!']);
+                        exit;
                   }
 
                   if ($refEmail && !filter_var($refEmail, FILTER_VALIDATE_EMAIL)) {
@@ -153,6 +171,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare('select exists(select * from appUser where phone=?) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from appUser where phone=?) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $phone);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -173,6 +197,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt->close();
 
                   $stmt = $conn->prepare('select exists(select * from appUser where email=?) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from appUser where email=?) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $email);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
@@ -194,6 +224,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if ($refEmail) {
                         $stmt = $conn->prepare('select exists(select * from appUser where email=?) as result');
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select exists(select * from appUser where email=?) as result` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $refEmail);
                         $isSuccess = $stmt->execute();
                         if (!$isSuccess) {
@@ -214,11 +250,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $stmt->close();
                   }
 
+                  $hashedPassword = hash_password($password);
+                  if ($hashedPassword === false) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing failed!']);
+                        $conn->close();
+                        exit;
+                  } else if (is_null($hashedPassword)) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing algorithm invalid!']);
+                        $conn->close();
+                        exit;
+                  }
+
                   // Begin transaction
                   $conn->begin_transaction();
 
-                  $hashedPassword = hash_password($password);
                   $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?,?)');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `call addCustomer(?,?,?,?,?,?,?,?,?)` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('sssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail, $gender);
                   $isSuccess = $stmt->execute();
 

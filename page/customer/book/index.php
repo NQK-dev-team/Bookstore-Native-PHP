@@ -1,13 +1,16 @@
 <?php
 require_once __DIR__ . '/../../../tool/php/role_check.php';
+require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
       require_once __DIR__ . '/../../../error/400.php';
-} else if (return_navigate_error() === 403) {
+} else if ($return_status_code === 403) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
-} else {
+} else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
@@ -24,29 +27,9 @@ if (return_navigate_error() === 400) {
             }
             $elem = '';
 
-            $stmt = $conn->prepare('SELECT DISTINCT 
-            book.id,
-            book.name,
-            book.edition,
-            book.isbn,
-            book.ageRestriction,
-            book.avgRating,
-            book.publisher,
-            book.publishDate,
-            book.description,
-            book.imagePath,
-            author.authorName,
-            filecopy.price
-        FROM 
-            book
-        JOIN 
-            author ON book.id = author.bookid
-        JOIN 
-            filecopy ON book.id = filecopy.id
-        WHERE 
-            book.status = 1
-        ORDER BY 
-            book.name, book.id');
+            $stmt = $conn->prepare('select book.id, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from book inner join author on book.id = author.bookID
+            join fileCopy on book.id = fileCopy.id
+            join physicalCopy on book.id = physicalCopy.id');
             $stmt->execute();
             $result = $stmt->get_result();
             // $cate_re = $cate->get_result();
@@ -73,7 +56,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -82,6 +65,43 @@ if (return_navigate_error() === 400) {
             ?>
             <link rel="stylesheet" href="/css/preset_style.css">
             <title>Book list</title>
+            <style>
+                  .grid-container {
+                        display: grid;
+                        grid-template-columns: auto auto auto auto;
+                        justify-content: space-evenly;
+                        align-content: center;
+                  }
+                  .card:hover {
+                        transform: scale(1.1);
+                  } 
+                  .card {
+                        margin: 1rem;
+                  }
+                  .author {
+                        color: gray;
+                  }
+                  .pic {
+                        height: 28rem;
+                        width: 100%;
+                  }
+                  a{
+                        text-decoration: none;
+                        color: black;
+                  }
+                  @media (min-width: 767.98px) { .card-body {
+                  max-height: 205px; /* Adjust this value as needed */
+                  overflow: auto; /* Add a scrollbar if the content is too long */
+                  } 
+                  .card-body::-webkit-scrollbar {
+                  display: none;
+                  }
+            }
+            .heading-decord{
+                  font-weight: bold;
+                  padding: 20px;
+            }
+            </style>
       </head>
 
       <body>
@@ -89,7 +109,7 @@ if (return_navigate_error() === 400) {
             require_once __DIR__ . '/../../../layout/customer/header.php';
             ?>
             <section id="page">
-            <h1 style="text-align: center;">Customer book page</h1>
+            <h1 class="heading-decord" style="text-align: center;">Our collection</h1>
       <div class="container">
             <div class="row">
                   <div class="col-12 col-md-4">
@@ -149,106 +169,38 @@ if (return_navigate_error() === 400) {
                   }
                   echo '<div class="col-9 col-md-4">';
                   $row = $result->fetch_assoc();
-                  $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
-                  echo '<div class="card w-75 mx-auto d-block">';
-                  echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
-                  echo '<div class="card-body">';
-                  echo '<h5 class="card-title">' . $row['name'] . '</h5>';
-                  if($row['edition'] == 1){
-                        echo '<p class="card-text">' . $row['edition'] . 'rst edition</p>';
-                  }
-                  
-                  elseif($row['edition'] == 2){
-                        echo '<p class="card-text">' . $row['edition'] . 'nd edition</p>';
-                  }
-                  elseif($row['edition'] == 3){
-                        echo '<p class="card-text">' . $row['edition'] . 'rd edition</p>';
-                  }
-                  else{
-                        echo '<p class="card-text">' . $row['edition'] . 'th edition</p>';
-                  }
-                  // Output other fields as needed...
-                  echo '<p class="card-text">Written by: ' . $row['authorName'] . '</p>';
-                  echo '<p class="card-text text-warning">';
-                  if($row['avgRating'] <1){
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 1 && $row['avgRating'] <1.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 1.5 && $row['avgRating'] <2){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 2 && $row['avgRating'] <2.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 2.5 && $row['avgRating'] <3){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 3 && $row['avgRating'] <3.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 3.5 && $row['avgRating'] <4){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 4 && $row['avgRating'] <4.5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star"></i>';
-                  }
-                  elseif($row['avgRating'] >= 4.5 && $row['avgRating'] <5){
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-fill"></i>';
-                        echo '<i class="bi bi-star-half"></i>';
-                  }
-                  echo '</p>';
-                  echo '<p class="card-text">Digital copy: ' . $row['price'] . '$</p>';
-                  // echo '<div class="card-body d-flex justify-content-center align-items-center">' 
-                  // . '<a href="#" class="card-link" style="font-size: 30px;"> <i class="bi bi-cart"></i></a>'
-                  // . '<a href="#" class="card-link" style="font-size: 30px;"><i class="bi bi-heart"></i> </a>'
-                  // . '</div>';
-                  echo '<a
-                        name=""
-                        id=""
-                        class="btn btn-primary d-flex justify-content-center align-items-center"
-                        href="book-detail?bookID=' . normalizeURL(rawurlencode($row['id'])) . '"
-                        role="button"
-                        >Learn more</a>';
-
-                  echo '</div>';
-                  echo '</div>';
+                  // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
+                  $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
+                                                echo '<div class="card w-75 mx-auto d-block">';
+                                                 echo "<a href=\"book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
+                                                 echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
+                                                      echo "<div class=\"card-body\">";
+                                                            echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
+                                                            echo "<p class=\"author\">".$row["authorName"]."</p>";
+                                                            echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
+                                                            echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
+                                                            // $cnt = 1;
+                                                            // $res="";
+                                                            // while($cnt <= 5){
+                                                            //       if ($cnt > $row["star"]){
+                                                            //             if($cnt - $row["star"] > 0 && $cnt - $row["star"] < 1){
+                                                            //                   $res .= "<i class=\"bi bi-star-half\"></i>";
+                                                            //             }
+                                                            //             else{
+                                                            //                   $res .= "<i class=\"bi bi-star\"></i>";
+                                                            //             }
+                                                            //       }
+                                                            //       else {
+                                                            //             $res .= "<i class=\"bi bi-star-fill\"></i>";
+                                                            //       }
+                                                            //       $cnt++;
+                                                            // }
+                                                            echo '<span class="text-warning">'.displayRatingStars($row["star"]).'</span>';
+                                                            echo "(".$row["star"].")";
+                                                            
+                                                      echo "</div>";
+                                                echo "</a>";
+                                                echo "</div>";
 
                   echo '</div>';
                   if ($i % 3 == 0 || $i == $result2->num_rows) {

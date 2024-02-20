@@ -16,6 +16,6 @@ function return_navigate_error()
                   }
             }
       }
-      return 0;
+      return 200;
 }
 ?>

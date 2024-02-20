@@ -58,6 +58,7 @@ $(document).ready(function ()
                   }
             });
       });
+      fetchBookList();
 });
 
 function fetchBookList()
@@ -126,7 +127,7 @@ function fetchBookList()
                               );
                               trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
-                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].isbn }</td>`));
+                              trElem.append($(`<td class=\"align-middle text-nowrap\">${ data.query_result[0][i].isbn }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].ageRestriction }</td>`));
 
                               if (data.query_result[0][i].author.length)
@@ -136,11 +137,11 @@ function fetchBookList()
                                     {
                                           if (data.query_result[0][i].author.length === 1)
                                           {
-                                                div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                div.append($('<p>').addClass('mb-0').addClass('text-nowrap').text(data.query_result[0][i].author[j]));
                                           }
                                           else
                                           {
-                                                div.append($('<p>').addClass('mb-0').text(data.query_result[0][i].author[j]));
+                                                div.append($('<p>').addClass('mb-0').addClass('text-nowrap').text(data.query_result[0][i].author[j]));
                                           }
                                     }
                                     trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(div));
@@ -155,15 +156,15 @@ function fetchBookList()
                                     {
                                           if (data.query_result[0][i].category.length === 1)
                                           {
-                                                div.append($(`<p class='mb-0'>
-                                                      ${ data.query_result[0][i].category[j].name }
+                                                div.append($(`<p class='mb-0 text-nowrap'>
+                                                      ${ data.query_result[0][i].category[j].name }&nbsp;
                                                       <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
                                           }
                                           else
                                           {
-                                                div.append($(`<p>
-                                                      ${ data.query_result[0][i].category[j].name }
+                                                div.append($(`<p class='text-nowrap'>
+                                                      ${ data.query_result[0][i].category[j].name }&nbsp;
                                                       <i class="bi bi-question-circle help" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="${ data.query_result[0][i].category[j].description ? data.query_result[0][i].category[j].description : 'N/A' }"></i>
                                                 </p>`));
                                           }
@@ -177,26 +178,25 @@ function fetchBookList()
                                     $('<div>').addClass('d-flex').addClass('flex-column').append(
                                           $('<p>').text(data.query_result[0][i].publisher)
                                     ).append(
-                                          $('<p>').text(data.query_result[0][i].publishDate)
+                                          $('<p>').addClass('text-nowrap').text(data.query_result[0][i].publishDate)
                                     )
                               ));
 
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $('<div>').addClass('truncate').text(data.query_result[0][i].description))
                               );
+
                               if (data.query_result[0][i].avgRating)
-                                    trElem.append($('<td>').addClass('align-middle').append(
-                                          $(`<i class=\"bi bi-star-fill text-warning me-1\"></i>`)
-                                    ).append(
-                                          $(`<span>`).text(data.query_result[0][i].avgRating)
+                                    trElem.append($('<td>').addClass('align-middle col-1').append(
+                                          $(`<span class='text-nowrap'><span class='text-warning'>${ displayRatingStars(data.query_result[0][i].avgRating) }</span>&nbsp;(${ data.query_result[0][i].avgRating })</span>`)
                                     ));
                               else
                                     trElem.append($('<td>').addClass('align-middle').text('N/A'));
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $(`<div class="d-flex flex-column">`).append(
-                                          $(`<p>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
+                                          $(`<p class='text-nowrap'>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
-                                          $(`<p>E-book: ${ data.query_result[0][i].fileCopy.price } <a ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
+                                          $(`<p class='text-nowrap'>E-book: ${ data.query_result[0][i].fileCopy.price } <a title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? "read PDF file" : 'no PDF file' }\" ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>
                                           </a></p>`)
                                     )
@@ -205,13 +205,13 @@ function fetchBookList()
                               trElem.append(
                                     $(`<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
-                                                                  <i class=\"bi bi-pencil text-white\"></i>
+                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=${ data.query_result[0][i].id }' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                                  <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
-                                                            <button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm'>
+                                                            <button title=\"${ status ? 'deactivate book' : 'activate book' }\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ status ? 'Deactivate' : 'Activate' }\" onclick='${ status ? 'confirmDeactivateBook' : 'confirmActivateBook' }(\"${ data.query_result[0][i].id }\")' class='btn ${ status ? 'btn-danger' : 'btn-success' } ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class="bi bi-power text-white"></i>
                                                             </button>
-                                                            ${ data.query_result[0][i].can_delete ? `<button data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
+                                                            ${ data.query_result[0][i].can_delete ? `<button title=\"delete book\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\" onclick='confirmDeleteBook(\"${ data.query_result[0][i].id }\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm'>
                                                                   <i class=\"bi bi-trash text-white\"></i>
                                                             </button>`: '' }
                                                       </div>

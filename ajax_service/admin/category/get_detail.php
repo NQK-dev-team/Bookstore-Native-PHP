@@ -27,6 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
 
                   $stmt = $conn->prepare('select name,description from category where id = ?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select name,description from category where id = ?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('s', $id);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {

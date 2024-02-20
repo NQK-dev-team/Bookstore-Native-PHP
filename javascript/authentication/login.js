@@ -1,3 +1,8 @@
+$(document).ready(function ()
+{ 
+      $('#inputEmail').focus();
+});
+
 function loginHandler(e, user_type)
 {
       e.preventDefault();
@@ -11,35 +16,11 @@ function loginHandler(e, user_type)
             reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
       }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = email.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
-                  return;
-            }
-      }
 
       if (password === '')
       {
             reportCustomValidity($('#inputPassword').get(0), "Password field is empty!");
             return;
-      }
-      else if (password.length < 8)
-      {
-            reportCustomValidity($('#inputPassword').get(0), "Password must be at least 8 characters long!");
-            return;
-      }
-      else
-      {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
-            if (!regex.test(password))
-            {
-                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  return;
-            }
       }
 
       $('*').addClass('wait');
@@ -89,7 +70,7 @@ function loginHandler(e, user_type)
                         error_message.style.display = 'flex';
                   } else
                   {
-                        $('#error_message_content').text('err.responseJSON.error');
+                        $('#error_message_content').text(err.responseJSON.error);
                         const error_message = document.getElementById('login_fail');
                         error_message.style.display = 'flex';
                   }

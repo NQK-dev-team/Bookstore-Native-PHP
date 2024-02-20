@@ -2,20 +2,22 @@
 require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
       require_once __DIR__ . '/../../../error/400.php';
-} else if (return_navigate_error() === 403) {
+} else if ($return_status_code === 403) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
-} else {
+} else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
-      $_SESSION['update_book_id'] = null;
+      unset($_SESSION['update_book_id']);
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -127,8 +129,9 @@ if (return_navigate_error() === 400) {
                                                                               Browse
                                                                         </label>
                                                                   </div>
-                                                                  <p class="mt-2" id="pdfFileName"></p>
+                                                                  <p class="mt-1" id="pdfFileName"></p>
                                                                   <p id="pdfFileError1" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Invalid PDF file!</p>
+                                                                  <p id="pdfFileError2" class='text-danger mt-2 d-none'><i class="bi bi-exclamation-triangle"></i>&nbsp;Only submit 1 PDF file!</p>
                                                             </div>
                                                       </div>
                                                 </div>
@@ -137,7 +140,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </form>
                   </div>
-                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -148,7 +151,7 @@ if (return_navigate_error() === 400) {
                                           <div class='w-100 mt-2 mb-4'>
                                                 <label class="form-label" for='searchCategoryInput'>Search category:</label>
                                                 <form id="category_search_form" class="d-flex align-items-center w-100 search_form mx-auto" role="search">
-                                                      <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                      <button aria-label="Search for category" class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                             <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -169,7 +172,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -186,7 +189,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -202,7 +205,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

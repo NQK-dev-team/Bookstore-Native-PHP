@@ -36,7 +36,7 @@
 }
 
 .dropdownCategory {
-      width: 400px;
+      width: 350px;
 }
 
 .categories {
@@ -46,4 +46,16 @@
 
 .categoryHover:hover {
       background-color: #adadad;
+}
+
+@media only screen and (max-width:500px) {
+      .dropdownCategory {
+            width: 300px;
+      }
+}
+
+@media only screen and (max-width:320px) {
+      .dropdownCategory {
+            width: 250px;
+      }
 }

@@ -5,6 +5,13 @@ require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 require_once __DIR__ . '/../../tool/php/random_generator.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email']) && isset($_POST['type'])) {
             try {
@@ -15,10 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if (!$email) {
                         http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
-                        exit;
-                  } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Invalid email format!']);
                         exit;
                   }
 
@@ -46,10 +49,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Using prepare statement (preventing SQL injection)
                   if ($user_type === "admin") {
                         $stmt = $conn->prepare("select appUser.id from appUser join admin on admin.id=appUser.id where appUser.email=?");
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select appUser.id from appUser join admin on admin.id=appUser.id where appUser.email=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $email);
                         $isSuccess = $stmt->execute();
                   } else if ($user_type === "customer") {
                         $stmt = $conn->prepare("select appUser.id from appUser join customer on customer.id=appUser.id where appUser.email=?");
+                        if (!$stmt) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Query `select appUser.id from appUser join customer on customer.id=appUser.id where appUser.email=?` preparation failed!']);
+                              $conn->close();
+                              exit;
+                        }
                         $stmt->bind_param('s', $email);
                         $isSuccess = $stmt->execute();
                   }
@@ -66,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               if (!session_start())
                                     throw new Exception('Error occurred during starting session!');
                               $_SESSION['recovery_code'] = $code;
-                              $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                              $_SESSION['recovery_code_send_time'] = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                               $_SESSION['recovery_email'] = $email;
                         }
                   } else {

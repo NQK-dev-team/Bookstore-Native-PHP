@@ -7,6 +7,8 @@ $(document).ready(function ()
       });
 
       initToolTip();
+
+      $('#inputName').focus();
 });
 
 function signUpHandler(event)
@@ -22,6 +24,7 @@ function signUpHandler(event)
       const card = encodeData(document.getElementById('inputCard').value);
       const refEmail = encodeData(document.getElementById('inputRefEmail').value);
       const gender = encodeData(document.getElementById('inputGender').value);
+      const confirmPassword = encodeData(document.getElementById('confirmPassword').value);
 
       if (name === '')
       {
@@ -118,18 +121,30 @@ function signUpHandler(event)
       }
       else
       {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/;
             if (!regex.test(password))
             {
-                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  reportCustomValidity($('#inputPassword').get(0), "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!");
                   return;
             }
+      }
+
+      if (confirmPassword === '')
+      {
+            reportCustomValidity($('#confirmPassword').get(0), "Confirm password field is empty!");
+            return;
+      }
+      else if (confirmPassword !== password)
+      {
+            reportCustomValidity($('#confirmPassword').get(0), "Confirm password does not match!");
+            return;
       }
 
       if (refEmail !== '')
       {
             const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(refEmail))
+            const localEmail = refEmail.replace(/%40/g, '@');
+            if (!regex.test(localEmail))
             {
                   reportCustomValidity($('#inputRefEmail').get(0), "Referrer email format invalid!");
                   return;
@@ -148,7 +163,7 @@ function signUpHandler(event)
       $.ajax({
             url: '/ajax_service/authentication/signup_handler.php',
             method: 'POST',
-            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, confirmPassword: confirmPassword, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
             dataType: 'json',
             success: function (data)
             {

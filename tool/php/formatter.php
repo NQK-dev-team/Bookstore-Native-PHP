@@ -25,4 +25,26 @@ function MDYDateFormat($inputDate)
 
       return $formattedDate;
 }
+
+function splitOrderCode($str)
+{
+      // Split the string into chunks of 4 characters
+      $chunks = chunk_split($str, 4, '-');
+
+      // Remove the trailing hyphen
+      $chunks = rtrim($chunks, '-');
+
+      return $chunks;
+}
+
+function formatOrderTime($inputTime)
+{
+      // Create a DateTime object from the input date
+      $dateTime = new DateTime($inputTime);
+
+      // Format the date as "Month day, year"
+      $formattedTime = $dateTime->format("F j, Y H:i:s");
+
+      return $formattedTime;
+}
 ?>

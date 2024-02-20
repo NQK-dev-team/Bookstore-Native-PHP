@@ -2,34 +2,19 @@
 require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
       require_once __DIR__ . '/../../../error/400.php';
-} else if (return_navigate_error() === 403) {
+} else if ($return_status_code === 403) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else {
-      require_once __DIR__. '/../../config/db_connection.php';
-      require_once __DIR__. '/../../tool/php/converter.php';
-      require_once __DIR__. '/../../tool/php/formatter.php';
-      try{
-            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
-
-            if (!$conn) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../error/500.php';
-                  exit;
-            }
-      }
-      catch (Exception $e){
-            http_response_code(500);
-            require_once __DIR__ . '/../../error/500.php';
-            exit;
-      }
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php

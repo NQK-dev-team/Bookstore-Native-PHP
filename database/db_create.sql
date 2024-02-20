@@ -6,9 +6,12 @@ use bookstore;
 
 -- Important --
 create table pointConfig(
-	pointConversionRate double primary key
+	locker char(1) primary key,
+	pointConversionRate double not null,
+    check (locker='X'),
+    check (pointConversionRate>0)
 );
-insert into pointConfig values(10);
+insert into pointConfig values('X',10);
 -- Important --
 
 create table category(
@@ -24,7 +27,7 @@ create table appUser(
     address varchar(1000),
     phone varchar(10) unique,
     email varchar(255) unique,
-    password varchar(255) not null,
+    password varchar(255),
     check(length(password)>=8),
     imagePath varchar(1000),
     gender varchar(1) not null,
@@ -39,10 +42,11 @@ create table admin(
 create table customer(
 	id varchar(20) primary key,
     cardNumber varchar(16),
-    point double default 0,
+    point double default 0 not null,
     check(point>=0),
     referrer varchar(20),
     status boolean not null default true,
+    deleteTime datetime, -- when current datetime>=delete time, set email and phone to null
     foreign key (id) references appUser(id) on delete cascade on update cascade,
     foreign key (referrer) references customer(id) on delete set null on update cascade
 );
@@ -137,8 +141,10 @@ create table customerOrder(
     totalDiscount double not null,
     check(totalDiscount>=0),
     customerID varchar(20) not null,
+    orderCode varchar(16) unique,
     foreign key (customerID) references customer(id) on delete cascade on update cascade,
-    check((status and purchaseTime is not null) or (!status and purchaseTime is null))
+    check((status and purchaseTime is not null) or (!status and purchaseTime is null)),
+    check((status and orderCode is not null) or (!status and orderCode is null))
 );
 
 create table physicalOrder(
@@ -210,7 +216,8 @@ create table eventDiscount(
     endDate date not null,
     check(startDate<=endDate),
     applyForAll boolean default false, -- true means all the books are discounted by applying this coupon, false means only a number of books are discounted
-    foreign key (id) references discount(id) on delete cascade on update cascade
+    foreign key (id) references discount(id) on delete cascade on update cascade,
+    isNotify boolean not null default false -- use for cron job to know whether or not it should send an email to notify all the customers
 );
 
 create table eventApply(

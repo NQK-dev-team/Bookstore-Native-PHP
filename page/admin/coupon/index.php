@@ -2,18 +2,20 @@
 require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
       require_once __DIR__ . '/../../../error/400.php';
-} else if (return_navigate_error() === 403) {
+} else if ($return_status_code === 403) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
-} else {
+} else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
 
-      $_SESSION['update_book_id'] = null;
+      unset($_SESSION['update_book_id']);
 
       require_once __DIR__ . '/../../../config/db_connection.php';
 
@@ -27,6 +29,12 @@ if (return_navigate_error() === 400) {
             }
 
             $stmt = $conn->prepare("SELECT COUNT(*) as total FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true");
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -41,6 +49,12 @@ if (return_navigate_error() === 400) {
             $stmt->close();
 
             $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true order by startDate desc,endDate desc,discount,id limit 10");
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -62,8 +76,14 @@ if (return_navigate_error() === 400) {
                   if ($row['applyForAll']) {
                         $elem .= "<td class='align-middle col-5'><strong>All Books</strong></td>";
                   } else {
-                        $elem .= "<td class='align-middle col-5'><div class='d-flex flex-column'>";
+                        $elem .= "<td class='align-middle col-5'><div class='d-flex flex-column book-list'>";
                         $sub_stmt = $conn->prepare('SELECT book.id,book.name,book.edition,book.status FROM book join eventApply on book.id=eventApply.bookID where eventApply.eventID=? order by book.name,book.edition,book.id');
+                        if (!$sub_stmt) {
+                              http_response_code(500);
+                              require_once __DIR__ . '/../../../error/500.php';
+                              $conn->close();
+                              exit;
+                        }
                         $sub_stmt->bind_param('s', $row['id']);
                         $isSuccess = $sub_stmt->execute();
                         if (!$isSuccess) {
@@ -88,6 +108,12 @@ if (return_navigate_error() === 400) {
                   }
 
                   $sub_stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result');
+                  if (!$sub_stmt) {
+                        http_response_code(500);
+                        require_once __DIR__ . '/../../../error/500.php';
+                        $conn->close();
+                        exit;
+                  }
                   $sub_stmt->bind_param('s', $row['id']);
                   $isSuccess = $sub_stmt->execute();
                   if (!$isSuccess) {
@@ -103,10 +129,10 @@ if (return_navigate_error() === 400) {
                   if ($sub_result['result']) {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
+                              <button title='Edit coupon' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
-                              <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                              <button title='Deactivate coupon' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                     <i class=\"bi bi-power text-white\"></i>
                               </button>
                         </div>
@@ -114,13 +140,13 @@ if (return_navigate_error() === 400) {
                   } else {
                         $elem .= "<td class='align-middle col-1'>
                         <div class='d-flex flex-lg-row flex-column'>
-                              <button class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
+                              <button title='Edit coupon' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
                                     <i class=\"bi bi-pencil text-white\"></i>
                               </button>
-                              <button onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                              <button title='Deactivate coupon' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                     <i class=\"bi bi-power text-white\"></i>
                               </button>
-                              <button onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
+                              <button title='Delete coupon' onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
                                     <i class=\"bi bi-trash text-white\"></i>
                               </button>
                         </div>
@@ -132,6 +158,12 @@ if (return_navigate_error() === 400) {
             $stmt->close();
 
             $stmt = $conn->prepare('select name from category order by name,id');
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -156,7 +188,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -181,7 +213,7 @@ if (return_navigate_error() === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Discount Coupon List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title='search coupon' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -223,7 +255,7 @@ if (return_navigate_error() === 400) {
                               <div class="mt-2">
                                     <div class="form-check form-switch">
                                           <label class="form-check-label text-success" for="flexSwitchCheckDefault" id="switch_label">Choose active coupons</label>
-                                          <input class="form-check-input pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked onchange="updateSwitchLabel()">
+                                          <input title='Coupon status' class="form-check-input pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked onchange="updateSwitchLabel()">
                                     </div>
                               </div>
                         </div>
@@ -273,7 +305,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -289,7 +321,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -306,7 +338,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -323,7 +355,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -340,7 +372,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -361,7 +393,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -382,7 +414,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -394,7 +426,7 @@ if (return_navigate_error() === 400) {
                                                 <div>
                                                       <label class="form-label" for='searchBookInput'>Search Books:</label>
                                                       <form id="book_search_form" class="d-flex align-items-center w-100" role="search">
-                                                            <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                                            <button title='search book' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                                   <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -415,16 +447,18 @@ if (return_navigate_error() === 400) {
                                                                               Select category
                                                                         </button>
                                                                         <ul class="dropdown-menu dropdownCategory">
-                                                                              <div class="container">
+                                                                              <li class="container">
                                                                                     <form id='searchCategoryForm'>
                                                                                           <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
                                                                                     </form>
-                                                                              </div>
-                                                                              <div class='categories w-100 container mt-2'>
-                                                                                    <?php
-                                                                                    echo $categoryList;
-                                                                                    ?>
-                                                                              </div>
+                                                                              </li>
+                                                                              <li>
+                                                                                    <ul class='categories w-100 container mt-2'>
+                                                                                          <?php
+                                                                                          echo $categoryList;
+                                                                                          ?>
+                                                                                    </ul>
+                                                                              </li>
                                                                         </ul>
                                                                   </div>
                                                             </div>
@@ -453,7 +487,7 @@ if (return_navigate_error() === 400) {
                                                 <table class="table table-hover border border-2 table-bordered mt-4 w-100">
                                                       <thead>
                                                             <tr>
-                                                                  <th scope="col" class="text-center"><input type='checkbox' class='pointer' id='checkAll' onclick="selectAllBook(event)"></th>
+                                                                  <th scope="col" class="text-center"><input title='Select all books' type='checkbox' class='pointer' id='checkAll' onclick="selectAllBook(event)"></th>
                                                                   <th scope="col">#</th>
                                                                   <th scope="col">Name</th>
                                                                   <th scope="col">Edition</th>
@@ -489,7 +523,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -506,7 +540,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -522,7 +556,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -539,7 +573,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -555,7 +589,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -563,7 +597,7 @@ if (return_navigate_error() === 400) {
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
-                                          <p>Changing from applying to all books to only a number of books can cause data anomalies, do you really want to do this?</p>
+                                          <p>Changing books applied for this coupon can cause incorrect data presentation when performing statistical analysis, do you really want to do this?</p>
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>

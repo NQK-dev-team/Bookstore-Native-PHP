@@ -8,7 +8,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                   <div class="container-fluid px-0">
                         <a class="navbar-brand d-flex align-items-center ms-2" href="/admin/">
                               <!-- <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" id="logo_img"></img> -->
-                              <img src="/image/logo.png" id="logo_img"></img>
+                              <img src="/image/logo.png" id="logo_img" title="NQK Bookstore demo logo"></img>
                               <p class="mb-0 ms-2">NQK Bookstore</p>
                         </a>
                         <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,24 +56,24 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           </ul>
                                     </li>
                                     <?php
-                                    if (!check_session())
+                                    if (!check_session()) {
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/admin/authentication/" id="policy_nav">Policy</a>
                                                 </li>';
-                                    else
-                                          echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
-                                          </li>";
-                                    ?>
-                                    <?php
-                                    if (!check_session())
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/admin/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
-                                    else
+                                    } else {
                                           echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Profile</a>
+                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
                                           </li>";
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Account</a>
+                                          </li>";
+                                          echo "<li class=\"nav-item ms-2\">
+                                                <a class=\"nav-link fs-5 text-danger text-nowrap\" href=\"/ajax_service/authentication/logout\">Sign Out</a>
+                                          </li>";
+                                    }
                                     ?>
                               </ul>
                         </div>

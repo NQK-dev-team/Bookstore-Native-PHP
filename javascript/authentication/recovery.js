@@ -5,6 +5,10 @@ $(document).ready(function ()
       {
             window.location.href = "/authentication/";
       });
+
+      initToolTip();
+
+      $('#inputEmail').focus();
 });
 
 let globalEmail = null;
@@ -19,16 +23,6 @@ function enterEmail(e, user_type)
       {
             reportCustomValidity($('#inputEmail').get(0), "Email field is empty!");
             return;
-      }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            const localEmail = email.replace(/%40/g, '@');
-            if (!regex.test(localEmail))
-            {
-                  reportCustomValidity($('#inputEmail').get(0), "Email format invalid!");
-                  return;
-            }
       }
 
       $('*').addClass('wait');
@@ -58,7 +52,7 @@ function enterEmail(e, user_type)
                         const error_message = document.getElementById('recovery_fail_1');
                         error_message.style.display = 'none';
 
-                        globalEmail = email;
+                        globalEmail = email.replace(/%40/g, '@');
                         $('#recovery_email_form').css('display', 'none');
                         $('#recovery_password_form').css('display', 'none');
                         $('#recovery_code_form').css('display', 'flex');
@@ -95,17 +89,6 @@ function requestRecoveryCode()
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
-      }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(globalEmail))
-            {
-                  $('#error_message_content_2').text('Email format invalid!');
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
-                  return;
-            }
       }
 
       $('*').addClass('wait');
@@ -170,17 +153,6 @@ function enterCode(e)
             const error_message = document.getElementById('recovery_fail_2');
             error_message.style.display = 'flex';
             return;
-      }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(globalEmail))
-            {
-                  $('#error_message_content_2').text('Email format invalid!');
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
-                  return;
-            }
       }
 
       if (code === '')
@@ -266,17 +238,6 @@ function changePassword(e, user_type)
             error_message.style.display = 'flex';
             return;
       }
-      else
-      {
-            const regex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
-            if (!regex.test(globalEmail))
-            {
-                  $('#error_message_content_2').text('Email format invalid!');
-                  const error_message = document.getElementById('recovery_fail_2');
-                  error_message.style.display = 'flex';
-                  return;
-            }
-      }
 
       if (password === '')
       {
@@ -290,10 +251,10 @@ function changePassword(e, user_type)
       }
       else
       {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
+            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/;
             if (!regex.test(password))
             {
-                  reportCustomValidity($('#inputNewPassword').get(0), "New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
+                  reportCustomValidity($('#inputNewPassword').get(0), "New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!");
                   return;
             }
       }
@@ -303,26 +264,9 @@ function changePassword(e, user_type)
             reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm new password field is empty!");
             return;
       }
-      else if (confirmPassword.length < 8)
+      else if (confirmPassword != password)
       {
-            reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm password must be at least 8 characters long!");
-            return;
-      }
-      else
-      {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/;
-            if (!regex.test(confirmPassword))
-            {
-                  reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!");
-                  return;
-            }
-      }
-
-      if (password !== confirmPassword)
-      {
-            $('#error_message_content_3').text('Passwords are not matched!');
-            const error_message = document.getElementById('recovery_fail_3');
-            error_message.style.display = 'flex';
+            reportCustomValidity($('#inputConfirmNewPassword').get(0), "Confirm new password does not match!");
             return;
       }
 

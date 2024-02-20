@@ -2,10 +2,11 @@
 require_once __DIR__ . '../../../../tool/php/session_check.php';
 
 if (check_session()) header('Location: /');
+unset($_SESSION['update_book_id']);
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
       <?php
@@ -43,7 +44,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group">
                               <label for="inputEmail" class="fs-4 fw-medium">Email</label>
-                              <input autocomplete="on" type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email">
+                              <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" autocomplete="email">
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
                         <div class="mt-auto my-3 mx-auto">
@@ -68,7 +69,7 @@ if (check_session()) header('Location: /');
                         </div>
                         <strong class="mb-3" id="user_recovery_email">A recovery code has been sent to your email</strong>
                         <div class="form-group">
-                              <input autocomplete="on" type="text" class="form-control" id="inputRecoveryCode" placeholder="Enter recovery code" name="recoveryCode">
+                              <input autocomplete="one-time-code" type="text" class="form-control" id="inputRecoveryCode" placeholder="Enter recovery code" name="recoveryCode">
                         </div>
                         <div class="d-flex align-items-center mt-3">
                               <p class="mb-0">Didn't receive the code?</p>
@@ -98,11 +99,11 @@ if (check_session()) header('Location: /');
                         </div>
                         <div class="form-group">
                               <label for="inputNewPassword" class="fs-4 fw-medium">New password</label>
-                              <input autocomplete="on" type="password" class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword">
+                              <input autocomplete="new-password" type="password" class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
                         </div>
                         <div class="form-group mt-3">
                               <label for="inputConfirmNewPassword" class="fs-4 fw-medium">Confirm new password</label>
-                              <input autocomplete="on" type="password" class="form-control" id="inputConfirmNewPassword" placeholder="Confirm new password" name="confirmNewPassword">
+                              <input autocomplete="new-password" type="password" class="form-control" id="inputConfirmNewPassword" placeholder="Confirm new password" name="confirmNewPassword">
                         </div>
                         <button type="button" class="btn btn-secondary btn-sm mx-auto mt-3" onclick="backToGetCode()">Back to recovery code</button>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
@@ -112,7 +113,7 @@ if (check_session()) header('Location: /');
                   </form>
             </div>
 
-            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="modalLabel">
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">
@@ -136,6 +137,7 @@ if (check_session()) header('Location: /');
       <script src="/tool/js/encoder.js"></script>
       <script src="/tool/js/input_validity.js"></script>
       <script src="/javascript/authentication/recovery.js"></script>
+      <script src="/tool/js/tool_tip.js"></script>
 </body>
 
 </html>

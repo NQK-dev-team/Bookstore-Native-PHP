@@ -5,6 +5,13 @@ require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->load();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (
             isset($_POST['email']) &&
@@ -22,10 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
-                  } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Invalid email format!']);
-                        exit;
                   }
 
                   if (!$password) {
@@ -37,12 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         echo json_encode(['error' => 'New password must be at least 8 characters long!']);
                         exit;
                   } else {
-                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $password);
+                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,72}$/', $password);
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
                               http_response_code(400);
-                              echo json_encode(['error' => 'New password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
+                              echo json_encode(['error' => 'New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!']);
                               exit;
                         }
                   }
@@ -51,24 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'No confirm password provided!']);
                         exit;
-                  } else if (strlen($confirmPassword) < 8) {
+                  } else if ($confirmPassword !== $password) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Confirm password must be at least 8 characters long!']);
-                        exit;
-                  } else {
-                        $matchResult = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#@$!%*?&])[A-Za-z\d#@$!%*?&]{8,}$/', $confirmPassword);
-                        if ($matchResult === false) {
-                              throw new Exception('Error occurred during confirm password format check!');
-                        } else if ($matchResult === 0) {
-                              http_response_code(400);
-                              echo json_encode(['error' => 'Confirm password must contain at least one uppercase letter, one lowercase letter, one number and one special character!']);
-                              exit;
-                        }
-                  }
-
-                  if ($confirmPassword !== $password) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Passwords are not matched!']);
+                        echo json_encode(['error' => 'Confirm new password does not match!']);
                         exit;
                   }
 
@@ -83,6 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
+                  if (!session_start())
+                        throw new Exception('Error occurred during starting session!');
+
                   if (!isset($_SESSION['recovery_email'], $_SESSION['recovery_state'], $_SESSION['recovery_state_set_time']) || !$_SESSION['recovery_email'] || !$_SESSION['recovery_state'] || !$_SESSION['recovery_state_set_time']) {
                         http_response_code(500);
                         echo json_encode(['error' => 'Server can\'t find information about client\'s recovery request!']);
@@ -94,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               exit;
                         }
 
-                        $current_time = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                        $current_time = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                         $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
 
                         if (abs($interval) > 300) {
@@ -119,8 +110,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   }
 
                   $hashedPassword = hash_password($password);
+                  if ($hashedPassword === false) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing failed!']);
+                        $conn->close();
+                        exit;
+                  } else if (is_null($hashedPassword)) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Password hashing algorithm invalid!']);
+                        $conn->close();
+                        exit;
+                  }
                   // Using prepare statement (preventing SQL injection)
                   $stmt = $conn->prepare("UPDATE appUser SET password=? WHERE email=?");
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `UPDATE appUser SET password=? WHERE email=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
                   $stmt->bind_param('ss', $hashedPassword, $email);
                   $isSuccess = $stmt->execute();
 

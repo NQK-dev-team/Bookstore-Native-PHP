@@ -2,20 +2,23 @@
 require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 
-if (return_navigate_error() === 400) {
+$return_status_code = return_navigate_error();
+
+if ($return_status_code === 400) {
       http_response_code(400);
       require_once __DIR__ . '/../../../error/400.php';
-} else if (return_navigate_error() === 403) {
+} else if ($return_status_code === 403) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
-} else {
+} else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
-      $_SESSION['update_book_id'] = null;
+      unset($_SESSION['update_book_id']);
 
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
+      require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 
       try {
             // Connect to MySQL
@@ -31,6 +34,12 @@ if (return_navigate_error() === 400) {
             $elem = '';
 
             $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -55,10 +64,16 @@ if (return_navigate_error() === 400) {
                               $elem .= "<td class=\"align-middle\"><img {$row['imagePath']} alt=\"book image\" class=\"book_image\"></img></td>";
                               $elem .= "<td class=\"col-2 align-middle\">{$row['name']}</td>";
                               $elem .= "<td class=\"align-middle\">{$row['edition']}</td>";
-                              $elem .= "<td class=\"align-middle\">{$row['isbn']}</td>";
+                              $elem .= "<td class=\"align-middle text-nowrap\">{$row['isbn']}</td>";
                               $elem .= "<td class=\"align-middle\">{$row['ageRestriction']}</td>";
 
                               $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -75,11 +90,11 @@ if (return_navigate_error() === 400) {
                                           <div class='d-flex flex-column'>";
                                           while ($sub_row = $sub_result->fetch_assoc()) {
                                                 if ($sub_result->num_rows === 1)
-                                                      $elem .= "<p class='mb-0'>
+                                                      $elem .= "<p class='mb-0 text-nowrap'>
                                                       {$sub_row['authorName']}
                                                 </p>";
                                                 else
-                                                      $elem .= "<p>
+                                                      $elem .= "<p class='text-nowrap'>
                                                       {$sub_row['authorName']}
                                                 </p>";
                                           }
@@ -92,6 +107,12 @@ if (return_navigate_error() === 400) {
                               $sub_stmt->close();
 
                               $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -109,13 +130,13 @@ if (return_navigate_error() === 400) {
                                           while ($sub_row = $sub_result->fetch_assoc()) {
                                                 $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
                                                 if ($sub_result->num_rows === 1)
-                                                      $elem .= "<p class='mb-0'>
-                                                      {$sub_row['name']}
+                                                      $elem .= "<p class='mb-0 text-nowrap'>
+                                                      {$sub_row['name']}&nbsp;
                                                       <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
                                                 </p>";
                                                 else
-                                                      $elem .= "<p>
-                                                      {$sub_row['name']}
+                                                      $elem .= "<p class='text-nowrap'>
+                                                      {$sub_row['name']}&nbsp;
                                                       <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
                                                 </p>";
                                           }
@@ -132,19 +153,19 @@ if (return_navigate_error() === 400) {
                                           <p>
                                                 {$row['publisher']}
                                           </a>
-                                          <p>
+                                          <p class='text-nowrap'>
                                                 {$row['publishDate']}   
                                           </p>
                                     </div>
                               </td>";
                               $row['description'] = $row['description'] ? $row['description'] : 'N/A';
                               $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$row['description']}</div></td>";
-                              if ($row['avgRating'])
-                                    $elem .= "<td class=\"align-middle\">
-                                          <i class=\"bi bi-star-fill text-warning\"></i>
-                                          <span>{$row['avgRating']}</span>
+                              if ($row['avgRating']) {
+                                    $func_res = displayRatingStars($row['avgRating']);
+                                    $elem .= "<td class=\"align-middle col-1\">
+                                          <span class='text-nowrap'><span class='text-warning'>{$func_res}</span>&nbsp;({$row['avgRating']})</span>
                                     </td>";
-                              else
+                              } else
                                     $elem .= "<td class=\"align-middle\">
                                           N/A
                                     </td>";
@@ -152,6 +173,12 @@ if (return_navigate_error() === 400) {
                               $elem .= "<td class=\"col-1 align-middle\">
                                     <div class='d-flex flex-column'>";
                               $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if ($isSuccess) {
@@ -160,9 +187,9 @@ if (return_navigate_error() === 400) {
                                           $sub_row = $sub_result->fetch_assoc();
                                           $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
                                           $sub_row['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
-                                          $elem .= "<p>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
+                                          $elem .= "<p class='text-nowrap'>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
                                     } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p>Physical: N/A (in stock: N/A)</p>";
+                                          $elem .= "<p class='text-nowrap'>Physical: N/A (in stock: N/A)</p>";
                               } else {
                                     http_response_code(500);
                                     require_once __DIR__ . '/../../../error/500.php';
@@ -174,6 +201,12 @@ if (return_navigate_error() === 400) {
                               $sub_stmt->close();
 
                               $sub_stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('s', $id);
                               $isSuccess = $sub_stmt->execute();
                               if ($isSuccess) {
@@ -185,11 +218,11 @@ if (return_navigate_error() === 400) {
                                           $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
                                           $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
                                           $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $elem .= "<p>E-book: {$sub_row['price']} <a $target {$sub_row['filePath']} alt='$alt'>
+                                          $elem .= "<p class='text-nowrap'>E-book: {$sub_row['price']} <a title='read PDF file' $target {$sub_row['filePath']} alt='$alt'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
                                           </a></p>";
                                     } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p>E-book: N/A <a href='#' alt='No PDF file'>
+                                          $elem .= "<p class='text-nowrap'>E-book: N/A <a title='no PDF file' href='#' alt='No PDF file'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
                                           </a></p>";
                               } else {
@@ -205,6 +238,12 @@ if (return_navigate_error() === 400) {
 
                               $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
     or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
+                              if (!$sub_stmt) {
+                                    http_response_code(500);
+                                    require_once __DIR__ . '/../../../error/500.php';
+                                    $conn->close();
+                                    exit;
+                              }
                               $sub_stmt->bind_param('ss', $id, $id);
                               $isSuccess = $sub_stmt->execute();
                               if (!$isSuccess) {
@@ -220,10 +259,10 @@ if (return_navigate_error() === 400) {
                                     if ($sub_result['result'])
                                           $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
-                                                                  <i class=\"bi bi-pencil text-white\"></i>
+                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                                  <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
-                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                                                            <button title='deactivate book' onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                                                   <i class=\"bi bi-power text-white\"></i>
                                                             </button>
                                                       </div>
@@ -231,13 +270,13 @@ if (return_navigate_error() === 400) {
                                     else
                                           $elem .= "<td class='align-middle col-1'>
                                                       <div class='d-flex flex-lg-row flex-column'>
-                                                            <a class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\">
-                                                                  <i class=\"bi bi-pencil text-white\"></i>
+                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
+                                                                  <i class=\"bi bi-info-circle text-white\"></i>
                                                             </a>
-                                                            <button onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
+                                                            <button title='deactivate book' onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
                                                                   <i class=\"bi bi-power text-white\"></i>
                                                             </button>
-                                                            <button onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
+                                                            <button title='delete book' onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
                                                                   <i class=\"bi bi-trash text-white\"></i>
                                                             </button>
                                                       </div>
@@ -250,6 +289,12 @@ if (return_navigate_error() === 400) {
             $stmt->close();
 
             $stmt = $conn->prepare('select count(*) as totalBook from book where status=1');
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -265,6 +310,12 @@ if (return_navigate_error() === 400) {
             $stmt->close();
 
             $stmt = $conn->prepare('select name from category order by name,id');
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -288,7 +339,7 @@ if (return_navigate_error() === 400) {
 ?>
 
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
 
       <head>
             <?php
@@ -313,7 +364,7 @@ if (return_navigate_error() === 400) {
                         <h1 class='fs-2 mx-auto mt-3'>Book List</h1>
                         <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <button title='submit search form' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                           <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
                                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -338,16 +389,18 @@ if (return_navigate_error() === 400) {
                                                       Select category
                                                 </button>
                                                 <ul class="dropdown-menu dropdownCategory">
-                                                      <div class="container">
+                                                      <li class="container">
                                                             <form id='searchCategoryForm'>
                                                                   <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
                                                             </form>
-                                                      </div>
-                                                      <div class='categories w-100 container mt-2'>
-                                                            <?php
-                                                            echo $categoryList;
-                                                            ?>
-                                                      </div>
+                                                      </li>
+                                                      <li>
+                                                            <ul class='categories w-100 container mt-2'>
+                                                                  <?php
+                                                                  echo $categoryList;
+                                                                  ?>
+                                                            </ul>
+                                                      </li>
                                                 </ul>
                                           </div>
                                     </div>
@@ -369,7 +422,7 @@ if (return_navigate_error() === 400) {
                               <div class="mt-2">
                                     <div class="form-check form-switch">
                                           <label class="form-check-label text-success" for="flexSwitchCheckDefault" id="switch_label">Choose active books</label>
-                                          <input class="form-check-input pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked onchange="updateSwitchLabel()">
+                                          <input title='Book status' class="form-check-input pointer" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked onchange="updateSwitchLabel()">
                                     </div>
                               </div>
                         </div>
@@ -382,7 +435,7 @@ if (return_navigate_error() === 400) {
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Edition</th>
                                                 <th scope="col">ISBN-13</th>
-                                                <th scope="col">Age Restriction</th>
+                                                <th scope="col" class='text-nowrap'>Age Restriction</th>
                                                 <th scope="col">Author</th>
                                                 <th scope="col">Category</th>
                                                 <th scope="col">Publisher</th>
@@ -426,7 +479,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -442,7 +495,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -459,7 +512,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -476,7 +529,7 @@ if (return_navigate_error() === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -501,6 +554,7 @@ if (return_navigate_error() === 400) {
             <script src="/javascript/admin/book/book_list.js"></script>
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
+            <script src="/tool/js/ratingStars.js"></script>
       </body>
 
       </html>

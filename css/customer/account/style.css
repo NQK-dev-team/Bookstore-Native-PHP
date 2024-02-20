@@ -1,0 +1,81 @@
+.block {
+      width: 80%;
+}
+
+.custom_image {
+      max-width: 300px;
+      height: auto;
+}
+
+#personalInfoForm {
+      display: flex;
+}
+
+#passwordForm {
+      display: none;
+}
+
+#historyPurchase {
+      display: none;
+}
+
+#otherTab {
+      display: none;
+}
+
+#search_order {
+      padding-left: 35px !important;
+}
+
+.search_form {
+      max-width: 500px;
+}
+
+.books {
+      max-height: 300px !important;
+      overflow: auto;
+}
+
+.modal-xl-custom {
+      max-width: 85%;
+}
+
+.book_image {
+      width: 100%;
+      max-width: 125px;
+      height: auto;
+      min-width: 80px;
+}
+
+.truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 10;
+      /* Number of lines to show before ellipsis */
+      -webkit-box-orient: vertical;
+}
+
+@media only screen and (max-width:767px) {
+      .books {
+            max-height: 250px !important;
+      }
+
+      .modal-xl-custom {
+            max-width: 90%;
+      }
+}
+
+@media only screen and (max-width:575px) {
+      .block {
+            width: 90%;
+      }
+
+      .books {
+            max-height: 200px !important;
+      }
+
+      .modal-xl-custom {
+            max-width: 95%;
+      }
+}
