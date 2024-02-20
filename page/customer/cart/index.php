@@ -11,6 +11,34 @@ if ($return_status_code === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else {
+      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+      require_once __DIR__ . '/../../../config/db_connection.php';
+      require_once __DIR__ . '/../../../tool/php/converter.php';
+
+      try{
+            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
+
+            // Check connection
+            if (!$conn) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  exit;
+            }
+
+            $stmt = $conn->prepare('');
+            if (!$stmt) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
+
+            $conn->close();
+      } catch (Exception $e) {
+            http_response_code(500);
+            require_once __DIR__ . '/../../../error/500.php';
+            exit;
+      }
 ?>
 
       <!DOCTYPE html>
@@ -26,6 +54,7 @@ if ($return_status_code === 400) {
             <meta name="author" content="Quang Nguyen">
             <meta name="description" content="Cart of a customer before checkout">
             <title>Cart</title>
+            <?php storeToken(); ?>
 
       </head>
 
