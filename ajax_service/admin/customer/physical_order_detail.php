@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $stmt = $conn->prepare('select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
                   from book join physicalOrderContain on physicalOrderContain.bookID=book.id
+                  join physicalOrder on physicalOrder.id=physicalOrderContain.orderID
                   join physicalCopy on physicalCopy.id=book.id
                   join customerOrder on customerOrder.id=physicalOrderContain.orderID
                   where customerOrder.orderCode=? and customerOrder.customerID=? and customerOrder.status=true order by name,book.id');
@@ -65,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         http_response_code(500);
                         echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
                   from book join physicalOrderContain on physicalOrderContain.bookID=book.id
+                  join physicalOrder on physicalOrder.id=physicalOrderContain.orderID
                   join physicalCopy on physicalCopy.id=book.id
                   join customerOrder on customerOrder.id=physicalOrderContain.orderID
                   where customerOrder.orderCode=? and customerOrder.customerID=? and customerOrder.status=true order by name,book.id` preparation failed!']);

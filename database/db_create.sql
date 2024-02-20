@@ -149,7 +149,8 @@ create table customerOrder(
 
 create table physicalOrder(
 	id varchar(20) primary key,
-    foreign key (id) references customerOrder(id) on delete cascade on update cascade
+    foreign key (id) references customerOrder(id) on delete cascade on update cascade,
+	destinationAddress varchar(1000) not null
 );
 
 create table fileOrder(
@@ -171,7 +172,6 @@ create table physicalOrderContain(
     primary key(bookID,orderID),
 	amount int not null default 1,
     check(amount>=1),
-    destinationAddress varchar(1000) not null,
     foreign key (bookID) references physicalCopy(id) on delete cascade on update cascade,
     foreign key (orderID) references physicalOrder(id) on delete cascade on update cascade
 );
