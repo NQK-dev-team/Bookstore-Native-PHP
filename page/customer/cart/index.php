@@ -33,6 +33,26 @@ if ($return_status_code === 400) {
                   exit;
             }
 
+            $stmt->bind_param('s', $_SESSION['id']);
+            $isSuccess = $stmt->execute();
+            if (!$isSuccess) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $result = $stmt->get_result();
+            if ($result->num_rows === 0) {
+                  http_response_code(404);
+                  require_once __DIR__ . '/../../../error/404.php';
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $result = $result->fetch_assoc();
+            $stmt->close();
+
             $conn->close();
       } catch (Exception $e) {
             http_response_code(500);
