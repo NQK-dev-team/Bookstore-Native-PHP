@@ -25,7 +25,7 @@ INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
 insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,'1142369875'),('CUSTOMER2','CUSTOMER1',27.8692,'1245369870'),('CUSTOMER3','CUSTOMER1',27.8692,'4100335874');
-insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4',null,0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
+insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4','CUSTOMER1',0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
 ('CUSTOMER10',null,0,null,false,null),('CUSTOMER11',null,0,null,false,null),('CUSTOMER12',null,0,null,false,null),('CUSTOMER13',null,0,null,false,null),('CUSTOMER14',null,0,null,false,null);
 
 -- Insert `book` table

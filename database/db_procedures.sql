@@ -104,3 +104,118 @@ begin
 end//
 delimiter ;
 
+drop procedure if exists reEvaluateOrder;
+delimiter //
+create procedure reEvaluateOrder(
+	in orderID varchar(20)
+)
+begin
+	declare localTotalCost double default 0;
+    declare localTotalDiscount double default 0;
+
+	update customerOrder set totalCost=0,totalDiscount=0 where id=orderID;
+    delete from discountApply where discountApply.orderID=orderID;
+    
+    begin 
+		DECLARE done BOOLEAN DEFAULT FALSE;
+		declare bookID varchar(20) default null;
+        declare bookAmount int default null;
+		DECLARE myCursor CURSOR FOR SELECT physicalOrderContain.bookID,amount from physicalOrderContain where physicalOrderContain.orderID=orderID;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+		OPEN myCursor;
+			loop_start: LOOP
+				set bookID:=null;
+                set bookAmount:=null;
+				FETCH myCursor INTO bookID,bookAmount;
+				IF done THEN
+					LEAVE loop_start;
+				END IF;
+                begin
+					declare discountID varchar(20) default null;
+                    declare discount double default null;
+                    select distinct combined.id,combined.discount into discountID,discount from (
+						select distinct id,eventDiscount.discount from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct id,eventDiscount.discount from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc limit 1;
+                    
+                    if discountID is not null then
+						 set localTotalCost:=localTotalCost+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*(100-discount)/100.0;
+						 set localTotalDiscount:=localTotalDiscount+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*discount/100.0;
+                         
+                         if not exists(select * from discountApply where discountApply.orderID=orderID and discountApply.discountID=discountID) then
+							insert into discountApply values(orderID,discountID);
+                         end if;
+					end if;
+                end;
+				END LOOP loop_start;
+		CLOSE myCursor;
+    end;
+    
+    begin 
+		DECLARE done BOOLEAN DEFAULT FALSE;
+		declare bookID varchar(20) default null;
+		DECLARE myCursor CURSOR FOR SELECT fileOrderContain.bookID from fileOrderContain where fileOrderContain.orderID=orderID;
+		DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+		OPEN myCursor;
+			loop_start: LOOP
+				set bookID:=null;
+				FETCH myCursor INTO bookID;
+				IF done THEN
+					LEAVE loop_start;
+				END IF;
+                begin
+					declare discountID varchar(20) default null;
+                    declare discount double default null;
+                    select distinct combined.id,combined.discount into discountID,discount from (
+						select distinct id,eventDiscount.discount from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct id,eventDiscount.discount from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc limit 1;
+                    
+                    if discountID is not null then
+						 set localTotalCost:=localTotalCost+(select price from fileCopy where fileCopy.id=bookID)*(100-discount)/100.0;
+						 set localTotalDiscount:=localTotalDiscount+(select price from fileCopy where fileCopy.id=bookID)*discount/100.0;
+                         
+                         if not exists(select * from discountApply where discountApply.orderID=orderID and discountApply.discountID=discountID) then
+							insert into discountApply values(orderID,discountID);
+                         end if;
+					end if;
+                end;
+				END LOOP loop_start;
+		CLOSE myCursor;
+    end;
+    
+    begin
+		declare discountID varchar(20) default null;
+        declare discount double default null;
+        
+        select id,customerDiscount.discount into discountID,discount from customerDiscount where customerDiscount.point<=(select point from customer where id=(select customerID from customerOrder where customerOrder.id=orderID)) order by customerDiscount.discount desc limit 1;
+        
+        if discountID is not null then
+			insert into discountApply values(orderID,discountID);
+            set localTotalDiscount:=localTotalDiscount+localTotalCost*discount/100.0;
+            set localTotalCost:=localTotalCost*(100-discount)/100.0;
+        end if;
+    end;
+    
+    begin
+		declare discountID varchar(20) default null;
+        declare discount double default null;
+        
+        select id,referrerDiscount.discount into discountID,discount from referrerDiscount where referrerDiscount.numberOfPeople<=(select count(*) from customer where referrer=(select customerID from customerOrder where customerOrder.id=orderID)) order by referrerDiscount.discount desc limit 1;
+        
+        if discountID is not null then
+			insert into discountApply values(orderID,discountID);
+            set localTotalDiscount:=localTotalDiscount+localTotalCost*discount/100.0;
+            set localTotalCost:=localTotalCost*(100-discount)/100.0;
+        end if;
+    end;
+    
+    update customerOrder set totalCost=localTotalCost,totalDiscount=localTotalDiscount where id=orderID; 
+end//
+delimiter ;
+
+-- call reEvaluateOrder('ORDER3');
+-- select * from customerOrder where id='ORDER3';
+-- select * from discountApply where orderID='ORDER3';
