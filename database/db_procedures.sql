@@ -134,10 +134,10 @@ begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
                     select distinct combined.id,combined.discount into discountID,discount from (
-						select distinct id,eventDiscount.discount from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+						select distinct id,eventDiscount.discount,1 as cardinal from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
-                        select distinct id,eventDiscount.discount from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
-                    ) as combined order by combined.discount desc limit 1;
+                        select distinct id,eventDiscount.discount, 2 as cardinal from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc,combined.cardinal limit 1;
                     
                     if discountID is not null then
 						 set localTotalCost:=localTotalCost+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*(100-discount)/100.0;
@@ -168,10 +168,10 @@ begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
                     select distinct combined.id,combined.discount into discountID,discount from (
-						select distinct id,eventDiscount.discount from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+						select distinct id,eventDiscount.discount,1 as cardinal from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
-                        select distinct id,eventDiscount.discount from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
-                    ) as combined order by combined.discount desc limit 1;
+                        select distinct id,eventDiscount.discount,2 as cardinal from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc,combined.cardinal limit 1;
                     
                     if discountID is not null then
 						 set localTotalCost:=localTotalCost+(select price from fileCopy where fileCopy.id=bookID)*(100-discount)/100.0;
@@ -215,7 +215,3 @@ begin
     update customerOrder set totalCost=localTotalCost,totalDiscount=localTotalDiscount where id=orderID; 
 end//
 delimiter ;
-
--- call reEvaluateOrder('ORDER3');
--- select * from customerOrder where id='ORDER3';
--- select * from discountApply where orderID='ORDER3';
