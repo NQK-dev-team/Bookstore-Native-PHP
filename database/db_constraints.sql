@@ -11,23 +11,40 @@ before update on book
 for each row
 begin	
 	if not new.status then
-			DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
+		DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
             
-            DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
+		DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
                         
-            delete from fileOrder where id not in(
-				select orderID from fileOrderContain
-            );
+		delete from fileOrder where id not in(
+			select orderID from fileOrderContain
+		);
             
-            delete from physicalOrder where id not in(
-				select orderID from physicalOrderContain
-            );
+		delete from physicalOrder where id not in(
+			select orderID from physicalOrderContain
+		);
             
-            delete from customerOrder where id not in(
-				select id from fileOrder
-                union
-                select id from physicalOrder
-            );
+		delete from customerOrder where id not in(
+			select id from fileOrder
+			union
+			select id from physicalOrder
+		);
+            
+		begin
+			DECLARE done BOOLEAN DEFAULT FALSE;
+			declare orderID varchar(20) default null;
+			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+			OPEN myCursor;
+				loop_start: LOOP
+					set orderID:=null;
+					FETCH myCursor INTO orderID;
+					IF done THEN
+						LEAVE loop_start;
+					END IF;
+					call reEvaluateOrder(orderID);
+					END LOOP loop_start;
+			CLOSE myCursor;
+		end;
     end if;
 end//
 delimiter ;
