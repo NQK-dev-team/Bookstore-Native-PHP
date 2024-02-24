@@ -27,6 +27,7 @@ if ($return_status_code === 400) {
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Home page of NQK bookstore">
             <title>NQK Shop</title>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       </head>
 
       <body>
@@ -34,6 +35,9 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../layout/admin/header.php';
             ?>
             <section id="page">
+                  <div>
+                        <canvas id="myChart"></canvas>
+                  </div>
             </section>
             <?php
             require_once __DIR__ . '/../../layout/footer.php';
