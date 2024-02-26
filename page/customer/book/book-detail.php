@@ -4,6 +4,7 @@ use Dotenv\Parser\Value;
 
 require_once __DIR__ . '/../../../tool/php/role_check.php';
 require_once __DIR__ . '/../../../tool/php/ratingStars.php';
+require_once __DIR__ . '/../../../tool/php/comment.php';
 
 $return_status_code = return_navigate_error();
 
@@ -55,8 +56,36 @@ if ($return_status_code === 400) {
                   require_once __DIR__ . '/../../../error/500.php';
                   exit;
             }
+            $stmt1 = $conn->prepare('select name,dob,address,phone,email,imagePath,gender from appUser join customer on appUser.id = customer.id where appUser.id = ?');
+            if (!$stmt1) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
+            $stmt1->bind_param('s', $_SESSION['id']);
+            $isSuccess = $stmt1->execute();
+            if (!$isSuccess) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $stmt1->close();
+                  $conn->close();
+                  exit;
+            }
+            $result1 = $stmt1->get_result();
+            if ($result->num_rows === 0) {
+                  http_response_code(404);
+                  require_once __DIR__ . '/../../../error/404.php';
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $result1 = $result1->fetch_assoc();
 ?>
 
+<?php
+      date_default_timezone_set('Asia/Ho_Chi_Minh');
+?>
       <!DOCTYPE html>
       <html lang="en">
 
@@ -69,6 +98,7 @@ if ($return_status_code === 400) {
 
             <meta name="author" content="Anh Khoa">
             <meta name="description" content="Home page of NQK bookstore">
+            <link rel="stylesheet" href="/css/customer/book/book-detail.css">
             <title>Book detail</title>
       </head>
 
@@ -135,13 +165,25 @@ if ($return_status_code === 400) {
                                     echo '<p class="h6">Description: ' . $book['description'] . '</p>';
                                     echo'</div>';
                               echo'</div>';
-
+                              //comment section
+                              if(isset($_SESSION['id'])){
+                              echo '<form method="POST" action="'.setComment($conn, $bookID).'">
+                                          <input type="hidden" name="customerID" value="'.$_SESSION['id'].'">
+                                          <input type="hidden" name="commentTime" value="'.date('Y-m-d H:i:s').'">
+                                          
+                                          <input type="hidden" name="bookID" value="'.$bookID.'">
+                                          <textarea name="content" ></textarea>
+                                          <button type="submit" name="commentSubmit">Submit</button>
+                                    </form>';
+                              }
+                        getComment($conn, $bookID);
+                        //comment section ends
                         echo '</div>'; 
                   }
                   
             }
+            
                   ?>
-                  
             </section>
             <?php
             require_once __DIR__ . '/../../../layout/footer.php';
