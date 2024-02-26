@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
+require_once __DIR__ . '/../../../tool/php/checker.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['entry']) && isset($_GET['offset']) && isset($_GET['search']) && isset($_GET['status']) && isset($_GET['type'])) {
@@ -86,6 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         }
                         $result = $stmt->get_result();
                         while ($row = $result->fetch_assoc()) {
+                              if ($status)
+                                    $row['status'] = isInPeriod($row['startDate'], $row['endDate']);
                               $row['startDate'] = MDYDateFormat($row['startDate']);
                               $row['endDate'] = MDYDateFormat($row['endDate']);
                               $sub_stmt = $conn->prepare("select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result");
