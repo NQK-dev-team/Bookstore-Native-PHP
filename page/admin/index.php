@@ -35,14 +35,29 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../layout/admin/header.php';
             ?>
             <section id="page">
-                  <div>
-                        <canvas id="myChart"></canvas>
+                  <div class='w-100 h-100 d-flex flex-column'>
+                        <h1 class='mx-auto mt-2'>Welcome Admin</h1>
+                        <div class='w-100 mt-3 d-flex flex-column'>
+                              <h4 class='mx-auto'>This Week Best Selling Books</h4>
+                              <div></div>
+                        </div>
+                        <div class='w-100 mt-3 d-flex flex-column'>
+                              <h4 class='mx-auto'>This Week Best Selling Categories</h4>
+                              <div></div>
+                        </div>
+                        <div class='w-100 mt-3 d-flex flex-column'>
+                              <h4 class='mx-auto'>Current Discount Events</h4>
+                              <div></div>
+                        </div>
                   </div>
             </section>
             <?php
             require_once __DIR__ . '/../../layout/footer.php';
             ?>
             <script src="/javascript/admin/menu_after_load.js"></script>
+            <script src="/javascript/admin/home/event_list.js"></script>
+            <script src="/javascript/admin/home/best_book.js"></script>
+            <script src="/javascript/admin/home/best_category.js"></script>
       </body>
 
       </html>
