@@ -3,6 +3,7 @@
 use Dotenv\Parser\Value;
 
 require_once __DIR__ . '/../../../tool/php/role_check.php';
+require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 
 $return_status_code = return_navigate_error();
 
@@ -87,9 +88,9 @@ if ($return_status_code === 400) {
                         echo'</div>';
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">
                                     <div class="col-10 col-md-6 d-flex justify-content-center align-items-center">';
-                                    echo '<img src="' . $imagePath . '" class="card-img-top w-75 " style="height: 28rem;" alt="..."> </div>';
+                                    echo '<img src="' . $imagePath . '" class="card-img-top w-50 rounded" alt="..."> </div>';
                                     echo '<div class="col-10 col-md-6"> ';
-                                    echo '<h2 class="display-1">' . $book['name'] . '</h2>';
+                                    echo '<h2 class="display-4">' . $book['name'] . '</h2>';
                                     if($book['edition'] == 1){
                                           echo '<p class="h6">' . $book['edition'] . 'rst edition</p>';
                                     }
@@ -104,71 +105,8 @@ if ($return_status_code === 400) {
                                           echo '<p class="h6">' . $book['edition'] . 'th edition</p>';
                                     }
                                     echo '<p class="h3 text-danger">Physical copy: ' . $book['price'] . '$</p>';
-                                    echo '<p class="text-warning">';
-                                    if($book['avgRating'] <1){
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 1 && $book['avgRating'] <1.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 1.5 && $book['avgRating'] <2){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 2 && $book['avgRating'] <2.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 2.5 && $book['avgRating'] <3){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 3 && $book['avgRating'] <3.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 3.5 && $book['avgRating'] <4){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 4 && $book['avgRating'] <4.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 4.5 && $book['avgRating'] <5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                    }
-                                    echo '</p>';
+                                    echo '<span class="text-warning">'.displayRatingStars($book['avgRating']).'</span>';
+                                                           echo "(".$book['avgRating'].")";
                                     echo '<p class="h5">Author: ' . $book['authorName'] . '</p>';
                                     echo '<p class="h5">Publisher: ' . $book['publisher'] . '</p>';
                                     echo '<p class="h5">ISBN: ' . $book['isbn'] . '</p>';

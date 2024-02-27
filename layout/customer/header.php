@@ -38,18 +38,12 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                     <?php
                                     if (!check_session()) {
                                           echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="wishlist_nav">Wishlist</a>
-                                                </li>';
-                                          echo '<li class="nav-item mx-2">
                                                       <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="cart_nav">Cart</a>
                                                 </li>';
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
                                     } else {
-                                          echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5 text-nowrap" href="/wishlist/" id="wishlist_nav">Wishlist</a>
-                                                </li>';
                                           echo '<li class="nav-item mx-2">
                                                       <a class="nav-link fs-5 text-nowrap" href="/wishlist/" id="cart_nav">Cart</a>
                                                 </li>';

@@ -11,23 +11,40 @@ before update on book
 for each row
 begin	
 	if not new.status then
-			DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
+		DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
             
-            DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
+		DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
                         
-            delete from fileOrder where id not in(
-				select orderID from fileOrderContain
-            );
+		delete from fileOrder where id not in(
+			select orderID from fileOrderContain
+		);
             
-            delete from physicalOrder where id not in(
-				select orderID from physicalOrderContain
-            );
+		delete from physicalOrder where id not in(
+			select orderID from physicalOrderContain
+		);
             
-            delete from customerOrder where id not in(
-				select id from fileOrder
-                union
-                select id from physicalOrder
-            );
+		delete from customerOrder where id not in(
+			select id from fileOrder
+			union
+			select id from physicalOrder
+		);
+            
+		begin
+			DECLARE done BOOLEAN DEFAULT FALSE;
+			declare orderID varchar(20) default null;
+			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+			OPEN myCursor;
+				loop_start: LOOP
+					set orderID:=null;
+					FETCH myCursor INTO orderID;
+					IF done THEN
+						LEAVE loop_start;
+					END IF;
+					call reEvaluateOrder(orderID);
+					END LOOP loop_start;
+			CLOSE myCursor;
+		end;
     end if;
 end//
 delimiter ;
@@ -118,11 +135,38 @@ before update on customerOrder
 for each row
 begin
     if old.status then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update order that has been purchased!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update information of order that has been purchased!';
     end if;
 end//
 delimiter ;
 -- ** End of customerOrder **
+
+-- ** Begin of discountApply **
+-- These 2 triggers below forbid any delete or update statement to any row of `discountApply` table that has order `status` set to true (order has been purchased)
+drop trigger if exists discountApplyBusinessConstraintDeleteTrigger;
+delimiter //
+create trigger discountApplyBusinessConstraintDeleteTrigger
+before delete on discountApply
+for each row
+begin
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount applied for purchased order!';
+    end if;
+end//
+delimiter ;
+
+drop trigger if exists discountApplyBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger discountApplyBusinessConstraintUpdateTrigger
+before update on discountApply
+for each row
+begin
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update information of discount applied for purchased order!';
+    end if;
+end//
+delimiter ;
+-- ** End of discountApply **
 
 -- ** Begin of fileOrder **
 -- These 2 triggers below forbid any delete or update statement to any row of `fileOrder` table that has `status` set to true (order has been purchased)
@@ -145,7 +189,7 @@ before update on fileOrder
 for each row
 begin
     if (select customerOrder.status from customerOrder where customerOrder.id=old.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update order that has been purchased!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update information of order that has been purchased!';
     end if;
 end//
 delimiter ;
@@ -165,6 +209,7 @@ begin
 end//
 delimiter ;
 
+-- This trigger also check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
 drop trigger if exists physicalOrderBusinessConstraintUpdateTrigger;
 delimiter //
 create trigger physicalOrderBusinessConstraintUpdateTrigger
@@ -172,8 +217,38 @@ before update on physicalOrder
 for each row
 begin
     if (select customerOrder.status from customerOrder where customerOrder.id=old.id) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update order that has been purchased!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update information of order that has been purchased!';
     end if;
+    begin
+	declare address varchar(1000) default null;
+	if new.destinationAddress is null then
+		select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=old.id;
+		if address is null then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
+		else
+			set new.destinationAddress:=address;
+		end if;
+	end if;
+    end;
+end//
+delimiter ;
+
+-- This trigger check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
+drop trigger if exists physicalOrderBusinessConstraintInsertTrigger;
+delimiter //
+create trigger physicalOrderBusinessConstraintInsertTrigger
+before insert on physicalOrder
+for each row
+begin
+	declare address varchar(1000) default null;
+	if new.destinationAddress is null then
+		select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=new.id;
+		if address is null then
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
+		else
+			set new.destinationAddress:=address;
+		end if;
+	end if;
 end//
 delimiter ;
 -- ** End of physicalOrder **
@@ -219,7 +294,6 @@ begin
 end//
 delimiter ;
 
--- This trigger also check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
 drop trigger if exists physicalOrderContainBusinessConstraintUpdateTrigger;
 delimiter //
 create trigger physicalOrderContainBusinessConstraintUpdateTrigger
@@ -228,38 +302,7 @@ for each row
 begin
     if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
-	else
-		begin
-			declare address varchar(1000) default null;
-			if new.destinationAddress is null then
-				select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=old.orderID;
-				if address is null then
-					SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
-				else
-					set new.destinationAddress:=address;
-				end if;
-			end if;
-        end;
     end if;
-end//
-delimiter ;
-
--- This trigger check if `destinationAddress` is null, if it is then get the customer default address, if that also null, return error
-drop trigger if exists physicalOrderContainBusinessConstraintInsertTrigger;
-delimiter //
-create trigger physicalOrderContainBusinessConstraintInsertTrigger
-before insert on physicalOrderContain
-for each row
-begin
-	declare address varchar(1000) default null;
-	if new.destinationAddress is null then
-		select appUser.address into address from appUser join customer on appUser.id=customer.id join customerOrder on customerOrder.customerID=customer.id where customerOrder.id=new.orderID;
-		if address is null then
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Customer did not provide book\'s delivery destination address nor fill in the `address` field in the profile!';
-		else
-			set new.destinationAddress:=address;
-		end if;
-	end if;
 end//
 delimiter ;
 -- ** End of physicalOrderContain **
@@ -333,7 +376,7 @@ before update on fileCopy
 for each row
 begin
 	if new.filePath is null and exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=new.id and customerOrder.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This file copy is in an order that has been paid for, you can\'t remove it PDF file!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This file copy of the book is in an order that has been paid for, can not remove it PDF file!';
     end if;
 end//
 delimiter ;
@@ -365,7 +408,7 @@ for each row
 begin
 	if exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=old.id) 
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been apply on purchased order(s)!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been applied for purchased order(s)!';
     end if;
 end//
 delimiter ;
@@ -403,7 +446,7 @@ begin
             select discount,point into discountPer,pointMileStone from customerDiscount where customerDiscount.id=new.id;
             
             if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-discountPer)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage value has already been used in another coupon!';
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage has already been used in another coupon!';
 			end if;
             
             if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-pointMileStone)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
@@ -420,7 +463,7 @@ begin
             select discount,numberOfPeople into discountPer,peopleMileStone from referrerDiscount where referrerDiscount.id=new.id;
             
             if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-discountPer)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage value has already been used in another coupon!';
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage has already been used in another coupon!';
 			end if;
             
             if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=peopleMileStone and referrerDiscount.id!=new.id and discount.status=true) then
@@ -443,7 +486,7 @@ for each row
 begin
 	if exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=old.id) 
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been apply on purchased order(s)!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been applied for purchased order(s)!';
     end if;
 end//
 delimiter ;
@@ -455,7 +498,7 @@ before insert on referrerDiscount
 for each row
 begin
 	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-new.discount)<10e-9 and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage value has already been used in another coupon!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage has already been used in another coupon!';
     end if;
 
 	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and discount.status=true) then
@@ -471,7 +514,7 @@ before update on referrerDiscount
 for each row
 begin
 	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-new.discount)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage has already been used in another coupon!';
     end if;
     
 	if (select status from discount where discount.id=new.id) and exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=new.numberOfPeople and referrerDiscount.id!=new.id and discount.status=true) then
@@ -491,7 +534,7 @@ for each row
 begin
 	if exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=old.id) 
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been apply on purchased order(s)!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been applied for purchased order(s)!';
     end if;
 end//
 delimiter ;
@@ -503,7 +546,7 @@ before insert on customerDiscount
 for each row
 begin
 	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-new.discount)<10e-9 and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage value has already been used in another coupon!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not create this coupon, current discount percentage has already been used in another coupon!';
     end if;
 
 	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and discount.status=true) then
@@ -519,7 +562,7 @@ before update on customerDiscount
 for each row
 begin
 	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-new.discount)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage value has already been used in another coupon!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update this coupon, current discount percentage has already been used in another coupon!';
     end if;
 
 	if (select status from discount where discount.id=new.id) and exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-new.point)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
@@ -539,7 +582,7 @@ for each row
 begin
 	if exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=old.id) 
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been apply on purchased order(s)!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete discount coupon that has been applied for purchased order(s)!';
     end if;
 end//
 delimiter ;
@@ -553,11 +596,11 @@ before update on eventDiscount
 for each row
 begin
 	if old.startDate < new.startDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime<new.startDate and customerOrder.purchaseTime>=old.startDate and customerOrder.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot push up event start date due to existing purchased orders using this coupon on dates before the new start date!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot push up event start date due to existing purchased order(s) using this coupon on dates before the new start date!';
     end if;
     
 	if old.endDate > new.endDate and exists(select * from customerOrder join discountApply on customerOrder.id=discountApply.orderID where discountApply.discountID=new.id and customerOrder.purchaseTime>new.endDate and customerOrder.purchaseTime<=old.endDate and customerOrder.status=true) then
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot shorten event end date due to existing purchased orders using this coupon on dates after the new end date!';
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cannot shorten event end date due to existing purchased order(s) using this coupon on dates after the new end date!';
     end if;
 end//
 delimiter ;
@@ -595,7 +638,7 @@ begin
         )
     )
     then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this row, the discount event has been used on purchased orders and the book is also in those orders!';
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this row, the discount event has been used for purchased orders and the book is also in those orders!';
     end if;
 end//
 delimiter ;

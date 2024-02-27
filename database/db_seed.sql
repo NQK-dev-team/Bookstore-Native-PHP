@@ -25,7 +25,7 @@ INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
 insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,'1142369875'),('CUSTOMER2','CUSTOMER1',27.8692,'1245369870'),('CUSTOMER3','CUSTOMER1',27.8692,'4100335874');
-insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4',null,0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
+insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4','CUSTOMER1',0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
 ('CUSTOMER10',null,0,null,false,null),('CUSTOMER11',null,0,null,false,null),('CUSTOMER12',null,0,null,false,null),('CUSTOMER13',null,0,null,false,null),('CUSTOMER14',null,0,null,false,null);
 
 -- Insert `book` table
@@ -287,12 +287,12 @@ insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,custome
 ('ORDER2',SUBTIME(now(),'00:02:30'),true,19.19428,8.78572,'CUSTOMER1','RKZM1Y4KS5OKU7OG'),
 ('ORDER3',null,false,420.13482,239.72518,'CUSTOMER1',null);
 
-insert into physicalOrder values('ORDER1'),('ORDER3');
+insert into physicalOrder values('ORDER1','211 Ly Thuong Kiet'),('ORDER3','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER1'),('ORDER2'),('ORDER3');
 
-insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER1','BOOK4',1,'211 Ly Thuong Kiet'),('ORDER1','BOOK5',2,'211 Ly Thuong Kiet'),
-('ORDER1','BOOK6',3,'211 Ly Thuong Kiet'),('ORDER1','BOOK7',1,'211 Ly Thuong Kiet'),('ORDER1','BOOK21',4,'211 Ly Thuong Kiet');
-insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER3','BOOK4',10,'211 Ly Thuong Kiet'),('ORDER3','BOOK5',2,'211 Ly Thuong Kiet');
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER1','BOOK4',1),('ORDER1','BOOK5',2),
+('ORDER1','BOOK6',3),('ORDER1','BOOK7',1),('ORDER1','BOOK21',4);
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER3','BOOK4',10),('ORDER3','BOOK5',2);
 
 insert into fileOrderContain(orderID,bookID) values('ORDER1','BOOK8'),('ORDER1','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER2','BOOK10'),('ORDER2','BOOK21');
@@ -306,12 +306,12 @@ insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,custome
 ('ORDER5',SUBTIME(now(),'00:07:30'),true,19.586,8.394,'CUSTOMER2','0CII886CCA8ZS18O'),
 ('ORDER6',null,false,428.709,231.151,'CUSTOMER1',NULL);
 
-insert into physicalOrder values('ORDER4'),('ORDER6');
+insert into physicalOrder values('ORDER4','211 Ly Thuong Kiet'),('ORDER6','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER4'),('ORDER5'),('ORDER6');
 
-insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER4','BOOK4',1,'211 Ly Thuong Kiet'),('ORDER4','BOOK5',2,'211 Ly Thuong Kiet'),
-('ORDER4','BOOK6',3,'211 Ly Thuong Kiet'),('ORDER4','BOOK7',1,'211 Ly Thuong Kiet'),('ORDER4','BOOK21',4,'211 Ly Thuong Kiet');
-insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER6','BOOK4',10,'211 Ly Thuong Kiet'),('ORDER6','BOOK5',2,'211 Ly Thuong Kiet');
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER4','BOOK4',1),('ORDER4','BOOK5',2),
+('ORDER4','BOOK6',3),('ORDER4','BOOK7',1),('ORDER4','BOOK21',4);
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER6','BOOK4',10),('ORDER6','BOOK5',2);
 
 insert into fileOrderContain(orderID,bookID) values('ORDER4','BOOK8'),('ORDER4','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER5','BOOK10'),('ORDER5','BOOK21');
@@ -325,12 +325,12 @@ insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,custome
 ('ORDER8',SUBTIME(now(),'00:01:30'),true,19.586,8.394,'CUSTOMER3','Y6ATT0B5BV3B7R8O'),
 ('ORDER9',null,false,428.709,231.151,'CUSTOMER3',null);
 
-insert into physicalOrder values('ORDER7'),('ORDER9');
+insert into physicalOrder values('ORDER7','211 Ly Thuong Kiet'),('ORDER9','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER7'),('ORDER8'),('ORDER9');
 
-insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER7','BOOK4',1,'211 Ly Thuong Kiet'),('ORDER7','BOOK5',2,'211 Ly Thuong Kiet'),
-('ORDER7','BOOK6',3,'211 Ly Thuong Kiet'),('ORDER7','BOOK7',1,'211 Ly Thuong Kiet'),('ORDER7','BOOK21',4,'211 Ly Thuong Kiet');
-insert into physicalOrderContain(orderID,bookID,amount,destinationAddress) values('ORDER9','BOOK4',10,'211 Ly Thuong Kiet'),('ORDER9','BOOK5',2,'211 Ly Thuong Kiet');
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER7','BOOK4',1),('ORDER7','BOOK5',2),
+('ORDER7','BOOK6',3),('ORDER7','BOOK7',1),('ORDER7','BOOK21',4);
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER9','BOOK4',10),('ORDER9','BOOK5',2);
 
 insert into fileOrderContain(orderID,bookID) values('ORDER7','BOOK8'),('ORDER7','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER8','BOOK10'),('ORDER8','BOOK21');

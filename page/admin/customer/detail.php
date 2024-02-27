@@ -353,6 +353,10 @@ if ($return_status_code === 400) {
                                                 </div>
                                                 <div class='flex-column mt-3' id='physicalCopyDisplay'>
                                                       <h5>Physical Copies</h5>
+                                                      <p>
+                                                            <span class='fw-medium'>Delivery Address:&nbsp;</span>
+                                                            <span id='physicalDestination'></span>
+                                                      </p>
                                                       <div class="w-100 overflow-x-auto">
                                                             <table class="table table-hover border border-2 table-bordered w-100">
                                                                   <thead>
@@ -370,7 +374,6 @@ if ($return_status_code === 400) {
                                                                               <th scope="col">Rating</th>
                                                                               <th scope="col">Price</th>
                                                                               <th scope="col">Ammount</th>
-                                                                              <th scope="col" class='text-nowrap'>Destination Address</th>
                                                                         </tr>
                                                                   </thead>
                                                                   <tbody id="physical_table_body">

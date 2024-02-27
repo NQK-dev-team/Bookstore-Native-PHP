@@ -3,6 +3,8 @@
 use Dotenv\Parser\Value;
 
 require_once __DIR__ . '/../../../tool/php/role_check.php';
+require_once __DIR__ . '/../../../tool/php/ratingStars.php';
+require_once __DIR__ . '/../../../tool/php/comment.php';
 
 $return_status_code = return_navigate_error();
 
@@ -54,8 +56,36 @@ if ($return_status_code === 400) {
                   require_once __DIR__ . '/../../../error/500.php';
                   exit;
             }
+            $stmt1 = $conn->prepare('select name,dob,address,phone,email,imagePath,gender from appUser join customer on appUser.id = customer.id where appUser.id = ?');
+            if (!$stmt1) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $conn->close();
+                  exit;
+            }
+            $stmt1->bind_param('s', $_SESSION['id']);
+            $isSuccess = $stmt1->execute();
+            if (!$isSuccess) {
+                  http_response_code(500);
+                  require_once __DIR__ . '/../../../error/500.php';
+                  $stmt1->close();
+                  $conn->close();
+                  exit;
+            }
+            $result1 = $stmt1->get_result();
+            if ($result->num_rows === 0) {
+                  http_response_code(404);
+                  require_once __DIR__ . '/../../../error/404.php';
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $result1 = $result1->fetch_assoc();
 ?>
 
+<?php
+      date_default_timezone_set('Asia/Ho_Chi_Minh');
+?>
       <!DOCTYPE html>
       <html lang="en">
 
@@ -68,6 +98,7 @@ if ($return_status_code === 400) {
 
             <meta name="author" content="Anh Khoa">
             <meta name="description" content="Home page of NQK bookstore">
+            <link rel="stylesheet" href="/css/customer/book/book-detail.css">
             <title>Book detail</title>
       </head>
 
@@ -87,9 +118,9 @@ if ($return_status_code === 400) {
                         echo'</div>';
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">
                                     <div class="col-10 col-md-6 d-flex justify-content-center align-items-center">';
-                                    echo '<img src="' . $imagePath . '" class="card-img-top w-75 " style="height: 28rem;" alt="..."> </div>';
+                                    echo '<img src="' . $imagePath . '" class="card-img-top w-50 rounded" alt="..."> </div>';
                                     echo '<div class="col-10 col-md-6"> ';
-                                    echo '<h2 class="display-1">' . $book['name'] . '</h2>';
+                                    echo '<h2 class="display-4">' . $book['name'] . '</h2>';
                                     if($book['edition'] == 1){
                                           echo '<p class="h6">' . $book['edition'] . 'rst edition</p>';
                                     }
@@ -104,71 +135,8 @@ if ($return_status_code === 400) {
                                           echo '<p class="h6">' . $book['edition'] . 'th edition</p>';
                                     }
                                     echo '<p class="h3 text-danger">Digital copy: ' . $book['price'] . '$</p>';
-                                    echo '<p class="text-warning">';
-                                    if($book['avgRating'] <1){
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 1 && $book['avgRating'] <1.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 1.5 && $book['avgRating'] <2){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 2 && $book['avgRating'] <2.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 2.5 && $book['avgRating'] <3){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 3 && $book['avgRating'] <3.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 3.5 && $book['avgRating'] <4){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 4 && $book['avgRating'] <4.5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star"></i>';
-                                    }
-                                    elseif($book['avgRating'] >= 4.5 && $book['avgRating'] <5){
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-fill"></i>';
-                                          echo '<i class="bi bi-star-half"></i>';
-                                    }
-                                    echo '</p>';
+                                    echo '<span class="text-warning">'.displayRatingStars($book['avgRating']).'</span>';
+                                                           echo "(".$book['avgRating'].")";
                                     echo '<p class="h5">Author: ' . $book['authorName'] . '</p>';
                                     echo '<p class="h5">Publisher: ' . $book['publisher'] . '</p>';
                                     echo '<p class="h5">ISBN: ' . $book['isbn'] . '</p>';
@@ -197,13 +165,25 @@ if ($return_status_code === 400) {
                                     echo '<p class="h6">Description: ' . $book['description'] . '</p>';
                                     echo'</div>';
                               echo'</div>';
-
+                              //comment section
+                              if(isset($_SESSION['id'])){
+                              echo '<form method="POST" action="'.setComment($conn, $bookID).'">
+                                          <input type="hidden" name="customerID" value="'.$_SESSION['id'].'">
+                                          <input type="hidden" name="commentTime" value="'.date('Y-m-d H:i:s').'">
+                                          
+                                          <input type="hidden" name="bookID" value="'.$bookID.'">
+                                          <textarea name="content" ></textarea>
+                                          <button type="submit" name="commentSubmit">Submit</button>
+                                    </form>';
+                              }
+                        getComment($conn, $bookID);
+                        //comment section ends
                         echo '</div>'; 
                   }
                   
             }
+            
                   ?>
-                  
             </section>
             <?php
             require_once __DIR__ . '/../../../layout/footer.php';
