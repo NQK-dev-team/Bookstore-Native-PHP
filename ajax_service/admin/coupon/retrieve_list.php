@@ -69,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $offset = ($offset - 1) * $entry;
 
                   if ($type === '1') {
-                        $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,endDate desc,discount,id limit ? offset ?");
+                        $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,discount,name,endDate desc,id limit ? offset ?");
                         if (!$stmt) {
                               http_response_code(500);
-                              echo json_encode(['error' => 'Query `SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,endDate desc,discount,id limit ? offset ?` preparation failed!']);
+                              echo json_encode(['error' => 'Query `SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,discount,name,endDate desc,id limit ? offset ?` preparation failed!']);
                               $conn->close();
                               exit;
                         }

@@ -28,8 +28,10 @@ function isInPeriod($start, $end)
 {
       $today = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
       $today->setTime(0, 0, 0);
-      $startDate = DateTime::createFromFormat('Y-m-d', $start);
-      $endDate = DateTime::createFromFormat('Y-m-d', $end);
+      $startDate = DateTime::createFromFormat('Y-m-d', $start, new DateTimeZone($_ENV['TIMEZONE']));
+      $startDate->setTime(0, 0, 0);
+      $endDate = DateTime::createFromFormat('Y-m-d', $end, new DateTimeZone($_ENV['TIMEZONE']));
+      $endDate->setTime(0, 0, 0);
 
       if ($today < $startDate) return 2;
       elseif ($today > $endDate) return 0;
