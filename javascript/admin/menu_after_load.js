@@ -14,7 +14,6 @@ $(document).ready(() =>
       {
             $('#statistic_dropdown_0').addClass('text-primary');
             if (location.includes('/book')) $('#statistic_dropdown_1').addClass('text-primary');
-            else if (location.includes('/customer')) $('#statistic_dropdown_2').addClass('text-primary');
             else if (location.includes('/revenue')) $('#statistic_dropdown_3').addClass('text-primary');
       }
       else if (location.includes('/account'))

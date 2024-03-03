@@ -46,11 +46,9 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                 <?php
                                                 if (!check_session())
                                                       echo '<li><a id="statistic_dropdown_1" class="dropdown-item" href="/admin/authentication/">Book</a></li>
-                                                <li><a id="statistic_dropdown_2" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
                                                 <li><a id="statistic_dropdown_3" class="dropdown-item" href="/admin/authentication/">Revenue</a></li>';
                                                 else
                                                       echo '<li><a id="statistic_dropdown_1" class="dropdown-item" href="/admin/statistic/book/">Book</a></li>
-                                                <li><a id="statistic_dropdown_2" class="dropdown-item" href="/admin/statistic/customer/">Customer</a></li>
                                                 <li><a id="statistic_dropdown_3" class="dropdown-item" href="/admin/statistic/revenue/">Revenue</a></li>';
                                                 ?>
                                           </ul>

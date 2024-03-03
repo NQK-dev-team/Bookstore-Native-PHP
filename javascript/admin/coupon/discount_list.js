@@ -96,6 +96,7 @@ function fetchCouponList()
                                           <th scope="col">Discount Percentage</th>
                                           <th scope="col">Period</th>
                                           <th scope="col">Books Applied</th>
+                                          ${ status ? '<th scope="col">Status</th>' : '' }
                                           <th scope="col">Action</th>
                                     </tr>`)
                               );
@@ -164,6 +165,9 @@ function fetchCouponList()
                                                 </td>`
                                           ));
                                     }
+
+                                    if (status)
+                                          trElem.append($(`<td class='align-middle ${ data.query_result[0][i].status === 0 ? 'text-danger' : (data.query_result[0][i].status === 1 ? 'text-success' : 'text-secondary') }'>${ data.query_result[0][i].status === 0 ? 'Ended' : (data.query_result[0][i].status === 1 ? 'On Going' : 'Up Coming') }</td>`));
 
                                     trElem.append(
                                           $(`<td class='align-middle col-1'>
