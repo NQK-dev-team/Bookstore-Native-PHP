@@ -38,7 +38,7 @@ if ($return_status_code === 400) {
             <section id="page">
                   <div class='w-100 h-100 d-flex flex-column'>
                         <h1 class='mx-auto mt-2 text-center'>Welcome Admin</h1>
-                        <div class='w-100 mt-3 d-flex flex-column'>
+                        <div class='w-100 mt-5 d-flex flex-column'>
                               <h4 class='mx-auto text-center'>This Week Best Selling Books</h4>
                               <div class='bookCarouselSlides'>
                                     <div id="bookCarousel" class="carousel slide carousel-dark">
@@ -243,14 +243,14 @@ if ($return_status_code === 400) {
                                     </div>
                               </div>
                         </div>
-                        <div class='w-100 mt-3 d-flex flex-column'>
-                              <h4 class='mx-auto text-center'>This Week Best Selling Categories</h4>
+                        <div class='w-100 mt-5 d-flex flex-column'>
+                              <h4 class='mx-auto text-center mt-5'>This Week Best Selling Categories</h4>
                               <div class='container-fluid overflow-auto'>
                                     <canvas id='category_chart'></canvas>
                               </div>
                         </div>
-                        <div class='w-100 mt-3 d-flex flex-column'>
-                              <h4 class='mx-auto text-center'>Current Discount Events</h4>
+                        <div class='w-100 mt-5 d-flex flex-column'>
+                              <h4 class='mx-auto text-center mt-5'>Current Discount Events</h4>
                               <div class='mt-2 d-flex container-fluid'>
                                     <form class="d-flex align-items-center w-100 search_form mx-auto" role="search" id="search_form">
                                           <button title='search coupon' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
