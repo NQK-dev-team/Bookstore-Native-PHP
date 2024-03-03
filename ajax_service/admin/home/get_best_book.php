@@ -28,14 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
-) as combined join book on book.id=combined.bookID group by bookID order by finalTotalSold desc limit 5');
+) as combined join book on book.id=combined.bookID group by bookID order by finalTotalSold desc,name limit 5');
             if (!$stmt) {
                   http_response_code(500);
                   echo json_encode(['error' => 'Query `select bookID as id,sum(totalSold) as finalTotalSold,name,edition,isbn,ageRestriction,publisher,publishDate,imagePath from (
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
-) as combined join book on book.id=combined.bookID group by bookID order by finalTotalSold desc limit 5` preparation failed!']);
+) as combined join book on book.id=combined.bookID group by bookID order by finalTotalSold desc,name limit 5` preparation failed!']);
                   $conn->close();
                   exit;
             }

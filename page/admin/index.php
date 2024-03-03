@@ -245,7 +245,9 @@ if ($return_status_code === 400) {
                         </div>
                         <div class='w-100 mt-3 d-flex flex-column'>
                               <h4 class='mx-auto text-center'>This Week Best Selling Categories</h4>
-                              <div></div>
+                              <div class='container-fluid overflow-auto'>
+                                    <canvas id='category_chart'></canvas>
+                              </div>
                         </div>
                         <div class='w-100 mt-3 d-flex flex-column'>
                               <h4 class='mx-auto text-center'>Current Discount Events</h4>
@@ -338,6 +340,7 @@ if ($return_status_code === 400) {
             <script src="/javascript/admin/home/best_category.js"></script>
             <script src="/javascript/admin/home/event_list.js"></script>
             <script src="/tool/js/encoder.js"></script>
+            <script src="/tool/js/generate_color.js"></script>
       </body>
 
       </html>
