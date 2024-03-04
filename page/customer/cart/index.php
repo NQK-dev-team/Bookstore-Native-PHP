@@ -57,7 +57,7 @@ if ($return_status_code === 400) {
             }
 
             $pBook->bind_param('s', $stmt);
-            $pBook = $pBook->execute();
+            $isSuccess = $pBook->execute();
             if (!$isSuccess) {
                   http_response_code(500);
                   require_once __DIR__ . '/../../../error/500.php';
@@ -79,7 +79,7 @@ if ($return_status_code === 400) {
             }
 
             $fBook->bind_param('s', $stmt);
-            $ifBook = $fBook->execute();
+            $isSuccess = $fBook->execute();
             if (!$isSuccess) {
                   http_response_code(500);
                   require_once __DIR__ . '/../../../error/500.php';
