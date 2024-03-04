@@ -45,7 +45,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                 </li>';
                                     } else {
                                           echo '<li class="nav-item mx-2">
-                                                      <a class="nav-link fs-5 text-nowrap" href="/wishlist/" id="cart_nav">Cart</a>
+                                                      <a class="nav-link fs-5 text-nowrap" href="/cart/" id="cart_nav">Cart</a>
                                                 </li>';
                                           echo "<li class=\"nav-item ms-2\">
                                                 <a class=\"nav-link fs-5 text-nowrap\" href=\"/account/\" id=\"profile_nav\">Account</a>
