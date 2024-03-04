@@ -43,7 +43,9 @@ if ($return_status_code === 400) {
                   $conn->close();
                   exit;
             }
-            $stmt = $stmt->get_result();
+            $orderID = $stmt->get_result()->fetch_assoc()['id'];
+
+            $stmt->close();
 
             $pBook = $conn->prepare('select bookID, imagePath, name, amount, price from physicalOrderContain
                                     join book on physicalOrderContain.bookID = book.id 
@@ -56,7 +58,7 @@ if ($return_status_code === 400) {
                   exit;
             }
 
-            $pBook->bind_param('s', $stmt);
+            $pBook->bind_param('s', $orderID);
             $isSuccess = $pBook->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -78,7 +80,7 @@ if ($return_status_code === 400) {
                   exit;
             }
 
-            $fBook->bind_param('s', $stmt);
+            $fBook->bind_param('s', $orderID);
             $isSuccess = $fBook->execute();
             if (!$isSuccess) {
                   http_response_code(500);
@@ -92,7 +94,7 @@ if ($return_status_code === 400) {
 
 
             // $result = $result->fetch_assoc();
-            $stmt->close();
+            // $stmt->close();
             $pBook->close();
             $fBook->close();
 
