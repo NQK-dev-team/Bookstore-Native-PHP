@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
+require_once __DIR__ . '/../../../tool/php/checker.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['entry']) && isset($_GET['offset']) && isset($_GET['search']) && isset($_GET['status']) && isset($_GET['type'])) {
@@ -68,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $offset = ($offset - 1) * $entry;
 
                   if ($type === '1') {
-                        $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,endDate desc,discount,id limit ? offset ?");
+                        $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,discount,name,endDate desc,id limit ? offset ?");
                         if (!$stmt) {
                               http_response_code(500);
-                              echo json_encode(['error' => 'Query `SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,endDate desc,discount,id limit ? offset ?` preparation failed!']);
+                              echo json_encode(['error' => 'Query `SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=? and discount.name like ? order by startDate desc,discount,name,endDate desc,id limit ? offset ?` preparation failed!']);
                               $conn->close();
                               exit;
                         }
@@ -86,6 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         }
                         $result = $stmt->get_result();
                         while ($row = $result->fetch_assoc()) {
+                              if ($status)
+                                    $row['status'] = isInPeriod($row['startDate'], $row['endDate']);
                               $row['startDate'] = MDYDateFormat($row['startDate']);
                               $row['endDate'] = MDYDateFormat($row['endDate']);
                               $sub_stmt = $conn->prepare("select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result");

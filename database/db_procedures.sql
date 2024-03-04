@@ -136,7 +136,7 @@ begin
                     select distinct combined.id,combined.discount into discountID,discount from (
 						select distinct id,eventDiscount.discount,1 as cardinal from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
-                        select distinct id,eventDiscount.discount, 2 as cardinal from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                        select distinct id,eventDiscount.discount,2 as cardinal from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal limit 1;
                     
                     if discountID is not null then

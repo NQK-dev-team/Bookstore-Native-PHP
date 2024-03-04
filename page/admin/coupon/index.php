@@ -14,6 +14,7 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
       require_once __DIR__ . '/../../../tool/php/formatter.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
+      require_once __DIR__ . '/../../../tool/php/checker.php';
 
       unset($_SESSION['update_book_id']);
 
@@ -105,6 +106,11 @@ if ($return_status_code === 400) {
                         }
                         $sub_stmt->close();
                         $elem .= "</div></td>";
+                  } {
+                        $tmp_status = isInPeriod($row['startDate'], $row['endDate']);
+                        $tmp_class = $tmp_status === 0 ? 'text-danger' : ($tmp_status === 1 ? 'text-success' : 'text-secondary');
+                        $tmp_text= $tmp_status === 0 ? 'Ended' : ($tmp_status === 1 ? 'On Going' : 'Up Coming');
+                        $elem .= "<td class='align-middle {$tmp_class}'>{$tmp_text}</td>";
                   }
 
                   $sub_stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result');
@@ -268,6 +274,7 @@ if ($return_status_code === 400) {
                                                 <th scope="col">Discount Percentage</th>
                                                 <th scope="col">Period</th>
                                                 <th scope="col">Books Applied</th>
+                                                <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                           </tr>
                                     </thead>
