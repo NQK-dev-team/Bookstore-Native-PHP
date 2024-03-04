@@ -304,7 +304,7 @@ insert into discountApply(orderID,discountID) values('ORDER3','E_DISCOUNT2'),('O
 
 insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER4',SUBTIME(now(),'00:10:00'),true,259.106,110.764,'CUSTOMER2','B59VDRO7X0QI6NHH'),
 ('ORDER5',SUBTIME(now(),'00:07:30'),true,19.586,8.394,'CUSTOMER2','0CII886CCA8ZS18O'),
-('ORDER6',null,false,428.709,231.151,'CUSTOMER1',NULL);
+('ORDER6',null,false,428.709,231.151,'CUSTOMER2',NULL);
 
 insert into physicalOrder values('ORDER4','211 Ly Thuong Kiet'),('ORDER6','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER4'),('ORDER5'),('ORDER6');
