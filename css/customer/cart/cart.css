@@ -1,0 +1,23 @@
+.orderPic {
+    width: 100px;
+}
+
+.paymentPic {
+    width: 200px;
+}
+
+.warning {
+    color: red;
+}
+
+.delBtn {
+    color: red;
+    background-color: white;
+    border: none;
+}
+
+.delBtn:hover {
+    color: rgb(232, 120, 120);
+    background-color: white;
+    border: none;
+}
