@@ -47,7 +47,7 @@ if ($return_status_code === 400) {
 
             $stmt->close();
 
-            $pBook = $conn->prepare('select bookID, imagePath, name, amount, price from physicalOrderContain
+            $pBook = $conn->prepare('select bookID, imagePath, name, amount, price, inStock from physicalOrderContain
                                     join book on physicalOrderContain.bookID = book.id 
                                     join physicalCopy on book.id = physicalCopy.id
                                     where orderID = ?;');
@@ -161,18 +161,25 @@ if ($return_status_code === 400) {
                               echo '<th scope="col">Name</th>';
                               echo '<th scope="col">Amount</th>';
                               echo '<th scope="col">Price</th>';
+                              echo '<th scope="col">In stock</th>';
+                              echo '<th scope="col"></th>';
                               echo '</tr>';
                               echo '</thead>';
 
                               echo '<tbody>';
 
                               while ($row = $pBook->fetch_assoc()) {
+                                    if ($row['inStock'] < $row['amount']) {
+                                          echo '<h3 class="warning">Out of order</h3>';
+                                    }
                                     $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
                                     echo '<tr>';
                                     echo '<td ><img src="' . $imagePath . '" class="orderPic" alt="..."></td>';
                                     echo '<td class = "name">' . $row['name'] . '</td>';
                                     echo '<td class = "amount">' . $row['amount'] . '</td>';
                                     echo '<td class = "price">' . $row['price'] . '</td>';
+                                    echo '<td class = "inStock">' . $row['inStock'] . '</td>';
+                                    echo '<td><button class = "delBtn"><i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delModal"></i></button></td>';
                                     echo '</tr>';
                               }
                               echo '</tbody>';
@@ -187,6 +194,7 @@ if ($return_status_code === 400) {
                               echo '<th scope="col">Image</th>';
                               echo '<th scope="col">Name</th>';
                               echo '<th scope="col">Price</th>';
+                              echo '<th scope="col"></th>';
                               echo '</tr>';
                               echo '</thead>';
 
@@ -198,12 +206,17 @@ if ($return_status_code === 400) {
                                     echo '<td><img src="' . $imagePath . '" class="orderPic" alt="..."></td>';
                                     echo '<td class = "name">' . $row['name'] . '</td>';
                                     echo '<td class = "price">' . $row['price'] . '</td>';
+                                    echo '<td><button class = "delBtn"><i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delModal"></i></button></td>';
                                     echo '</tr>';
                               }
                               echo '</tbody>';
                               echo '</table>';
                         }
                         ?>
+                        <div><?php
+                              $row = $payment->fetch_assoc();
+                              echo '<h2>Discount: ' . round($row['totalDiscount'], 2) . '$</h2>';
+                              ?></div>
                         <button type="button" class="btn btn-primary w-100 mb-4" data-bs-toggle="modal" data-bs-target="#paymentModal"><i class="bi bi-cart4"></i> Payment</button>
                         <div class="modal" id="paymentModal" tabindex="-1">
                               <div class="modal-dialog modal-dialog-scrollable">
@@ -221,10 +234,28 @@ if ($return_status_code === 400) {
                                           <div class="modal-footer">
                                                 <div><?php
                                                       $row = $payment->fetch_assoc();
-                                                      echo '<h2>Payment: ' . round($row['totalCost'] - $row['totalDiscount'], 2) . '$</h2>';
+                                                      echo '<h2>Payment: ' . round($row['totalCost'], 2) . '$</h2>';
                                                       ?></div>
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                        <div class="modal" id="delModal" tabindex="-1">
+                              <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                          <div class="modal-header">
+                                                <h5 class="modal-title">Delete from cart</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          </div>
+                                          <div class="modal-body">
+                                                <h2>Are you sure you want to delete this book from your cart?</h2>
+                                          </div>
+                                          <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <!-- Add data handling here -->
+                                                <button type="button" class="btn btn-primary">Confirm</button>
                                           </div>
                                     </div>
                               </div>
