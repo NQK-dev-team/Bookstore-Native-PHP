@@ -176,7 +176,7 @@ if ($return_status_code === 400) {
                                     echo '<tr>';
                                     echo '<td ><img src="' . $imagePath . '" class="orderPic" alt="..."></td>';
                                     echo '<td class = "name">' . $row['name'] . '</td>';
-                                    echo '<td class = "amount">' . $row['amount'] . '</td>';
+                                    echo '<td class = "amount"><input type="number" step="1" max="' . $row['inStock'] . '" value="' . $row['amount'] . '" name="quantity" class="quantity-field border-0 text-center w-25"></td>';
                                     echo '<td class = "price">' . $row['price'] . '</td>';
                                     echo '<td class = "inStock">' . $row['inStock'] . '</td>';
                                     echo '<td><button class = "delBtn"><i class="bi bi-trash3" data-bs-toggle="modal" data-bs-target="#delModal"></i></button></td>';
