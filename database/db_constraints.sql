@@ -369,6 +369,7 @@ end//
 delimiter ;
 
 -- This trigger prevent remove filePath if a customer has bought the file copy
+-- If filePath is null or price is null and there are no paid order for this file copy, remove it from all unpaid orders and re-evaluate them
 drop trigger if exists fileCopyBusinessConstraintUpdateTrigger;
 delimiter //
 create trigger fileCopyBusinessConstraintUpdateTrigger
@@ -377,6 +378,37 @@ for each row
 begin
 	if new.filePath is null and exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=new.id and customerOrder.status=true) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This file copy of the book is in an order that has been paid for, can not remove it PDF file!';
+    end if;
+    
+    if (new.filePath is null or new.price is null) and not exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=new.id and customerOrder.status=true) then
+		DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
+                                    
+		delete from fileOrder where id not in(
+			select orderID from fileOrderContain
+		);
+            
+		delete from customerOrder where id not in(
+			select id from fileOrder
+			union
+			select id from physicalOrder
+		);
+            
+		begin
+			DECLARE done BOOLEAN DEFAULT FALSE;
+			declare orderID varchar(20) default null;
+			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+			OPEN myCursor;
+				loop_start: LOOP
+					set orderID:=null;
+					FETCH myCursor INTO orderID;
+					IF done THEN
+						LEAVE loop_start;
+					END IF;
+					call reEvaluateOrder(orderID);
+					END LOOP loop_start;
+			CLOSE myCursor;
+		end;
     end if;
 end//
 delimiter ;
@@ -393,6 +425,46 @@ begin
 	if exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=old.id) 
     then
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete book that has been purchased!';
+    end if;
+end//
+delimiter ;
+
+-- If inStock is null or price is null and there are no paid order for this physical copy, remove it from all unpaid orders and re-evaluate them
+drop trigger if exists physicalCopyBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger physicalCopyBusinessConstraintUpdateTrigger
+before update on physicalCopy
+for each row
+begin
+	if (new.inStock is null or new.price is null) and not exists(select * from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where physicalOrderContain.bookID=new.id and customerOrder.status=true) then            
+		DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
+            
+		delete from physicalOrder where id not in(
+			select orderID from physicalOrderContain
+		);
+            
+		delete from customerOrder where id not in(
+			select id from fileOrder
+			union
+			select id from physicalOrder
+		);
+            
+		begin
+			DECLARE done BOOLEAN DEFAULT FALSE;
+			declare orderID varchar(20) default null;
+			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+			OPEN myCursor;
+				loop_start: LOOP
+					set orderID:=null;
+					FETCH myCursor INTO orderID;
+					IF done THEN
+						LEAVE loop_start;
+					END IF;
+					call reEvaluateOrder(orderID);
+					END LOOP loop_start;
+			CLOSE myCursor;
+		end;
     end if;
 end//
 delimiter ;
