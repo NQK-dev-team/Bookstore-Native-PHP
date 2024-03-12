@@ -14,6 +14,13 @@ require_once __DIR__ . '/../../../tool/php/delete_directory.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/notify_event.php';
 
+// Include Composer's autoloader
+require_once __DIR__ . '/../../../vendor/autoload.php';
+
+// Load environment variables from .env file
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
+$dotenv->load();
+
 function map($elem)
 {
       return sanitize(rawurldecode($elem));
@@ -97,11 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $startDT = new DateTime($start);
+                  $startDT = new DateTime($start, new DateTimeZone($_ENV['TIMEZONE']));
                   $startDT->setTime(0, 0, 0); // Set time to 00:00:00
-                  $endDT = new DateTime($end);
+                  $endDT = new DateTime($end, new DateTimeZone($_ENV['TIMEZONE']));
                   $endDT->setTime(0, 0, 0); // Set time to 00:00:00
-                  $currentDate = new DateTime('now', new DateTimeZone('Asia/Ho_Chi_Minh'));
+                  $currentDate = new DateTime('now', new DateTimeZone($_ENV['TIMEZONE']));
                   $currentDate->setTime(0, 0, 0); // Set time to 00:00:00
 
                   if ($startDT < $currentDate) {

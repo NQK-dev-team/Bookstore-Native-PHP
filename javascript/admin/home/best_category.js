@@ -39,6 +39,7 @@ $(document).ready(function ()
                               type: 'bar',
                               data: config_data,
                               options: {
+                                    responsive: true,
                                     scales: {
                                           y: {
                                                 beginAtZero: true,
@@ -65,6 +66,21 @@ $(document).ready(function ()
                                     plugins: {
                                           legend: {
                                                 display: false
+                                          },
+                                          zoom: {
+                                                pan: {
+                                                      enabled: true,
+                                                      mode: 'x'
+                                                },
+                                                zoom: {
+                                                      wheel: {
+                                                            enabled: true,
+                                                      },
+                                                      pinch: {
+                                                            enabled: true
+                                                      },
+                                                      mode: 'x',
+                                                }
                                           }
                                     }
                               },

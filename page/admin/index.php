@@ -27,6 +27,8 @@ if ($return_status_code === 400) {
             <meta name="description" content="Home page of NQK bookstore">
             <title>NQK Shop</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>
             <link rel="stylesheet" href="/css/admin/home/style.css">
       </head>
 
