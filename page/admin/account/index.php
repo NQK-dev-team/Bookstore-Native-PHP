@@ -13,8 +13,6 @@ if ($return_status_code === 400) {
 } else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
-      unset($_SESSION['update_book_id']);
-
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
 

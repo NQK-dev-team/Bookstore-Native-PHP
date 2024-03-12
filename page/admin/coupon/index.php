@@ -11,186 +11,6 @@ if ($return_status_code === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
-      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-      require_once __DIR__ . '/../../../tool/php/formatter.php';
-      require_once __DIR__ . '/../../../tool/php/converter.php';
-      require_once __DIR__ . '/../../../tool/php/checker.php';
-
-      unset($_SESSION['update_book_id']);
-
-      require_once __DIR__ . '/../../../config/db_connection.php';
-
-      try {
-            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
-
-            if (!$conn) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  exit;
-            }
-
-            $stmt = $conn->prepare("SELECT COUNT(*) as total FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true");
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            }
-            $result = $stmt->get_result();
-            $result = $result->fetch_assoc();
-            $totalEntries = $result['total'];
-            $stmt->close();
-
-            $stmt = $conn->prepare("SELECT discount.id,discount.name,eventDiscount.startDate,eventDiscount.endDate,eventDiscount.discount,eventDiscount.applyForAll FROM eventDiscount join discount on eventDiscount.id=discount.id where discount.status=true order by startDate desc,endDate desc,discount,id limit 10");
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            }
-            $result = $stmt->get_result();
-            $idx = 0;
-            $elem = '';
-            while ($row = $result->fetch_assoc()) {
-                  $idx++;
-                  $elem .= "<tr>";
-                  $elem .= "<td class='align-middle'>" . $idx . "</td>";
-                  $elem .= "<td class='align-middle'>" . $row['name'] . "</td>";
-                  $elem .= "<td class='align-middle'>" . $row['discount'] . "%</td>";
-                  $elem .= "<td class='align-middle'>" . MDYDateFormat($row['startDate']) . " - " . MDYDateFormat($row['endDate']) . "</td>";
-                  if ($row['applyForAll']) {
-                        $elem .= "<td class='align-middle col-5'><strong>All Books</strong></td>";
-                  } else {
-                        $elem .= "<td class='align-middle col-5'><div class='d-flex flex-column book-list'>";
-                        $sub_stmt = $conn->prepare('SELECT book.id,book.name,book.edition,book.status FROM book join eventApply on book.id=eventApply.bookID where eventApply.eventID=? order by book.name,book.edition,book.id');
-                        if (!$sub_stmt) {
-                              http_response_code(500);
-                              require_once __DIR__ . '/../../../error/500.php';
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_stmt->bind_param('s', $row['id']);
-                        $isSuccess = $sub_stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              require_once __DIR__ . '/../../../error/500.php';
-                              $sub_stmt->close();
-                              $stmt->close();
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_result = $sub_stmt->get_result();
-                        while ($sub_row = $sub_result->fetch_assoc()) {
-                              $underline = $sub_row['status'] ? 'text-decoration-none' : 'text-decoration-line-through';
-                              if ($sub_result->num_rows === 1) {
-                                    $elem .= "<a href='/admin/book/edit-book?id={$sub_row['id']}' class='{$underline}'>" . $sub_row['name'] . " - " . convertToOrdinal($sub_row['edition']) . " edition</a>";
-                              } else {
-                                    $elem .= "<a href='/admin/book/edit-book?id={$sub_row['id']}' class='{$underline} mb-3'>" . $sub_row['name'] . " - " . convertToOrdinal($sub_row['edition']) . " edition</a>";
-                              }
-                        }
-                        $sub_stmt->close();
-                        $elem .= "</div></td>";
-                  } {
-                        $tmp_status = isInPeriod($row['startDate'], $row['endDate']);
-                        $tmp_class = $tmp_status === 0 ? 'text-danger' : ($tmp_status === 1 ? 'text-success' : 'text-secondary');
-                        $tmp_text= $tmp_status === 0 ? 'Ended' : ($tmp_status === 1 ? 'On Going' : 'Up Coming');
-                        $elem .= "<td class='align-middle {$tmp_class}'>{$tmp_text}</td>";
-                  }
-
-                  $sub_stmt = $conn->prepare('select exists(select * from discountApply join customerOrder on discountApply.orderID=customerOrder.id where customerOrder.status=true and discountApply.discountID=?) as result');
-                  if (!$sub_stmt) {
-                        http_response_code(500);
-                        require_once __DIR__ . '/../../../error/500.php';
-                        $conn->close();
-                        exit;
-                  }
-                  $sub_stmt->bind_param('s', $row['id']);
-                  $isSuccess = $sub_stmt->execute();
-                  if (!$isSuccess) {
-                        http_response_code(500);
-                        require_once __DIR__ . '/../../../error/500.php';
-                        $sub_stmt->close();
-                        $stmt->close();
-                        $conn->close();
-                        exit;
-                  }
-                  $sub_result = $sub_stmt->get_result();
-                  $sub_result = $sub_result->fetch_assoc();
-                  if ($sub_result['result']) {
-                        $elem .= "<td class='align-middle col-1'>
-                        <div class='d-flex flex-lg-row flex-column'>
-                              <button title='Edit coupon' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
-                                    <i class=\"bi bi-pencil text-white\"></i>
-                              </button>
-                              <button title='Deactivate coupon' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
-                                    <i class=\"bi bi-power text-white\"></i>
-                              </button>
-                        </div>
-                  </td>";
-                  } else {
-                        $elem .= "<td class='align-middle col-1'>
-                        <div class='d-flex flex-lg-row flex-column'>
-                              <button title='Edit coupon' class='btn btn-info btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Edit\" onclick='openUpdateModal(\"{$row['id']}\")'>
-                                    <i class=\"bi bi-pencil text-white\"></i>
-                              </button>
-                              <button title='Deactivate coupon' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
-                                    <i class=\"bi bi-power text-white\"></i>
-                              </button>
-                              <button title='Delete coupon' onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
-                                    <i class=\"bi bi-trash text-white\"></i>
-                              </button>
-                        </div>
-                  </td>";
-                  }
-                  $sub_stmt->close();
-                  $elem .= "</tr>";
-            }
-            $stmt->close();
-
-            $stmt = $conn->prepare('select name from category order by name,id');
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            }
-            $categoryList = '';
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                  $categoryList .= "<li class='categoryHover pointer' onclick='chooseCategory(event)'>{$row['name']}</li>";
-            }
-            $stmt->close();
-
-            $conn->close();
-      } catch (Exception $e) {
-            http_response_code(500);
-            require_once __DIR__ . '/../../../error/500.php';
-            exit;
-      }
 ?>
 
       <!DOCTYPE html>
@@ -207,7 +27,10 @@ if ($return_status_code === 400) {
             <meta name="description" content="Manage discount coupons of NQK Bookstore">
             <title>Manage Discount Coupons</title>
             <link rel="stylesheet" href="/css/admin/coupon/discount_list.css">
-            <?php storeToken(); ?>
+            <?php
+            require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+            storeToken();
+            ?>
       </head>
 
       <body>
@@ -279,35 +102,24 @@ if ($return_status_code === 400) {
                                           </tr>
                                     </thead>
                                     <tbody id="table_body">
-                                          <?php
-                                          echo $elem;
-                                          ?>
                                     </tbody>
                               </table>
                         </div>
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">
-                                          <?php
-                                          if ($totalEntries === 0) echo '0';
-                                          else echo '1'; ?>
-                                    </p>
+                                    <p id="start_entry">1</p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">
-                                          <?php
-                                          if ($totalEntries < 10) echo $totalEntries;
-                                          else echo '10'; ?>
-                                    </p>
+                                    <p id="end_entry">10</p>
                                     <p>&nbsp;of&nbsp;</p>
-                                    <p id="total_entries"><?php echo $totalEntries; ?></p>
+                                    <p id="total_entries"></p>
                                     <p>&nbsp;entries</p>
                               </div>
                               <div class="group_button">
                                     <div class="btn-group d-flex" role="group">
                                           <button type="button" class="btn btn-outline-info" id="prev_button" onClick="changeList(false)" disabled>Previous</button>
                                           <button type="button" class="btn btn-info text-white" disabled id="list_offset">1</button>
-                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) echo 'disabled'; ?>>Next</button>
+                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)">Next</button>
                                     </div>
                               </div>
                         </div>

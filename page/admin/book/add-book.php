@@ -12,8 +12,6 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-
-      unset($_SESSION['update_book_id']);
 ?>
 
       <!DOCTYPE html>

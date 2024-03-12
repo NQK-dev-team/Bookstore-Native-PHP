@@ -39,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isset($_POST['physicalPrice']) &&
             isset($_POST['filePrice']) &&
             isset($_POST['inStock']) &&
-            isset($_POST['removeFile'])
+            isset($_POST['removeFile']) &&
+            isset($_POST['id'])
       ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
@@ -48,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   }
 
-                  $id = $_SESSION['update_book_id'];
+                  $id = sanitize(rawurldecode($_POST['id']));
                   $name = sanitize(rawurldecode($_POST['name']));
                   $edition = sanitize(rawurldecode($_POST['edition']));
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));

@@ -11,92 +11,7 @@ if ($return_status_code === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
-      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-      require_once __DIR__ . '/../../../tool/php/formatter.php';
-
-      unset($_SESSION['update_book_id']);
-
-      require_once __DIR__ . '/../../../config/db_connection.php';
-
-      try {
-            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
-
-            if (!$conn) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  exit;
-            }
-
-            $stmt = $conn->prepare("SELECT COUNT(*) as result FROM customer where status=true");
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  exit;
-            }
-            $totalEntries = $stmt->get_result()->fetch_assoc()['result'];
-            $stmt->close();
-
-            $elem = '';
-
-            $stmt = $conn->prepare('select name,email,phone,dob,gender,point,cardNumber,address,appUser.id from appUser join customer on customer.id=appUser.id where status=true order by point desc,name,email,customer.id limit 10');
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  exit;
-            }
-            $result = $stmt->get_result();
-            $idx = 0;
-            while ($row = $result->fetch_assoc()) {
-                  $idx++;
-                  $elem .= '<tr>';
-                  $elem .= "<td class='align-middle'>{$idx}</td>";
-                  $elem .= "<td class='align-middle col-2'>{$row['name']}</td>";
-                  $row['email'] = $row['email'] ? $row['email'] : 'N/A';
-                  $elem .= "<td class='align-middle col-2'>{$row['email']}</td>";
-                  $row['phone'] = $row['phone'] ? $row['phone'] : 'N/A';
-                  $elem .= "<td class='align-middle col-1'>{$row['phone']}</td>";
-                  $row['dob'] = MDYDateFormat($row['dob']);
-                  $elem .= "<td class='align-middle col-1'>{$row['dob']}</td>";
-                  $row['address'] = $row['address'] ? $row['address'] : 'N/A';
-                  $elem .= "<td class='align-middle col-2'>{$row['address']}</td>";
-                  $row['gender'] = $row['gender'] === 'M' ? 'Male' : ($row['gender'] === 'F' ? 'Female' : 'Other');
-                  $elem .= "<td class='align-middle'>{$row['gender']}</td>";
-                  $row['point'] = round($row['point'], 2);
-                  $elem .= "<td class='align-middle'>{$row['point']}</td>";
-                  $row['cardNumber'] = $row['cardNumber'] ? $row['cardNumber'] : 'N/A';
-                  $elem .= "<td class='align-middle col-1'>{$row['cardNumber']}</td>";
-                  $elem .= "<td class='align-middle col-1'>
-                        <div class='d-flex flex-lg-row flex-column'>
-                              <a title='Visit customer detailed information page' class='btn btn-sm btn-info text-white' href='./detail?id={$row['id']}' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a>
-                              <button title='deactivate customer' onclick='openDeactivateModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactivate\"><i class=\"bi bi-power\"></i></button>
-                              <button title='delete customer' onclick='openDeleteModal(\"{$row['id']}\")' class='btn btn-sm btn-danger text-white ms-lg-2 mt-2 mt-lg-0' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\"><i class=\"bi bi-trash3-fill\"></i></button>
-                        </div>
-                  </td>";
-                  $elem .= "</tr>";
-            }
-            $stmt->close();
-            $conn->close();
-      } catch (Exception $e) {
-            http_response_code(500);
-            require_once __DIR__ . '/../../../error/500.php';
-            exit;
-      }
 ?>
-
       <!DOCTYPE html>
       <html lang="en">
 
@@ -111,7 +26,10 @@ if ($return_status_code === 400) {
             <meta name="description" content="Manage customers of NQK Bookstore">
             <title>Manage Customers</title>
             <link rel="stylesheet" href="/css/admin/customer/customer_list.css">
-            <?php storeToken(); ?>
+            <?php
+            require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+            storeToken();
+            ?>
       </head>
 
       <body>
@@ -173,35 +91,24 @@ if ($return_status_code === 400) {
                                           </tr>
                                     </thead>
                                     <tbody id="table_body">
-                                          <?php
-                                          echo $elem;
-                                          ?>
                                     </tbody>
                               </table>
                         </div>
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">
-                                          <?php
-                                          if ($totalEntries === 0) echo '0';
-                                          else echo '1'; ?>
-                                    </p>
+                                    <p id="start_entry">1</p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">
-                                          <?php
-                                          if ($totalEntries < 10) echo $totalEntries;
-                                          else echo '10'; ?>
-                                    </p>
+                                    <p id="end_entry">10</p>
                                     <p>&nbsp;of&nbsp;</p>
-                                    <p id="total_entries"><?php echo $totalEntries; ?></p>
+                                    <p id="total_entries"></p>
                                     <p>&nbsp;entries</p>
                               </div>
                               <div class="group_button">
                                     <div class="btn-group d-flex" role="group">
                                           <button type="button" class="btn btn-outline-info" id="prev_button" onClick="changeList(false)" disabled>Previous</button>
                                           <button type="button" class="btn btn-info text-white" disabled id="list_offset">1</button>
-                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) echo 'disabled'; ?>>Next</button>
+                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)">Next</button>
                                     </div>
                               </div>
                         </div>

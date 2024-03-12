@@ -11,331 +11,6 @@ if ($return_status_code === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
-      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-
-      unset($_SESSION['update_book_id']);
-
-      require_once __DIR__ . '/../../../config/db_connection.php';
-      require_once __DIR__ . '/../../../tool/php/converter.php';
-      require_once __DIR__ . '/../../../tool/php/formatter.php';
-      require_once __DIR__ . '/../../../tool/php/ratingStars.php';
-
-      try {
-            // Connect to MySQL
-            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
-
-            // Check connection
-            if (!$conn) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  exit;
-            }
-
-            $elem = '';
-
-            $stmt = $conn->prepare('select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.status=1 order by book.name,book.id limit 10');
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            } else {
-                  $result = $stmt->get_result();
-                  if ($result->num_rows > 0) {
-                        $counter = 0;
-                        while ($row = $result->fetch_assoc()) {
-                              $counter++;
-                              $row['edition'] = convertToOrdinal($row['edition']);
-                              $id = $row['id'];
-                              $row['isbn'] = formatISBN($row['isbn']);
-                              $row['publishDate'] = MDYDateFormat($row['publishDate']);
-                              $row['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
-                              $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
-                              $elem .= '<tr>';
-                              $elem .= "<td class=\"align-middle\">{$counter}</td>";
-                              $elem .= "<td class=\"align-middle\"><img {$row['imagePath']} alt=\"book image\" class=\"book_image\"></img></td>";
-                              $elem .= "<td class=\"col-2 align-middle\">{$row['name']}</td>";
-                              $elem .= "<td class=\"align-middle\">{$row['edition']}</td>";
-                              $elem .= "<td class=\"align-middle text-nowrap\">{$row['isbn']}</td>";
-                              $elem .= "<td class=\"align-middle\">{$row['ageRestriction']}</td>";
-
-                              $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
-                              if (!$sub_stmt) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->bind_param('s', $id);
-                              $isSuccess = $sub_stmt->execute();
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $sub_stmt->close();
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              } else {
-                                    $sub_result = $sub_stmt->get_result();
-                                    if ($sub_result->num_rows > 0) {
-                                          $elem .= "<td class=\"col-1 align-middle\">
-                                          <div class='d-flex flex-column'>";
-                                          while ($sub_row = $sub_result->fetch_assoc()) {
-                                                if ($sub_result->num_rows === 1)
-                                                      $elem .= "<p class='mb-0 text-nowrap'>
-                                                      {$sub_row['authorName']}
-                                                </p>";
-                                                else
-                                                      $elem .= "<p class='text-nowrap'>
-                                                      {$sub_row['authorName']}
-                                                </p>";
-                                          }
-                                          $elem .= "</div>
-                                          </td>";
-                                    } else
-                                          $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
-                              }
-
-                              $sub_stmt->close();
-
-                              $sub_stmt = $conn->prepare('select category.name,category.description from category join belong on belong.categoryID=category.id where belong.bookID=? order by category.name,category.id');
-                              if (!$sub_stmt) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->bind_param('s', $id);
-                              $isSuccess = $sub_stmt->execute();
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $sub_stmt->close();
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              } else {
-                                    $sub_result = $sub_stmt->get_result();
-                                    if ($sub_result->num_rows > 0) {
-                                          $elem .= "<td class=\"col-1 align-middle\">
-                                          <div class='d-flex flex-column'>";
-                                          while ($sub_row = $sub_result->fetch_assoc()) {
-                                                $description = $sub_row['description'] ? $sub_row['description'] : 'N/A';
-                                                if ($sub_result->num_rows === 1)
-                                                      $elem .= "<p class='mb-0 text-nowrap'>
-                                                      {$sub_row['name']}&nbsp;
-                                                      <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
-                                                </p>";
-                                                else
-                                                      $elem .= "<p class='text-nowrap'>
-                                                      {$sub_row['name']}&nbsp;
-                                                      <i class=\"bi bi-question-circle help\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"{$description}\"></i>
-                                                </p>";
-                                          }
-                                          $elem .= "</div>
-                                          </td>";
-                                    } else
-                                          $elem .= "<td class=\"col-1 align-middle\">N/A</td>";
-                              }
-
-                              $sub_stmt->close();
-
-                              $elem .= "<td class=\"col-1 align-middle\">
-                                    <div class='d-flex flex-column'>
-                                          <p>
-                                                {$row['publisher']}
-                                          </a>
-                                          <p class='text-nowrap'>
-                                                {$row['publishDate']}   
-                                          </p>
-                                    </div>
-                              </td>";
-                              $row['description'] = $row['description'] ? $row['description'] : 'N/A';
-                              $elem .= "<td class=\"col-1 align-middle\"><div class='truncate'>{$row['description']}</div></td>";
-                              if ($row['avgRating']) {
-                                    $func_res = displayRatingStars($row['avgRating']);
-                                    $elem .= "<td class=\"align-middle col-1\">
-                                          <span class='text-nowrap'><span class='text-warning'>{$func_res}</span>&nbsp;({$row['avgRating']})</span>
-                                    </td>";
-                              } else
-                                    $elem .= "<td class=\"align-middle\">
-                                          N/A
-                                    </td>";
-
-                              $elem .= "<td class=\"col-1 align-middle\">
-                                    <div class='d-flex flex-column'>";
-                              $sub_stmt = $conn->prepare('select price,inStock from physicalCopy where id=?');
-                              if (!$sub_stmt) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->bind_param('s', $id);
-                              $isSuccess = $sub_stmt->execute();
-                              if ($isSuccess) {
-                                    $sub_result = $sub_stmt->get_result();
-                                    if ($sub_result->num_rows === 1) {
-                                          $sub_row = $sub_result->fetch_assoc();
-                                          $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $sub_row['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
-                                          $elem .= "<p class='text-nowrap'>Physical: {$sub_row['price']} (in stock: {$sub_row['inStock']})</p>";
-                                    } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p class='text-nowrap'>Physical: N/A (in stock: N/A)</p>";
-                              } else {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $sub_stmt->close();
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->close();
-
-                              $sub_stmt = $conn->prepare('select price,filePath from fileCopy where id=?');
-                              if (!$sub_stmt) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->bind_param('s', $id);
-                              $isSuccess = $sub_stmt->execute();
-                              if ($isSuccess) {
-                                    $sub_result = $sub_stmt->get_result();
-                                    if ($sub_result->num_rows === 1) {
-                                          $sub_row = $sub_result->fetch_assoc();
-                                          $sub_row['filePath'] = $sub_row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($sub_row['filePath'])) . "\"" : '';
-                                          $target = $sub_row['filePath'] !== '' ? "target='_blank'" : '';
-                                          $alt = $sub_row['filePath'] !== '' ? "PDF file" : 'No PDF file';
-                                          $tooltip = $sub_row['filePath'] !== '' ? "Read file" : 'No PDF file';
-                                          $sub_row['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $elem .= "<p class='text-nowrap'>E-book: {$sub_row['price']} <a title='read PDF file' $target {$sub_row['filePath']} alt='$alt'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"$tooltip\"></i>
-                                          </a></p>";
-                                    } else if ($sub_result->num_rows === 0)
-                                          $elem .= "<p class='text-nowrap'>E-book: N/A <a title='no PDF file' href='#' alt='No PDF file'>
-                                          <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"No PDF file\"></i>
-                                          </a></p>";
-                              } else {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $sub_stmt->close();
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->close();
-                              $elem .= "</div></td>";
-
-                              $sub_stmt = $conn->prepare('select (exists(select * from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=?) 
-    or exists(select * from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=?)) as result');
-                              if (!$sub_stmt) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $conn->close();
-                                    exit;
-                              }
-                              $sub_stmt->bind_param('ss', $id, $id);
-                              $isSuccess = $sub_stmt->execute();
-                              if (!$isSuccess) {
-                                    http_response_code(500);
-                                    require_once __DIR__ . '/../../../error/500.php';
-                                    $sub_stmt->close();
-                                    $stmt->close();
-                                    $conn->close();
-                                    exit;
-                              } else {
-                                    $sub_result = $sub_stmt->get_result();
-                                    $sub_result = $sub_result->fetch_assoc();
-                                    if ($sub_result['result'])
-                                          $elem .= "<td class='align-middle col-1'>
-                                                      <div class='d-flex flex-lg-row flex-column'>
-                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
-                                                                  <i class=\"bi bi-info-circle text-white\"></i>
-                                                            </a>
-                                                            <button title='deactivate book' onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
-                                                                  <i class=\"bi bi-power text-white\"></i>
-                                                            </button>
-                                                      </div>
-                                                </td>";
-                                    else
-                                          $elem .= "<td class='align-middle col-1'>
-                                                      <div class='d-flex flex-lg-row flex-column'>
-                                                            <a title='go to book detail' class='btn btn-info btn-sm' href='./edit-book?id=$id' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\">
-                                                                  <i class=\"bi bi-info-circle text-white\"></i>
-                                                            </a>
-                                                            <button title='deactivate book' onclick='confirmDeactivateBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Deactive\">
-                                                                  <i class=\"bi bi-power text-white\"></i>
-                                                            </button>
-                                                            <button title='delete book' onclick='confirmDeleteBook(\"$id\")' class='btn btn-danger ms-lg-2 mt-2 mt-lg-0 btn-sm' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Delete\">
-                                                                  <i class=\"bi bi-trash text-white\"></i>
-                                                            </button>
-                                                      </div>
-                                                </td>";
-                              }
-                              $elem .= '</tr>';
-                        }
-                  }
-            }
-            $stmt->close();
-
-            $stmt = $conn->prepare('select count(*) as totalBook from book where status=1');
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            } else {
-                  $result = $stmt->get_result();
-                  $result = $result->fetch_assoc();
-                  $totalEntries = $result['totalBook'];
-            }
-            $stmt->close();
-
-            $stmt = $conn->prepare('select name from category order by name,id');
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            }
-            $categoryList = '';
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                  $categoryList .= "<li class='categoryHover pointer' onclick='chooseCategory(event)'>{$row['name']}</li>";
-            }
-            $stmt->close();
-            $conn->close();
-      } catch (Exception $e) {
-            http_response_code(500);
-            require_once __DIR__ . '/../../../error/500.php';
-            exit;
-      }
 ?>
 
       <!DOCTYPE html>
@@ -352,7 +27,10 @@ if ($return_status_code === 400) {
             <meta name="description" content="Manage books of NQK Bookstore">
             <title>Manage Books</title>
             <link rel="stylesheet" href="/css/admin/book/book_list.css">
-            <?php storeToken(); ?>
+            <?php
+            require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+            storeToken();
+            ?>
       </head>
 
       <body>
@@ -395,10 +73,7 @@ if ($return_status_code === 400) {
                                                             </form>
                                                       </li>
                                                       <li>
-                                                            <ul class='categories w-100 container mt-2'>
-                                                                  <?php
-                                                                  echo $categoryList;
-                                                                  ?>
+                                                            <ul class='categories w-100 container mt-2' id='category_list'>
                                                             </ul>
                                                       </li>
                                                 </ul>
@@ -446,35 +121,24 @@ if ($return_status_code === 400) {
                                           </tr>
                                     </thead>
                                     <tbody id="table_body">
-                                          <?php
-                                          echo $elem;
-                                          ?>
                                     </tbody>
                               </table>
                         </div>
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">
-                                          <?php
-                                          if ($totalEntries === 0) echo '0';
-                                          else echo '1'; ?>
-                                    </p>
+                                    <p id="start_entry">1</p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">
-                                          <?php
-                                          if ($totalEntries < 10) echo $totalEntries;
-                                          else echo '10'; ?>
-                                    </p>
+                                    <p id="end_entry">10</p>
                                     <p>&nbsp;of&nbsp;</p>
-                                    <p id="total_entries"><?php echo $totalEntries; ?></p>
+                                    <p id="total_entries"></p>
                                     <p>&nbsp;entries</p>
                               </div>
                               <div class="group_button">
                                     <div class="btn-group d-flex" role="group">
                                           <button type="button" class="btn btn-outline-info" id="prev_button" onClick="changeList(false)" disabled>Previous</button>
                                           <button type="button" class="btn btn-info text-white" disabled id="list_offset">1</button>
-                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) echo 'disabled'; ?>>Next</button>
+                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)">Next</button>
                                     </div>
                               </div>
                         </div>

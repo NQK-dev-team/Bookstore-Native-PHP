@@ -7,8 +7,15 @@ let newImg = null, newFile = null, removeFile = false;
 
 let imageError = false, pdfError = false;
 
+let bookID = null;
+
 $(document).ready(() =>
 {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if (urlParams.has('id'))
+            bookID = urlParams.get('id');
+
       initToolTip();
 
       originalImg = $('#bookImage').prop('src');
@@ -395,6 +402,7 @@ function submitForm()
       }
 
       const postData = new FormData();
+      postData.append('id', bookID);
       postData.append('name', name);
       postData.append('edition', edition);
       postData.append('isbn', isbn);

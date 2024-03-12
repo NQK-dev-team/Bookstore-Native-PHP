@@ -12,6 +12,8 @@ $(document).ready(function ()
             event.preventDefault();
             selectEntry();
       });
+
+      fetchCategoryList();
 });
 
 function fetchCategoryList()

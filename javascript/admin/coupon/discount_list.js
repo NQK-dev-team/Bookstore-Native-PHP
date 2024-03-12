@@ -12,6 +12,8 @@ $(document).ready(function ()
       });
 
       initToolTip();
+
+      fetchCouponList();
 });
 
 function updateSwitchLabel()

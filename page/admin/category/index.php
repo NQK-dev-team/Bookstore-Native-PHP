@@ -11,82 +11,6 @@ if ($return_status_code === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
-      require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-
-      unset($_SESSION['update_book_id']);
-
-      require_once __DIR__ . '/../../../config/db_connection.php';
-
-      try {
-            $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
-
-            if (!$conn) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  exit;
-            }
-
-            $stmt = $conn->prepare("SELECT COUNT(*) as total FROM category");
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            }
-            $result = $stmt->get_result();
-            $totalEntries = $result->fetch_assoc()['total'];
-            $stmt->close();
-
-
-            $stmt = $conn->prepare("SELECT * FROM category order by name,id LIMIT 10");
-            if (!$stmt) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $conn->close();
-                  exit;
-            }
-            $isSuccess = $stmt->execute();
-            if (!$isSuccess) {
-                  http_response_code(500);
-                  require_once __DIR__ . '/../../../error/500.php';
-                  $stmt->close();
-                  $conn->close();
-                  exit;
-            }
-            $result = $stmt->get_result();
-            $idx = 0;
-            $elem = '';
-            while ($row = $result->fetch_assoc()) {
-                  $idx++;
-                  $row['description'] = $row['description'] ? $row['description'] : 'N/A';
-                  $elem .= '<tr>';
-                  $elem .= '<td class="align-middle">' . $idx . '</td>';
-                  $elem .= '<td class="col-1 align-middle">' . $row['name'] . '</td>';
-                  $elem .= '<td class="align-middle"><div class="truncate">' . $row['description'] . '</div></td>';
-                  $elem .= '<td class="align-middle col-1">';
-                  $elem .= "<div class='d-flex flex-lg-row flex-column'>";
-                  $elem .= '<button title="edit category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit" class="btn btn-info btn-sm me-lg-2" onclick="openEditModal(\'' . $row['id'] . '\')"><i class="bi bi-pencil text-white"></i></button>';
-                  $elem .= '<button title="delete category" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Delete" class="btn btn-danger btn-sm mt-2 mt-lg-0" onclick="confirmDelete(\'' . $row['id'] . '\')"><i class="bi bi-trash text-white"></i></button>';
-                  $elem .= "</div>";
-                  $elem .= '</td>';
-                  $elem .= '</tr>';
-            }
-
-            $conn->close();
-      } catch (Exception $e) {
-            http_response_code(500);
-            require_once __DIR__ . '/../../../error/500.php';
-            exit;
-      }
 ?>
 
       <!DOCTYPE html>
@@ -103,7 +27,10 @@ if ($return_status_code === 400) {
             <meta name="description" content="Manage book categories of NQK Bookstore">
             <title>Manage Book Categories</title>
             <link rel="stylesheet" href="/css/admin/category/category_list.css">
-            <?php storeToken(); ?>
+            <?php
+            require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+            storeToken();
+            ?>
       </head>
 
       <body>
@@ -156,35 +83,24 @@ if ($return_status_code === 400) {
                                           </tr>
                                     </thead>
                                     <tbody id="table_body">
-                                          <?php
-                                          echo $elem;
-                                          ?>
                                     </tbody>
                               </table>
                         </div>
                         <div class="w-100 d-flex flex-sm-row flex-column justify-content-sm-between mb-4 mt-2 align-items-center">
                               <div class="d-flex">
                                     <p>Show&nbsp;</p>
-                                    <p id="start_entry">
-                                          <?php
-                                          if ($totalEntries === 0) echo '0';
-                                          else echo '1'; ?>
-                                    </p>
+                                    <p id="start_entry">1</p>
                                     <p>&nbsp;to&nbsp;</p>
-                                    <p id="end_entry">
-                                          <?php
-                                          if ($totalEntries < 10) echo $totalEntries;
-                                          else echo '10'; ?>
-                                    </p>
+                                    <p id="end_entry">10</p>
                                     <p>&nbsp;of&nbsp;</p>
-                                    <p id="total_entries"><?php echo $totalEntries; ?></p>
+                                    <p id="total_entries"></p>
                                     <p>&nbsp;entries</p>
                               </div>
                               <div class="group_button">
                                     <div class="btn-group d-flex" role="group">
                                           <button type="button" class="btn btn-outline-info" id="prev_button" onClick="changeList(false)" disabled>Previous</button>
                                           <button type="button" class="btn btn-info text-white" disabled id="list_offset">1</button>
-                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)" <?php if ($totalEntries !== "N/A" && 10 >= $totalEntries) echo 'disabled'; ?>>Next</button>
+                                          <button type="button" class="btn btn-outline-info" id="next_button" onClick="changeList(true)">Next</button>
                                     </div>
                               </div>
                         </div>
