@@ -63,7 +63,7 @@ if ($return_status_code === 400) {
                                     <p class="mb-0 me-2">Coupon Type</p>
                                     <div>
                                           <select class="form-select pointer" aria-label="Select coupon type" id='couponSelect' onchange="selectEntry()">
-                                                <option value="1">Event</option>
+                                                <option value="1" selected>Event</option>
                                                 <option value="2">Point</option>
                                                 <option value="3">Referrer</option>
                                           </select>
