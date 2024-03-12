@@ -17,7 +17,6 @@ require_once __DIR__ . '/../../../tool/php/password.php';
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
       parse_str(file_get_contents('php://input'), $_PUT);
       if (
-            isset($_PUT['id']) &&
             isset($_PUT['newPassword']) &&
             isset($_PUT['confirmPassword'])
       ) {
@@ -28,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
 
-                  $id = sanitize(rawurldecode($_PUT['id']));
+                  $id = $_SESSION['update_customer_id'];
                   $newPassword = sanitize(rawurldecode($_PUT['newPassword']));
                   $confirmPassword = sanitize(rawurldecode($_PUT['confirmPassword']));
 
@@ -102,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                   }
                   $result = $result->fetch_assoc();
                   $email = $result['email'];
-                  $phone=$result['phone'];
+                  $phone = $result['phone'];
                   $stmt->close();
 
                   if (!$email) {

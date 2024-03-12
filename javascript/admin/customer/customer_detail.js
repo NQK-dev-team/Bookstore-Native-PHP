@@ -1,12 +1,7 @@
-let mode = null, customerID = null;
+let mode = null;
 
 $(document).ready(function ()
 {
-      const urlParams = new URLSearchParams(window.location.search);
-
-      if (urlParams.has('id'))
-            customerID = urlParams.get('id');
-
       document.getElementById('btnradio1').addEventListener('change', function ()
       {
             if (this.checked)
@@ -156,7 +151,7 @@ function changeCustomerInfo()
       $.ajax({
             url: '/ajax_service/admin/customer/update_info.php',
             method: 'PUT',
-            data: { email, phone, id: encodeData(customerID) },
+            data: { email, phone },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -254,7 +249,7 @@ function changePassword()
       $.ajax({
             url: '/ajax_service/admin/customer/update_password.php',
             method: 'PUT',
-            data: { newPassword, confirmPassword, id: encodeData(customerID) },
+            data: { newPassword, confirmPassword },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -321,7 +316,7 @@ function findOrder()
       $.ajax({
             url: '/ajax_service/admin/customer/get_order_list.php',
             method: 'GET',
-            data: { code: search, date: date, id: encodeData(customerID) },
+            data: { code: search, date: date },
             dataType: 'json',
             success: function (data)
             {
@@ -409,7 +404,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/admin/customer/file_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', ''), id: encodeData(customerID) },
+            data: { code: code.replace('/-/g', '') },
             dataType: 'json',
             success: function (data)
             {
@@ -506,7 +501,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/admin/customer/physical_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', ''), id: encodeData(customerID) },
+            data: { code: code.replace('/-/g', '') },
             dataType: 'json',
             success: function (data)
             {

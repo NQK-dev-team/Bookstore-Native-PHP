@@ -14,9 +14,9 @@ require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['code'], $_GET['id'])) {
+      if (isset($_GET['code'])) {
             try {
-                  $id = sanitize(rawurldecode($_GET['id']));
+                  $id = $_SESSION['update_customer_id'];
                   $code = sanitize(rawurldecode(str_replace('-', '', $_GET['code'])));
 
                   // Connect to MySQL

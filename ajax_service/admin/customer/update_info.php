@@ -16,7 +16,6 @@ require_once __DIR__ . '/../../../tool/php/send_mail.php';
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
       parse_str(file_get_contents('php://input'), $_PUT);
       if (
-            isset($_PUT['id']) &&
             isset($_PUT['email']) &&
             isset($_PUT['phone'])
       ) {
@@ -27,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
 
-                  $id = sanitize(rawurldecode($_PUT['id']));
+                  $id = $_SESSION['update_customer_id'];
                   $email = sanitize(rawurldecode($_PUT['email']));
                   $phone = sanitize(rawurldecode($_PUT['phone']));
 

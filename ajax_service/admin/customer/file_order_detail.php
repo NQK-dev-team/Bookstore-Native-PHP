@@ -14,9 +14,9 @@ require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['code'], $_GET['id'])) {
+      if (isset($_GET['code'])) {
             try {
-                  $id = sanitize(rawurldecode($_GET['id']));
+                  $id = $_SESSION['update_customer_id'];
                   $code = sanitize(rawurldecode(str_replace('-', '', $_GET['code'])));
 
                   // Connect to MySQL
@@ -29,23 +29,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt=$conn->prepare('select * from customer where id=?');
-                  if(!$stmt) {
+                  $stmt = $conn->prepare('select * from customer where id=?');
+                  if (!$stmt) {
                         http_response_code(500);
                         echo json_encode(['error' => 'Query `select * from customer where id=?` preparation failed!']);
                         $conn->close();
                         exit;
                   }
-                  $stmt->bind_param('s',$id);
-                  if(!$stmt->execute()) {
+                  $stmt->bind_param('s', $id);
+                  if (!$stmt->execute()) {
                         http_response_code(500);
                         echo json_encode(['error' => $stmt->error]);
                         $stmt->close();
                         $conn->close();
                         exit;
                   }
-                  $result=$stmt->get_result();
-                  if($result->num_rows===0) {
+                  $result = $stmt->get_result();
+                  if ($result->num_rows === 0) {
                         http_response_code(404);
                         echo json_encode(['error' => 'Customer not found!']);
                         $stmt->close();
