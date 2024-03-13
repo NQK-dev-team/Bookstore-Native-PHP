@@ -81,10 +81,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $conn->close();
                               }
                               $result = $stmt->get_result();
+                              $appliedBooks=[];
                               while ($row = $result->fetch_assoc()) {
                                     $row['edition']=convertToOrdinal($row['edition']);
-                                    $queryResult['bookApply'][] = $row;
+                                    $appliedBooks[]=$row;
                               }
+                              $queryResult['bookApply']= $appliedBooks;
                               $stmt->close();
                         }
                   } else if ($type === '2') {

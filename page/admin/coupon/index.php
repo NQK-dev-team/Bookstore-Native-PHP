@@ -274,10 +274,7 @@ if ($return_status_code === 400) {
                                                                                     </form>
                                                                               </li>
                                                                               <li>
-                                                                                    <ul class='categories w-100 container mt-2'>
-                                                                                          <?php
-                                                                                          echo $categoryList;
-                                                                                          ?>
+                                                                                    <ul class='categories w-100 container mt-2' id='category_list'>
                                                                                     </ul>
                                                                               </li>
                                                                         </ul>

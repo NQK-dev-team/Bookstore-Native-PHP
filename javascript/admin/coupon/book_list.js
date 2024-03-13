@@ -38,6 +38,46 @@ $(document).ready(function ()
       {
             selectBookEntry();
       });
+
+      $.ajax({
+            url: '/ajax_service/admin/book/get_category_list.php',
+            method: 'GET',
+            data: { search: '' },
+            dataType: 'json',
+            success: function (data)
+            {
+
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#category_list').empty();
+                        for (let i = 0; i < data.query_result.length; i++)
+                        {
+                              $('#category_list').append(
+                                    $(`<li class='categoryHover pointer' onclick='chooseCategory(event)'>${ data.query_result[i].name }</li>`)
+                              );
+                        }
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
 });
 
 function fetchBookList()
