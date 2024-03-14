@@ -45,8 +45,7 @@
       background-color: #adadad;
 }
 
-#category_chart,
-#book_chart {
+#category_chart {
       max-height: 50vh;
 }
 

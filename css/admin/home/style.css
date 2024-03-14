@@ -18,6 +18,10 @@
       max-width: 500px;
 }
 
+#category_chart {
+      max-height: 50vh;
+}
+
 @media only screen and (max-width: 1199px) {
       .bookCarouselSlides {
             width: 85%;

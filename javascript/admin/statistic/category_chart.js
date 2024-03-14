@@ -112,13 +112,6 @@ function getCategoryChart()
                                                             size: 16
                                                       },
                                                       color: 'black'
-                                                },
-                                                ticks: {
-                                                      callback: function (value, index, values)
-                                                      {
-                                                            // If the label is "0", return an empty string
-                                                            return value === "0" ? "" : value;
-                                                      }
                                                 }
                                           }
                                     },
