@@ -1,13 +1,66 @@
 $(document).ready(function ()
 {
+      getCategoryChart();
+});
+
+let categoryChart = null;
+
+function getCategoryChart()
+{
+      const start = encodeData($('#startDateInput').val());
+      const end = encodeData($('#endDateInput').val());
+
+      {
+            const startDate = new Date(start);
+            const endDate = new Date(end);
+            const today = new Date();
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            if (!start)
+            {
+                  $('#errorModal').modal('show');
+                  $('#error_message').text('Missing start date!');
+                  return;
+            }
+            else if (startDate > today)
+            {
+                  $('#errorModal').modal('show');
+                  $('#error_message').text('Start date must be before or the same day as today!');
+                  return;
+            }
+
+            if (!end)
+            {
+                  $('#errorModal').modal('show');
+                  $('#error_message').text('Missing end date!');
+                  return;
+            }
+            else if (endDate > today)
+            {
+                  $('#errorModal').modal('show');
+                  $('#error_message').text('End date must be before or the same day as today!');
+                  return;
+            }
+
+            if (startDate > endDate)
+            {
+                  $('#errorModal').modal('show');
+                  $('#error_message').text('Start date must be before or the same day as end date!');
+                  return;
+            }
+      }
+
       const labels = [];
       const chart_data = [];
       let color = { backgroundColor: [], borderColor: [] };
 
       $.ajax({
-            url: '/ajax_service/admin/home/get_best_category.php',
+            url: '/ajax_service/admin/statistic/get_category_sale.php',
             method: 'GET',
             dataType: 'json',
+            data: { start, end },
             success: function (data)
             {
                   if (data.error)
@@ -39,7 +92,6 @@ $(document).ready(function ()
                               type: 'bar',
                               data: config_data,
                               options: {
-                                    responsive: true,
                                     scales: {
                                           y: {
                                                 beginAtZero: true,
@@ -60,7 +112,8 @@ $(document).ready(function ()
                                                             size: 16
                                                       },
                                                       color: 'black'
-                                                }, ticks: {
+                                                },
+                                                ticks: {
                                                       callback: function (value, index, values)
                                                       {
                                                             // If the label is "0", return an empty string
@@ -92,7 +145,9 @@ $(document).ready(function ()
                               },
                         };
 
-                        new Chart(
+                        if (categoryChart) categoryChart.destroy();
+
+                        categoryChart = new Chart(
                               document.getElementById('category_chart'),
                               config
                         );
@@ -113,4 +168,4 @@ $(document).ready(function ()
                   }
             }
       });
-});
+}

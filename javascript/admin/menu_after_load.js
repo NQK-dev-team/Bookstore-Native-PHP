@@ -11,11 +11,7 @@ $(document).ready(() =>
             else if (location.includes('/admin/coupon')) $('#manage_dropdown_4').addClass('text-primary');
       }
       else if (location.includes('/admin/statistic'))
-      {
-            $('#statistic_dropdown_0').addClass('text-primary');
-            if (location.includes('/book')) $('#statistic_dropdown_1').addClass('text-primary');
-            else if (location.includes('/revenue')) $('#statistic_dropdown_3').addClass('text-primary');
-      }
+            $('#statistic_nav').addClass('text-primary');
       else if (location.includes('/account'))
             $('#profile_nav').addClass('text-primary');
       else if (location.includes('/policy'))
