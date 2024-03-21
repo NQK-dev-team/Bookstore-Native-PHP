@@ -33,6 +33,48 @@ function getComment($conn, $bookID) {
             echo $row['customerID']."<br>";
             echo $row['commentTime']."<br>";
             echo nl2br($row['content']."<br><br>");
-        echo '</p></div>';
+        echo '</p>';
+        if($_SESSION['id'] == $row['customerID']){
+            echo '<form class="edit-form" method="POST" action="edit-comment.php">
+            <input type="hidden" name="customerID" value="'.$row['customerID'].'">
+            <input type="hidden" name="commentIdx" value="'.$row['commentIdx'].'">
+            <input type="hidden" name="commentTime" value="'.$row['commentTime'].'">
+            <input type="hidden" name="bookID" value="'.$bookID.'">
+            <input type="hidden" name="content" value="'.$row['content'].'">
+            <button name="edit">Edit</button>
+        </form>
+        <form class="delete-form" method="POST" action="'.deleteComments($conn).'">
+            <input type="hidden" name="customerID" value="'.$row['customerID'].'">
+            <input type="hidden" name="commentIdx" value="'.$row['commentIdx'].'">
+            <input type="hidden" name="bookID" value="'.$bookID.'">
+            <button type="submit" name="deleteComment" onclick="if(confirm(\'Are you sure you want to delete this comment?\')) { this.form.submit(); location.reload(); } else {return false;}">Delete</button>
+        </form>';
+        }
+        echo '</div>';
+    }
+}
+
+function editComment($conn) {
+    if (isset($_POST['commentUpdate'])){
+        // echo "Comment submitted";
+        $customerID = $_POST['customerID'];
+        $bookID = $_POST['bookID'];
+        $commentTime = $_POST['commentTime'];
+        $content = $_POST['content'];
+        $commentIdx = $_POST['commentIdx'];
+
+        $sql = "UPDATE commentcontent SET content = '$content', commentTime = '$commentTime' WHERE customerID = '$customerID' AND bookID = '$bookID' AND commentIdx = '$commentIdx'";
+        $result = $conn->query($sql);
+    }
+}
+function deleteComments($conn) {
+    if (isset($_POST['deleteComment'])){
+        // echo "Comment submitted";
+        $customerID = $_POST['customerID'];
+        $bookID = $_POST['bookID'];
+        $commentIdx = $_POST['commentIdx'];
+
+        $sql = "Delete FROM commentcontent WHERE customerID = '$customerID' AND bookID = '$bookID' AND commentIdx = '$commentIdx'";
+        $result = $conn->query($sql);
     }
 }

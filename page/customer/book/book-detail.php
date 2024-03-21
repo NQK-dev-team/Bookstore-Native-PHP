@@ -95,10 +95,57 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../../head_element/meta.php';
             ?>
             <link rel="stylesheet" href="/css/preset_style.css">
-
+            <!-- <link rel="stylesheet" href="../../css/customer/book/book-detail.css"> -->
             <meta name="author" content="Anh Khoa">
             <meta name="description" content="Home page of NQK bookstore">
-            <link rel="stylesheet" href="/css/customer/book/book-detail.css">
+            <style>
+                  .comment-box{
+                        margin-top: 20px;
+                        padding: 20px;
+                        border: 1px solid #e6e6e6;
+                        border-radius: 5px;
+                        background-color: hsl(0, 0%, 98%);
+                        position: relative;
+                  }
+                  .comment-box p{
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 14px;
+                        line-height: 16px;
+                        color: #282828;
+                        font-weight: 100;
+                       
+                  }
+                  .edit-form {
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                  }
+                  .edit-form button{
+                        width: 40px;
+                        color: #282828;
+                        background-color: hsl(0, 0%, 98%);
+                        border: none;
+                        opacity: 0.7;
+                  }
+                  .edit-form button:hover{
+                       opacity: 1;
+                  }
+                  .delete-form {
+                        position: absolute;
+                        top: 0px;
+                        right: 60px;
+                  }
+                  .delete-form button{
+                        width: 40px;
+                        color: #282828;
+                        background-color: hsl(0, 0%, 98%);
+                        border: none;
+                        opacity: 0.7;
+                  }
+                  .delete-form button:hover{
+                       opacity: 1;
+                  }
+            </style>
             <title>Book detail</title>
       </head>
 
@@ -178,6 +225,7 @@ if ($return_status_code === 400) {
                               }
                         getComment($conn, $bookID);
                         //comment section ends
+                        //var_dump($_SESSION);
                         echo '</div>'; 
                   }
                   
