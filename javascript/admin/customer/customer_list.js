@@ -47,6 +47,9 @@ function fetchCustomerList()
             url: '/ajax_service/admin/customer/retrieve_list.php',
             method: 'GET',
             data: { entry: entry, offset: listOffset, search: search, status: status },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             dataType: 'json',
             success: function (data)
             {

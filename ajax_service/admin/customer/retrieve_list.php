@@ -11,6 +11,7 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
+require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (
@@ -20,6 +21,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             isset($_GET['search'])
       ) {
             try {
+                  if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                        http_response_code(403);
+                        echo json_encode(['error' => 'CSRF token validation failed!']);
+                        exit;
+                  }
+
                   $entry = sanitize(rawurldecode($_GET['entry']));
                   $offset = sanitize(rawurldecode($_GET['offset']));
                   $status = filter_var(sanitize(rawurldecode($_GET['status'])), FILTER_VALIDATE_BOOLEAN);

@@ -128,6 +128,18 @@ begin
 end//
 delimiter ;
 
+drop trigger if exists orderBusinessConstraintInsertTrigger;
+delimiter //
+create trigger orderBusinessConstraintInsertTrigger
+before insert on customerOrder
+for each row
+begin
+    if not new.status and not(select status from customerOrder where customerID=new.customerID) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This customer has already had an unpaid order, cannot insert another!';
+    end if;
+end//
+delimiter ;
+
 drop trigger if exists orderBusinessConstraintUpdateTrigger;
 delimiter //
 create trigger orderBusinessConstraintUpdateTrigger
