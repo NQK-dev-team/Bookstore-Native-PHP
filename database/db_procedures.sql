@@ -140,8 +140,8 @@ begin
                     ) as combined order by combined.discount desc,combined.cardinal limit 1;
                     
                     if discountID is not null then
-						 set localTotalCost:=localTotalCost+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*(100-discount)/100.0;
-						 set localTotalDiscount:=localTotalDiscount+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*discount/100.0;
+						 set localTotalCost:=round((localTotalCost+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*(100-discount)/100.0),2);
+						 set localTotalDiscount:=round((localTotalDiscount+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount*discount/100.0),2);
                          
                          if not exists(select * from discountApply where discountApply.orderID=orderID and discountApply.discountID=discountID) then
 							insert into discountApply values(orderID,discountID);
@@ -174,8 +174,8 @@ begin
                     ) as combined order by combined.discount desc,combined.cardinal limit 1;
                     
                     if discountID is not null then
-						 set localTotalCost:=localTotalCost+(select price from fileCopy where fileCopy.id=bookID)*(100-discount)/100.0;
-						 set localTotalDiscount:=localTotalDiscount+(select price from fileCopy where fileCopy.id=bookID)*discount/100.0;
+						 set localTotalCost:=round((localTotalCost+(select price from fileCopy where fileCopy.id=bookID)*(100-discount)/100.0),2);
+						 set localTotalDiscount:=round((localTotalDiscount+(select price from fileCopy where fileCopy.id=bookID)*discount/100.0),2);
                          
                          if not exists(select * from discountApply where discountApply.orderID=orderID and discountApply.discountID=discountID) then
 							insert into discountApply values(orderID,discountID);
@@ -194,8 +194,8 @@ begin
         
         if discountID is not null then
 			insert into discountApply values(orderID,discountID);
-            set localTotalDiscount:=localTotalDiscount+localTotalCost*discount/100.0;
-            set localTotalCost:=localTotalCost*(100-discount)/100.0;
+            set localTotalDiscount:=round((localTotalDiscount+localTotalCost*discount/100.0),2);
+            set localTotalCost:=round((localTotalCost*(100-discount)/100.0),2);
         end if;
     end;
     
@@ -207,11 +207,11 @@ begin
         
         if discountID is not null then
 			insert into discountApply values(orderID,discountID);
-            set localTotalDiscount:=localTotalDiscount+localTotalCost*discount/100.0;
-            set localTotalCost:=localTotalCost*(100-discount)/100.0;
+            set localTotalDiscount:=round((localTotalDiscount+localTotalCost*discount/100.0),2);
+            set localTotalCost:=round((localTotalCost*(100-discount)/100.0),2);
         end if;
     end;
     
-    update customerOrder set totalCost=localTotalCost,totalDiscount=localTotalDiscount where id=orderID; 
+    update customerOrder set totalCost=round(localTotalCost,2),totalDiscount=round(localTotalDiscount,2) where id=orderID; 
 end//
 delimiter ;

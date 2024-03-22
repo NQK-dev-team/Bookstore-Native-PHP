@@ -134,7 +134,7 @@ create trigger orderBusinessConstraintInsertTrigger
 before insert on customerOrder
 for each row
 begin
-    if not new.status and not(select status from customerOrder where customerID=new.customerID) then
+    if not new.status and exists(select * from customerOrder where customerID=new.customerID and status=false) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This customer has already had an unpaid order, cannot insert another!';
     end if;
 end//
@@ -392,7 +392,7 @@ begin
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This file copy of the book is in an order that has been paid for, can not remove it PDF file!';
     end if;
     
-    if (new.filePath is null or new.price is null) and not exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=new.id and customerOrder.status=true) then
+    if new.filePath is null or new.price is null then
 		DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
                                     
 		delete from fileOrder where id not in(
@@ -448,7 +448,7 @@ create trigger physicalCopyBusinessConstraintUpdateTrigger
 before update on physicalCopy
 for each row
 begin
-	if (new.inStock is null or new.price is null) and not exists(select * from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where physicalOrderContain.bookID=new.id and customerOrder.status=true) then            
+	if new.inStock is null or new.price is null then            
 		DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
             
 		delete from physicalOrder where id not in(
