@@ -1,5 +1,5 @@
-let physicalBook = [], fileBook = [];
 let deleteID = null, refreshList = null;
+
 
 $(document).ready(function ()
 {
@@ -21,10 +21,150 @@ $(document).ready(function ()
             refreshList = null;
       });
 
+      $('#paymentModal').on('hidden.bs.modal', function ()
+      {
+            $('input[name="paymentMethod"]').prop('checked', false);
+      });
+
+      reEvalOrder(true);
+
       fetchFileOrder();
 
-      fetchPhysicalOrder();
+      fetchPhysicalOrder(true);
+
+      updateBillingDetail();
+
+      setInterval(() =>
+      {
+            reEvalOrder(false);
+            $('div[name="physical_row"]').each(function ()
+            {
+                  updateInStock($(this).data('id'));
+            });
+      }, 10000);
 });
+
+function updateInStock(id)
+{
+      $.ajax({
+            url: '/ajax_service/customer/cart/get_in_stock.php',
+            method: 'GET',
+            data: { id },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $(`#in_stock_${ id }`).text(data.query_result);
+                        checkAmmount(id);
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+}
+
+function reEvalOrder(isFirstTime)
+{
+      $.ajax({
+            url: '/ajax_service/customer/cart/re_eval_order.php',
+            method: 'GET',
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
+            dataType: 'json',
+            success: async function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  } else if (data.query_result)
+                  {
+                        if ((data.query_result === 1 || data.query_result === 0) && !isFirstTime)
+                        {
+                              fetchFileOrder();
+                              fetchPhysicalOrder(false);
+                              updateBillingDetail();
+                        }
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+}
+
+function updateBillingDetail()
+{
+      $.ajax({
+            url: '/ajax_service/customer/cart/get_bill_detail.php',
+            method: 'GET',
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#totalPriceBeforeCoupon').text(`$${ data.query_result.originalCost }`);
+                        $('#totalPriceAfterCoupon').text(`$${ data.query_result.costAfterCoupon }`);
+                        $('#loyalDiscount').text(`${ data.query_result.loyalty }%`);
+                        $('#refDiscount').text(`${ data.query_result.referrer }%`);
+                        $('#finalPrice').text(`$${ data.query_result.final }`);
+                        $('#totalDiscount').text(`$${ data.query_result.discount }`);
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+}
 
 function fetchFileOrder()
 {
@@ -44,10 +184,8 @@ function fetchFileOrder()
                   }
                   else if (data.query_result)
                   {
-                        if (data.query_result.detail.length)
+                        if (!Array.isArray(data.query_result) && data.query_result.detail.length)
                         {
-                              $('#fileCopyTitle').css('display', 'block');
-                              $('#fileList').css('display', 'block');
                               $('#fileList').empty();
 
                               let temp = '';
@@ -64,9 +202,10 @@ function fetchFileOrder()
                                                 <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[i].name }</strong>
                                                 <strong class='text-md-start text-center'>${ data.query_result.detail[i].edition } edition</strong>
                                                 <div class='fs-5 text-md-start text-center'>
-                                                      <p class='mb-0'>$${ data.query_result.detail[i].price }</p>
-                                                      <div class='d-flex justify-content-center justify-content-md-start'>
-                                                            <p>$200</p>
+                                                      <p class='mb-0 ${ data.query_result.detail[i].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[i].price }</p>
+                                                      ${ data.query_result.detail[i].discount ?
+                                                `<div class='d-flex justify-content-center justify-content-md-start'>
+                                                            <p>$${ parseFloat(data.query_result.detail[i].price * (100 - data.query_result.detail[i].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
                                                                   <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -78,9 +217,10 @@ function fetchFileOrder()
                                                                               <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                                         </g>
                                                                   </svg>
-                                                                  <p class='ms-1 text-danger'>30%</p>
+                                                                  <p class='ms-1 text-danger'>${ data.query_result.detail[i].discount }%</p>
                                                             </div>
-                                                      </div>
+                                                      </div>`: ''
+                                          }
                                                 </div>
                                           </div>
                                     </div>
@@ -104,9 +244,10 @@ function fetchFileOrder()
                                                 <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].name }</strong>
                                                 <strong class='text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition</strong>
                                                 <div class='fs-5 text-md-start text-center'>
-                                                      <p class='mb-0'>$${ data.query_result.detail[data.query_result.detail.length - 1].price }</p>
-                                                      <div class='d-flex justify-content-center justify-content-md-start'>
-                                                            <p>$200</p>
+                                                      <p class='mb-0 ${ data.query_result.detail[data.query_result.detail.length - 1].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[data.query_result.detail.length - 1].price }</p>
+                                                      ${ data.query_result.detail[data.query_result.detail.length - 1].discount ?
+                                          `<div class='d-flex justify-content-center justify-content-md-start'>
+                                                            <p>$${ parseFloat(data.query_result.detail[data.query_result.detail.length - 1].price * (100 - data.query_result.detail[data.query_result.detail.length - 1].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
                                                                   <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -118,9 +259,10 @@ function fetchFileOrder()
                                                                               <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                                         </g>
                                                                   </svg>
-                                                                  <p class='ms-1 text-danger'>30%</p>
+                                                                  <p class='ms-1 text-danger'>${ data.query_result.detail[data.query_result.detail.length - 1].discount }%</p>
                                                             </div>
-                                                      </div>
+                                                      </div>`: ''
+                                    }
                                                 </div>
                                           </div>
                                     </div>
@@ -135,8 +277,7 @@ function fetchFileOrder()
                         }
                         else
                         {
-                              $('#fileCopyTitle').css('display', 'none');
-                              $('#fileList').css('display', 'none');
+                              $('#fileList').empty();
                         }
                   }
             },
@@ -157,7 +298,7 @@ function fetchFileOrder()
       });
 }
 
-function fetchPhysicalOrder()
+function fetchPhysicalOrder(isFirstTime)
 {
       $.ajax({
             url: '/ajax_service/customer/cart/get_physical_order.php',
@@ -175,16 +316,18 @@ function fetchPhysicalOrder()
                   }
                   else if (data.query_result)
                   {
-                        if (data.query_result.detail.length)
+                        if (data.query_result.destinationAddress && data.query_result.detail.length)
                         {
-                              $('#physicalCopyTitle').css('display', 'block');
-                              $('#physicalList').css('display', 'block');
                               $('#physicalList').empty();
+                              $('#physicalDestination').prop('disabled', false);
+
+                              if (isFirstTime)
+                                    $('#physicalDestination').val(data.query_result.destinationAddress);
 
                               let temp = '';
                               for (let i = 0; i < data.query_result.detail.length - 1; i++)
                               {
-                                    temp += `<div class='row my-1'>
+                                    temp += `<div class='row my-1' name='physical_row' data-id='${ data.query_result.detail[i].id }'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
                                           <a href="#" class='my-auto mx-auto'>
                                                 <img src="${ data.query_result.detail[i].imagePath }" class='book_image'>
@@ -195,9 +338,10 @@ function fetchPhysicalOrder()
                                                 <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[i].name }</strong>
                                                 <strong class='text-md-start text-center'>${ data.query_result.detail[i].edition } edition</strong>
                                                 <div class='fs-5 text-md-start text-center'>
-                                                      <p class='mb-0'>$${ data.query_result.detail[i].price }</p>
-                                                      <div class='d-flex justify-content-center justify-content-md-start'>
-                                                            <p>$200</p>
+                                                      <p class='mb-0 ${ data.query_result.detail[i].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[i].price }</p>
+                                                      ${ data.query_result.detail[i].discount ?
+                                                `<div class='d-flex justify-content-center justify-content-md-start'>
+                                                            <p>$${ parseFloat(data.query_result.detail[i].price * (100 - data.query_result.detail[i].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
                                                                   <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -209,9 +353,10 @@ function fetchPhysicalOrder()
                                                                               <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                                         </g>
                                                                   </svg>
-                                                                  <p class='ms-1 text-danger'>30%</p>
+                                                                  <p class='ms-1 text-danger'>${ data.query_result.detail[i].discount }%</p>
                                                             </div>
-                                                      </div>
+                                                      </div>`: ''
+                                          }
                                                 </div>
                                           </div>
                                     </div>
@@ -220,7 +365,7 @@ function fetchPhysicalOrder()
                                                 <input onclick='adjustAmount(false,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
                                                 <label class="btn btn-outline-danger" for="decrease_book_ammount_${ data.query_result.detail[i].id }">-</label>
 
-                                                <input onchange='checkAmmount("${ data.query_result.detail[i].id }")' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
+                                                <input onchange='checkAmmount("${ data.query_result.detail[i].id }",true)' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
 
                                                 <input onclick='adjustAmount(true,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
                                                 <label class="btn btn-outline-success" for="increase_book_ammount_${ data.query_result.detail[i].id }">+</label>
@@ -238,7 +383,7 @@ function fetchPhysicalOrder()
                               </div>
                               <hr class='my-2'>`;
                               }
-                              temp += `<div class='row my-1'>
+                              temp += `<div class='row my-1' name='physical_row' data-id='${ data.query_result.detail[data.query_result.detail.length - 1].id }'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
                                           <a href="#" class='my-auto mx-auto'>
                                                 <img src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
@@ -249,9 +394,10 @@ function fetchPhysicalOrder()
                                                 <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].name }</strong>
                                                 <strong class='text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition</strong>
                                                 <div class='fs-5 text-md-start text-center'>
-                                                      <p class='mb-0'>$${ data.query_result.detail[data.query_result.detail.length - 1].price }</p>
-                                                      <div class='d-flex justify-content-center justify-content-md-start'>
-                                                            <p>$200</p>
+                                                      <p class='mb-0 ${ data.query_result.detail[data.query_result.detail.length - 1].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[data.query_result.detail.length - 1].price }</p>
+                                                      ${ data.query_result.detail[data.query_result.detail.length - 1].discount ?
+                                          `<div class='d-flex justify-content-center justify-content-md-start'>
+                                                            <p>$${ parseFloat(data.query_result.detail[data.query_result.detail.length - 1].price * (100 - data.query_result.detail[data.query_result.detail.length - 1].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
                                                                   <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -263,9 +409,10 @@ function fetchPhysicalOrder()
                                                                               <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                                         </g>
                                                                   </svg>
-                                                                  <p class='ms-1 text-danger'>30%</p>
+                                                                  <p class='ms-1 text-danger'>${ data.query_result.detail[data.query_result.detail.length - 1].discount }%</p>
                                                             </div>
-                                                      </div>
+                                                      </div>`: ''
+                                    }
                                                 </div>
                                           </div>
                                     </div>
@@ -274,7 +421,7 @@ function fetchPhysicalOrder()
                                                 <input onclick='adjustAmount(false,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
                                                 <label class="btn btn-outline-danger" for="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">-</label>
 
-                                                <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
+                                                <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }",true)' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
 
                                                 <input onclick='adjustAmount(true,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
                                                 <label class="btn btn-outline-success" for="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">+</label>
@@ -295,8 +442,8 @@ function fetchPhysicalOrder()
                         }
                         else
                         {
-                              $('#physicalCopyTitle').css('display', 'none');
-                              $('#physicalList').css('display', 'none');
+                              $('#physicalList').empty();
+                              $('#physicalDestination').prop('disabled', true).val('');
                         }
                   }
             },
@@ -326,8 +473,84 @@ function openDeleteModal(id, type)
 
 function removeBook()
 {
-      console.log(deleteID, refreshList);
+      if (refreshList === 1)
+      {
+            $.ajax({
+                  url: '/ajax_service/customer/cart/remove_book.php',
+                  method: 'DELETE',
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  data: { id: deleteID, mode: 1 },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+                        }
+                        else if (data.query_result)
+                        {
+                              fetchFileOrder();
+                              updateBillingDetail();
+                        }
+                  },
 
+                  error: function (err)
+                  {
+                        console.error(err);
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
+      }
+      else if (refreshList === 2)
+      {
+            $.ajax({
+                  url: '/ajax_service/customer/cart/remove_book.php',
+                  method: 'DELETE',
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  data: { id: deleteID, mode: 2 },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+                        }
+                        else if (data.query_result)
+                        {
+                              fetchPhysicalOrder(false);
+                              updateBillingDetail();
+                        }
+                  },
+
+                  error: function (err)
+                  {
+                        console.error(err);
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
+      }
       $('#deleteModal').modal('hide');
 }
 
@@ -338,10 +561,10 @@ function adjustAmount(isIncrease, id)
       else
             $(`#book_ammount_${ id }`).val(parseInt($(`#book_ammount_${ id }`).val()) - 1);
 
-      checkAmmount(id);
+      checkAmmount(id, true);
 }
 
-function checkAmmount(id)
+function checkAmmount(id, update = false)
 {
       clearAllCustomValidity();
 
@@ -351,13 +574,71 @@ function checkAmmount(id)
       if (amount < 0)
       {
             reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be negative!");
+            return;
       } else if (amount === 0)
       {
             reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be zero!");
+            return;
       }
       else if (amount > inStock)
       {
             reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount exceeds in stock amount!");
+            return;
       }
 
+      if (update)
+            updateAmount(amount, id);
+}
+
+function updateAmount(amount, id)
+{
+      $.ajax({
+            url: '/ajax_service/customer/cart/update_amount.php',
+            method: 'PUT',
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
+            data: { amount, id },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        updateBillingDetail();
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+}
+
+function payOrder()
+{
+      if ($('input[name="paymentMethod"][value="1"]').is(':checked'))
+      {
+            console.log('Visa is selected');
+      } else if ($('input[name="paymentMethod"][value="2"]').is(':checked'))
+      {
+            console.log('MasterCard is selected');
+      } else
+      {
+            $('#noPaymentModal').modal('show');
+      }
 }

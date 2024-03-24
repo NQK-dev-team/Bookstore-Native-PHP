@@ -13,7 +13,6 @@ if (!check_session()) {
 }
 
 require_once __DIR__ . '/../../../config/db_connection.php';
-require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
@@ -35,6 +34,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
 
             $finalResult = [];
+
+            $stmt = $conn->prepare('select destinationAddress from physicalOrder join customerOrder on customerOrder.id=physicalOrder.id where status=false and customerOrder.customerID=?');
+            if (!$stmt) {
+                  http_response_code(500);
+                  echo json_encode(['error' => 'Query `select destinationAddress from physicalOrder join customerOrder on customerOrder.id=physicalOrder.id where status=false and customerOrder.customerID=?` preparation failed!']);
+                  exit;
+            }
+            $stmt->bind_param('s', $_SESSION['id']);
+            if (!$stmt->execute()) {
+                  http_response_code(500);
+                  echo json_encode(['error' => $stmt->error]);
+                  $stmt->close();
+                  $conn->close();
+                  exit;
+            }
+            $result = $stmt->get_result();
+            if ($result->num_rows === 1) {
+                  $result = $result->fetch_assoc();
+                  $finalResult['destinationAddress'] = $result['destinationAddress'];
+            } else {
+                  $finalResult['destinationAddress'] = null;
+            }
+            $stmt->close();
 
             $stmt = $conn->prepare("select imagePath,name,edition,book.id,physicalCopy.price,physicalOrderContain.amount,physicalCopy.inStock
                   from book join physicalOrderContain on physicalOrderContain.bookID=book.id
@@ -64,6 +86,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             while ($row = $result->fetch_assoc()) {
                   $row['edition'] = convertToOrdinal($row['edition']);
                   $row['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+
+                  $sub_stmt = $conn->prepare("select distinct combined.discount from (
+						select eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
+                  ) as combined order by combined.discount desc,combined.cardinal limit 1");
+                  if (!$sub_stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select distinct combined.discount from (
+						select eventDiscount.discount,1 as cardinal from eventDiscount where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select eventDiscount.discount,2 as cardinal from eventDiscount join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
+                  ) as combined order by combined.discount desc,combined.cardinal limit 1` preparation failed!']);
+                        exit;
+                  }
+                  $sub_stmt->bind_param('s', $row['id']);
+                  if (!$sub_stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $sub_stmt->error]);
+                        $sub_stmt->close();
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_result = $sub_stmt->get_result();
+                  if ($sub_result->num_rows === 1) {
+                        $sub_result = $sub_result->fetch_assoc();
+                        $row['discount'] = $sub_result['discount'];
+                  } else if ($sub_result->num_rows === 0) {
+                        $row['discount'] = null;
+                  }
+                  $sub_stmt->close();
+
                   $finalResult['detail'][] = $row;
             }
             $stmt->close();

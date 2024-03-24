@@ -40,31 +40,43 @@ if ($return_status_code === 400) {
                   <form class='w-100 h-100 d-flex flex-column container-fluid' id='cartForm'>
                         <h1 class='mt-2 mx-auto fs-2'>My Shopping Cart</h1>
 
-                        <h5 id='fileCopyTitle'>File Copies</h5>
+                        <h5>File Copies</h5>
                         <div class="w-100 bg-white border rounded mb-5" id='fileList'></div>
 
-                        <h5 id='physicalCopyTitle'>Physical Copies</h5>
-                        <p>
+                        <h5>Physical Copies</h5>
+                        <div class='mb-2'>
                               <label class='fw-bold form-label' for="physicalDestination">Delivery Address:&nbsp;</label>
                               <input id='physicalDestination' class='form-control'></input>
-                        </p>
+                        </div>
                         <div class="w-100 bg-white border rounded" id='physicalList'></div>
-                        <div class='my-3 w-100'>
-                              <h4>Price Detail</h4>
+                        <div class='my-3 w-100 mt-auto'>
+                              <h4 class='mt-3'>Price Detail</h4>
                               <div class='d-flex'>
-                                    <p>Total Before Discount:&nbsp;</p>
-                                    <p class='mb-0' id='totalPriceBefore'>0</p>
+                                    <p>Total Before Discount Coupons:&nbsp;</p>
+                                    <p class='mb-0' id='totalPriceBeforeCoupon'>0</p>
                               </div>
                               <div class='d-flex'>
-                                    <p>Total After Discount:&nbsp;</p>
-                                    <p class='mb-0' id='totalPriceAfter'>0</p>
+                                    <p>Total After Discount Coupons:&nbsp;</p>
+                                    <p class='mb-0' id='totalPriceAfterCoupon'>0</p>
                               </div>
                               <div class='d-flex'>
-                                    <p>Discount:&nbsp;</p>
+                                    <p>Loyalty Discount:&nbsp;</p>
+                                    <p class='mb-0' id='loyalDiscount'>0</p>
+                              </div>
+                              <div class='d-flex'>
+                                    <p>Referrer Discount:&nbsp;</p>
+                                    <p class='mb-0' id='refDiscount'>0</p>
+                              </div>
+                              <div class='d-flex'>
+                                    <p>Final Price:&nbsp;</p>
+                                    <p class='mb-0' id='finalPrice'>0</p>
+                              </div>
+                              <div class='d-flex'>
+                                    <p>Total Discount:&nbsp;</p>
                                     <p class='mb-0' id='totalDiscount'>0</p>
                               </div>
+                              <button id='purchaseBtn' type="submit" class="btn btn-primary mb-3 w-100"><i class="bi bi-cart4"></i> Place Order</button>
                         </div>
-                        <button id='purchaseBtn' type="submit" class="btn btn-primary mb-3 mt-auto"><i class="bi bi-cart4"></i> Place Order</button>
                   </form>
                   <div class="modal fade" id='paymentModal' tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -75,12 +87,12 @@ if ($return_status_code === 400) {
                                     </div>
                                     <div class="modal-body">
                                           <div class='w-100 h-100 d-flex flex-lg-row flex-column'>
-                                                <input type="radio" class="btn-check" id="visaCheck" autocomplete="off" name='paymentMethod'>
+                                                <input type="radio" class="btn-check" id="visaCheck" autocomplete="off" name='paymentMethod' value='1'>
                                                 <label class="btn btn-outline-secondary p-1 mx-auto pointer my-lg-0 my-2 border rounded" for="visaCheck">
                                                       <img src='/image/visa.jpeg' class='payment'>
                                                 </label>
 
-                                                <input type="radio" class="btn-check" id="mcCheck" autocomplete="off" name='paymentMethod'>
+                                                <input type="radio" class="btn-check" id="mcCheck" autocomplete="off" name='paymentMethod' value='2'>
                                                 <label class="btn btn-outline-secondary p-1 mx-auto pointer my-lg-0 my-2 border rounded" for="mcCheck">
                                                       <img src='/image/mastercard.png' class='payment'>
                                                 </label>
@@ -88,12 +100,28 @@ if ($return_status_code === 400) {
                                     </div>
                                     <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                          <button type="button" class="btn btn-primary" onclick="payOrder()">Confirm</button>
                                     </div>
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id='noPaymentModal' tabindex="-1" aria-labelledby="modalLabel">
+                        <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                    <div class="modal-header">
+                                          <h5 class="modal-title">Payment Method Not Chosen</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                          <p>Please choose a payment method!</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Confirm</button>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class=" modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

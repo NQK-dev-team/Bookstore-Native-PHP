@@ -2,6 +2,98 @@ use bookstore;
 
 -- **** Business constraints ****
 
+-- ** Begin of fileOrderContain **
+-- These 2 triggers below forbid any delete or update statement to any row of `fileOrderContain` table that has `status` set to true (order has been purchased)
+drop trigger if exists fileOrderContainBusinessConstraintDeleteTrigger;
+delimiter //
+create trigger fileOrderContainBusinessConstraintDeleteTrigger
+before delete on fileOrderContain
+for each row
+begin
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete content of order that has been purchased!';
+    end if;
+end//
+delimiter ;
+
+drop trigger if exists fileOrderContainBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger fileOrderContainBusinessConstraintUpdateTrigger
+before update on fileOrderContain
+for each row
+begin
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
+    end if;
+end//
+delimiter ;
+
+-- This trigger will delete the empty order
+-- drop trigger if exists fileOrderContainBusinessConstraintDeleteTrigger2;
+-- delimiter //
+-- create trigger fileOrderContainBusinessConstraintDeleteTrigger2
+-- after delete on fileOrderContain
+-- for each row
+-- begin                   
+-- 		delete from fileOrder where id not in(
+-- 			select orderID from fileOrderContain
+-- 		);
+--             
+-- 		delete from customerOrder where id not in(
+-- 			select id from fileOrder
+-- 			union
+-- 			select id from physicalOrder
+-- 		);
+-- end//
+-- delimiter ;
+-- ** End of fileOrderContain **
+
+-- ** Begin of physicalOrderContain **
+-- These 2 triggers below forbid any delete or update statement to any row of `physicalOrderContain` table that has `status` set to true (order has been purchased)
+drop trigger if exists physicalOrderContainBusinessConstraintDeleteTrigger;
+delimiter //
+create trigger physicalOrderContainBusinessConstraintDeleteTrigger
+before delete on physicalOrderContain
+for each row
+begin
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete content of order that has been purchased!';
+    end if;
+end//
+delimiter ;
+
+drop trigger if exists physicalOrderContainBusinessConstraintUpdateTrigger;
+delimiter //
+create trigger physicalOrderContainBusinessConstraintUpdateTrigger
+before update on physicalOrderContain
+for each row
+begin
+    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
+    end if;
+end//
+delimiter ;
+
+-- This trigger will delete the empty order
+-- drop trigger if exists physicalOrderContainBusinessConstraintDeleteTrigger2;
+-- delimiter //
+-- create trigger physicalOrderContainBusinessConstraintDeleteTrigger2
+-- after delete on physicalOrderContain
+-- for each row
+-- begin                   
+-- 		delete from physicalOrder where id not in(
+-- 			select orderID from physicalOrderContain
+-- 		);
+--             
+-- 		delete from customerOrder where id not in(
+-- 			select id from fileOrder
+-- 			union
+-- 			select id from physicalOrder
+-- 		);
+-- end//
+-- delimiter ;
+-- ** End of physicalOrderContain **
+
 -- ** Begin of book **
 -- This trigger delete the book from unpaid orders if new.status=false
 drop trigger if exists bookBusinessConstraintUpdateTrigger;
@@ -12,39 +104,39 @@ for each row
 begin	
 	if not new.status then
 		DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
-            
+		
 		DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
                         
-		delete from fileOrder where id not in(
+		delete fileOrder from fileOrder join customerOrder on customerOrder.id=fileOrder.id where customerOrder.id not in(
 			select orderID from fileOrderContain
-		);
+		) and status=false;
             
-		delete from physicalOrder where id not in(
+		delete physicalOrder from physicalOrder join customerOrder on customerOrder.id=physicalOrder.id where customerOrder.id not in(
 			select orderID from physicalOrderContain
-		);
+		) and status=false;
             
 		delete from customerOrder where id not in(
 			select id from fileOrder
 			union
 			select id from physicalOrder
-		);
+		) and status=false;
             
-		begin
-			DECLARE done BOOLEAN DEFAULT FALSE;
-			declare orderID varchar(20) default null;
-			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
-			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-			OPEN myCursor;
-				loop_start: LOOP
-					set orderID:=null;
-					FETCH myCursor INTO orderID;
-					IF done THEN
-						LEAVE loop_start;
-					END IF;
-					call reEvaluateOrder(orderID);
-					END LOOP loop_start;
-			CLOSE myCursor;
-		end;
+		-- begin
+-- 			DECLARE done BOOLEAN DEFAULT FALSE;
+-- 			declare orderID varchar(20) default null;
+-- 			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+-- 			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+-- 			OPEN myCursor;
+-- 				loop_start: LOOP
+-- 					set orderID:=null;
+-- 					FETCH myCursor INTO orderID;
+-- 					IF done THEN
+-- 						LEAVE loop_start;
+-- 					END IF;
+-- 					call reEvaluateOrder(orderID);
+-- 					END LOOP loop_start;
+-- 			CLOSE myCursor;
+-- 		end;
     end if;
 end//
 delimiter ;
@@ -265,60 +357,6 @@ end//
 delimiter ;
 -- ** End of physicalOrder **
 
--- ** Begin of fileOrderContain **
--- These 2 triggers below forbid any delete or update statement to any row of `fileOrderContain` table that has `status` set to true (order has been purchased)
-drop trigger if exists fileOrderContainBusinessConstraintDeleteTrigger;
-delimiter //
-create trigger fileOrderContainBusinessConstraintDeleteTrigger
-before delete on fileOrderContain
-for each row
-begin
-    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete content of order that has been purchased!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists fileOrderContainBusinessConstraintUpdateTrigger;
-delimiter //
-create trigger fileOrderContainBusinessConstraintUpdateTrigger
-before update on fileOrderContain
-for each row
-begin
-    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
-    end if;
-end//
-delimiter ;
--- ** End of fileOrderContain **
-
--- ** Begin of physicalOrderContain **
--- These 2 triggers below forbid any delete or update statement to any row of `physicalOrderContain` table that has `status` set to true (order has been purchased)
-drop trigger if exists physicalOrderContainBusinessConstraintDeleteTrigger;
-delimiter //
-create trigger physicalOrderContainBusinessConstraintDeleteTrigger
-before delete on physicalOrderContain
-for each row
-begin
-    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete content of order that has been purchased!';
-    end if;
-end//
-delimiter ;
-
-drop trigger if exists physicalOrderContainBusinessConstraintUpdateTrigger;
-delimiter //
-create trigger physicalOrderContainBusinessConstraintUpdateTrigger
-before update on physicalOrderContain
-for each row
-begin
-    if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
-    end if;
-end//
-delimiter ;
--- ** End of physicalOrderContain **
-
 -- ** Begin of appUser **
 -- This trigger forbid any delete statement to any row of `appUser` table that is a customer and has purchase an order
 drop trigger if exists appUserBusinessConstraintDeleteTrigger;
@@ -395,32 +433,32 @@ begin
     if new.filePath is null or new.price is null then
 		DELETE fileOrderContain FROM fileOrderContain JOIN customerOrder ON fileOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND fileOrderContain.bookID = new.id;
                                     
-		delete from fileOrder where id not in(
+		delete fileOrder from fileOrder join customerOrder on customerOrder.id=fileOrder.id where customerOrder.id not in(
 			select orderID from fileOrderContain
-		);
+		) and status=false;
             
 		delete from customerOrder where id not in(
 			select id from fileOrder
 			union
 			select id from physicalOrder
-		);
+		) and status=false;
             
-		begin
-			DECLARE done BOOLEAN DEFAULT FALSE;
-			declare orderID varchar(20) default null;
-			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
-			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-			OPEN myCursor;
-				loop_start: LOOP
-					set orderID:=null;
-					FETCH myCursor INTO orderID;
-					IF done THEN
-						LEAVE loop_start;
-					END IF;
-					call reEvaluateOrder(orderID);
-					END LOOP loop_start;
-			CLOSE myCursor;
-		end;
+		-- begin
+-- 			DECLARE done BOOLEAN DEFAULT FALSE;
+-- 			declare orderID varchar(20) default null;
+-- 			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+-- 			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+-- 			OPEN myCursor;
+-- 				loop_start: LOOP
+-- 					set orderID:=null;
+-- 					FETCH myCursor INTO orderID;
+-- 					IF done THEN
+-- 						LEAVE loop_start;
+-- 					END IF;
+-- 					call reEvaluateOrder(orderID);
+-- 					END LOOP loop_start;
+-- 			CLOSE myCursor;
+-- 		end;
     end if;
 end//
 delimiter ;
@@ -451,32 +489,32 @@ begin
 	if new.inStock is null or new.price is null then            
 		DELETE physicalOrderContain FROM physicalOrderContain JOIN customerOrder ON physicalOrderContain.orderID = customerOrder.id WHERE customerOrder.status = false AND physicalOrderContain.bookID = new.id;
             
-		delete from physicalOrder where id not in(
+		delete physicalOrder from physicalOrder join customerOrder on customerOrder.id=physicalOrder.id where customerOrder.id not in(
 			select orderID from physicalOrderContain
-		);
+		) and status=false;
             
 		delete from customerOrder where id not in(
 			select id from fileOrder
 			union
 			select id from physicalOrder
-		);
+		) and status=false;
             
-		begin
-			DECLARE done BOOLEAN DEFAULT FALSE;
-			declare orderID varchar(20) default null;
-			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
-			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-			OPEN myCursor;
-				loop_start: LOOP
-					set orderID:=null;
-					FETCH myCursor INTO orderID;
-					IF done THEN
-						LEAVE loop_start;
-					END IF;
-					call reEvaluateOrder(orderID);
-					END LOOP loop_start;
-			CLOSE myCursor;
-		end;
+		-- begin
+-- 			DECLARE done BOOLEAN DEFAULT FALSE;
+-- 			declare orderID varchar(20) default null;
+-- 			DECLARE myCursor CURSOR FOR SELECT id from customerOrder where status=false;
+-- 			DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+-- 			OPEN myCursor;
+-- 				loop_start: LOOP
+-- 					set orderID:=null;
+-- 					FETCH myCursor INTO orderID;
+-- 					IF done THEN
+-- 						LEAVE loop_start;
+-- 					END IF;
+-- 					call reEvaluateOrder(orderID);
+-- 					END LOOP loop_start;
+-- 			CLOSE myCursor;
+-- 		end;
     end if;
 end//
 delimiter ;
