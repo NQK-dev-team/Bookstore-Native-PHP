@@ -12,11 +12,18 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
+require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['code']) && isset($_GET['date'])) {
             try {
-                  $id =$_SESSION['update_customer_id'];
+                  if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                        http_response_code(403);
+                        echo json_encode(['error' => 'CSRF token validation failed!']);
+                        exit;
+                  }
+
+                  $id = $_SESSION['update_customer_id'];
                   $code = sanitize(rawurldecode(str_replace('-', '', $_GET['code'])));
                   $date = sanitize(rawurldecode($_GET['date']));
 
@@ -47,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
                   $result = $stmt->get_result();
-                  if($result->num_rows===0) {
+                  if ($result->num_rows === 0) {
                         http_response_code(404);
                         echo json_encode(['error' => 'Customer not found!']);
                         $stmt->close();

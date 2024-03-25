@@ -5,6 +5,8 @@ create schema bookstore;
 use bookstore;
 
 -- Important --
+SET @nullVar = NULL;
+
 create table pointConfig(
 	locker char(1) primary key,
 	pointConversionRate double not null,

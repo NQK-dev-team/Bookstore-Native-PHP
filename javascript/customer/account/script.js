@@ -522,6 +522,9 @@ function findOrder()
             url: '/ajax_service/customer/account/get_order_list.php',
             method: 'GET',
             data: { code: search, date: date },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             dataType: 'json',
             success: function (data)
             {
@@ -604,6 +607,9 @@ async function orderDetail(code, time, price, discount)
             url: '/ajax_service/customer/account/file_order_detail.php',
             method: 'GET',
             data: { code: code.replace('/-/g', '') },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             dataType: 'json',
             success: function (data)
             {
@@ -698,6 +704,9 @@ async function orderDetail(code, time, price, discount)
             url: '/ajax_service/customer/account/physical_order_detail.php',
             method: 'GET',
             data: { code: code.replace('/-/g', '') },
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
             dataType: 'json',
             success: function (data)
             {

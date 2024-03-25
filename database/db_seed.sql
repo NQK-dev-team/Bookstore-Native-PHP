@@ -24,7 +24,7 @@ INSERT INTO admin (`id`) VALUES ('ADMIN1');
 INSERT INTO admin (`id`) VALUES ('ADMIN2');
 
 -- Insert `customer` table
-insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.311816,'1142369875'),('CUSTOMER2','CUSTOMER1',27.8692,'1245369870'),('CUSTOMER3','CUSTOMER1',27.8692,'4100335874');
+insert into customer (id,referrer,point,cardNumber) values('CUSTOMER1',null,27.31,'1142369875'),('CUSTOMER2','CUSTOMER1',27.87,'1245369870'),('CUSTOMER3','CUSTOMER1',27.87,'4100335874');
 insert into customer (id,referrer,point,cardNumber,status,deleteTime) values('CUSTOMER4','CUSTOMER1',0,null,true,null),('CUSTOMER5',null,0,null,true,null),('CUSTOMER6',null,0,null,true,null),('CUSTOMER7',null,0,null,true,null),('CUSTOMER8',null,0,null,true,null),('CUSTOMER9',null,0,null,false,'2024-01-31 13:00:00'),
 ('CUSTOMER10',null,0,null,false,null),('CUSTOMER11',null,0,null,false,null),('CUSTOMER12',null,0,null,false,null),('CUSTOMER13',null,0,null,false,null),('CUSTOMER14',null,0,null,false,null);
 
@@ -162,7 +162,6 @@ INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK29', 'CAT
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK30', 'CATEGORY1');
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK31', 'CATEGORY2');
 
-
 -- Insert `physical copy`
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '29.99', '0');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2', '39.99', '14');
@@ -195,9 +194,6 @@ INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK29', '59.99', '0');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK30', '15.99', '15');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK31', '29.99', '18');
-
-
-
 
 -- Insert file copy
 INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK1', '13.99', 'demo/BOOK1/The Joy of PHP.pdf');
@@ -283,9 +279,9 @@ insert into eventApply(eventID,bookID) values('E_DISCOUNT4','BOOK5');
 insert into eventApply(eventID,bookID) values('E_DISCOUNT5','BOOK4'),('E_DISCOUNT5','BOOK5'),('E_DISCOUNT5','BOOK7'),('E_DISCOUNT5','BOOK12'),('E_DISCOUNT5','BOOK13'),('E_DISCOUNT5','BOOK17'),
 ('E_DISCOUNT5','BOOK6'),('E_DISCOUNT5','BOOK9'),('E_DISCOUNT5','BOOK11'),('E_DISCOUNT5','BOOK19'),('E_DISCOUNT5','BOOK21'),('E_DISCOUNT5','BOOK24');
 
-insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER1',SUBTIME(now(),'00:05:00'),true,253.92388,115.94612,'CUSTOMER1','YIHENYO7SZVT4MNQ'),
-('ORDER2',SUBTIME(now(),'00:02:30'),true,19.19428,8.78572,'CUSTOMER1','RKZM1Y4KS5OKU7OG'),
-('ORDER3',null,false,420.13482,239.72518,'CUSTOMER1',null);
+insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER1',SUBTIME(now(),'00:05:00'),true,253.92,115.95,'CUSTOMER1','YIHENYO7SZVT4MNQ'),
+('ORDER2',SUBTIME(now(),'00:02:30'),true,19.19,8.79,'CUSTOMER1','RKZM1Y4KS5OKU7OG'),
+('ORDER3',null,false,420.09,239.77,'CUSTOMER1',null);
 
 insert into physicalOrder values('ORDER1','211 Ly Thuong Kiet'),('ORDER3','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER1'),('ORDER2'),('ORDER3');
@@ -302,9 +298,9 @@ insert into discountApply(orderID,discountID) values('ORDER1','E_DISCOUNT1'),('O
 insert into discountApply(orderID,discountID) values('ORDER2','E_DISCOUNT1'),('ORDER2','R_DISCOUNT1');
 insert into discountApply(orderID,discountID) values('ORDER3','E_DISCOUNT2'),('ORDER3','E_DISCOUNT4'),('ORDER3','E_DISCOUNT1'),('ORDER3','R_DISCOUNT1');
 
-insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER4',SUBTIME(now(),'00:10:00'),true,259.106,110.764,'CUSTOMER2','B59VDRO7X0QI6NHH'),
-('ORDER5',SUBTIME(now(),'00:07:30'),true,19.586,8.394,'CUSTOMER2','0CII886CCA8ZS18O'),
-('ORDER6',null,false,428.709,231.151,'CUSTOMER2',NULL);
+insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER4',SUBTIME(now(),'00:10:00'),true,259.11,110.76,'CUSTOMER2','B59VDRO7X0QI6NHH'),
+('ORDER5',SUBTIME(now(),'00:07:30'),true,19.59,8.39,'CUSTOMER2','0CII886CCA8ZS18O'),
+('ORDER6',null,false,428.66,231.2,'CUSTOMER2',NULL);
 
 insert into physicalOrder values('ORDER4','211 Ly Thuong Kiet'),('ORDER6','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER4'),('ORDER5'),('ORDER6');
@@ -321,9 +317,9 @@ insert into discountApply(orderID,discountID) values('ORDER4','E_DISCOUNT1'),('O
 insert into discountApply(orderID,discountID) values('ORDER5','E_DISCOUNT1');
 insert into discountApply(orderID,discountID) values('ORDER6','E_DISCOUNT2'),('ORDER6','E_DISCOUNT4'),('ORDER6','E_DISCOUNT1');
 
-insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER7',SUBTIME(now(),'00:15:00'),true,259.106,110.764,'CUSTOMER3','N7RJ593EYRVHKPED'),
-('ORDER8',SUBTIME(now(),'00:01:30'),true,19.586,8.394,'CUSTOMER3','Y6ATT0B5BV3B7R8O'),
-('ORDER9',null,false,428.709,231.151,'CUSTOMER3',null);
+insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER7',SUBTIME(now(),'00:15:00'),true,259.11,110.76,'CUSTOMER3','N7RJ593EYRVHKPED'),
+('ORDER8',SUBTIME(now(),'00:01:30'),true,19.59,8.39,'CUSTOMER3','Y6ATT0B5BV3B7R8O'),
+('ORDER9',null,false,428.66,231.2,'CUSTOMER3',null);
 
 insert into physicalOrder values('ORDER7','211 Ly Thuong Kiet'),('ORDER9','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER7'),('ORDER8'),('ORDER9');
