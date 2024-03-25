@@ -29,7 +29,7 @@ if ($return_status_code === 400) {
             $elem = $conn->prepare('select book.id, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from book inner join author on book.id = author.bookID
                                                                                                                                                                                   join fileCopy on book.id = fileCopy.id
                                                                                                                                                                                   join physicalCopy on book.id = physicalCopy.id
-                                                                                                                                                                                  limit 8');
+                                                                                                                                                                                  limit 6');
             $elem->execute();
             $elem = $elem->get_result();
 
@@ -39,7 +39,7 @@ if ($return_status_code === 400) {
                                                                                                                                                                                                                                                                         join fileCopy on book.id = fileCopy.id
                                                                                                                                                                                                                                                                         join physicalCopy on book.id = physicalCopy.id
                                                                                                                                                                                                                                                             order by sales DESC
-                                                                                                                                                                                                                                                            limit 3');
+                                                                                                                                                                                                                                                            limit 6');
             $featured->execute();
             $featured = $featured->get_result();
 
@@ -95,6 +95,32 @@ if ($return_status_code === 400) {
             .bgr-col{
                   background-color: #F8F8FF;
             }
+            .carousel-item{
+                  height: 36rem;
+                  color: white;
+                  position: relative;
+                  background-position: center;
+                  background-size: cover;
+                  
+            }
+            @media screen and (max-width: 768px) {
+                  .carousel-item{
+                        height: 48rem;
+                  }
+                  
+            }
+            .overlay-image{
+                  position: absolute;
+                  top: -10px;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  background-image:url(https://th.bing.com/th/id/R.9ab69065931f33912678c9fa0055c875?rik=l4n%2bZal8cVnKMg&pid=ImgRaw&r=0);
+                  background-position: center;
+                  background-size: cover;
+                  opacity: 0.70;
+                  border-radius: 25px;
+            }
             </style>
       </head>
 
@@ -104,15 +130,19 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
             <br>
+            
+            
       <?php
             if($featured->num_rows > 0){
-                  echo '<div class= "container border border-dark rounded bgr-col">';
+                  echo '<div class= "container border border-dark rounded bgr-col my-3">';
                   echo '<p class="h1">Featured books</p>';
                   echo '<hr>';
                   echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
-                  for($i = 1; $i <= $featured->num_rows; $i++){
+                  $rows = array();
+                  for($i = 0; $i <= $featured->num_rows; $i++){
                         $row=$featured->fetch_assoc();
-                        if($i < 3){
+                        $rows[] = $row;
+                        if($i < 2){
                          $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
                         echo ' <div class="col-9 col-md-6">';
                         echo "<a href=\"book/book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
@@ -140,7 +170,61 @@ if ($return_status_code === 400) {
                         
                   }
                         echo "</div>"; //row end
-                        
+                        echo '<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">';
+for($i = 2; $i < $featured->num_rows; $i++){
+      echo '<div class="carousel-item ';
+      if($i == 2){
+            echo ' active" data-interval="1500">';
+      }
+      else{
+            echo '" data-interval="1000">';
+      }
+      echo '<div class="overlay-image m-3"> </div>';
+      echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
+      $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($rows[$i]['pic']));
+                        echo ' <div class="col-9 col-md-6">';
+                        echo "<a href=\"book/book-detail?bookID=".normalizeURL(rawurlencode($rows[$i]["id"]))."\">"; 
+                        echo'                  <div class="card mx-2" style="opacity: 90%">
+                                                <div class="row g-0">
+                                                      <div class="col-md-7 d-flex justify-content-center ">';
+                        echo '<img src="' . $imagePath . '" class="card-img my-3 px-3" style="height: 28rem;" alt="...">';
+                        echo '
+                              </div>
+                              <div class="col-md-5">
+                                    <div class="card-body" style="max-height: 350px;">
+                                    <h5 class="card-title">'.$rows[$i]["name"].'</h5>
+                                    <p class="author">'.$rows[$i]["authorName"].'</p>';
+                                    echo "<p class=\"price\">"."E-book price: ".$rows[$i]["filePrice"]."$"."</p>";
+                        echo "<p class=\"price\">"."Physical price: ".$rows[$i]["physicalPrice"]."$"."</p>";
+                        echo '<span class="text-warning">'.displayRatingStars($rows[$i]["star"]).'</span>';
+                        echo "(".$rows[$i]["star"].")";
+                        echo '</div>
+                              </div>
+                              </div>
+                        </div>';
+                        echo '</a>
+                                    </div>'; //end col-9 col-md-4
+      echo '</div>';//end row
+    echo '</div>'; //end carousel item
+}
+
+    //end of carousel inner
+echo '</div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>';
                   echo "</div>";  //container end
                   
             }
@@ -148,14 +232,26 @@ if ($return_status_code === 400) {
                   echo "Some error occured!";
             }
       ?>
-      <h2 class="text-center heading-decord">Browse book</h2>
+      
             <?php
-            echo '<div class="container border border-dark rounded bgr-col mb-3">';
+            echo '<div class="container border border-dark rounded bgr-col my-3">';
+            echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
+            echo '<p class="h1 col-9 col-md-9">Our collection</p>';
+            echo '<a 
+                        name=""
+                        id=""
+                        class="btn btn-primary align-items-center w-25 mx-auto m-3 col-9 col-md-3"
+                        href="book"
+                        role="button"
+                        style="font-size: 20px;"
+                        >Learn more</a>';
+            echo '</div>';//end div row
+                  echo '<hr>';
                   for ($i = 1; $i <= $elem->num_rows; $i++) {
-                        if ($i % 4 == 1) {
-                              echo '<div class="row justify-content-center align-items-center g-2 m-3">';
+                        if ($i % 3 == 1) {
+                              echo '<div class="row justify-content-center align-items-center g-2 m-3 py-3">';
                         }
-                        echo '<div class="col-9 col-md-3">';
+                        echo '<div class="col-9 col-md-4">';
                         $row = $elem->fetch_assoc();
                         // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                         $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
@@ -175,17 +271,11 @@ if ($return_status_code === 400) {
                                                       echo "</div>";
       
                         echo '</div>';
-                        if ($i % 4 == 0 || $i == $elem->num_rows) {
+                        if ($i % 3 == 0 || $i == $elem->num_rows) {
                               echo '</div>';
                         }
                         }
-                        echo '<a 
-                        name=""
-                        id=""
-                        class="btn btn-primary d-flex justify-content-center align-items-center w-25 mx-auto m-3"
-                        href="book"
-                        role="button"
-                        >Learn more</a>';
+                        
                         echo '</div>';
                         
             ?>
