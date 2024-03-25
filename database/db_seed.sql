@@ -293,7 +293,7 @@ insert into physicalOrderContain(orderID,bookID,amount) values('ORDER3','BOOK4',
 insert into fileOrderContain(orderID,bookID) values('ORDER1','BOOK8'),('ORDER1','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER2','BOOK10'),('ORDER2','BOOK21');
 insert into fileOrderContain(orderID,bookID) values('ORDER3','BOOK10'),('ORDER3','BOOK21');
-insert into fileOrderContain(orderID,bookID) values('ORDER9','BOOK5'),('ORDER3','BOOK7');
+insert into fileOrderContain(orderID,bookID) values('ORDER3','BOOK5'),('ORDER3','BOOK7');
 
 insert into discountApply(orderID,discountID) values('ORDER1','E_DISCOUNT1'),('ORDER1','E_DISCOUNT2'),('ORDER1','E_DISCOUNT4'),('ORDER1','R_DISCOUNT1');
 insert into discountApply(orderID,discountID) values('ORDER2','E_DISCOUNT1'),('ORDER2','R_DISCOUNT1');

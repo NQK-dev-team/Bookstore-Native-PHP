@@ -105,7 +105,7 @@ if ($return_status_code === 400) {
             }
             @media screen and (max-width: 768px) {
                   .carousel-item{
-                        height: 48rem;
+                        height: 50rem;
                   }
                   
             }
