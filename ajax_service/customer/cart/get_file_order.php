@@ -64,18 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $row['edition'] = convertToOrdinal($row['edition']);
                   $row['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
 
-                  $sub_stmt = $conn->prepare("select distinct combined.discount from (
-						select eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                  $sub_stmt = $conn->prepare("select combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
-                        select eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
-                  ) as combined order by combined.discount desc,combined.cardinal limit 1");
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1");
                   if (!$sub_stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select distinct combined.discount from (
-						select eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        echo json_encode(['error' => 'Query `select combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
-                        select eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
-                  ) as combined order by combined.discount desc,combined.cardinal limit 1` preparation failed!']);
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1` preparation failed!']);
                         exit;
                   }
                   $sub_stmt->bind_param('s', $row['id']);

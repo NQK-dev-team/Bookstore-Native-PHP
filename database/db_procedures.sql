@@ -138,7 +138,7 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
-                    select distinct combined.id,combined.discount into discountID,discount from (
+                    select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
@@ -177,7 +177,7 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
-                    select distinct combined.id,combined.discount into discountID,discount from (
+                    select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
@@ -273,13 +273,14 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
-                    select distinct combined.id,combined.discount into discountID,discount from (
+                    select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
                     
                     set originalCost=originalCost+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount;
+                    set originalCost=round(originalCost,2);
                     
                     if discountID is not null then
 						 set localTotalCost:=localTotalCost+round((select price from physicalCopy where physicalCopy.id=bookID)*(100-discount)/100.0,2)*bookAmount;
@@ -310,13 +311,14 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
-                    select distinct combined.id,combined.discount into discountID,discount from (
+                    select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
                     
                     set originalCost=originalCost+(select price from fileCopy where fileCopy.id=bookID);
+                    set originalCost=round(originalCost,2);
                     
                     if discountID is not null then
 						 set localTotalCost:=localTotalCost+round((select price from fileCopy where fileCopy.id=bookID)*(100-discount)/100.0,2);
@@ -403,5 +405,21 @@ begin
 	) and status=false;
     
     call reEvaluateOrder(orderID,@nullVar);
+end//
+delimiter ;
+
+drop procedure if exists purchaseOrder;
+delimiter //
+create procedure purchaseOrder(
+	in orderID varchar(20)
+)
+begin
+	declare code varchar(16);
+    set code=generateRandomString();
+    while code in (select orderCode from customerOrder where status=true) do
+		set code=generateRandomString();
+    end while;
+    
+    update customerOrder set status=true,purchaseTime=now(),orderCode=code where id=orderID;
 end//
 delimiter ;

@@ -137,7 +137,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal" id="paymentSuccess" tabindex="-1">
+                  <div class="modal fade" id="paymentSuccess" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -153,7 +153,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal" id="deleteModal" tabindex="-1">
+                  <div class="modal fade" id="deleteModal" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

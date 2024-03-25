@@ -162,7 +162,6 @@ INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK29', 'CAT
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK30', 'CATEGORY1');
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK31', 'CATEGORY2');
 
-
 -- Insert `physical copy`
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '29.99', '0');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2', '39.99', '14');
@@ -195,9 +194,6 @@ INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK29', '59.99', '0');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK30', '15.99', '15');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK31', '29.99', '18');
-
-
-
 
 -- Insert file copy
 INSERT INTO `bookstore`.`filecopy` (`id`, `price`, `filePath`) VALUES ('BOOK1', '13.99', 'demo/BOOK1/The Joy of PHP.pdf');

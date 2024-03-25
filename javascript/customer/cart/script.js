@@ -1,4 +1,5 @@
 let deleteID = null, refreshList = null;
+let pause = false;
 
 
 $(document).ready(function ()
@@ -11,7 +12,7 @@ $(document).ready(function ()
       $("#cartForm").submit(function (e)
       {
             e.preventDefault();
-
+            pause = true;
             $('#paymentModal').modal('show');
       });
 
@@ -23,8 +24,14 @@ $(document).ready(function ()
 
       $('#paymentModal').on('hidden.bs.modal', function ()
       {
+            pause = false;
             $('input[name="paymentMethod"]').prop('checked', false);
       });
+
+      // $('#paymentSuccess').on('hidden.bs.modal', function ()
+      // {
+      //       pause = false;
+      // });
 
       reEvalOrder(true);
 
@@ -36,11 +43,14 @@ $(document).ready(function ()
 
       setInterval(() =>
       {
-            reEvalOrder(false);
-            $('div[name="physical_row"]').each(function ()
+            if (!pause)
             {
-                  updateInStock($(this).data('id'));
-            });
+                  reEvalOrder(false);
+                  $('div[name="physical_row"]').each(function ()
+                  {
+                        updateInStock($(this).data('id'));
+                  });
+            }
       }, 10000);
 });
 
@@ -631,12 +641,54 @@ function updateAmount(amount, id)
 
 function payOrder()
 {
-      if ($('input[name="paymentMethod"][value="1"]').is(':checked'))
+      if ($('input[name="paymentMethod"][value="1"]').is(':checked') || $('input[name="paymentMethod"][value="2"]').is(':checked'))
       {
-            console.log('Visa is selected');
-      } else if ($('input[name="paymentMethod"][value="2"]').is(':checked'))
+            $.ajax({
+                  url: '/ajax_service/customer/cart/pay_order.php',
+                  method: 'POST',
+                  headers: {
+                        'X-CSRF-Token': CSRF_TOKEN
+                  },
+                  dataType: 'json',
+                  success: function (data)
+                  {
+                        if (data.error)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(data.error);
+
+                              reEvalOrder(false);
+                        }
+                        else if (data.query_result)
+                        {
+                              fetchFileOrder();
+                              fetchPhysicalOrder(true);
+                              updateBillingDetail();
+                              $('#paymentSuccess').modal('show');
+                        }
+                  },
+
+                  error: function (err)
+                  {
+                        console.error(err);
+                        if (err.status >= 500)
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text('Server encountered error!');
+                        } else
+                        {
+                              $('#errorModal').modal('show');
+                              $('#error_message').text(err.responseJSON.error);
+                        }
+                  }
+            });
+
+            $('#paymentModal').modal('hide');
+
+      } else if ($('input[name="paymentMethod"][value="1"]').is(':checked') && $('input[name="paymentMethod"][value="2"]').is(':checked'))
       {
-            console.log('MasterCard is selected');
+            $('#errorModal').modal('show');
+            $('#error_message').text('You can not choose both payment methods!');
       } else
       {
             $('#noPaymentModal').modal('show');
