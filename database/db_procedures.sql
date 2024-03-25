@@ -138,11 +138,18 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
+                    
+                    if exists(select combined.id,combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1) then
                     select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
+                    end if;
                     
                     if discountID is not null then
 						 set localTotalCost:=localTotalCost+round((select price from physicalCopy where physicalCopy.id=bookID)*(100-discount)/100.0,2)*bookAmount;
@@ -177,11 +184,18 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
+                    
+                    if exists(select combined.id,combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1) then
                     select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
+                    end if;
                     
                     if discountID is not null then
 						 set localTotalCost:=localTotalCost+round((select price from fileCopy where fileCopy.id=bookID)*(100-discount)/100.0,2);
@@ -273,11 +287,18 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
+                    
+                    if exists(select combined.id,combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1) then
                     select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
+                    end if;
                     
                     set originalCost=originalCost+(select price from physicalCopy where physicalCopy.id=bookID)*bookAmount;
                     set originalCost=round(originalCost,2);
@@ -311,11 +332,18 @@ begin
                 begin
 					declare discountID varchar(20) default null;
                     declare discount double default null;
+                    
+                    if exists(select combined.id,combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1) then
                     select combined.id,combined.discount into discountID,discount from (
 						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=bookID
                     ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
+                    end if;
                     
                     set originalCost=originalCost+(select price from fileCopy where fileCopy.id=bookID);
                     set originalCost=round(originalCost,2);
