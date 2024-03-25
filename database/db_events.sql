@@ -18,7 +18,7 @@ CREATE EVENT IF NOT EXISTS orderReEvaluate
 ON SCHEDULE EVERY 2 minute
 DO
 BEGIN
-	insert into orderReEvaluatedLog(orderReEvaluated) values((select count(*) from customerOrder where status=false));
+	declare counter int default 0;
     begin
 		DECLARE done BOOLEAN DEFAULT FALSE;
 		declare orderID varchar(20) default null;
@@ -31,9 +31,10 @@ BEGIN
 				IF done THEN
 					LEAVE loop_start;
 				END IF;
-                call reEvaluateOrder(orderID);
+                call reEvaluateOrder(orderID,counter);
 				END LOOP loop_start;
 		CLOSE myCursor;
     end;
+	insert into orderReEvaluatedLog(orderReEvaluated) values(counter);
 END //
 DELIMITER ;

@@ -13,10 +13,10 @@ if (!check_session()) {
 }
 
 require_once __DIR__ . '/../../../config/db_connection.php';
+require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-require_once __DIR__ . '/../../../tool/php/send_mail.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       try {
             if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                   http_response_code(403);
@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   exit;
             }
 
-            // Connect to MySQL
             $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
             // Check connection
@@ -34,11 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   exit;
             }
 
-            $stmt = $conn->prepare('select email from appUser join customer on customer.id=appUser.id where appUser.id=? and status=true');
+            $finalResult = ['originalCost' => 0, 'costAfterCoupon' => 0, 'loyalty' => 0, 'referrer' => 0, 'final' => 0, 'discount' => 0];
+
+            $stmt = $conn->prepare('select id from customerOrder where customerID=? and status=false');
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `select email from appUser join customer on customer.id=appUser.id where appUser.id=? and status=true` preparation failed!']);
-                  $conn->close();
+                  echo json_encode(['error' => 'Query `elect id from customerOrder where customerID=? and status=false` preparation failed!']);
                   exit;
             }
             $stmt->bind_param('s', $_SESSION['id']);
@@ -48,22 +48,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   $stmt->close();
                   $conn->close();
                   exit;
-            } else {
-                  $result = $stmt->get_result();
-                  $result = $result->fetch_assoc();
-                  $email = $result['email'];
             }
+            $result = $stmt->get_result();
+            if ($result->num_rows === 0) {
+                  $stmt->close();
+                  $conn->close();
+                  echo json_encode(['query_result' => $finalResult]);
+                  exit;
+            }
+            $row = $result->fetch_assoc();
+            $orderID = $row['id'];
             $stmt->close();
 
-            $conn->begin_transaction();
-            $stmt = $conn->prepare("update customer join appUser on customer.id=appUser.id set customer.status=false where customer.id=? and customer.status=true");
+            $stmt = $conn->prepare('call getBillingDetail(?)');
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `update customer join appUser on customer.id=appUser.id set customer.status=false where customer.id=? and customer.status=true` preparation failed!']);
-                  $conn->close();
+                  echo json_encode(['error' => 'Query `call getBillingDetail(?)` preparation failed!']);
                   exit;
             }
-            $stmt->bind_param('s', $_SESSION['id']);
+            $stmt->bind_param('s', $orderID);
             if (!$stmt->execute()) {
                   http_response_code(500);
                   echo json_encode(['error' => $stmt->error]);
@@ -71,11 +74,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                   $conn->close();
                   exit;
             }
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $finalResult['originalCost'] = $row['originalCost'];
+            $finalResult['costAfterCoupon'] = $row['costAfterCoupon'];
+            $finalResult['loyalty'] = $row['loyaltyDiscount'];
+            $finalResult['referrer'] = $row['referrerDiscount'];
+            $finalResult['final'] = $row['finalCost'];
+            $finalResult['discount'] = $row['finalDiscount'];
             $stmt->close();
-            $conn->commit();
+
             $conn->close();
-            deactivate_mail($email);
-            echo json_encode(['query_result' => true]);
+            echo json_encode(['query_result' => $finalResult]);
       } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['error' => $e->getMessage()]);

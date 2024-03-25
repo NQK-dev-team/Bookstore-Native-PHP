@@ -1,23 +1,18 @@
-.orderPic {
-    width: 100px;
+.ammount_input {
+    width: 75px;
 }
 
-.paymentPic {
+.book_image {
     width: 200px;
 }
 
-.warning {
-    color: red;
+
+.payment {
+    width: 250px;
 }
 
-.delBtn {
-    color: red;
-    background-color: white;
-    border: none;
-}
-
-.delBtn:hover {
-    color: rgb(232, 120, 120);
-    background-color: white;
-    border: none;
+@media only screen and (max-width: 768px) {
+    .payment {
+        width: 200px;
+    }
 }
