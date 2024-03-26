@@ -36,8 +36,6 @@ function resetForm()
 
       $('#isbnInput').val('');
 
-      $('#ageInput').val('');
-
       $('#publisherInput').val('');
 
       $('#publishDateInput').val('');
@@ -194,7 +192,6 @@ function submitForm()
       const name = encodeData($('#bookNameInput').val());
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
-      const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
       const author = $('#authorInput').val() !== '' ? (($('#authorInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
       const category = encodeData($('#categoryInput').val()); //$('#categoryInput').val() !== '' ? (($('#categoryInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
       const publisher = encodeData($('#publisherInput').val());
@@ -281,12 +278,6 @@ function submitForm()
             }
       }
 
-      if (!((typeof age === 'number' && !isNaN(age) && age > 0) || (typeof age === 'string' && age === '')))
-      {
-            reportCustomValidity($('#ageInput').get(0), 'Age restriction invalid!');
-            return;
-      }
-
       if (author.length === 0)
       {
             reportCustomValidity($('#authorInput').get(0), 'Book must have at least one author!');
@@ -367,7 +358,6 @@ function submitForm()
       postData.append('name', name);
       postData.append('edition', edition);
       postData.append('isbn', isbn);
-      postData.append('age', age);
       postData.append('author', author);
       postData.append('category', category);
       postData.append('publisher', publisher);

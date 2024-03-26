@@ -1,5 +1,5 @@
 let originalImg = null, originalName = null, originalEdition = null,
-      originalISBN = null, originalAge = null, originalPublisher = null,
+      originalISBN = null, originalPublisher = null,
       originalPublishDate = null, originalPhysicalPrice = null, originalFilePrice = null,
       originalPhysicalInStock = null, originalAuthor = null, originalDescription = null;
 
@@ -15,7 +15,6 @@ $(document).ready(() =>
       originalName = $('#bookNameInput').val();
       originalEdition = $('#editionInput').val();
       originalISBN = $('#isbnInput').val();
-      originalAge = $('#ageInput').val();
       originalPublisher = $('#publisherInput').val();
       originalPublishDate = $('#publishDateInput').val();
       originalPhysicalPrice = $('#physicalPriceInput').val();
@@ -47,8 +46,6 @@ function resetForm()
       $('#editionInput').val(originalEdition);
 
       $('#isbnInput').val(originalISBN);
-
-      $('#ageInput').val(originalAge);
 
       $('#publisherInput').val(originalPublisher);
 
@@ -224,7 +221,6 @@ function submitForm()
       const name = encodeData($('#bookNameInput').val());
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
-      const age = encodeData($('#ageInput').val()) === '' ? '' : parseInt(encodeData($('#ageInput').val()));
       const author = $('#authorInput').val() !== '' ? (($('#authorInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
       const category = encodeData($('#categoryInput').val());//$('#categoryInput').val() !== '' ? (($('#categoryInput').val().split(';')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
       const publisher = encodeData($('#publisherInput').val());
@@ -284,12 +280,6 @@ function submitForm()
                   reportCustomValidity($('#isbnInput').get(0), 'Book ISBN-13 invalid!');
                   return;
             }
-      }
-
-      if (!((typeof age === 'number' && !isNaN(age) && age > 0) || (typeof age === 'string' && age === '')))
-      {
-            reportCustomValidity($('#ageInput').get(0), 'Age restriction invalid!');
-            return;
       }
 
       if (author.length === 0)
@@ -398,7 +388,6 @@ function submitForm()
       postData.append('name', name);
       postData.append('edition', edition);
       postData.append('isbn', isbn);
-      postData.append('age', age);
       postData.append('author', author);
       postData.append('category', category);
       postData.append('publisher', publisher);
@@ -482,7 +471,6 @@ function submitForm()
                         originalEdition = $('#editionInput').val();
                         $('#isbnInput').val(formatISBN($('#isbnInput').val()));
                         originalISBN = $('#isbnInput').val();
-                        originalAge = $('#ageInput').val();
                         originalPublisher = $('#publisherInput').val();
                         originalPublishDate = $('#publishDateInput').val();
                         originalPhysicalPrice = $('#physicalPriceInput').val();

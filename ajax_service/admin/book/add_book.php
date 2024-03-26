@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isset($_POST['name']) &&
             isset($_POST['edition']) &&
             isset($_POST['isbn']) &&
-            isset($_POST['age']) &&
             isset($_POST['author']) &&
             isset($_POST['category']) &&
             isset($_POST['publisher']) &&
@@ -51,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $name = sanitize(rawurldecode($_POST['name']));
                   $edition = sanitize(rawurldecode($_POST['edition']));
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
-                  $age = sanitize(rawurldecode($_POST['age'])) ? sanitize(rawurldecode($_POST['age'])) : null;
                   $author =  $_POST['author'] ? array_map('map', explode(',', $_POST['author'])) : [];
                   $category = $_POST['category'] ? array_map('map', explode("\n", rawurldecode($_POST['category']))) : [];
                   $publisher = sanitize(rawurldecode($_POST['publisher']));
@@ -98,12 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         exit;
                   } else if (preg_match('/[?\/]/', $name) === false) {
                         throw new Exception('Error occurred during book ISBN-13 format check!');
-                        exit;
-                  }
-
-                  if ($age && (!is_numeric($age) || $age <= 0)) {
-                        http_response_code(400);
-                        echo json_encode(['error' => 'Age restriction invalid!']);
                         exit;
                   }
 
@@ -309,11 +301,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $stmt = $conn->prepare('call addBook(?,?,?,?,?,?,?,?,?,?,?,?)');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `call addBook(?,?,?,?,?,?,?,?,?,?,?,?)` preparation failed!']);
+                        echo json_encode(['error' => 'Query `call addBook(?,?,?,?,?,?,?,?,?,?,?)` preparation failed!']);
                         $conn->close();
                         exit;
                   }
-                  $stmt->bind_param('sisissssdids', $name, $edition, $isbn, $age, $publisher, $publishDate, $description, $imageFile, $physicalPrice, $inStock, $filePrice, $pdfFile);
+                  $stmt->bind_param('sisssssdids', $name, $edition, $isbn, $publisher, $publishDate, $description, $imageFile, $physicalPrice, $inStock, $filePrice, $pdfFile);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         http_response_code(500);

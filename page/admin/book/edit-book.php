@@ -38,7 +38,7 @@ if ($return_status_code === 400) {
 
                   $query_result = null;
 
-                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?');
+                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath from book where book.id=?');
                   if (!$stmt) {
                         http_response_code(500);
                         require_once __DIR__ . '/../../../error/500.php';
@@ -258,10 +258,6 @@ if ($return_status_code === 400) {
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="isbnInput" class="form-label">ISBN-13:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="text" class="form-control" id="isbnInput" value="<?php echo $query_result['isbn']; ?>">
-                                                </div>
-                                                <div class="my-2 px-xl-5 px-3">
-                                                      <label for="ageInput" class="form-label">Age Restriction:</label>
-                                                      <input type="number" class="form-control" id="ageInput" value="<?php echo $query_result['ageRestriction'] ? $query_result['ageRestriction'] : ''; ?>">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
                                                       <label for="authorInput" class="form-label">Author:<span class='fw-bold text-danger'>&nbsp;*</span></label>

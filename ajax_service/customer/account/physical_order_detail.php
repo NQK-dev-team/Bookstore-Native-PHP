@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $finalResult = [];
 
-                  $stmt = $conn->prepare('select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
+                  $stmt = $conn->prepare('select imagePath,name,edition,isbn,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
                   from book join physicalOrderContain on physicalOrderContain.bookID=book.id
                   join physicalOrder on physicalOrder.id=physicalOrderContain.orderID
                   join physicalCopy on physicalCopy.id=book.id
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   where customerOrder.orderCode=? and customerOrder.customerID=? and customerOrder.status=true order by name,book.id');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
+                        echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,publisher,publishDate,description,avgRating,amount,book.id,physicalCopy.price,destinationAddress
                   from book join physicalOrderContain on physicalOrderContain.bookID=book.id
                   join physicalOrder on physicalOrder.id=physicalOrderContain.orderID
                   join physicalCopy on physicalCopy.id=book.id

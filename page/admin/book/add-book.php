@@ -80,10 +80,6 @@ if ($return_status_code === 400) {
                                                       <input type="text" class="form-control" id="isbnInput">
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
-                                                      <label for="ageInput" class="form-label">Age Restriction:</label>
-                                                      <input type="number" class="form-control" id="ageInput">
-                                                </div>
-                                                <div class="my-2 px-xl-5 px-3">
                                                       <label for="authorInput" class="form-label">Author:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <input type="text" class="form-control" id="authorInput">
                                                       <small class="form-text text-muted">You can enter multiple authors with each seperated by comma</small>
