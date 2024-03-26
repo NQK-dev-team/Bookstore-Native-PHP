@@ -72,10 +72,6 @@ if ($return_status_code === 400) {
                                                                         <p id='book_publisher_1'>N/A</p>
                                                                   </div>
                                                                   <div class="card-text d-flex">
-                                                                        <p>Age Restriction:&nbsp;</p>
-                                                                        <p id='book_age_1'>N/A</p>
-                                                                  </div>
-                                                                  <div class="card-text d-flex">
                                                                         <p>Sold:&nbsp;</p>
                                                                         <p id='book_sold_1' class='fw-medium'>N/A</p>
                                                                   </div>
@@ -106,10 +102,6 @@ if ($return_status_code === 400) {
                                                                   <div class="card-text d-flex">
                                                                         <p>Publisher:&nbsp;</p>
                                                                         <p id='book_publisher_2'>N/A</p>
-                                                                  </div>
-                                                                  <div class="card-text d-flex">
-                                                                        <p>Age Restriction:&nbsp;</p>
-                                                                        <p id='book_age_2'>N/A</p>
                                                                   </div>
                                                                   <div class="card-text d-flex">
                                                                         <p>Sold:&nbsp;</p>
@@ -144,10 +136,6 @@ if ($return_status_code === 400) {
                                                                         <p id='book_publisher_3'>N/A</p>
                                                                   </div>
                                                                   <div class="card-text d-flex">
-                                                                        <p>Age Restriction:&nbsp;</p>
-                                                                        <p id='book_age_3'>N/A</p>
-                                                                  </div>
-                                                                  <div class="card-text d-flex">
                                                                         <p>Sold:&nbsp;</p>
                                                                         <p id='book_sold_3' class='fw-medium'>N/A</p>
                                                                   </div>
@@ -180,10 +168,6 @@ if ($return_status_code === 400) {
                                                                         <p id='book_publisher_4'>N/A</p>
                                                                   </div>
                                                                   <div class="card-text d-flex">
-                                                                        <p>Age Restriction:&nbsp;</p>
-                                                                        <p id='book_age_4'>N/A</p>
-                                                                  </div>
-                                                                  <div class="card-text d-flex">
                                                                         <p>Sold:&nbsp;</p>
                                                                         <p id='book_sold_4' class='fw-medium'>N/A</p>
                                                                   </div>
@@ -214,10 +198,6 @@ if ($return_status_code === 400) {
                                                                   <div class="card-text d-flex">
                                                                         <p>Publisher:&nbsp;</p>
                                                                         <p id='book_publisher_5'>N/A</p>
-                                                                  </div>
-                                                                  <div class="card-text d-flex">
-                                                                        <p>Age Restriction:&nbsp;</p>
-                                                                        <p id='book_age_5'>N/A</p>
                                                                   </div>
                                                                   <div class="card-text d-flex">
                                                                         <p>Sold:&nbsp;</p>
