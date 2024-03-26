@@ -85,7 +85,6 @@ function fetchCustomerList()
                               trElem.append($(`<td class="align-middle col-2">${ data.query_result[0][i].address }</td>`));
                               trElem.append($(`<td class="align-middle">${ data.query_result[0][i].gender }</td>`));
                               trElem.append($(`<td class="align-middle">${ data.query_result[0][i].point }</td>`));
-                              trElem.append($(`<td class="align-middle col-1">${ data.query_result[0][i].cardNumber }</td>`));
                               if (!status)
                                     trElem.append($(`<td class="align-middle col-1">${ data.query_result[0][i].deleteTime ? data.query_result[0][i].deleteTime : 'N/A' }</td>`));
                               trElem.append(
@@ -184,7 +183,6 @@ function updateSwitchLabel()
                                                 <th scope="col">Address</th>
                                                 <th scope="col">Gender</th>
                                                 <th scope="col" class='text-nowrap'>Accumulated Points</th>
-                                                <th scope="col">Card Number</th>
                                                 <th scope="col">Action</th>
                                           </tr>`));
       }
@@ -201,7 +199,6 @@ function updateSwitchLabel()
                                                 <th scope="col">Address</th>
                                                 <th scope="col">Gender</th>
                                                 <th scope="col" class='text-nowrap'>Accumulated Points</th>
-                                                <th scope="col">Card Number</th>
                                                 <th scope="col">Delete Date</th>
                                                 <th scope="col">Action</th>
                                           </tr>`));

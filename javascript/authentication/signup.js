@@ -21,7 +21,6 @@ function signUpHandler(event)
       const address = encodeData(document.getElementById('inputAddress').value);
       const email = encodeData(document.getElementById('inputEmail').value);
       const password = encodeData(document.getElementById('inputPassword').value);
-      const card = encodeData(document.getElementById('inputCard').value);
       const refEmail = encodeData(document.getElementById('inputRefEmail').value);
       const gender = encodeData(document.getElementById('inputGender').value);
       const confirmPassword = encodeData(document.getElementById('confirmPassword').value);
@@ -74,16 +73,6 @@ function signUpHandler(event)
             if (!regex.test(phone))
             {
                   reportCustomValidity($('#inputPhone').get(0), "Phone number format invalid!");
-                  return;
-            }
-      }
-
-      if (card !== '')
-      {
-            const regex = /^[0-9]{8,16}$/;
-            if (!regex.test(card))
-            {
-                  reportCustomValidity($('#inputCard').get(0), "Card number format invalid!");
                   return;
             }
       }
@@ -163,7 +152,7 @@ function signUpHandler(event)
       $.ajax({
             url: '/ajax_service/authentication/signup_handler.php',
             method: 'POST',
-            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, card: (card === '' || !card) ? null : card, email: email, password: password, confirmPassword: confirmPassword, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
+            data: { gender: gender, name: name, date: date, phone: phone, address: (address === '' || !address) ? null : address, email: email, password: password, confirmPassword: confirmPassword, refEmail: (refEmail === '' || !refEmail) ? null : refEmail },
             dataType: 'json',
             success: function (data)
             {

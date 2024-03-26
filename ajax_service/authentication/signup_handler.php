@@ -30,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $date = sanitize(rawurldecode($_POST['date']));
                   $phone = sanitize(rawurldecode($_POST['phone']));
                   $address = (isset($_POST['address']) && $_POST['address']) ? sanitize(rawurldecode($_POST['address'])) : null;
-                  $card = (isset($_POST['card']) && $_POST['card']) ? sanitize(rawurldecode($_POST['card'])) : null;
                   $refEmail = (isset($_POST['refEmail']) && $_POST['refEmail']) ? sanitize(rawurldecode($_POST['refEmail'])) : null;
                   $gender = sanitize(rawurldecode($_POST['gender']));
                   $confirmPassword = sanitize(rawurldecode($_POST['confirmPassword']));
@@ -91,17 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         } else if ($matchResult === 0) {
                               http_response_code(400);
                               echo json_encode(['error' => 'Invalid phone number format!']);
-                              exit;
-                        }
-                  }
-
-                  if ($card) {
-                        $matchResult = preg_match('/^[0-9]{8,16}$/', $card);
-                        if ($matchResult === false) {
-                              throw new Exception('Error occurred during card number format check!');
-                        } else if ($matchResult === 0) {
-                              http_response_code(400);
-                              echo json_encode(['error' => 'Card number format invalid!']);
                               exit;
                         }
                   }
@@ -266,14 +254,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   // Begin transaction
                   $conn->begin_transaction();
 
-                  $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?,?)');
+                  $stmt = $conn->prepare('call addCustomer(?,?,?,?,?,?,?,?)');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `call addCustomer(?,?,?,?,?,?,?,?,?)` preparation failed!']);
+                        echo json_encode(['error' => 'Query `call addCustomer(?,?,?,?,?,?,?,?)` preparation failed!']);
                         $conn->close();
                         exit;
                   }
-                  $stmt->bind_param('sssssssss', $name, $date, $phone, $address, $card, $email, $hashedPassword, $refEmail, $gender);
+                  $stmt->bind_param('ssssssss', $name, $date, $phone, $address, $email, $hashedPassword, $refEmail, $gender);
                   $isSuccess = $stmt->execute();
 
                   if (!$isSuccess) {
