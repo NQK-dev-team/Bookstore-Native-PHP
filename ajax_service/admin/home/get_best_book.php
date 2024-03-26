@@ -24,14 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   exit;
             }
 
-            $stmt = $conn->prepare('select bookID as id,sum(totalSold) as finalTotalSold,name,edition,isbn,ageRestriction,publisher,publishDate,imagePath from (
+            $stmt = $conn->prepare('select bookID as id,sum(totalSold) as finalTotalSold,name,edition,isbn,publisher,publishDate,imagePath from (
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 ) as combined join book on book.id=combined.bookID group by bookID order by finalTotalSold desc,name limit 5');
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `select bookID as id,sum(totalSold) as finalTotalSold,name,edition,isbn,ageRestriction,publisher,publishDate,imagePath from (
+                  echo json_encode(['error' => 'Query `select bookID as id,sum(totalSold) as finalTotalSold,name,edition,isbn,publisher,publishDate,imagePath from (
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
@@ -52,7 +52,6 @@ select bookID,count(*) as totalSold from fileOrderContain join customerOrder on 
             while ($row = $result->fetch_assoc()) {
                   $host = $_SERVER['HTTP_HOST'];
                   $row['imagePath'] = "https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
-                  $row['ageRestriction'] = $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
                   $row['edition'] = convertToOrdinal($row['edition']);
                   $row['isbn'] = formatISBN($row['isbn']);
                   $row['publishDate'] = MDYDateFormat($row['publishDate']);
