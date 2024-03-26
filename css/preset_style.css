@@ -41,13 +41,14 @@ body {
       min-height: 200px;
 }
 
-#footer>* {
+#footer * {
       color: white;
+      text-decoration: none;
 }
 
 #page {
       width: 100%;
-      background-color: rgb(240, 240, 240);
+      background-color: rgb(235, 235, 235);
       margin-top: 80px;
       flex-grow: 1;
 }
@@ -76,6 +77,15 @@ body {
       cursor: pointer;
 }
 
+.payment_method_footer {
+      width: 100px;
+      height: 60px;
+}
+
+.shipment_footer {
+      width: 150px;
+      height: 50px;
+}
 
 @media only screen and (max-width: 991px) {
       #header {

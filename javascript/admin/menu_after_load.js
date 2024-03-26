@@ -12,12 +12,10 @@ $(document).ready(() =>
       }
       else if (location.includes('/admin/statistic'))
             $('#statistic_nav').addClass('text-primary');
-      else if (location.includes('/account'))
+      else if (location.includes('/admin/account'))
             $('#profile_nav').addClass('text-primary');
-      else if (location.includes('/policy'))
-            $('#policy_nav').addClass('text-primary');
-      else if (location.includes('/authentication') && !location.includes('recovery'))
+      else if (location.includes('/admin/authentication') && !location.includes('/admin/authentication/recovery'))
             $('#signin_nav').addClass('text-primary');
-      else if (location.includes('/') && !location.includes('recovery'))
+      else if (location.includes('/admin/') && !location.includes('/admin/authentication/recovery') && !location.includes('/about-us') && !location.includes('/term-of-service') && !location.includes('/discount-milestone'))
             $('#home_nav').addClass('text-primary');
 });

@@ -14,6 +14,23 @@ create table pointConfig(
     check (pointConversionRate>0)
 );
 insert into pointConfig values('X',10);
+
+create table aboutUs(
+	locker char(1) primary key,
+	content text,
+	check (locker='X')
+);
+insert into aboutUs values('X','');
+
+create table contact(
+	locker char(1) primary key,
+	email varchar(255),
+    phone varchar(10),
+    address text,
+    check (locker='X')
+);
+
+insert into contact values('X','','','');
 -- Important --
 
 create table category(
