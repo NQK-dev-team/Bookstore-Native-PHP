@@ -20,7 +20,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           <a class="nav-link fs-5" href="/" id="home_nav">Home</a>
                                     </li>
                                     <li class="nav-item mx-2">
-                                          <a class="nav-link fs-5" href="/book/" id="book_nav">Books</a>
+                                          <a class="nav-link fs-5" href="/book/" id="book_nav">Book</a>
                                     </li>
                                     <?php
                                     if (!check_session()) {
