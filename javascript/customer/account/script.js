@@ -606,7 +606,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/customer/account/file_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: encodeData(code.replace('/-/g', '')) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -702,7 +702,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/customer/account/physical_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: encodeData(code.replace('/-/g', '')) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },

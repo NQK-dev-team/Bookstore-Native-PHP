@@ -6,6 +6,12 @@ function clearAllCustomValidity()
       });
 }
 
+function clearCustomValidity(elem)
+{
+      elem.setCustomValidity('');
+
+}
+
 function reportCustomValidity(elem, message)
 {
       elem.setCustomValidity(message);

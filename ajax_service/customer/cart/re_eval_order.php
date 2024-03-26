@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             }
             $orderID = null;
             $result = $stmt->get_result();
-            if ($result->num_rows > 0) {
+            if ($result->num_rows === 1) {
                   $orderID = $result->fetch_assoc()['id'];
             }
             $stmt->close();
