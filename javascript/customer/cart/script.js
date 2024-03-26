@@ -12,6 +12,7 @@ $(document).ready(function ()
       $("#cartForm").submit(function (e)
       {
             e.preventDefault();
+
             pause = true;
             $('#paymentModal').modal('show');
       });
@@ -54,12 +55,44 @@ $(document).ready(function ()
       }, 10000);
 });
 
+function placeOrder()
+{
+      const deliveryAddress = $('#physicalDestination').val();
+
+      clearCustomValidity($(`#physicalDestination`).get(0));
+
+      if (!deliveryAddress && !$('#physicalList:empty').length)
+      {
+            reportCustomValidity($(`#physicalDestination`).get(0), "Please fill in your delivery address!");
+            return;
+      }
+
+      let signal = false;
+
+      $('div[name="physical_row"]').each(function ()
+      {
+            const id = $(this).data('id');
+
+            checkAmmount(id);
+
+            if ($(`#book_ammount_${ id }`).get(0).validationMessage)
+            {
+                  signal = true;
+                  return false;
+            }
+      });
+
+      if (signal) return;
+
+      $('#cartForm').submit();
+}
+
 function updateInStock(id)
 {
       $.ajax({
             url: '/ajax_service/customer/cart/get_in_stock.php',
             method: 'GET',
-            data: { id },
+            data: { id: encodeData(id) },
             dataType: 'json',
             success: function (data)
             {
@@ -491,7 +524,7 @@ function removeBook()
                   headers: {
                         'X-CSRF-Token': CSRF_TOKEN
                   },
-                  data: { id: deleteID, mode: 1 },
+                  data: { id: encodeData(deleteID), mode: 1 },
                   dataType: 'json',
                   success: function (data)
                   {
@@ -530,7 +563,7 @@ function removeBook()
                   headers: {
                         'X-CSRF-Token': CSRF_TOKEN
                   },
-                  data: { id: deleteID, mode: 2 },
+                  data: { id: encodeData(deleteID), mode: 2 },
                   dataType: 'json',
                   success: function (data)
                   {
@@ -576,10 +609,10 @@ function adjustAmount(isIncrease, id)
 
 function checkAmmount(id, update = false)
 {
-      clearAllCustomValidity();
-
       const amount = parseInt($(`#book_ammount_${ id }`).val());
       const inStock = parseInt($(`#in_stock_${ id }`).text());
+
+      clearCustomValidity($(`#book_ammount_${ id }`).get(0));
 
       if (amount < 0)
       {
@@ -608,7 +641,7 @@ function updateAmount(amount, id)
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
-            data: { amount, id },
+            data: { amount: encodeData(amount), id: encodeData(id) },
             dataType: 'json',
             success: function (data)
             {
@@ -643,12 +676,15 @@ function payOrder()
 {
       if ($('input[name="paymentMethod"][value="1"]').is(':checked') || $('input[name="paymentMethod"][value="2"]').is(':checked'))
       {
+            const deliveryAddress = encodeData($('#physicalDestination').val());
+
             $.ajax({
                   url: '/ajax_service/customer/cart/pay_order.php',
                   method: 'POST',
                   headers: {
                         'X-CSRF-Token': CSRF_TOKEN
                   },
+                  data: { deliveryAddress },
                   dataType: 'json',
                   success: function (data)
                   {

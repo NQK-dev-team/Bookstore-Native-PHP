@@ -75,7 +75,7 @@ if ($return_status_code === 400) {
                                     <p>Total Discount:&nbsp;</p>
                                     <p class='mb-0' id='totalDiscount'>0</p>
                               </div>
-                              <button id='purchaseBtn' type="submit" class="btn btn-primary mb-3 w-100"><i class="bi bi-cart4"></i> Place Order</button>
+                              <button id='purchaseBtn' onclick="placeOrder()" type="button" class="btn btn-primary mb-3 w-100"><i class="bi bi-cart4"></i> Place Order</button>
                         </div>
                   </form>
                   <div class="modal fade" id='paymentModal' tabindex="-1" aria-labelledby="modalLabel">
