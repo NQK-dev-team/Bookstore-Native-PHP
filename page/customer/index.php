@@ -39,7 +39,7 @@ if ($return_status_code === 400) {
                                                                                                                                                                                                                                                                         join fileCopy on book.id = fileCopy.id
                                                                                                                                                                                                                                                                         join physicalCopy on book.id = physicalCopy.id
                                                                                                                                                                                                                                                             order by sales DESC
-                                                                                                                                                                                                                                                            limit 6');
+                                                                                                                                                                                                                                                            limit 5');
             $featured->execute();
             $featured = $featured->get_result();
 
@@ -115,11 +115,20 @@ if ($return_status_code === 400) {
                   left: 0;
                   right: 0;
                   bottom: 0;
-                  background-image:url(https://th.bing.com/th/id/R.9ab69065931f33912678c9fa0055c875?rik=l4n%2bZal8cVnKMg&pid=ImgRaw&r=0);
+                  /* background-image:url(https://th.bing.com/th/id/R.9ab69065931f33912678c9fa0055c875?rik=l4n%2bZal8cVnKMg&pid=ImgRaw&r=0); */
                   background-position: center;
                   background-size: cover;
                   opacity: 0.70;
                   border-radius: 25px;
+            }
+            .carousel-control-prev-icon {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            }
+            .carousel-control-next-icon {
+            filter: invert(1) grayscale(100%) brightness(200%);
+            }
+            .carousel-indicators{
+            filter: invert(1) grayscale(100%) brightness(200%);
             }
             </style>
       </head>
@@ -188,12 +197,12 @@ for($i = 2; $i < $featured->num_rows; $i++){
       echo '<div class="overlay-image m-3"> </div>';
       echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
       $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($rows[$i]['pic']));
-                        echo ' <div class="col-9 col-md-6">';
+                        echo ' <div class="col-10 col-md-10">';
                         echo "<a href=\"book/book-detail?bookID=".normalizeURL(rawurlencode($rows[$i]["id"]))."\">"; 
                         echo'                  <div class="card mx-2" style="opacity: 90%">
                                                 <div class="row g-0">
                                                       <div class="col-md-7 d-flex justify-content-center ">';
-                        echo '<img src="' . $imagePath . '" class="card-img my-3 px-3" style="height: 28rem;" alt="...">';
+                        echo '<img src="' . $imagePath . '" class="card-img w-75 my-3 px-3" style="height: 28rem;" alt="...">';
                         echo '
                               </div>
                               <div class="col-md-5">

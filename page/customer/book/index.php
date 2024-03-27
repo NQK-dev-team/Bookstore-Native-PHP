@@ -27,25 +27,31 @@ if ($return_status_code === 400) {
             }
             $elem = '';
 
-            $stmt = $conn->prepare('select book.id, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from book inner join author on book.id = author.bookID
-            join fileCopy on book.id = fileCopy.id
-            join physicalCopy on book.id = physicalCopy.id');
+            $stmt = $conn->prepare('WITH RankedBooks AS (
+  SELECT book.id, book.name,
+         author.authorName,
+         fileCopy.price AS filePrice,
+         physicalCopy.price AS physicalPrice,
+         book.imagePath AS pic,
+         book.avgRating AS star,
+         eventapply.eventID,
+         COALESCE(eventdiscount.discount, 0) AS discount,
+         ROW_NUMBER() OVER (PARTITION BY book.id ORDER BY discount DESC) AS discount_rank
+  FROM book
+  INNER JOIN author ON book.id = author.bookID
+  INNER JOIN fileCopy ON book.id = fileCopy.id
+  INNER JOIN physicalCopy ON book.id = physicalCopy.id
+  LEFT JOIN eventapply ON book.id = eventapply.bookID
+  LEFT JOIN eventdiscount ON eventapply.eventID = eventdiscount.ID
+)
+SELECT *
+FROM RankedBooks
+WHERE discount_rank = 1');
+            // $stmt = $conn->prepare('select book.id, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic, book.avgRating as star from book inner join author on book.id = author.bookID
+            // join fileCopy on book.id = fileCopy.id
+            // join physicalCopy on book.id = physicalCopy.id');
             $stmt->execute();
             $result = $stmt->get_result();
-            // $cate_re = $cate->get_result();
-            // echo '<section id="page" class="container">';
-            // while ($row = $result->fetch_assoc()) {
-            //       $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
-            // echo '<div class="card" style="width: 18rem;">';
-            // echo '<img src="' . $imagePath . '" class="card-img-top" alt="...">';
-            // echo '<div class="card-body">';
-            // echo '<h5 class="card-title">' . $row['name'] . '</h5>';
-            // echo '<p class="card-text">Edition: ' . $row['edition'] . '</p>';
-            // // Output other fields as needed...
-            // echo '</div>';
-            // echo '</div>';
-            // }
-            // echo '</section>';
             $cate = $conn->prepare('SELECT category.ID, category.name FROM category');
             $auth = $conn->prepare('SELECT author.authorName FROM author');
       } catch (Exception $e) {
@@ -66,12 +72,6 @@ if ($return_status_code === 400) {
             <link rel="stylesheet" href="/css/preset_style.css">
             <title>Book list</title>
             <style>
-                  .grid-container {
-                        display: grid;
-                        grid-template-columns: auto auto auto auto;
-                        justify-content: space-evenly;
-                        align-content: center;
-                  }
                   .card:hover {
                         transform: scale(1.1);
                   } 
@@ -101,6 +101,16 @@ if ($return_status_code === 400) {
                   font-weight: bold;
                   padding: 20px;
             }
+            #Discount_Button.on {
+                  box-shadow: 0 0 10px #fff; /* White glow */
+                  background-color: red; /* Faint white background */
+                  color: #fff; /* White text */
+            }
+            #Best-Seller_Button.on {
+                  box-shadow: 0 0 10px #fff; /* White glow */
+                  background-color: #ffc107; /* Faint white background */
+                  color: #fff; /* White text */
+            }
             </style>
       </head>
 
@@ -110,12 +120,18 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
             <h1 class="heading-decord" style="text-align: center;">Our collection</h1>
+
+            <!--
+            <ul id="book-List"
+            <li>Example book</li>
+            </ul>
+            -->
       <div class="container">
             <div class="row">
-                  <div class="col-12 col-md-4">
+                  <div class="col-12 col-md-4 m-2">
                         <!-- category form -->
-                  <select class="form-select " aria-label="Default select example">
-                        <option selected>Category</option>
+                  <select class="form-select " aria-label="Default select example" id="category">
+                        <option selected value="All_Category">All Category</option>
                         <?php 
                               if ($cate) {
                                     $success = $cate->execute();
@@ -123,7 +139,7 @@ if ($return_status_code === 400) {
                                           $result1 = $cate->get_result();
                                           while ($row = $result1->fetch_assoc()) {
                                                 // Process each row of data here...
-                                                echo '<option value="' . $row['ID'].'">'. $row['name'] . '</option>';
+                                                echo '<option value="' . $row['ID'].'" >'. $row['name'] . '</option>';
                                           }
                                                 } else {
                                           echo "Error executing statement: " . $conn->error;
@@ -134,83 +150,70 @@ if ($return_status_code === 400) {
                         ?>
                         </select>  
                   </div>
-                  <!-- author form -->
-                  <div class="col-12 col-md-4">
-                  <select class="form-select" aria-label="Default select example">
-                        <option selected>Author</option>
-                        <?php 
-                              if ($auth) {
-                                    $success1 = $auth->execute();
-                                    if ($success1) {
-                                          $result2 = $auth->get_result();
-                                          while ($row = $result2->fetch_assoc()) {
-                                                // Process each row of data here...
-                                                echo '<option value="' . $row['authorName'].'">'. $row['authorName'] . '</option>';
-                                          }
-                                                } else {
-                                          echo "Error executing statement: " . $conn->error;
-                                                }     
-                                          } else {
-                                          echo "Error preparing statement: " . $conn->error;
-                                          }
-                        ?>
-                        </select>  
-                  </div>
-                  <!-- search button -->
-                  <div class="col-12 col-md-4">
-                  <button type="button" class="btn btn-primary mx-auto d-block">SEARCH NOW</button>
+                  <button type="button" class="btn btn-outline-danger col-12 col-md-1 m-2" id= "Discount_Button">Discount</button>
+                  <button type="button" class="btn btn-outline-warning col-12 col-md-1 m-2" id= "Best-Seller_Button">Best seller</button>
+                  <!-- search bar -->
+                  <div class="col-12 col-md-5 m-2">
+                   <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
+                                    <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
+                              </form>
                   </div>
             </div>
             <br>
-            <?php
-                  for ($i = 1; $i <= $result2->num_rows; $i++) {
-                  if ($i % 3 == 1) {
-                        echo '<div class="row justify-content-center align-items-center g-2 m-3">';
-                  }
-                  echo '<div class="col-9 col-md-4">';
-                  $row = $result->fetch_assoc();
-                  // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
-                  $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
-                                                echo '<div class="card w-75 mx-auto d-block">';
-                                                 echo "<a href=\"book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
-                                                 echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
-                                                      echo "<div class=\"card-body\">";
-                                                            echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
-                                                            echo "<p class=\"author\">".$row["authorName"]."</p>";
-                                                            echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
-                                                            echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
-                                                            // $cnt = 1;
-                                                            // $res="";
-                                                            // while($cnt <= 5){
-                                                            //       if ($cnt > $row["star"]){
-                                                            //             if($cnt - $row["star"] > 0 && $cnt - $row["star"] < 1){
-                                                            //                   $res .= "<i class=\"bi bi-star-half\"></i>";
-                                                            //             }
-                                                            //             else{
-                                                            //                   $res .= "<i class=\"bi bi-star\"></i>";
-                                                            //             }
-                                                            //       }
-                                                            //       else {
-                                                            //             $res .= "<i class=\"bi bi-star-fill\"></i>";
-                                                            //       }
-                                                            //       $cnt++;
-                                                            // }
-                                                            echo '<span class="text-warning">'.displayRatingStars($row["star"]).'</span>';
-                                                            echo "(".$row["star"].")";
-                                                            
-                                                      echo "</div>";
-                                                echo "</a>";
-                                                echo "</div>";
+            <div id="bookList">
+                  <?php
+                        for ($i = 1; $i <= $result->num_rows; $i++) {
+                        if ($i % 3 == 1) {
+                              echo '<div class="row justify-content-center align-items-center g-2 m-3">';
+                        }
+                        echo '<div class="col-9 col-md-4">';
+                        $row = $result->fetch_assoc();
+                        // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
+                        $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
+                              echo '<div class="card w-75 mx-auto d-block">';
+                              echo "<a href=\"book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
+                              echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
+                                    echo "<div class=\"card-body\">";
+                                          echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
+                                          if($row["discount"] > 0){
+                                                echo '<p class="text-danger"> <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                  <g id="SVGRepo_iconCarrier">
+                        <path d="M3.9889 14.6604L2.46891 13.1404C1.84891 12.5204 1.84891 11.5004 2.46891 10.8804L3.9889 9.36039C4.2489 9.10039 4.4589 8.59038 4.4589 8.23038V6.08036C4.4589 5.20036 5.1789 4.48038 6.0589 4.48038H8.2089C8.5689 4.48038 9.0789 4.27041 9.3389 4.01041L10.8589 2.49039C11.4789 1.87039 12.4989 1.87039 13.1189 2.49039L14.6389 4.01041C14.8989 4.27041 15.4089 4.48038 15.7689 4.48038H17.9189C18.7989 4.48038 19.5189 5.20036 19.5189 6.08036V8.23038C19.5189 8.59038 19.7289 9.10039 19.9889 9.36039L21.5089 10.8804C22.1289 11.5004 22.1289 12.5204 21.5089 13.1404L19.9889 14.6604C19.7289 14.9204 19.5189 15.4304 19.5189 15.7904V17.9403C19.5189 18.8203 18.7989 19.5404 17.9189 19.5404H15.7689C15.4089 19.5404 14.8989 19.7504 14.6389 20.0104L13.1189 21.5304C12.4989 22.1504 11.4789 22.1504 10.8589 21.5304L9.3389 20.0104C9.0789 19.7504 8.5689 19.5404 8.2089 19.5404H6.0589C5.1789 19.5404 4.4589 18.8203 4.4589 17.9403V15.7904C4.4589 15.4204 4.2489 14.9104 3.9889 14.6604Z" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M9 15L15 9" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M14.4945 14.5H14.5035" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </g>
+            </svg> '.$row["discount"].'%</p>';
+                                          }
+                                          echo "<p class=\"author\">".$row["authorName"]."</p>";
+                                          if($row["discount"] > 0){
+                                                echo '<p class= "price" style="text-decoration: line-through;"> E-book price:'. $row["filePrice"] .'$</p>';
+                                                echo '<p class= "price" style="text-decoration: line-through;"> Physical price:'. $row["physicalPrice"] .'$</p>';
+                                                echo "<p class=\"price\">"."E-book price: ".round($row["filePrice"] - $row["filePrice"] * $row["discount"] / 100, 2)."$"."</p>";
+                                                echo "<p class=\"price\">"."Physical price: ".round($row["physicalPrice"] - $row["physicalPrice"] * $row["discount"] / 100, 2)."$"."</p>";
+                                          }
+                                          else {
+                                          echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
+                                          echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
+                                          }
+                                          echo '<span class="text-warning">'.displayRatingStars($row["star"]).'</span>';
+                                          echo "(".$row["star"].")";
+                                          
+                                    echo "</div>";
+                              echo "</a>";
+                              echo "</div>";
 
-                  echo '</div>';
-                  if ($i % 3 == 0 || $i == $result2->num_rows) {
                         echo '</div>';
-                  }
-                  }
-                  
-                  
-            ?>
-            
+                        if ($i % 3 == 0 || $i == $result->num_rows) {
+                              echo '</div>';
+                        }
+                        }
+                        
+                        
+                  ?>
+            </div>
       
       </div>
             
@@ -220,6 +223,9 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../../layout/footer.php';
             ?>
             <script src="/javascript/customer/menu_after_load.js"></script>
+            <script src="/tool/js/ratingStars.js"></script>
+            <script src="/javascript/customer/book/book-list-cus.js"></script>
+            
       </body>
 
       </html>
