@@ -24,29 +24,32 @@ if ($return_status_code === 400) {
                   $bookID = $_GET['bookID'];
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
-                  $stmt = $conn->prepare('SELECT DISTINCT 
-            book.id,
-            book.name,
-            book.edition,
+                  $stmt = $conn->prepare('WITH RankedBooks AS (
+  SELECT book.id, book.name,
+         author.authorName,  book.edition,
             book.isbn,
             book.ageRestriction,
-            book.avgRating,
             book.publisher,
             book.publishDate,
             book.description,
             book.imagePath,
-            author.authorName,
-            filecopy.price
-        FROM 
-            book
-        JOIN 
-            author ON book.id = author.bookid
-        JOIN 
-            filecopy ON book.id = filecopy.id
-        WHERE 
-            book.status = 1
-        ORDER BY 
-            book.name, book.id');
+         fileCopy.price AS filePrice,
+         physicalCopy.price AS physicalPrice,
+         book.imagePath AS pic,
+         book.avgRating AS star,
+         eventapply.eventID,
+         COALESCE(eventdiscount.discount, 0) AS discount,
+         ROW_NUMBER() OVER (PARTITION BY book.id ORDER BY discount DESC) AS discount_rank
+  FROM book
+  INNER JOIN author ON book.id = author.bookID
+  INNER JOIN fileCopy ON book.id = fileCopy.id
+  INNER JOIN physicalCopy ON book.id = physicalCopy.id
+  LEFT JOIN eventapply ON book.id = eventapply.bookID
+  LEFT JOIN eventdiscount ON eventapply.eventID = eventdiscount.ID
+)
+SELECT *
+FROM RankedBooks
+WHERE discount_rank = 1');
                   $stmt->execute();
                   $result = $stmt->get_result();
                   // $book = $result->fetch_assoc();
@@ -99,6 +102,12 @@ if ($return_status_code === 400) {
             <meta name="author" content="Anh Khoa">
             <meta name="description" content="Home page of NQK bookstore">
             <style>
+                  .author {
+                        color: gray;
+                  }
+                  .text-justify{
+                        text-align: justify;
+                  }
                   .comment-box{
                         margin-top: 20px;
                         padding: 20px;
@@ -164,10 +173,22 @@ if ($return_status_code === 400) {
                         echo '<hr>';
                         echo'</div>';
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">
-                                    <div class="col-10 col-md-6 d-flex justify-content-center align-items-center">';
-                                    echo '<img src="' . $imagePath . '" class="card-img-top w-50 rounded" alt="..."> </div>';
-                                    echo '<div class="col-10 col-md-6"> ';
+                                    <div class="col-11 col-md-5 d-flex justify-content-center align-items-center">';
+                                    echo '<img src="' . $imagePath . '" class="card-img-top w-75 rounded" alt="..."> </div>';
+                                    echo '<div class="col-11 col-md-7"> ';
                                     echo '<h2 class="display-4">' . $book['name'] . '</h2>';
+                                    if($book["discount"] > 0){
+                                                echo '<p class="text-danger"> <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                      <path d="M3.9889 14.6604L2.46891 13.1404C1.84891 12.5204 1.84891 11.5004 2.46891 10.8804L3.9889 9.36039C4.2489 9.10039 4.4589 8.59038 4.4589 8.23038V6.08036C4.4589 5.20036 5.1789 4.48038 6.0589 4.48038H8.2089C8.5689 4.48038 9.0789 4.27041 9.3389 4.01041L10.8589 2.49039C11.4789 1.87039 12.4989 1.87039 13.1189 2.49039L14.6389 4.01041C14.8989 4.27041 15.4089 4.48038 15.7689 4.48038H17.9189C18.7989 4.48038 19.5189 5.20036 19.5189 6.08036V8.23038C19.5189 8.59038 19.7289 9.10039 19.9889 9.36039L21.5089 10.8804C22.1289 11.5004 22.1289 12.5204 21.5089 13.1404L19.9889 14.6604C19.7289 14.9204 19.5189 15.4304 19.5189 15.7904V17.9403C19.5189 18.8203 18.7989 19.5404 17.9189 19.5404H15.7689C15.4089 19.5404 14.8989 19.7504 14.6389 20.0104L13.1189 21.5304C12.4989 22.1504 11.4789 22.1504 10.8589 21.5304L9.3389 20.0104C9.0789 19.7504 8.5689 19.5404 8.2089 19.5404H6.0589C5.1789 19.5404 4.4589 18.8203 4.4589 17.9403V15.7904C4.4589 15.4204 4.2489 14.9104 3.9889 14.6604Z" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M9 15L15 9" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M14.4945 14.5H14.5035" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </g>
+                                          </svg> '.$book["discount"].'%</p>';
+                                    }
                                     if($book['edition'] == 1){
                                           echo '<p class="h6">' . $book['edition'] . 'rst edition</p>';
                                     }
@@ -181,37 +202,41 @@ if ($return_status_code === 400) {
                                     else{
                                           echo '<p class="h6">' . $book['edition'] . 'th edition</p>';
                                     }
-                                    echo '<p class="h3 text-danger">Digital copy: ' . $book['price'] . '$</p>';
-                                    echo '<span class="text-warning">'.displayRatingStars($book['avgRating']).'</span>';
-                                                           echo "(".$book['avgRating'].")";
-                                    echo '<p class="h5">Author: ' . $book['authorName'] . '</p>';
+                                    if($book["discount"] > 0){
+                                          echo '<p class="price h4">E-book price: <span style="text-decoration: line-through;">' . $book["filePrice"] . '$</span> ' .round($book["filePrice"] - $book["filePrice"] * $book["discount"] / 100, 2). '$</p>';
+                                          echo '<p class="price h4">Physical price: <span style="text-decoration: line-through;">' . $book["physicalPrice"] . '$</span> ' .round($book["physicalPrice"] - $book["physicalPrice"] * $book["discount"] / 100, 2). '$</p>';
+                                          }
+                                          else {
+                                          echo "<p class=\"price h4\">"."E-book price: ".$book["filePrice"]."$"."</p>";
+                                          echo "<p class=\"price h4\">"."Physical price: ".$book["physicalPrice"]."$"."</p>";
+                                          }
+                                    echo '<span class="text-warning">'.displayRatingStars($book['star']).'</span>';
+                                                           echo "(".$book['star'].")";
+                                    echo '<p class="h5 mt-3">ISBN: ' . $book['isbn'] . '</p>';
+                                    echo '<p class="h5 author">Author: ' . $book['authorName'] . '</p>';
                                     echo '<p class="h5">Publisher: ' . $book['publisher'] . '</p>';
-                                    echo '<p class="h5">ISBN: ' . $book['isbn'] . '</p>';
+                                    echo '<p class="h5">Publish date: ' . $book['publishDate'] . '</p>';
                                     echo '<a
                                           name=""
                                           id=""
-                                          class="btn btn-info text-light col-9 col-md-3 m-3"
+                                          class="btn btn-primary text-light col-12 col-md-4 col-xxl-3 mt-3"
                                           href="#"
                                           role="button"
                                           >Add to cart</a
                                     >';
-                                    echo '<a
-                                          name=""
-                                          id=""
-                                          class="btn btn-info col-9 text-light col-md-3 m-3"
-                                          href="book-detail-p?bookID=' . normalizeURL(rawurlencode($book['id'])) . '"
-                                          role="button"
-                                          >Physical copy</a
-                                    >';
-                                    
                                     echo '</div>';
                               echo'</div>';
+
                               
+
                               echo '<div class="row justify-content-center align-items-center g-2 mt-3">';
-                                    echo '<div class="col-10"> ';
-                                    echo '<p class="h6">Description: ' . $book['description'] . '</p>';
+                                    echo '<div class="col-11"> ';
+                                    echo '<p class="h5">Description: </p>';
+                                    echo '<p class="h6 text-justify">' . $book['description'] . '</p>';
                                     echo'</div>';
                               echo'</div>';
+
+                              echo '<hr>';//break to separate book detail and comment section
                               //comment section
                               if(isset($_SESSION['id'])){
                               echo '<form method="POST" action="'.setComment($conn, $bookID).'">
@@ -233,6 +258,7 @@ if ($return_status_code === 400) {
             
                   ?>
             </section>
+            
             <?php
             require_once __DIR__ . '/../../../layout/footer.php';
             ?>

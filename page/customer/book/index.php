@@ -127,37 +127,67 @@ WHERE discount_rank = 1');
             </ul>
             -->
       <div class="container">
-            <div class="row">
-                  <div class="col-12 col-md-4 m-2">
-                        <!-- category form -->
-                  <select class="form-select " aria-label="Default select example" id="category">
-                        <option selected value="All_Category">All Category</option>
-                        <?php 
-                              if ($cate) {
-                                    $success = $cate->execute();
-                                    if ($success) {
-                                          $result1 = $cate->get_result();
-                                          while ($row = $result1->fetch_assoc()) {
-                                                // Process each row of data here...
-                                                echo '<option value="' . $row['ID'].'" >'. $row['name'] . '</option>';
-                                          }
+                  <div class="row justify-content-center">
+                        <div class="col-12 col-md-4 m-2">
+                              <!-- category form -->
+                        <select class="form-select " aria-label="Default select example" id="category">
+                              <option selected value="All_Category">All Category</option>
+                              <?php 
+                                    if ($cate) {
+                                          $success = $cate->execute();
+                                          if ($success) {
+                                                $result1 = $cate->get_result();
+                                                while ($row = $result1->fetch_assoc()) {
+                                                      // Process each row of data here...
+                                                      echo '<option value="' . $row['ID'].'" >'. $row['name'] . '</option>';
+                                                }
+                                                      } else {
+                                                echo "Error executing statement: " . $conn->error;
+                                                      }     
                                                 } else {
-                                          echo "Error executing statement: " . $conn->error;
-                                                }     
-                                          } else {
-                                          echo "Error preparing statement: " . $conn->error;
-                                          }
-                        ?>
-                        </select>  
+                                                echo "Error preparing statement: " . $conn->error;
+                                                }
+                              ?>
+                              </select>  
                   </div>
-                  <button type="button" class="btn btn-outline-danger col-12 col-md-1 m-2" id= "Discount_Button">Discount</button>
-                  <button type="button" class="btn btn-outline-warning col-12 col-md-1 m-2" id= "Best-Seller_Button">Best seller</button>
+                  <button type="button" class="btn btn-outline-danger col-10 col-md-2 col-lg-1 m-2" id= "Discount_Button">Discount</button>
+                  <button type="button" class="btn btn-outline-warning col-10 col-md-2 col-lg-1 m-2" id= "Best-Seller_Button">Best seller</button>
                   <!-- search bar -->
-                  <div class="col-12 col-md-5 m-2">
-                   <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <input id="search_book" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
+                  <div class="row justify-content-center">
+                        <div class="col-12 col-md-5 m-2">
+                              <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_book">
+                                    <input id="search-input" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
+                                    <input type="submit" value="Search" class="btn btn-primary">
                               </form>
+                        </div>
                   </div>
+                  <div class="row justify-content-center">
+                        <div class="col-12 col-md-2 m-2">
+                              <select class="form-select" id="itemsPerPage">
+                                    <option selected>Items per page</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                              </select>
+                        </div>
+                        <nav class=" col-12 col-md-2 m-2 page-nav" aria-label="Page navigation example">
+                              <ul class="pagination">
+                                    <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                          <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                          <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                    </li>
+                              </ul>
+                        </nav> 
+                        
+                  </div>
+                  
             </div>
             <br>
             <div id="bookList">
@@ -166,7 +196,7 @@ WHERE discount_rank = 1');
                         if ($i % 3 == 1) {
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">';
                         }
-                        echo '<div class="col-9 col-md-4">';
+                        echo '<div class="col-9 col-md-6 col-xl-4">';
                         $row = $result->fetch_assoc();
                         // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                         $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
@@ -187,7 +217,7 @@ WHERE discount_rank = 1');
                   </g>
             </svg> '.$row["discount"].'%</p>';
                                           }
-                                          echo "<p class=\"author\">".$row["authorName"]."</p>";
+                                          echo '<p class="author">'.$row["authorName"].'</p>';
                                           if($row["discount"] > 0){
                                                 echo '<p class= "price" style="text-decoration: line-through;"> E-book price:'. $row["filePrice"] .'$</p>';
                                                 echo '<p class= "price" style="text-decoration: line-through;"> Physical price:'. $row["physicalPrice"] .'$</p>';
