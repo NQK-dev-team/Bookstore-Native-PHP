@@ -9,8 +9,8 @@
       <link rel="stylesheet" href="/css/preset_style.css">
 
       <meta name="author" content="Nghia Duong">
-      <meta name="description" content="Information about NQK Bookstore">
-      <title>About Us</title>
+      <meta name="description" content="NQK Bookstore privacy policy">
+      <title>Privacy Policy</title>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
       ?>
       <section id="page">
             <div class='container-fluid d-flex flex-column'>
-                  <h1 class='mt-2 mx-auto'>ABOUT NQK BOOKSTORE</h1>
+                  <h1 class='mt-2 mx-auto'>PRIVACY POLICY</h1>
                   <hr>
             </div>
       </section>

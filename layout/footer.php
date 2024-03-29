@@ -4,8 +4,9 @@
                   <div class="text-center h-100 w-100 me-lg-3 d-flex flex-column my-2 my-lg-0">
                         <h3>About NQK Bookstore</h3>
                         <a href='/about-us'>About Us</a>
-                        <a href='/term-of-service'>Term of Service</a>
-                        <a href='/discount-milestone'>Discount Milestone</a>
+                        <a href='/terms-of-service'>Terms of Service</a>
+                        <a href='/privacy-policy'>Privacy Policy</a>
+                        <a href='/discount-program'>Discount Program</a>
                   </div>
                   <div class="text-center h-100 w-100 me-lg-3 my-2 my-lg-0">
                         <h3>Payment</h3>

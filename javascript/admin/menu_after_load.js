@@ -16,6 +16,6 @@ $(document).ready(() =>
             $('#profile_nav').addClass('text-primary');
       else if (location.includes('/admin/authentication') && !location.includes('/admin/authentication/recovery'))
             $('#signin_nav').addClass('text-primary');
-      else if (location.includes('/admin/') && !location.includes('/admin/authentication/recovery') && !location.includes('/about-us') && !location.includes('/term-of-service') && !location.includes('/discount-milestone'))
+      else if (location.includes('/admin/') && !location.includes('/admin/authentication/recovery') && !location.includes('/about-us') && !location.includes('/terms-of-service') && !location.includes('/discount-program') && !location.includes('/privacy-policy'))
             $('#home_nav').addClass('text-primary');
 });

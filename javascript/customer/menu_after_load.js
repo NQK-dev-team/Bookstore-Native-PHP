@@ -10,6 +10,6 @@ $(document).ready(() =>
             $('#profile_nav').addClass('text-primary');
       else if (location.includes('/authentication') && !location.includes('/authentication/recovery') && !location.includes('/authentication/sign-up'))
             $('#signin_nav').addClass('text-primary');
-      else if (location.includes('/') && !location.includes('/authentication/recovery') && !location.includes('/authentication/sign-up') && !location.includes('/about-us') && !location.includes('/term-of-service') && !location.includes('/discount-milestone'))
+      else if (location.includes('/') && !location.includes('/authentication/recovery') && !location.includes('/authentication/sign-up') && !location.includes('/about-us') && !location.includes('/terms-of-service') && !location.includes('/discount-program') && !location.includes('/privacy-policy'))
             $('#home_nav').addClass('text-primary');
 });
