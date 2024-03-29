@@ -18,13 +18,25 @@ function setComment($conn, $bookID) {
         } else {
             $nextCommentIdx = 1;
         }
-        $sql2 = "INSERT INTO comment (customerID, bookID) VALUES ('$customerID', '$bookID')";
-        $result2 = $conn->query($sql2);
-        $sql = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
-        $result = $conn->query($sql);
+        $result = $conn->query("SELECT * FROM comment");
+        while ($row = $result->fetch_assoc()) {
+            if($row['customerID'] == $customerID && $row['bookID'] == $bookID){
+                $sql3 = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
+            $result3 = $conn->query($sql3);
+            break;
+        }
+        if($result->fetch_assoc() == null){
+            $sql2 = "INSERT INTO comment (customerID, bookID) VALUES ('$customerID', '$bookID')";
+            $result2 = $conn->query($sql2);
+            $sql3 = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
+            $result3 = $conn->query($sql3);
+        }
+        // $sql2 = "INSERT INTO comment (customerID, bookID) VALUES ('$customerID', '$bookID')";
+        // $result2 = $conn->query($sql2);
+        
+        }
     }
 }
-
 function getComment($conn, $bookID) {
     $sql = "SELECT * FROM commentcontent WHERE bookID = '$bookID'";
     $result = $conn->query($sql);
