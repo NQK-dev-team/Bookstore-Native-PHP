@@ -433,7 +433,6 @@ async function orderDetail(code, time, price, discount)
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;
-                                    temp += `<td class=\"align-middle\">${ data.query_result[i].ageRestriction }</td>`;
 
                                     {
                                           let div = `<div class='d-flex flex-column'>`;
@@ -533,7 +532,6 @@ async function orderDetail(code, time, price, discount)
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;
-                                    temp += `<td class=\"align-middle\">${ data.query_result[i].ageRestriction }</td>`;
 
                                     {
                                           let div = `<div class='d-flex flex-column'>`;

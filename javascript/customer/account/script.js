@@ -606,7 +606,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/customer/account/file_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: encodeData(code.replace('/-/g', '')) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -632,7 +632,6 @@ async function orderDetail(code, time, price, discount)
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;
-                                    temp += `<td class=\"align-middle\">${ data.query_result[i].ageRestriction }</td>`;
 
                                     {
                                           let div = `<div class='d-flex flex-column'>`;
@@ -703,7 +702,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/customer/account/physical_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: encodeData(code.replace('/-/g', '')) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -729,7 +728,6 @@ async function orderDetail(code, time, price, discount)
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;
-                                    temp += `<td class=\"align-middle\">${ data.query_result[i].ageRestriction }</td>`;
 
                                     {
                                           let div = `<div class='d-flex flex-column'>`;

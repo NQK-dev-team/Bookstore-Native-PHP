@@ -53,7 +53,7 @@ if ($return_status_code === 400) {
                                           </svg>
                                     </button>
 
-                                    <input id="search_customer" class="form-control me-2" type="search" placeholder="Search by name, email, phone number or card number" aria-label="Search">
+                                    <input id="search_customer" class="form-control me-2" type="search" placeholder="Search by name, email or phone number" aria-label="Search">
                               </form>
                         </div>
                         <div class="mt-2">
@@ -88,7 +88,6 @@ if ($return_status_code === 400) {
                                                 <th scope="col">Address</th>
                                                 <th scope="col">Gender</th>
                                                 <th scope="col" class='text-nowrap'>Accumulated Points</th>
-                                                <th scope="col">Card Number</th>
                                                 <th scope="col">Action</th>
                                           </tr>
                                     </thead>

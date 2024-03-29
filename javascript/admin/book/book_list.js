@@ -169,7 +169,6 @@ function fetchBookList()
                               trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
                               trElem.append($(`<td class=\"align-middle text-nowrap\">${ data.query_result[0][i].isbn }</td>`));
-                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].ageRestriction }</td>`));
 
                               if (data.query_result[0][i].author.length)
                               {

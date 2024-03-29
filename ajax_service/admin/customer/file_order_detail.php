@@ -63,14 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   $finalResult = [];
 
-                  $stmt = $conn->prepare('select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,book.id,fileCopy.price,fileCopy.filePath
+                  $stmt = $conn->prepare('select imagePath,name,edition,isbn,publisher,publishDate,description,avgRating,book.id,fileCopy.price,fileCopy.filePath
                   from book join fileOrderContain on fileOrderContain.bookID=book.id
                   join fileCopy on fileCopy.id=book.id
                   join customerOrder on customerOrder.id=fileOrderContain.orderID
                   where customerOrder.orderCode=? and customerOrder.customerID=? and customerOrder.status=true order by name,book.id');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,ageRestriction,publisher,publishDate,description,avgRating,book.id,fileCopy.price,fileCopy.filePath
+                        echo json_encode(['error' => 'Query `select imagePath,name,edition,isbn,publisher,publishDate,description,avgRating,book.id,fileCopy.price,fileCopy.filePath
                   from book join fileOrderContain on fileOrderContain.bookID=book.id
                   join fileCopy on fileCopy.id=book.id
                   join customerOrder on customerOrder.id=fileOrderContain.orderID

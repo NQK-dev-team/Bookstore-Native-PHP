@@ -92,12 +92,6 @@ unset($_SESSION['update_book_id']);
                               <input autocomplete="off" type="text" class="form-control" id="inputAddress" placeholder="Enter address" name="address">
                         </div>
                         <div class="form-group mt-3">
-                              <label for="inputCard" class="fs-4 fw-medium">Card number</label>
-                              <p class="mb-1">(You can enter this later on)</p>
-
-                              <input autocomplete="cc-number" type="text" class="form-control" id="inputCard" placeholder="Enter card number" name="card">
-                        </div>
-                        <div class="form-group mt-3">
                               <div class="d-flex">
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
                                     <p class="text-danger mb-0 ms-2 align-middle text-center fs-4 fw-bold">*</p>

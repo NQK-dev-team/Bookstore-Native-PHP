@@ -19,7 +19,6 @@ $(document).ready(function ()
                               $(`#book_name_${ i + 1 }`).text(data.query_result[i].name);
                               $(`#book_edition_${ i + 1 }`).text(data.query_result[i].edition);
                               $(`#book_isbn_${ i + 1 }`).text(data.query_result[i].isbn);
-                              $(`#book_age_${ i + 1 }`).text(data.query_result[i].ageRestriction);
                               $(`#book_sold_${ i + 1 }`).text(data.query_result[i].finalTotalSold === 1 ? data.query_result[i].finalTotalSold + ' copy' : data.query_result[i].finalTotalSold + ' copies');
                               $(`#book_publisher_${ i + 1 }`).text(data.query_result[i].publisher + ' (' + data.query_result[i].publishDate + ')');
                               $(`#book_category_${ i + 1 }`).text(data.query_result[i].category.length ? data.query_result[i].category.join(', ') : 'N/A');

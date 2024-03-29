@@ -112,7 +112,6 @@ if ($return_status_code === 400) {
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Edition</th>
                                                 <th scope="col">ISBN-13</th>
-                                                <th scope="col" class='text-nowrap'>Age Restriction</th>
                                                 <th scope="col">Author</th>
                                                 <th scope="col">Category</th>
                                                 <th scope="col">Publisher</th>

@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $stmt = null;
 
                   if ($category === '%%') {
-                        $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                        $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -76,13 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   
                   union
                   
-                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id limit ? offset ?)');
                         if (!$stmt) {
                               http_response_code(500);
-                              echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                              echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   
                   union
                   
-                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id limit ? offset ?)` preparation failed!']);
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         }
                         $stmt->bind_param('issssiiisssii', $status, $search, $isbnSearch,  $search, $category, $entry, $offset, $status, $search, $isbnSearch,  $search, $entry, $offset);
                   } else {
-                        $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                        $stmt = $conn->prepare('(select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   order by book.name,book.id limit ? offset ?)');
                         if (!$stmt) {
                               http_response_code(500);
-                              echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                              echo json_encode(['error' => 'Query `(select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -131,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         while ($row = $result->fetch_assoc()) {
                               $host = $_SERVER['HTTP_HOST'];
                               $row['imagePath'] = "src=\"https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
-                              $row['ageRestriction'] = $row['ageRestriction'] ? $row['ageRestriction'] : 'N/A';
                               $row['edition'] = convertToOrdinal($row['edition']);
                               $row['isbn'] = formatISBN($row['isbn']);
                               $row['publishDate'] = MDYDateFormat($row['publishDate']);
@@ -285,7 +284,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
                   if ($category === '%%') {
                         $stmt = $conn->prepare('select count(*) as totalBook from(
-                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -294,7 +293,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   
                   union
                   
-                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id)
@@ -302,7 +301,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         if (!$stmt) {
                               http_response_code(500);
                               echo json_encode(['error' => 'Query `select count(*) as totalBook from(
-                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -311,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   
                   union
                   
-                  (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                  (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   where book.status=? and (book.name like ? or book.isbn like ? or author.authorName like ?)
                   order by book.name,book.id)
@@ -322,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $stmt->bind_param('issssisss', $status, $search, $isbnSearch, $search, $category, $status, $search, $isbnSearch, $search);
                   } else {
                         $stmt = $conn->prepare('select count(*) as totalBook from(
-                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID
@@ -332,7 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         if (!$stmt) {
                               http_response_code(500);
                               echo json_encode(['error' => 'Query `select count(*) as totalBook from(
-                        (select distinct book.id,book.name,book.edition,book.isbn,book.ageRestriction,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
+                        (select distinct book.id,book.name,book.edition,book.isbn,book.avgRating,book.publisher,book.publishDate,book.description,book.imagePath
                   from book join author on book.id=author.bookID
                   join belong on belong.bookID=book.id
                   join category on category.id=belong.categoryID

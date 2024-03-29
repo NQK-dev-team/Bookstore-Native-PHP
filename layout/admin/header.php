@@ -7,7 +7,6 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
             <nav class="navbar navbar-expand-lg py-auto w-100">
                   <div class="container-fluid px-0">
                         <a class="navbar-brand d-flex align-items-center ms-2" href="/admin/">
-                              <!-- <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" id="logo_img"></img> -->
                               <img src="/image/logo.png" id="logo_img" title="NQK Bookstore demo logo"></img>
                               <p class="mb-0 ms-2">NQK Bookstore</p>
                         </a>
@@ -49,15 +48,9 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                     <?php
                                     if (!check_session()) {
                                           echo '<li class="nav-item ms-2">
-                                                      <a class="nav-link fs-5" href="/admin/authentication/" id="policy_nav">Policy</a>
-                                                </li>';
-                                          echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5" href="/admin/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
                                     } else {
-                                          echo "<li class=\"nav-item ms-2\">
-                                                <a class=\"nav-link fs-5\" href=\"/admin/policy/\" id=\"policy_nav\">Policy</a>
-                                          </li>";
                                           echo "<li class=\"nav-item ms-2\">
                                                 <a class=\"nav-link fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Account</a>
                                           </li>";

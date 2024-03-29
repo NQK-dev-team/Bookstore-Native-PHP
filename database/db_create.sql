@@ -43,7 +43,6 @@ create table admin(
 
 create table customer(
 	id varchar(20) primary key,
-    cardNumber varchar(16),
     point double default 0 not null,
     check(point>=0),
     referrer varchar(20),
@@ -59,8 +58,6 @@ create table book(
     edition int not null,
     unique(name,edition),
     isbn varchar(13) not null unique,
-    ageRestriction int,
-    check(ageRestriction>0),
     avgRating double default 0,
     check(avgRating>=0 and avgRating<=5),
     publisher varchar(255) not null,
