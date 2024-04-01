@@ -192,6 +192,9 @@ WHERE discount_rank = 1 AND discount != 0 limit 3');
                   border: 1px solid black;
                   background-color: #FEFEFF;
                   }
+                  .rounded-border{
+                        border-radius: 20px;
+                  }
             </style>
       </head>
 
@@ -205,7 +208,7 @@ WHERE discount_rank = 1 AND discount != 0 limit 3');
       <!-- feature books section -->
       <?php
             if($featured->num_rows > 0){
-                  echo '<div class= "container border border-dark rounded bgr-col my-3">';
+                  echo '<div class= "container border border-dark bgr-col my-3 rounded-border">';
                   echo '<p class="h1">Featured books</p>';
                   echo '<hr>';
                   echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
@@ -220,7 +223,7 @@ WHERE discount_rank = 1 AND discount != 0 limit 3');
                               echo' <div class="card mx-2 feature-card" >
                                           <div class="row g-0">
                                                             <div class="col-md-7 d-flex justify-content-center ">';
-                                          echo '<img src="' . $imagePath . '" class="card-img my-3 px-3" style="height: 28rem;" alt="...">';
+                                          echo '<img src="' . $imagePath . '" class="card-img my-3 px-3" style="height: 28rem; border-radius: 35px;" alt="...">';
                                           echo '
                                                       </div>
                                           <div class="col-md-5">
@@ -282,7 +285,7 @@ WHERE discount_rank = 1 AND discount != 0 limit 3');
                                           echo'                  <div class="card mx-2 feature-card" style="opacity: 90%">
                                                                   <div class="row g-0">
                                                                         <div class="col-md-7 d-flex justify-content-center ">';
-                                          echo '<img src="' . $imagePath . '" class="card-img w-75 my-3 px-3" style="height: 28rem;" alt="...">';
+                                          echo '<img src="' . $imagePath . '" class="card-img w-75 my-3 px-3" style="height: 28rem; border-radius: 35px;" alt="...">';
                                           echo '
                                                 </div>
                                                 <div class="col-md-5">
@@ -344,7 +347,7 @@ WHERE discount_rank = 1 AND discount != 0 limit 3');
       ?>
       <!-- discounted books section -->
        <?php
-            echo '<div class="container border border-dark rounded bgr-col my-3">';
+            echo '<div class="container border border-dark rounded-border bgr-col my-3">';
             echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
             echo '<p class="h1 col-9 col-md-9">On discount today</p>';
             echo '<a 
@@ -411,7 +414,7 @@ WHERE discount_rank = 1 AND discount != 0 limit 3');
       ?>
       <!-- brows books section -->
       <?php
-            echo '<div class="container border border-dark rounded bgr-col my-3">';
+            echo '<div class="container border border-dark rounded-border bgr-col my-3">';
             echo '<div class="row justify-content-center align-items-center g-2 m-3 p-1">';
             echo '<p class="h1 col-9 col-md-9">Our collection</p>';
             echo '<a 
