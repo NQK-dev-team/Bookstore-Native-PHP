@@ -219,14 +219,12 @@ WHERE discount_rank = 1');
                                           }
                                           echo '<p class="author">'.$row["authorName"].'</p>';
                                           if($row["discount"] > 0){
-                                                echo '<p class= "price" style="text-decoration: line-through;"> E-book price:'. $row["filePrice"] .'$</p>';
-                                                echo '<p class= "price" style="text-decoration: line-through;"> Physical price:'. $row["physicalPrice"] .'$</p>';
-                                                echo "<p class=\"price\">"."E-book price: ".round($row["filePrice"] - $row["filePrice"] * $row["discount"] / 100, 2)."$"."</p>";
-                                                echo "<p class=\"price\">"."Physical price: ".round($row["physicalPrice"] - $row["physicalPrice"] * $row["discount"] / 100, 2)."$"."</p>";
-                                          }
-                                          else {
-                                          echo "<p class=\"price\">"."E-book price: ".$row["filePrice"]."$"."</p>";
-                                          echo "<p class=\"price\">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
+                                                echo '<p class="price ">E-book price: <span style="text-decoration: line-through;">' . $row["filePrice"] . '$</span> ' .round($row["filePrice"] - $row["filePrice"] * $row["discount"] / 100, 2). '$</p>';
+                                                echo '<p class="price ">Physical price: <span style="text-decoration: line-through;">' . $row["physicalPrice"] . '$</span> ' .round($row["physicalPrice"] - $row["physicalPrice"] * $row["discount"] / 100, 2). '$</p>';
+                                                }
+                                                else {
+                                                echo "<p class=\"price \">"."E-book price: ".$row["filePrice"]."$"."</p>";
+                                                echo "<p class=\"price \">"."Physical price: ".$row["physicalPrice"]."$"."</p>";
                                           }
                                           echo '<span class="text-warning">'.displayRatingStars($row["star"]).'</span>';
                                           echo "(".$row["star"].")";
