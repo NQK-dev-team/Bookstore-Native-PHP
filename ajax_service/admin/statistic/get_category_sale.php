@@ -64,6 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
+                  $start = $start . ' 00:00:00';
+                  $end = $end . ' 23:59:59';
+
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
@@ -75,16 +78,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
 
                   $stmt = $conn->prepare('select category.name,sum(totalSold) as finalTotalSold from (
-select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
+select bookID,sum(amount) as totalSold from physicalOrderContain join book on book.id=physicalOrderContain.bookID and book.status=true join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
 union
-select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
+select bookID,count(*) as totalSold from fileOrderContain join book on book.id=fileOrderContain.bookID and book.status=true join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
 ) as combined join belong on belong.bookID=combined.bookID join category on category.id=belong.categoryID group by category.name order by name');
                   if (!$stmt) {
                         http_response_code(500);
                         echo json_encode(['error' => 'Query `select category.name,sum(totalSold) as finalTotalSold from (
-select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
+select bookID,sum(amount) as totalSold from physicalOrderContain join book on book.id=physicalOrderContain.bookID and book.status=true join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
 union
-select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
+select bookID,count(*) as totalSold from fileOrderContain join book on book.id=fileOrderContain.bookID and book.status=true join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and purchaseTime>=? and purchaseTime<=? group by bookID
 ) as combined join belong on belong.bookID=combined.bookID join category on category.id=belong.categoryID group by category.name order by name` preparation failed!']);
                         $conn->close();
                         exit;
