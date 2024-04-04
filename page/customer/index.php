@@ -38,7 +38,7 @@ if ($return_status_code === 400) {
                               <div class='container-lg p-2'>
                                     <div class='mx-3 bg-white rounded mt-3 py-2 px-2 px-sm-3 d-flex align-items-center'>
                                           <div class='d-flex'>
-                                                <img src='/image/flash_sale.png' class='flash_sale_image'>
+                                                <img alt='icon' src='/image/flash_sale.png' class='flash_sale_image'>
                                                 <div class='ms-3 d-flex align-items-center'>
                                                       <p class='bg-dark text-white p-2 rounded mb-0 timer' id='days'></p>
                                                       <p class='mb-0 fs-5 text-dark mx-1'>:</p>
@@ -62,7 +62,7 @@ if ($return_status_code === 400) {
                               <div class='container-lg p-2 my-3 position-relative'>
                                     <div class='w-100 h-100 position-absolute align-items-center justify-content-between pe-3' id='slideNavigate'>
                                           <div class='slide-button-div'>
-                                                <button id='slideLeft' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
+                                                <button aria-label="left slide" id='slideLeft' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
                                                       <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#828282" transform="rotate(180)">
                                                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -73,7 +73,7 @@ if ($return_status_code === 400) {
                                                 </button>
                                           </div>
                                           <div class='slide-button-div'>
-                                                <button id='slideRight' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
+                                                <button aria-label="right slide" id='slideRight' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
                                                       <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#828282">
                                                             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -119,7 +119,7 @@ if ($return_status_code === 400) {
                                     <div class='container-lg px-2 position-relative'>
                                           <div class='w-100 h-100 position-absolute align-items-center justify-content-between pe-4' id='slideNavigate2'>
                                                 <div class='slide-button-div'>
-                                                      <button id='slideLeft2' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
+                                                      <button aria-label="left slide" id='slideLeft2' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
                                                             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#828282" transform="rotate(180)">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -130,7 +130,7 @@ if ($return_status_code === 400) {
                                                       </button>
                                                 </div>
                                                 <div class='slide-button-div'>
-                                                      <button id='slideRight2' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
+                                                      <button aria-label="right slide" id='slideRight2' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
                                                             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#828282">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -149,7 +149,7 @@ if ($return_status_code === 400) {
                         <div class='container-lg p-2 my-4' id='topPublisherPanel'>
                               <div class='mx-3 bg-white rounded pb-3'>
                                     <div class='mb-0 text-center p-3 d-flex justify-content-center align-items-center'>
-                                          <h4><img src='/image/stonk.png' style="height:28px;width:28px;">&nbsp;Top Publishers</h4>
+                                          <h4><img alt='icon' src='/image/stonk.png' style="height:28px;width:28px;">&nbsp;Top Publishers</h4>
                                     </div>
                                     <div class='d-flex overflow-x-auto px-4 pb-2' id='publisherList'>
                                     </div>
@@ -157,7 +157,7 @@ if ($return_status_code === 400) {
                                     <div class='container-lg px-2 position-relative'>
                                           <div class='w-100 h-100 position-absolute align-items-center justify-content-between pe-4' id='slideNavigate1'>
                                                 <div class='slide-button-div'>
-                                                      <button id='slideLeft1' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
+                                                      <button aria-label="left slide" id='slideLeft1' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
                                                             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#828282" transform="rotate(180)">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -168,7 +168,7 @@ if ($return_status_code === 400) {
                                                       </button>
                                                 </div>
                                                 <div class='slide-button-div'>
-                                                      <button id='slideRight1' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
+                                                      <button aria-label="right slide" id='slideRight1' class='slide-button btn btn-outline-secondary bg-white rounded-circle p-0'>
                                                             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#828282">
                                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
