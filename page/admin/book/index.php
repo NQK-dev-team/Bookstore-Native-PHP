@@ -58,7 +58,7 @@ if ($return_status_code === 400) {
 
                               <input id="search_book" class="form-control me-2" type="search" placeholder="Search book by name or ISBN number" aria-label="Search for books">
                         </form>
-                        <div class="mt-2">
+                        <div class="mt-2 d-flex flex-md-row flex-column">
                               <div class="d-flex align-items-center">
                                     <p class="mb-0 me-2">Category</p>
                                     <div>
@@ -66,7 +66,7 @@ if ($return_status_code === 400) {
                                                 <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                                       Select category
                                                 </button>
-                                                <ul class="dropdown-menu dropdownCategory">
+                                                <ul class="dropdown-menu dropdown-width">
                                                       <li class="container">
                                                             <form id='searchCategoryForm'>
                                                                   <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
@@ -74,6 +74,48 @@ if ($return_status_code === 400) {
                                                       </li>
                                                       <li>
                                                             <ul class='categories w-100 container mt-2' id='category_list'>
+                                                            </ul>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="d-flex align-items-center ms-md-3 mt-2 mt-md-0">
+                                    <p class="mb-0 me-2">Author</p>
+                                    <div>
+                                          <div class="dropdown" id='authorDropDown'>
+                                                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                      Select author
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-width">
+                                                      <li class="container">
+                                                            <form id='searchAuthorForm'>
+                                                                  <input class="form-control" id="authorInput" type="text" placeholder="Search...">
+                                                            </form>
+                                                      </li>
+                                                      <li>
+                                                            <ul class='authors w-100 container mt-2' id='author_list'>
+                                                            </ul>
+                                                      </li>
+                                                </ul>
+                                          </div>
+                                    </div>
+                              </div>
+                              <div class="d-flex align-items-center ms-md-3 mt-2 mt-md-0">
+                                    <p class="mb-0 me-2">Publisher</p>
+                                    <div>
+                                          <div class="dropdown" id='publisherDropDown'>
+                                                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                      Select publisher
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-width">
+                                                      <li class="container">
+                                                            <form id='searchPublisherForm'>
+                                                                  <input class="form-control" id="publisherInput" type="text" placeholder="Search...">
+                                                            </form>
+                                                      </li>
+                                                      <li>
+                                                            <ul class='publishers w-100 container mt-2' id='publisher_list'>
                                                             </ul>
                                                       </li>
                                                 </ul>

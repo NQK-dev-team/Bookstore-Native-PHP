@@ -259,7 +259,7 @@ if ($return_status_code === 400) {
                                                             <input placeholder='Search by name' class="form-control search_book" type='text' id='searchBookInput'></input>
                                                       </form>
                                                 </div>
-                                                <div class="mt-2">
+                                                <div class="mt-2 d-flex flex-lg-row flex-column">
                                                       <div class="d-flex align-items-center">
                                                             <p class="mb-0 me-2">Category</p>
                                                             <div>
@@ -267,7 +267,7 @@ if ($return_status_code === 400) {
                                                                         <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                                                               Select category
                                                                         </button>
-                                                                        <ul class="dropdown-menu dropdownCategory">
+                                                                        <ul class="dropdown-menu dropdown-width">
                                                                               <li class="container">
                                                                                     <form id='searchCategoryForm'>
                                                                                           <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
@@ -275,6 +275,48 @@ if ($return_status_code === 400) {
                                                                               </li>
                                                                               <li>
                                                                                     <ul class='categories w-100 container mt-2' id='category_list'>
+                                                                                    </ul>
+                                                                              </li>
+                                                                        </ul>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="d-flex align-items-center mt-2 mt-lg-0 ms-lg-3">
+                                                            <p class="mb-0 me-2">Author</p>
+                                                            <div>
+                                                                  <div class="dropdown" id='authorDropDown'>
+                                                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                                              Select author
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-width">
+                                                                              <li class="container">
+                                                                                    <form id='searchAuthorForm'>
+                                                                                          <input class="form-control" id="authorInput" type="text" placeholder="Search...">
+                                                                                    </form>
+                                                                              </li>
+                                                                              <li>
+                                                                                    <ul class='authors w-100 container mt-2' id='author_list'>
+                                                                                    </ul>
+                                                                              </li>
+                                                                        </ul>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="d-flex align-items-center mt-2 mt-lg-0 ms-lg-3">
+                                                            <p class="mb-0 me-2">Publisher</p>
+                                                            <div>
+                                                                  <div class="dropdown" id='publisherDropDown'>
+                                                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                                              Select publisher
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-width">
+                                                                              <li class="container">
+                                                                                    <form id='searchPublisherForm'>
+                                                                                          <input class="form-control" id="publisherInput" type="text" placeholder="Search...">
+                                                                                    </form>
+                                                                              </li>
+                                                                              <li>
+                                                                                    <ul class='publishers w-100 container mt-2' id='publisher_list'>
                                                                                     </ul>
                                                                               </li>
                                                                         </ul>
@@ -309,6 +351,8 @@ if ($return_status_code === 400) {
                                                                   <th scope="col">#</th>
                                                                   <th scope="col">Name</th>
                                                                   <th scope="col">Edition</th>
+                                                                  <th scope="col">Author</th>
+                                                                  <th scope="col">Publisher</th>
                                                                   <th scope="col">Category</th>
                                                                   <th scope="col"></th>
                                                             </tr>
