@@ -38,3 +38,25 @@ BEGIN
 	insert into orderReEvaluatedLog(orderReEvaluated) values(counter);
 END //
 DELIMITER ;
+
+drop table if exists updateEventDiscountStatusLog;
+CREATE TABLE IF NOT EXISTS updateEventDiscountStatusLog (
+    logId INT AUTO_INCREMENT PRIMARY KEY,
+    executionTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    eventDiscountUpdated INT
+);
+
+-- select * from updateEventDiscountStatusLog; 
+
+drop event if exists updateEventDiscountStatus;
+DELIMITER //
+CREATE EVENT IF NOT EXISTS updateEventDiscountStatus
+ON SCHEDULE EVERY 2 minute
+DO
+BEGIN
+	declare counter int default 0;
+    select count(*) into counter from eventDiscount where endDate<curdate();
+    update discount set status=false where id in(select id from eventDiscount where endDate<curdate());
+    insert into updateEventDiscountStatus(eventDiscountUpdated) values(counter);
+END //
+DELIMITER ;
