@@ -509,7 +509,7 @@ function getPublisherBook(name)
                         for (let i = 0; i < data.query_result.length; i++)
                         {
                               if (i === 0)
-                                    temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                    temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
@@ -529,7 +529,7 @@ function getPublisherBook(name)
                                                       </div>
                                                 </a>`;
                               else if (i === data.query_result.length - 1)
-                                    temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                    temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
@@ -549,7 +549,7 @@ function getPublisherBook(name)
                                                       </div>
                                                 </a>`;
                               else
-                                    temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                    temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
@@ -677,7 +677,7 @@ function getCategoryBook(name)
                         for (let i = 0; i < data.query_result.length; i++)
                         {
                               if (i === 0)
-                                    temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                    temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
@@ -697,7 +697,7 @@ function getCategoryBook(name)
                                                       </div>
                                                 </a>`;
                               else if (i === data.query_result.length - 1)
-                                    temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                    temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
@@ -717,7 +717,7 @@ function getCategoryBook(name)
                                                       </div>
                                                 </a>`;
                               else
-                                    temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                    temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?bookID${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>

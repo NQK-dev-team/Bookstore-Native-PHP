@@ -13,7 +13,7 @@ $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port)
 //$result = $conn->query("SELECT category.id FROM category WHERE category.id = '$category'");
 $result = $conn->query("WITH SearchBooks AS (
 WITH RankedBooks AS (
-  SELECT book.id, book.name, book.isbn,
+  SELECT book.id, book.name, book.isbn, book.publisher,
          author.authorName,
          fileCopy.price AS filePrice,
          physicalCopy.price AS physicalPrice,
@@ -35,7 +35,7 @@ WHERE discount_rank = 1
 )
 SELECT *
 FROM SearchBooks
-WHERE SearchBooks.name LIKE  '%$search%' or SearchBooks.authorName LIKE '%$search%' or SearchBooks.isbn LIKE '%$search%'");
+WHERE SearchBooks.name LIKE  '%$search%' or SearchBooks.authorName LIKE '%$search%' or SearchBooks.isbn LIKE '%$search%'or SearchBooks.publisher LIKE '%$search%'");
 //             else{$result = $conn->query("Select book.id, book.name, author.authorName, fileCopy.price as filePrice, physicalCopy.price as physicalPrice, book.imagePath as pic,  belong.categoryID, book.avgRating as star, category.name as categoryNAME from 
 // book inner join author on book.id = author.bookID
 //             join fileCopy on book.id = fileCopy.id

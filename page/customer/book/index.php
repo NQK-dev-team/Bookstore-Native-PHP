@@ -130,7 +130,7 @@ WHERE discount_rank = 1');
                   <div class="row justify-content-center">
                         <div class="col-12 col-md-4 m-2">
                               <!-- category form -->
-                        <select class="form-select " aria-label="Default select example" id="category">
+                               <select class="form-select " aria-label="Default select example" id="category">
                               <option selected value="All_Category">All Category</option>
                               <?php 
                                     if ($cate) {
@@ -149,39 +149,53 @@ WHERE discount_rank = 1');
                                                 }
                               ?>
                               </select>  
-                  </div>
-                  <button type="button" class="btn btn-outline-danger col-10 col-md-2 col-lg-1 m-2" id= "Discount_Button">Discount</button>
-                  <button type="button" class="btn btn-outline-warning col-10 col-md-2 col-lg-1 m-2" id= "Best-Seller_Button">Best seller</button>
-                  <!-- search bar -->
+                              <!-- end of catagory collum -->
+                        </div>
+
+                        <div class="col-12 col-md-4 m-2">
+                              <!-- category form -->
+                              <select class="form-select " aria-label="Default select example" id="DisplayBook">
+                                    <option selected value="Default">Default Listing</option>
+                                    <option value="Discount">Discount</option>
+                                    <option value="Best-Seller">Best Seller</option>
+                                    <option value="HighToLowPhysical">Physical Price Descending</option>
+                                    <option value="LowToHighPhysical">Physical Price Ascending</option>
+                              </select>  
+                              <!-- end of select discount and best seller form -->
+                        </div>
+                        <!-- <button type="button" class="btn btn-outline-danger col-10 col-md-2 col-lg-1 m-2" id= "Discount_Button">Discount</button>
+                        <button type="button" class="btn btn-outline-warning col-10 col-md-2 col-lg-1 m-2" id= "Best-Seller_Button">Best seller</button> -->
+                        <!-- search bar -->
                   <div class="row justify-content-center">
                         <div class="col-12 col-md-5 m-2">
                               <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_book">
-                                    <input id="search-input" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number" aria-label="Search">
-                                    <input type="submit" value="Search" class="btn btn-primary">
+                                    <input id="search-input" class="form-control me-2" type="search" placeholder="Search by name, author or ISBN number or Publisher" aria-label="Search">
+                                    <!-- <input type="submit" value="Search" class="btn btn-primary"> -->
+                                    <button type="submit" class="btn btn-primary">
+                                          <i class="fas fa-search"></i>
+                                    </button>
                               </form>
                         </div>
                   </div>
+                  
                   <div class="row justify-content-center">
                         <div class="col-12 col-md-2 m-2">
                               <select class="form-select" id="itemsPerPage">
-                                    <option selected>Items per page</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
+                                    <option value="100" selected>All books</option>
+                                    <option value="6">6 books per page</option>
+                                    <option value="12">12 books per page</option>
+                                    <option value="24">24 books per page</option>
+                                    <option value="51">51 books per page</option>
                               </select>
                         </div>
                         <nav class=" col-12 col-md-2 m-2 page-nav" aria-label="Page navigation example">
                               <ul class="pagination">
                                     <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
-                                          <span aria-hidden="true">&laquo;</span>
-                                    </a>
+                                          <a class="page-link" href="#">«</a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <!-- Add as many page links as you need -->
                                     <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
-                                          <span aria-hidden="true">&raquo;</span>
-                                    </a>
+                                          <a class="page-link" href="#">»</a>
                                     </li>
                               </ul>
                         </nav> 
@@ -190,13 +204,16 @@ WHERE discount_rank = 1');
                   
             </div>
             <br>
+            <!-- <div id="TestBookList">
+                  <p>Test Item perpage here</p>
+            </div> -->
             <div id="bookList">
                   <?php
                         for ($i = 1; $i <= $result->num_rows; $i++) {
                         if ($i % 3 == 1) {
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">';
                         }
-                        echo '<div class="col-9 col-md-6 col-xl-4">';
+                        echo '<div class="col-11 col-md-6 col-xl-4">';
                         $row = $result->fetch_assoc();
                         // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                         $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));

@@ -28,7 +28,6 @@ if ($return_status_code === 400) {
   SELECT book.id, book.name,
          author.authorName,  book.edition,
             book.isbn,
-            book.ageRestriction,
             book.publisher,
             book.publishDate,
             book.description,
