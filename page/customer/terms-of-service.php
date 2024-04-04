@@ -31,8 +31,7 @@
       ?>
       <section id="page">
             <div class='container-fluid d-flex flex-column'>
-                  <h1 class='mt-2 mx-auto'>TERMS OF SERVICE</h1>
-                  <p class='mb-0'><small>Last updated: April 1, 2024</small></p>
+                  <h1 class='mt-2 mx-auto text-center'>TERMS OF SERVICE</h1>
                   <hr>
                   <p>Welcome to <strong>NQK Bookstore!</strong> These Terms of Service outline the terms and conditions governing your use of our website, services, and products. By accessing or using our website, you agree to comply with these terms. Please read them carefully before proceeding.</p>
                   <h4>1. Acceptance of Terms</h4>

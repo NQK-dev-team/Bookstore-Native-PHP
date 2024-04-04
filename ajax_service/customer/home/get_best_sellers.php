@@ -27,7 +27,7 @@ select bookID,count(*) as totalSold from fileOrderContain join customerOrder on 
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
-) as combined join book on book.id=combined.bookID and book.status=true group by bookID,name,edition,isbn,publisher,publishDate,imagePath,avgRating,description order by combined.totalSold desc,name limit 5` preparation failed!']);
+) as combined join book on book.id=combined.bookID and book.status=true group by bookID order by sum(combined.totalSold) desc,name limit 5` preparation failed!']);
                   $conn->close();
                   exit;
             }

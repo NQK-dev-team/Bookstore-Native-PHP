@@ -429,7 +429,7 @@ async function orderDetail(code, time, price, discount)
                               {
                                     let temp = '';
                                     temp += `<td class='align-middle'>${ i + 1 }</td>`
-                                    temp += `<td class='align-middle'><img src="${ data.query_result[i].imagePath }" alt=\"book image\" class=\"book_image\"></img></td>`;
+                                    temp += `<td class='align-middle'><img src="${ data.query_result[i].imagePath }" alt=\"Book image\" class=\"book_image\"></img></td>`;
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;
@@ -528,7 +528,7 @@ async function orderDetail(code, time, price, discount)
                               {
                                     let temp = '';
                                     temp += `<td class='align-middle'>${ i + 1 }</td>`
-                                    temp += `<td class='align-middle'><img src="${ data.query_result[i].imagePath }" alt=\"book image\" class=\"book_image\"></img></td>`;
+                                    temp += `<td class='align-middle'><img src="${ data.query_result[i].imagePath }" alt=\"Book image\" class=\"book_image\"></img></td>`;
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;

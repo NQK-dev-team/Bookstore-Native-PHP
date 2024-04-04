@@ -235,7 +235,7 @@ if ($return_status_code === 400) {
                                                       <input type="text" class="form-control fs-4" id="bookNameInput" value="<?php echo $query_result['name']; ?>">
                                                 </div>
                                                 <div class="mb-auto my-2 d-flex flex-column w-100 align-items-center">
-                                                      <img class='custom_image w-100' id="bookImage" alt="book image" <?php echo $query_result['imagePath']; ?>>
+                                                      <img class='custom_image w-100' id="bookImage" alt="Book image" <?php echo $query_result['imagePath']; ?>>
                                                       </img>
                                                       <label class='btn btn-sm btn-light border border-dark mt-3 mx-auto'>
                                                             <input accept='image/jpeg,image/png' id="imageInput" type='file' class='d-none' onchange="setNewImage(event)"></input>
@@ -329,7 +329,7 @@ if ($return_status_code === 400) {
                               </div>
                         </form>
                   </div>
-                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="Select category modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -361,7 +361,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="Confirm change modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -378,7 +378,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="Error modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -394,7 +394,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="Success modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

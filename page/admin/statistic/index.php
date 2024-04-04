@@ -27,7 +27,7 @@ if ($return_status_code === 400) {
 
             <meta name="author" content="Nghia Duong">
             <meta name="description" content="Get statistics about books of NQK Bookstore">
-            <title>Book Statistics</title>
+            <title>Statistics</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>

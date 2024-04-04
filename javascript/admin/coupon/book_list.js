@@ -5,7 +5,7 @@ let textareaDefaultValue = '';
 
 $(document).ready(function ()
 {
-      $('#searchCategoryForm').submit(function (e)
+      $('#searchCategoryForm,#searchAuthorForm,#searchPublisherForm').submit(function (e)
       {
             e.preventDefault();
             selectBookEntry();
@@ -28,13 +28,47 @@ $(document).ready(function ()
             });
       });
 
+      $('#authorInput').on('input', function ()
+      {
+            let filter = $(this).val().toUpperCase();
+
+            $('.authors li').each(function ()
+            {
+                  let txtValue = $(this).text();
+                  if (txtValue.toUpperCase().indexOf(filter) > -1)
+                  {
+                        $(this).show();
+                  } else
+                  {
+                        $(this).hide();
+                  }
+            });
+      });
+
+      $('#publisherInput').on('input', function ()
+      {
+            let filter = $(this).val().toUpperCase();
+
+            $('.publishers li').each(function ()
+            {
+                  let txtValue = $(this).text();
+                  if (txtValue.toUpperCase().indexOf(filter) > -1)
+                  {
+                        $(this).show();
+                  } else
+                  {
+                        $(this).hide();
+                  }
+            });
+      });
+
       $("#book_search_form").submit(function (e)
       {
             e.preventDefault();
             selectBookEntry();
       });
 
-      $('#categoryDropDown').on('hidden.bs.dropdown', function ()
+      $('#categoryDropDown,#authorDropDown,#publisherDropDown').on('hidden.bs.dropdown', function ()
       {
             selectBookEntry();
       });
@@ -58,7 +92,85 @@ $(document).ready(function ()
                         for (let i = 0; i < data.query_result.length; i++)
                         {
                               $('#category_list').append(
-                                    $(`<li class='categoryHover pointer' onclick='chooseCategory(event)'>${ data.query_result[i].name }</li>`)
+                                    $(`<li class='dropdownHover pointer my-2' onclick='chooseCategory(event)'>${ data.query_result[i].name }</li>`)
+                              );
+                        }
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+
+      $.ajax({
+            url: '/ajax_service/admin/book/get_author_list.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data)
+            {
+
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#author_list').empty();
+                        for (let i = 0; i < data.query_result.length; i++)
+                        {
+                              $('#author_list').append(
+                                    $(`<li class='dropdownHover pointer my-2' onclick='chooseAuthor(event)'>${ data.query_result[i].name }</li>`)
+                              );
+                        }
+                  }
+            },
+
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+
+      $.ajax({
+            url: '/ajax_service/admin/book/get_publisher_list.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data)
+            {
+
+                  if (data.error)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
+                  }
+                  else if (data.query_result)
+                  {
+                        $('#publisher_list').empty();
+                        for (let i = 0; i < data.query_result.length; i++)
+                        {
+                              $('#publisher_list').append(
+                                    $(`<li class='dropdownHover pointer my-2' onclick='choosePublisher(event)'>${ data.query_result[i].name }</li>`)
                               );
                         }
                   }
@@ -86,6 +198,8 @@ function fetchBookList()
       const search = encodeData($('#searchBookInput').val());
       const listOffset = parseInt(encodeData($('#book_list_offset').text()));
       const category = encodeData($('#categoryInput').val());
+      const author = encodeData($('#authorInput').val());
+      const publisher = encodeData($('#publisherInput').val());
 
       if (typeof entry !== 'number' || isNaN(entry) || entry < 0)
       {
@@ -111,7 +225,7 @@ function fetchBookList()
       $.ajax({
             url: '/ajax_service/admin/coupon/get_book_list.php',
             method: 'GET',
-            data: { entry: entry, offset: listOffset, search: search, category: category },
+            data: { entry: entry, offset: listOffset, search: search, category: category, author, publisher },
             dataType: 'json',
             success: function (data)
             {
@@ -144,6 +258,8 @@ function fetchBookList()
                               trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
                               trElem.append($(`<td class=\"col-4 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
+                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].author.join(', ') }</td>`));
+                              trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].publisher }</td>`));
 
                               if (data.query_result[0][i].category.length)
                               {
@@ -172,7 +288,7 @@ function fetchBookList()
 
 
                               trElem.append(
-                                    $(`<td class='align-middle'><a href='/admin/book/edit-book?id=${ data.query_result[0][i].id }' alt='book detail' class='btn btn-sm btn-info text-white' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a></td>`));
+                                    $(`<td class='align-middle'><a href='/admin/book/edit-book?id=${ data.query_result[0][i].id }' alt='Book detail' class='btn btn-sm btn-info text-white' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a></td>`));
 
                               $('#book_table_body').append(trElem);
                         }
@@ -341,6 +457,20 @@ function chooseCategory(e)
 {
       $('#categoryInput').val(e.target.innerText);
       $('#categoryInput').trigger('input');
+      selectBookEntry();
+}
+
+function chooseAuthor(e)
+{
+      $('#authorInput').val(e.target.innerText);
+      $('#authorInput').trigger('input');
+      selectBookEntry();
+}
+
+function choosePublisher(e)
+{
+      $('#publisherInput').val(e.target.innerText);
+      $('#publisherInput').trigger('input');
       selectBookEntry();
 }
 

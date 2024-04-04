@@ -378,74 +378,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
                         }
                   }
 
-                  if ($type === '1') {
-                        $stmt = $conn->prepare('update discount join eventDiscount on eventDiscount.id=discount.id set discount.status=? where eventDiscount.id=?');
-                        if (!$stmt) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Query `update discount join eventDiscount on eventDiscount.id=discount.id set discount.status=? where eventDiscount.id=?` preparation failed!']);
-                              $conn->close();
-                              exit;
-                        }
-                        $stmt->bind_param('is', $status, $id);
-                        $isSuccess = $stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                        } else {
-                              if ($stmt->affected_rows > 1) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => 'Updated more than one discount event coupon!']);
-                              } else {
-                                    echo json_encode(['query_result' => true]);
-                              }
-                        }
-                        $stmt->close();
-                  } else if ($type === '2') {
-                        $stmt = $conn->prepare('update discount join customerDiscount on customerDiscount.id=discount.id set discount.status=? where customerDiscount.id=?');
-                        if (!$stmt) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Query `update discount join customerDiscount on customerDiscount.id=discount.id set discount.status=? where customerDiscount.id=?` preparation failed!']);
-                              $conn->close();
-                              exit;
-                        }
-                        $stmt->bind_param('is', $status, $id);
-                        $isSuccess = $stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                        } else {
-                              if ($stmt->affected_rows > 1) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => 'Updated more than one customer discount coupon!']);
-                              } else {
-                                    echo json_encode(['query_result' => true]);
-                              }
-                        }
-                        $stmt->close();
-                  } else if ($type === '3') {
-                        $stmt = $conn->prepare('update discount join referrerDiscount on referrerDiscount.id=discount.id set discount.status=? where referrerDiscount.id=?');
-                        if (!$stmt) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Query `update discount join referrerDiscount on referrerDiscount.id=discount.id set discount.status=? where referrerDiscount.id=?` preparation failed!']);
-                              $conn->close();
-                              exit;
-                        }
-                        $stmt->bind_param('is', $status, $id);
-                        $isSuccess = $stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $stmt->error]);
-                        } else {
-                              if ($stmt->affected_rows > 1) {
-                                    http_response_code(500);
-                                    echo json_encode(['error' => 'Updated more than one referrer discount coupon!']);
-                              } else {
-                                    echo json_encode(['query_result' => true]);
-                              }
-                        }
-                        $stmt->close();
+                  $stmt = $conn->prepare('update discount set status=? where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `update discount set status=? where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
                   }
-
+                  $stmt->bind_param('is', $status, $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                  } else {
+                        if ($stmt->affected_rows > 1) {
+                              http_response_code(500);
+                              echo json_encode(['error' => 'Updated more than one discount event coupon!']);
+                        } else {
+                              echo json_encode(['query_result' => true]);
+                        }
+                  }
+                  $stmt->close();
+                  
                   $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);

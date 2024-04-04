@@ -39,21 +39,18 @@
       padding-left: 35px !important;
 }
 
-#categoryList {
-      max-height: 50px;
-      overflow-y: auto;
-}
-
-.dropdownCategory {
+.dropdown-width {
       width: 250px;
 }
 
-.categories {
+.categories,
+.authors,
+.publishers {
       max-height: 200px;
       overflow-y: auto;
 }
 
-.categoryHover:hover {
+.dropdownHover:hover {
       background-color: #adadad;
 }
 

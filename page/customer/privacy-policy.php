@@ -31,8 +31,7 @@
       ?>
       <section id="page">
             <div class='container-fluid d-flex flex-column'>
-                  <h1 class='mt-2 mx-auto'>PRIVACY POLICY</h1>
-                  <p class='mb-0'><small>Last updated: April 1, 2024</small></p>
+                  <h1 class='mt-2 mx-auto text-center'>PRIVACY POLICY</h1>
                   <hr>
                   <p><strong>NQK Bookstore</strong> ("we," "us," or "our") is committed to protecting your privacy. This <strong>Privacy Policy</strong> explains how we collect, use, and safeguard your personal information when you use our website and services. By accessing or using <strong>NQK Bookstore</strong>, you consent to the collection and use of your information as described in this <strong>Privacy Policy</strong>.</p>
                   <h4>1. Information We Collect</h4>

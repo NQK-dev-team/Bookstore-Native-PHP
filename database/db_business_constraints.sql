@@ -560,39 +560,39 @@ begin
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Current coupon name has already been used in another coupon!';
     end if;
     
-	if exists(select * from customerDiscount where customerDiscount.id=new.id) then
-		begin
-			declare pointMileStone double default null;
-            declare discountPer double default null;
-            
-            select discount,point into discountPer,pointMileStone from customerDiscount where customerDiscount.id=new.id;
-            
-            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-discountPer)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage has already been used in another coupon!';
-			end if;
-            
-            if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-pointMileStone)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current accumulated point milestone has already been used in another coupon!';
-			end if;
-        end;
-    end if;
-    
-    if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
-		begin
-			declare peopleMileStone int default null;
-            declare discountPer double default null;
-            
-            select discount,numberOfPeople into discountPer,peopleMileStone from referrerDiscount where referrerDiscount.id=new.id;
-            
-            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-discountPer)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage has already been used in another coupon!';
-			end if;
-            
-            if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=peopleMileStone and referrerDiscount.id!=new.id and discount.status=true) then
-				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current number of people milestone has already been used in another coupon!';
-			end if;
-        end;
-    end if;
+	-- if exists(select * from customerDiscount where customerDiscount.id=new.id) then
+-- 		begin
+-- 			declare pointMileStone double default null;
+--             declare discountPer double default null;
+--             
+--             select discount,point into discountPer,pointMileStone from customerDiscount where customerDiscount.id=new.id;
+--             
+--             if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.discount-discountPer)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+-- 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage has already been used in another coupon!';
+-- 			end if;
+--             
+--             if exists(select * from customerDiscount join discount on discount.id=customerDiscount.id where abs(customerDiscount.point-pointMileStone)<10e-9 and customerDiscount.id!=new.id and discount.status=true) then
+-- 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current accumulated point milestone has already been used in another coupon!';
+-- 			end if;
+--         end;
+--     end if;
+--     
+--     if exists(select * from referrerDiscount where referrerDiscount.id=new.id) then
+-- 		begin
+-- 			declare peopleMileStone int default null;
+--             declare discountPer double default null;
+--             
+--             select discount,numberOfPeople into discountPer,peopleMileStone from referrerDiscount where referrerDiscount.id=new.id;
+--             
+--             if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where abs(referrerDiscount.discount-discountPer)<10e-9 and referrerDiscount.id!=new.id and discount.status=true) then
+-- 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current discount percentage has already been used in another coupon!';
+-- 			end if;
+--             
+--             if exists(select * from referrerDiscount join discount on discount.id=referrerDiscount.id where referrerDiscount.numberOfPeople=peopleMileStone and referrerDiscount.id!=new.id and discount.status=true) then
+-- 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not activate this coupon, current number of people milestone has already been used in another coupon!';
+-- 			end if;
+--         end;
+--     end if;
     end if;
 end//
 delimiter ;
@@ -741,27 +741,3 @@ end//
 delimiter ;
 
 -- ** End of eventDiscount **
-
--- ** Begin of eventApply **
--- This trigger forbid any delete statement to any row of `eventApply` table that the discount event coupon is used on purchased order(s) and the book that discount event applies is also in that/those purchased order(s)
-drop trigger if exists eventApplyBusinessConstraintDeleteTrigger;
-delimiter //
-create trigger eventApplyBusinessConstraintDeleteTrigger
-before delete on eventApply
-for each row
-begin
-	if not (select eventDiscount.applyForAll from eventDiscount where eventDiscount.id=old.eventID) and exists(
-		select customerOrder.id from customerOrder 
-        join discountApply on discountApply.orderID=customerOrder.id
-        where customerOrder.status=true and discountApply.discountID=old.eventID and customerOrder.id in (
-			select customerOrder.id from customerOrder join fileOrderContain on fileOrderContain.orderID=customerOrder.id where customerOrder.status=true and fileOrderContain.bookID=old.bookID
-            union
-			select customerOrder.id from customerOrder join physicalOrderContain on physicalOrderContain.orderID=customerOrder.id where customerOrder.status=true and physicalOrderContain.bookID=old.bookID
-        )
-    )
-    then
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not delete this row, the discount event has been used for purchased orders and the book is also in those orders!';
-    end if;
-end//
-delimiter ;
--- ** End of eventApply **

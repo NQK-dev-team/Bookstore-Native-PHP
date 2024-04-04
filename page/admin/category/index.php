@@ -42,24 +42,22 @@ if ($return_status_code === 400) {
             <section id="page">
                   <div class="container-fluid h-100 d-flex flex-column">
                         <h1 class='fs-2 mx-auto mt-3'>Book Category List</h1>
-                        <div class='mt-2 d-flex flex-column flex-lg-row align-items-center'>
-                              <form class="d-flex align-items-center w-100 search_form mx-auto mx-lg-0 mt-2 mt-lg-0 order-2 order-lg-1" role="search" id="search_form">
-                                    <button title="search category" title='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
-                                          <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                      <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
-                                                </g>
-                                          </svg>
-                                    </button>
-
-                                    <input id="search_category" class="form-control me-2" type="search" placeholder="Search by name" aria-label="Search">
-                              </form>
-                              <div class="mx-auto mx-lg-0 ms-lg-2 order-1 order-lg-2">
-                                    <button class="btn btn-success btn-sm" onclick="openAddModal()"><strong>+</strong> Add New Category</button>
-                              </div>
+                        <div class="mb-2">
+                              <button class="btn btn-success btn-sm" onclick="openAddModal()"><strong>+</strong> Add New Category</button>
                         </div>
+                        <form class="d-flex align-items-center w-100 search_form" role="search" id="search_form">
+                              <button title="search category" title='Search for category' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
+                                    <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
+                                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                          <g id="SVGRepo_iconCarrier">
+                                                <path d="M31.707 30.282l-9.717-9.776c1.811-2.169 2.902-4.96 2.902-8.007 0-6.904-5.596-12.5-12.5-12.5s-12.5 5.596-12.5 12.5 5.596 12.5 12.5 12.5c3.136 0 6.002-1.158 8.197-3.067l9.703 9.764c0.39 0.39 1.024 0.39 1.415 0s0.39-1.023 0-1.415zM12.393 23.016c-5.808 0-10.517-4.709-10.517-10.517s4.708-10.517 10.517-10.517c5.808 0 10.516 4.708 10.516 10.517s-4.709 10.517-10.517 10.517z"></path>
+                                          </g>
+                                    </svg>
+                              </button>
+
+                              <input id="search_category" class="form-control me-2" type="search" placeholder="Search category by name" aria-label="Search for categories">
+                        </form>
                         <div class="mt-2">
                               <div class="d-flex align-items-center">
                                     <p class="mb-0 me-2">Show</p>
@@ -107,7 +105,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="Error modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -123,7 +121,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="Confirm deletion">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -140,7 +138,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="Confirm change modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -157,11 +155,11 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="Confirm completion modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
-                                          <h2 class="modal-title fs-5">Confirm Change</h2>
+                                          <h2 class="modal-title fs-5">Confirm Completion</h2>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body d-flex flex-column">
@@ -174,7 +172,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addSuccessModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="addSuccessModal" tabindex="-1" aria-labelledby="Category added modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -190,7 +188,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="updateSuccessModal" tabindex="-1" aria-labelledby="Category updated modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -206,7 +204,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="inputModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="inputModal" tabindex="-1" aria-labelledby="Category info modal">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
                                     <div class="modal-header">

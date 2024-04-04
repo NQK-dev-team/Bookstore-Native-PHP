@@ -54,7 +54,7 @@ if ($return_status_code === 400) {
                                           </svg>
                                     </button>
 
-                                    <input id="search_coupon" class="form-control me-2" type="search" placeholder="Search by name" aria-label="Search">
+                                    <input id="search_coupon" class="form-control me-2" type="search" placeholder="Search coupon by name" aria-label="Search for coupons">
                               </form>
                               <div class="mx-auto mx-lg-0 ms-lg-2 order-1 order-lg-2">
                                     <button class="btn btn-success btn-sm" onclick="openAddModal()"><strong>+</strong> Add New Coupon</button>
@@ -126,7 +126,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="Error modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -142,7 +142,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="Confirm elete modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -159,7 +159,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="Confirm deactivate modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -176,7 +176,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="Confirm activate modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -193,7 +193,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="Add coupon modal">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -214,7 +214,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="Edit coupon modal">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -235,7 +235,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="Choose book modal">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -259,7 +259,7 @@ if ($return_status_code === 400) {
                                                             <input placeholder='Search by name' class="form-control search_book" type='text' id='searchBookInput'></input>
                                                       </form>
                                                 </div>
-                                                <div class="mt-2">
+                                                <div class="mt-2 d-flex flex-lg-row flex-column">
                                                       <div class="d-flex align-items-center">
                                                             <p class="mb-0 me-2">Category</p>
                                                             <div>
@@ -267,7 +267,7 @@ if ($return_status_code === 400) {
                                                                         <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                                                               Select category
                                                                         </button>
-                                                                        <ul class="dropdown-menu dropdownCategory">
+                                                                        <ul class="dropdown-menu dropdown-width">
                                                                               <li class="container">
                                                                                     <form id='searchCategoryForm'>
                                                                                           <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
@@ -275,6 +275,48 @@ if ($return_status_code === 400) {
                                                                               </li>
                                                                               <li>
                                                                                     <ul class='categories w-100 container mt-2' id='category_list'>
+                                                                                    </ul>
+                                                                              </li>
+                                                                        </ul>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="d-flex align-items-center mt-2 mt-lg-0 ms-lg-3">
+                                                            <p class="mb-0 me-2">Author</p>
+                                                            <div>
+                                                                  <div class="dropdown" id='authorDropDown'>
+                                                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                                              Select author
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-width">
+                                                                              <li class="container">
+                                                                                    <form id='searchAuthorForm'>
+                                                                                          <input class="form-control" id="authorInput" type="text" placeholder="Search...">
+                                                                                    </form>
+                                                                              </li>
+                                                                              <li>
+                                                                                    <ul class='authors w-100 container mt-2' id='author_list'>
+                                                                                    </ul>
+                                                                              </li>
+                                                                        </ul>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="d-flex align-items-center mt-2 mt-lg-0 ms-lg-3">
+                                                            <p class="mb-0 me-2">Publisher</p>
+                                                            <div>
+                                                                  <div class="dropdown" id='publisherDropDown'>
+                                                                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                                              Select publisher
+                                                                        </button>
+                                                                        <ul class="dropdown-menu dropdown-width">
+                                                                              <li class="container">
+                                                                                    <form id='searchPublisherForm'>
+                                                                                          <input class="form-control" id="publisherInput" type="text" placeholder="Search...">
+                                                                                    </form>
+                                                                              </li>
+                                                                              <li>
+                                                                                    <ul class='publishers w-100 container mt-2' id='publisher_list'>
                                                                                     </ul>
                                                                               </li>
                                                                         </ul>
@@ -309,6 +351,8 @@ if ($return_status_code === 400) {
                                                                   <th scope="col">#</th>
                                                                   <th scope="col">Name</th>
                                                                   <th scope="col">Edition</th>
+                                                                  <th scope="col">Author</th>
+                                                                  <th scope="col">Publisher</th>
                                                                   <th scope="col">Category</th>
                                                                   <th scope="col"></th>
                                                             </tr>
@@ -341,7 +385,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="Confirm change modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -358,7 +402,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="Success modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -374,7 +418,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="Confirm modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -391,7 +435,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="Changes saved modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -407,7 +451,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="Warning modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
