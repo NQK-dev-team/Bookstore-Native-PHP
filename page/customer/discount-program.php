@@ -31,7 +31,7 @@
       ?>
       <section id="page">
             <div class='container-fluid d-flex flex-column'>
-                  <h1 class='mt-2 mx-auto'>DISCOUNT PROGRAM</h1>
+                  <h1 class='mt-2 mx-auto text-center'>DISCOUNT PROGRAM</h1>
                   <hr>
             </div>
       </section>
