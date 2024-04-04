@@ -48,7 +48,7 @@ body {
 
 #page {
       width: 100%;
-      background-color: rgb(235, 235, 235);
+      background-color: rgb(230, 230, 230);
       margin-top: 80px;
       flex-grow: 1;
 }
@@ -85,6 +85,10 @@ body {
 .shipment_footer {
       width: 150px;
       height: 50px;
+}
+
+.none {
+      display: none;
 }
 
 @media only screen and (max-width: 991px) {

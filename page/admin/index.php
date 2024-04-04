@@ -26,8 +26,8 @@ if ($return_status_code === 400) {
             <link rel="stylesheet" href="/css/preset_style.css">
 
             <meta name="author" content="Nghia Duong">
-            <meta name="description" content="Home page of NQK bookstore">
-            <title>NQK Shop</title>
+            <meta name="description" content="Home page of NQK bookstore for admins">
+            <title>Overall Statistics</title>
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/2.0.1/chartjs-plugin-zoom.min.js"></script>

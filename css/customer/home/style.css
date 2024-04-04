@@ -1,0 +1,101 @@
+.sales {
+      background-image: url('/image/sale_bg.jpg');
+      display: flex;
+      flex-direction: column;
+}
+
+.sales>* {
+      color: white;
+}
+
+.flash_sale_image {
+      width: 100px;
+}
+
+.card {
+      min-width: 250px;
+      max-width: 250px;
+}
+
+.slide-button-div {
+      z-index: 1000;
+}
+
+.slide-button {
+      border-radius: 100%;
+      width: 40px;
+      height: 40px;
+}
+
+.card-img-top {
+      height: 350px;
+}
+
+#saleList,
+#bookList,
+#bookList1 {
+      scroll-behavior: smooth;
+}
+
+#slideNavigate,
+#slideNavigate1,
+#slideNavigate2 {
+      display: flex;
+}
+
+.banner {
+      background-image: url('/image/feature_banner.png');
+}
+
+.best-seller-img {
+      width: 100px;
+}
+
+.best-seller:hover {
+      border-right: 2px solid rgb(255, 125, 0);
+}
+
+.select-border {
+      border-right: 1px solid gray;
+}
+
+.best-seller-img-detail {
+      width: 250px;
+}
+
+.publisher-hover {
+      border-bottom: 2px solid white;
+}
+
+.publisher-hover:hover {
+      color: rgb(255, 125, 0);
+}
+
+.publisher-active {
+      color: rgb(255, 125, 0);
+      border-bottom: 2px solid rgb(255, 125, 0);
+}
+
+@media only screen and (max-width:767px) {
+
+      #slideNavigate,
+      #slideNavigate1 {
+            display: none;
+      }
+}
+
+@media only screen and (max-width:991px) {
+      .select-border {
+            border-right: none;
+      }
+}
+
+@media only screen and (max-width:575px) {
+      .timer {
+            font-size: 11px;
+      }
+
+      .flash_sale_image {
+            width: 40px;
+      }
+}
