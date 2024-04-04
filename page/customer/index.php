@@ -49,7 +49,7 @@ if ($return_status_code === 400) {
                                                       <p class='bg-dark text-white p-2 rounded mb-0 timer' id='seconds'></p>
                                                 </div>
                                           </div>
-                                          <a id='learn_more_sales' href='/book/?select=sale' class='text-decoration-none ms-auto fs-5 d-flex align-items-center'>More<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <a aria-label="view more discounted books" id='learn_more_sales' href='/book/?select=sale' class='text-decoration-none ms-auto fs-5 d-flex align-items-center'>More<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                       <g id="SVGRepo_iconCarrier">
