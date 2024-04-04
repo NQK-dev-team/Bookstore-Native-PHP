@@ -12,7 +12,7 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
       unset($_SESSION['update_book_id']);
-      
+
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
@@ -127,7 +127,7 @@ if ($return_status_code === 400) {
                                                       </svg>
                                                 </button>
 
-                                                <input id="search_order" class="form-control me-2" type="search" placeholder="Search by order code" aria-label="Search">
+                                                <input id="search_order" class="form-control me-2" type="search" placeholder="Search order by order code" aria-label="Search for orders">
                                           </form>
 
                                           <label for="orderDateInput" class="form-label fw-medium mt-3">Order Date:</label>
@@ -185,7 +185,7 @@ if ($return_status_code === 400) {
                               <div class='w-100 flex-grow-1 p-2 flex-column flex-lg-row d-flex'>
                                     <div class="col-lg-5 col-12">
                                           <div class='w-100 d-flex flex-column h-100 justify-content-center'>
-                                                <img class='custom_image w-100 mx-auto' id="userImage" alt="user image" data-initial-src="<?php if ($result['imagePath'])
+                                                <img class='custom_image w-100 mx-auto' id="userImage" alt="User image" data-initial-src="<?php if ($result['imagePath'])
                                                                                                                                                 echo "https://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($result['imagePath']));
                                                                                                                                           else echo '/image/default_male.jpeg'; ?>">
                                                 </img>
@@ -234,7 +234,7 @@ if ($return_status_code === 400) {
                               </div>
                         </form>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="Error modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -250,7 +250,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmPersonalModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmPersonalModal" tabindex="-1" aria-labelledby="Confirm change info modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -267,7 +267,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="Confirm change password modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -284,7 +284,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="Change success modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -300,7 +300,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="Order detail modal">
                         <div class="modal-dialog modal-dialog-centered modal-xl-custom modal-dialog-scrollable">
                               <div class="modal-content">
                                     <div class="modal-header">

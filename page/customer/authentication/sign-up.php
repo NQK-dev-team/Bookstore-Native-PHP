@@ -143,7 +143,7 @@ unset($_SESSION['update_book_id']);
                   </form>
             </div>
 
-            <div class="modal fade" id="signUpSuccessModal" tabindex="-1" aria-labelledby="modalLabel">
+            <div class="modal fade" id="signUpSuccessModal" tabindex="-1" aria-labelledby="Sign up success modal">
                   <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                               <div class="modal-header">

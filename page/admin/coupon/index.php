@@ -54,7 +54,7 @@ if ($return_status_code === 400) {
                                           </svg>
                                     </button>
 
-                                    <input id="search_coupon" class="form-control me-2" type="search" placeholder="Search by name" aria-label="Search">
+                                    <input id="search_coupon" class="form-control me-2" type="search" placeholder="Search coupon by name" aria-label="Search for coupons">
                               </form>
                               <div class="mx-auto mx-lg-0 ms-lg-2 order-1 order-lg-2">
                                     <button class="btn btn-success btn-sm" onclick="openAddModal()"><strong>+</strong> Add New Coupon</button>
@@ -126,7 +126,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="Error modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -142,7 +142,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="Confirm elete modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -159,7 +159,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="Confirm deactivate modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -176,7 +176,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="activateModal" tabindex="-1" aria-labelledby="Confirm activate modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -193,7 +193,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="Add coupon modal">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -214,7 +214,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="Edit coupon modal">
                         <div class="modal-dialog modal-dialog-centered modal-xl">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -235,7 +235,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="chooseBookModal" tabindex="-1" aria-labelledby="Choose book modal">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -341,7 +341,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmAddModal" tabindex="-1" aria-labelledby="Confirm change modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -358,7 +358,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="successAddModal" tabindex="-1" aria-labelledby="Success modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -374,7 +374,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="confirmUpdateModal" tabindex="-1" aria-labelledby="Confirm modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -391,7 +391,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="successUpdateModal" tabindex="-1" aria-labelledby="Changes saved modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">
@@ -407,7 +407,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                   </div>
-                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="modalLabel">
+                  <div class="modal fade" id="dataAnomalies" tabindex="-1" aria-labelledby="Warning modal">
                         <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
                                     <div class="modal-header">

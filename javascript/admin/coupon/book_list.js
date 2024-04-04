@@ -172,7 +172,7 @@ function fetchBookList()
 
 
                               trElem.append(
-                                    $(`<td class='align-middle'><a href='/admin/book/edit-book?id=${ data.query_result[0][i].id }' alt='book detail' class='btn btn-sm btn-info text-white' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a></td>`));
+                                    $(`<td class='align-middle'><a href='/admin/book/edit-book?id=${ data.query_result[0][i].id }' alt='Book detail' class='btn btn-sm btn-info text-white' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Detail\"><i class=\"bi bi-info-circle\"></i></a></td>`));
 
                               $('#book_table_body').append(trElem);
                         }

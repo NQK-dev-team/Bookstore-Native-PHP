@@ -177,7 +177,7 @@ function getSales()
                         {
                               if (i === 0)
                                     temp += `<a class='bg-white card p-2 text-decoration-none me-sm-3 me-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
-                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition'>
+                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
                                                 <div class="card-body p-2">
                                                       <h5 class="card-title">${ data.query_result[1][i].name }</h5>
                                                       <p class="card-text">${ data.query_result[1][i].edition } edition</p>
@@ -197,7 +197,7 @@ function getSales()
                                           </a>`;
                               else if (i === data.query_result.length - 1)
                                     temp += `<a class='bg-white card p-2 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
-                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition'>
+                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
                                                 <div class="card-body p-2">
                                                       <h5 class="card-title">${ data.query_result[1][i].name }</h5>
                                                       <p class="card-text">${ data.query_result[1][i].edition } edition</p>
@@ -217,7 +217,7 @@ function getSales()
                                           </a>`;
                               else
                                     temp += `<a class='bg-white card p-2 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
-                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition'>
+                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
                                                 <div class="card-body p-2">
                                                       <h5 class="card-title">${ data.query_result[1][i].name }</h5>
                                                       <p class="card-text">${ data.query_result[1][i].edition } edition</p>
@@ -303,7 +303,7 @@ function getBestSeller()
                         for (let i = 0; i < data.query_result.length; i++)
                         {
                               temp1 += `<a onmouseover="getBookInfo(this)" data-id='${ data.query_result[i].id }' href='/book/book-detail?id=${ data.query_result[i].id }' class='my-4 d-flex flex-column flex-sm-row pointer best-seller text-dark text-decoration-none'>
-                                                      <img alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition' src="${ data.query_result[i].imagePath }" class="best-seller-img mx-auto mx-sm-0">
+                                                      <img alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition image' src="${ data.query_result[i].imagePath }" class="best-seller-img mx-auto mx-sm-0">
                                                       <div class='mx-auto ms-sm-3 me-sm-0 d-flex flex-column align-items-center align-items-sm-start'>
                                                             <h5 class='mb-2 mt-2 mt-sm-0 t text-sm-start text-center'>${ data.query_result[i].name }</h5>
                                                             <p class='mb-2'>${ data.query_result[i].edition } edition</p>
@@ -320,7 +320,7 @@ function getBestSeller()
                               if (i === 0)
                                     temp2 += `<div id='bestSellerDetail_${ data.query_result[i].id }' name='bestSellerDetail'>
                                                       <div class='d-flex'>
-                                                            <img alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition' src="${ data.query_result[i].imagePath }" class="best-seller-img-detail">
+                                                            <img alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition image' src="${ data.query_result[i].imagePath }" class="best-seller-img-detail">
                                                             <div class='ms-3'>
                                                                   <h3>${ data.query_result[i].name }</h3>
                                                                   <p>${ data.query_result[i].edition } edition</p>
@@ -354,7 +354,7 @@ function getBestSeller()
                               else
                                     temp2 += `<div class='none' id='bestSellerDetail_${ data.query_result[i].id }' name='bestSellerDetail'>
                                                       <div class='d-flex'>
-                                                            <img alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition' src="${ data.query_result[i].imagePath }" class="best-seller-img-detail">
+                                                            <img alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition image' src="${ data.query_result[i].imagePath }" class="best-seller-img-detail">
                                                             <div class='ms-3'>
                                                                   <h3>${ data.query_result[i].name }</h3>
                                                                   <p>${ data.query_result[i].edition } edition</p>
@@ -510,7 +510,7 @@ function getPublisherBook(name)
                         {
                               if (i === 0)
                                     temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
-                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
+                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
@@ -530,7 +530,7 @@ function getPublisherBook(name)
                                                 </a>`;
                               else if (i === data.query_result.length - 1)
                                     temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
-                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
+                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
@@ -550,7 +550,7 @@ function getPublisherBook(name)
                                                 </a>`;
                               else
                                     temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
-                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
+                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
@@ -678,7 +678,7 @@ function getCategoryBook(name)
                         {
                               if (i === 0)
                                     temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
-                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
+                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
@@ -698,7 +698,7 @@ function getCategoryBook(name)
                                                 </a>`;
                               else if (i === data.query_result.length - 1)
                                     temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
-                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
+                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
@@ -718,7 +718,7 @@ function getCategoryBook(name)
                                                 </a>`;
                               else
                                     temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?bookID${ data.query_result[i].id }'>
-                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition">
+                                                      <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
                                                       <div class="card-body p-1">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>

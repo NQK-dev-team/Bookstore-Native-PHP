@@ -164,7 +164,7 @@ function fetchBookList()
 
                               trElem.append($(`<td class=\"align-middle\">${ (listOffset - 1) * entry + i + 1 }</td>`));
                               trElem.append(
-                                    $(`<td class=\"align-middle\"><img ${ data.query_result[0][i].imagePath } alt=\"book image\" class=\"book_image\"></img></td>`)
+                                    $(`<td class=\"align-middle\"><img ${ data.query_result[0][i].imagePath } alt=\"Book image\" class=\"book_image\"></img></td>`)
                               );
                               trElem.append($(`<td class=\"col-2 align-middle\">${ data.query_result[0][i].name }</td>`));
                               trElem.append($(`<td class=\"align-middle\">${ data.query_result[0][i].edition }</td>`));
