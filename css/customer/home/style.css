@@ -28,7 +28,8 @@
 }
 
 .card-img-top {
-      height: 350px;
+      margin-left: auto;
+      margin-right: auto;
 }
 
 #saleList,
@@ -81,6 +82,19 @@
       #slideNavigate,
       #slideNavigate1 {
             display: none;
+      }
+
+      .card {
+            min-width: 200px;
+            max-width: 200px;
+      }
+
+      .card-img-top {
+            width: 150px;
+      }
+
+      .card p {
+            font-size: 13px;
       }
 }
 
