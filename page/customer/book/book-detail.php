@@ -3,6 +3,7 @@
 use Dotenv\Parser\Value;
 
 require_once __DIR__ . '/../../../tool/php/role_check.php';
+require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 require_once __DIR__ . '/../../../tool/php/comment.php';
 
@@ -215,14 +216,35 @@ WHERE discount_rank = 1');
                                     echo '<p class="h5 author">Author: ' . $book['authorName'] . '</p>';
                                     echo '<p class="h5">Publisher: ' . $book['publisher'] . '</p>';
                                     echo '<p class="h5">Publish date: ' . $book['publishDate'] . '</p>';
-                                    echo '<a
+                                  echo '<a
                                           name=""
-                                          id=""
+                                          id="add_to_cart"
                                           class="btn btn-primary text-light col-12 col-md-4 col-xxl-3 mt-3"
                                           href="#"
                                           role="button"
-                                          >Add to cart</a
-                                    >';
+                                          data-book-id="' . $book['id'] . '"
+                                          data-user-id="' . $_SESSION['id'] . '"
+                                          >Add Digital Copy</a>';
+                                    echo '<p class="h5 mt-4 ">Amount of physical copy to buy: </p>';
+                                    echo '<div class="col-12 col-md-4 col-xxl-3 mt-3">
+                                          <input
+                                                type="number"
+                                                id="quantity"
+                                                min="1"
+                                                value="1"
+                                                class="form-control mt-1"
+                                          >
+                                          </div>
+                                          <a
+                                          name=""
+                                          id="add_to_cart_physical"
+                                          class="btn btn-primary text-light col-12 col-md-4 col-xxl-3 mt-3"
+                                          href="#"
+                                          role="button"
+                                          data-book-id="' . $book['id'] . '"
+                                          data-user-id="' . $_SESSION['id'] . '"
+                                          >Add Physical Copies</a>';
+
                                     echo '</div>';
                               echo'</div>';
 
@@ -238,7 +260,7 @@ WHERE discount_rank = 1');
                               echo '<hr>';//break to separate book detail and comment section
                               //comment section
                               if(isset($_SESSION['id'])){
-                              echo '<form method="POST" action="'.setComment($conn, $bookID).'">
+                              echo '<form method="POST" class="comment-input" action="'.setComment($conn, $bookID).'">
                                           <input type="hidden" name="customerID" value="'.$_SESSION['id'].'">
                                           <input type="hidden" name="commentTime" value="'.date('Y-m-d H:i:s').'">
                                           
@@ -262,6 +284,7 @@ WHERE discount_rank = 1');
             require_once __DIR__ . '/../../../layout/footer.php';
             ?>
             <script src="/javascript/customer/menu_after_load.js"></script>
+            <script src="/javascript/customer/book/book-detail.js"></script>
       </body>
 
       </html>
