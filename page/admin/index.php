@@ -40,7 +40,6 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div class='w-100 h-100 d-flex flex-column'>
-                        <h1 class='mx-auto mt-2 text-center'>Welcome Admin</h1>
                         <div class='w-100 mt-5 d-flex flex-column'>
                               <h4 class='mx-auto text-center'>This Week Best Selling Books</h4>
                               <div class='bookCarouselSlides'>
