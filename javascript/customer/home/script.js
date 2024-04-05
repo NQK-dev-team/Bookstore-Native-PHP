@@ -178,7 +178,7 @@ function getSales()
                               if (i === 0)
                                     temp += `<a class='bg-white card p-2 text-decoration-none me-sm-3 me-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
                                                 <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
-                                                <div class="card-body p-2">
+                                                <div class="card-body p-1 pt-2">
                                                       <h5 class="card-title">${ data.query_result[1][i].name }</h5>
                                                       <p class="card-text">${ data.query_result[1][i].edition } edition</p>
                                                       <p class="card-text">Author: ${ data.query_result[1][i].author.join(', ') } edition</p>
@@ -198,7 +198,7 @@ function getSales()
                               else if (i === data.query_result.length - 1)
                                     temp += `<a class='bg-white card p-2 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
                                                 <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
-                                                <div class="card-body p-2">
+                                                <div class="card-body p-1 pt-2">
                                                       <h5 class="card-title">${ data.query_result[1][i].name }</h5>
                                                       <p class="card-text">${ data.query_result[1][i].edition } edition</p>
                                                       <p class="card-text">Author: ${ data.query_result[1][i].author.join(', ') } edition</p>
@@ -218,7 +218,7 @@ function getSales()
                               else
                                     temp += `<a class='bg-white card p-2 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
                                                 <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
-                                                <div class="card-body p-2">
+                                                <div class="card-body p-1 pt-2">
                                                       <h5 class="card-title">${ data.query_result[1][i].name }</h5>
                                                       <p class="card-text">${ data.query_result[1][i].edition } edition</p>
                                                       <p class="card-text">Author: ${ data.query_result[1][i].author.join(', ') } edition</p>
@@ -511,7 +511,7 @@ function getPublisherBook(name)
                               if (i === 0)
                                     temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
-                                                      <div class="card-body p-1">
+                                                      <div class="card-body p-1 pt-2">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
                                                             <p class="card-text">Author: ${ data.query_result[i].author.join(', ') }</p>
@@ -531,7 +531,7 @@ function getPublisherBook(name)
                               else if (i === data.query_result.length - 1)
                                     temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
-                                                      <div class="card-body p-1">
+                                                      <div class="card-body p-1 pt-2">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
                                                             <p class="card-text">Author: ${ data.query_result[i].author.join(', ') }</p>
@@ -551,7 +551,7 @@ function getPublisherBook(name)
                               else
                                     temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
-                                                      <div class="card-body p-1">
+                                                      <div class="card-body p-1 pt-2">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
                                                             <p class="card-text">Author: ${ data.query_result[i].author.join(', ') }</p>
@@ -679,7 +679,7 @@ function getCategoryBook(name)
                               if (i === 0)
                                     temp += `<a class='bg-white card p-1 text-decoration-none me-sm-3 me-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
-                                                      <div class="card-body p-1">
+                                                      <div class="card-body p-1 pt-2">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
                                                             <p class="card-text">Author: ${ data.query_result[i].author.join(', ') }</p>
@@ -699,7 +699,7 @@ function getCategoryBook(name)
                               else if (i === data.query_result.length - 1)
                                     temp += `<a class='bg-white card p-1 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?bookID=${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
-                                                      <div class="card-body p-1">
+                                                      <div class="card-body p-1 pt-2">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
                                                             <p class="card-text">Author: ${ data.query_result[i].author.join(', ') }</p>
@@ -719,7 +719,7 @@ function getCategoryBook(name)
                               else
                                     temp += `<a class='bg-white card p-1 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?bookID${ data.query_result[i].id }'>
                                                       <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt="${ data.query_result[i].name } ${ data.query_result[i].edition } edition image">
-                                                      <div class="card-body p-1">
+                                                      <div class="card-body p-1 pt-2">
                                                             <h5 class="card-title">${ data.query_result[i].name }</h5>
                                                             <p class="card-text">${ data.query_result[i].edition } edition</p>
                                                             <p class="card-text">Author: ${ data.query_result[i].author.join(', ') }</p>

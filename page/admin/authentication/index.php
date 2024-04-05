@@ -55,7 +55,7 @@ unset($_SESSION['update_customer_id']);
                         </div>
                         <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="recovery">Forgot password?</a>
                         <div class="mt-auto my-3 mx-auto">
-                              <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Submit</button>
+                              <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Login</button>
                         </div>
                   </form>
             </div>
