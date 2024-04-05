@@ -14,19 +14,14 @@ $(document).ready(function ()
             e.preventDefault();
 
             pause = true;
-            $('#paymentModal').modal('show');
+
+            $('#confirmModal').modal('show');
       });
 
       $('#deleteModal').on('hidden.bs.modal', function ()
       {
             deleteID = null;
             refreshList = null;
-      });
-
-      $('#paymentModal').on('hidden.bs.modal', function ()
-      {
-            pause = false;
-            $('input[name="paymentMethod"]').prop('checked', false);
       });
 
       // $('#paymentSuccess').on('hidden.bs.modal', function ()
@@ -53,6 +48,8 @@ $(document).ready(function ()
                   });
             }
       }, 10000);
+
+      initToolTip();
 });
 
 function placeOrder()
@@ -83,6 +80,74 @@ function placeOrder()
       });
 
       if (signal) return;
+
+      if ($('#card-payment').is(':checked'))
+      {
+            if (!$('#visa-payment').is(':checked') && !$('#jcb-payment').is(':checked') && !$('#mastercard-payment').is(':checked'))
+            {
+                  $('#errorModal').modal('show');
+                  $('#error_message').text('Please select a card type!');
+                  return;
+            }
+
+            clearCustomValidity($(`#card-holder-name`).get(0));
+            if (!$('#card-holder-name').val())
+            {
+                  reportCustomValidity($(`#card-holder-name`).get(0), "Please fill in your card holder name!");
+                  return;
+            }
+
+            clearCustomValidity($(`#card-number`).get(0));
+            if (!$('#card-number').val())
+            {
+                  reportCustomValidity($(`#card-number`).get(0), "Please fill in your card number!");
+                  return;
+            }
+            else if ($('#card-number').val().length < 16)
+            {
+                  reportCustomValidity($(`#card-number`).get(0), "Card number must have 16 digits!");
+                  return;
+            }
+            else
+            {
+                  const regex = /^[0-9]{16}$/;
+                  const cardNumber = $('#card-number').val();
+                  if (!regex.test(cardNumber))
+                  {
+                        reportCustomValidity($(`#card-number`).get(0), "Card number contain non-numerical character(s)!");
+                        return;
+                  }
+            }
+
+            clearCustomValidity($(`#card-expiration`).get(0));
+            if (!$('#card-expiration').val())
+            {
+                  reportCustomValidity($(`#card-expiration`).get(0), "Please fill in your card expiration date!");
+                  return;
+            }
+
+            clearCustomValidity($(`#card-cvv`).get(0));
+            if (!$('#card-cvv').val())
+            {
+                  reportCustomValidity($(`#card-cvv`).get(0), "Please fill in your card CVV!");
+                  return;
+            }
+            else if ($('#card-cvv').val().length < 3)
+            {
+                  reportCustomValidity($(`#card-cvv`).get(0), "CVV must have 3 digits!");
+                  return;
+            }
+            else
+            {
+                  const regex = /^[0-9]{3}$/;
+                  const cvv = $('#card-cvv').val();
+                  if (!regex.test(cvv))
+                  {
+                        reportCustomValidity($(`#card-cvv`).get(0), "CVV contain non-numerical character(s)!");
+                        return;
+                  }
+            }
+      }
 
       $('#cartForm').submit();
 }
@@ -236,21 +301,21 @@ function fetchFileOrder()
                               {
                                     temp += `<div class='row my-1'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
-                                          <a href="#" class='my-auto mx-auto'>
-                                                <img src="${ data.query_result.detail[i].imagePath }" class='book_image'>
+                                          <a href="/book/book-detail?id=${ data.query_result.detail[i].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
+                                                <img alt='${data.query_result.detail[i].name } ${ data.query_result.detail[i].edition} edition' src="${ data.query_result.detail[i].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
                                           <div class='d-flex flex-column justify-content-center px-5 mt-3'>
-                                                <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[i].name }</strong>
-                                                <strong class='text-md-start text-center'>${ data.query_result.detail[i].edition } edition</strong>
-                                                <div class='fs-5 text-md-start text-center'>
+                                                <h6 class='fw-bold text-md-start text-center mb-0'>${ data.query_result.detail[i].name }</h6>
+                                                <p class='text-md-start text-center mb-0'>${ data.query_result.detail[i].edition } edition</p>
+                                                <div class='text-md-start text-center'>
                                                       <p class='mb-0 ${ data.query_result.detail[i].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[i].price }</p>
                                                       ${ data.query_result.detail[i].discount ?
                                                 `<div class='d-flex justify-content-center justify-content-md-start'>
                                                             <p>$${ parseFloat(data.query_result.detail[i].price * (100 - data.query_result.detail[i].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
-                                                                  <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                                                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                                         <g id="SVGRepo_iconCarrier">
@@ -270,7 +335,7 @@ function fetchFileOrder()
                                     <div class='col-lg-2 col-12 d-flex'></div>
                                     <div class='col-lg-2 col-12'></div>
                                     <div class='col-lg-1 col-12 d-flex'>
-                                          <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
+                                          <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-5 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>
                               <hr class='my-2'>`;
@@ -278,21 +343,21 @@ function fetchFileOrder()
 
                               temp += `<div class='row my-1'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
-                                          <a href="#" class='my-auto mx-auto'>
-                                                <img src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
+                                          <a href="/book/book-detail?id=${ data.query_result.detail[data.query_result.detail.length - 1].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
+                                                <img alt='${data.query_result.detail[data.query_result.detail.length - 1].name } ${ data.query_result.detail[data.query_result.detail.length - 1].edition} edition' src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
                                           <div class='d-flex flex-column justify-content-center px-5 mt-3'>
-                                                <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].name }</strong>
-                                                <strong class='text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition</strong>
-                                                <div class='fs-5 text-md-start text-center'>
+                                                <h6 class='fw-bold text-md-start text-center mb-0'>${ data.query_result.detail[data.query_result.detail.length - 1].name }</h6>
+                                                <p class='text-md-start text-center mb-0'>${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition</p>
+                                                <div class='text-md-start text-center'>
                                                       <p class='mb-0 ${ data.query_result.detail[data.query_result.detail.length - 1].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[data.query_result.detail.length - 1].price }</p>
                                                       ${ data.query_result.detail[data.query_result.detail.length - 1].discount ?
                                           `<div class='d-flex justify-content-center justify-content-md-start'>
                                                             <p>$${ parseFloat(data.query_result.detail[data.query_result.detail.length - 1].price * (100 - data.query_result.detail[data.query_result.detail.length - 1].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
-                                                                  <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                                                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                                         <g id="SVGRepo_iconCarrier">
@@ -312,7 +377,7 @@ function fetchFileOrder()
                                     <div class='col-lg-2 col-12 d-flex'></div>
                                     <div class='col-lg-2 col-12'></div>
                                     <div class='col-lg-1 col-12 d-flex'>
-                                          <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
+                                          <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-5 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>`;
 
@@ -372,21 +437,21 @@ function fetchPhysicalOrder(isFirstTime)
                               {
                                     temp += `<div class='row my-1' name='physical_row' data-id='${ data.query_result.detail[i].id }'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
-                                          <a href="#" class='my-auto mx-auto'>
-                                                <img src="${ data.query_result.detail[i].imagePath }" class='book_image'>
+                                          <a href="/book/book-detail?id=${ data.query_result.detail[i].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
+                                                <img alt='${data.query_result.detail[i].name } ${ data.query_result.detail[i].edition} edition' src="${ data.query_result.detail[i].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
                                           <div class='d-flex flex-column justify-content-center px-5 mt-3'>
-                                                <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[i].name }</strong>
-                                                <strong class='text-md-start text-center'>${ data.query_result.detail[i].edition } edition</strong>
-                                                <div class='fs-5 text-md-start text-center'>
+                                                <h6 class='fw-bold text-md-start text-center mb-0'>${ data.query_result.detail[i].name }</h6>
+                                                <p class='text-md-start text-center mb-0'>${ data.query_result.detail[i].edition } edition</p>
+                                                <div class='text-md-start text-center'>
                                                       <p class='mb-0 ${ data.query_result.detail[i].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[i].price }</p>
                                                       ${ data.query_result.detail[i].discount ?
                                                 `<div class='d-flex justify-content-center justify-content-md-start'>
                                                             <p>$${ parseFloat(data.query_result.detail[i].price * (100 - data.query_result.detail[i].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
-                                                                  <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                                                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                                         <g id="SVGRepo_iconCarrier">
@@ -403,24 +468,24 @@ function fetchPhysicalOrder(isFirstTime)
                                                 </div>
                                           </div>
                                     </div>
-                                    <div class='col-lg-2 col-12 d-flex'>
-                                          <div class="btn-group my-lg-auto mx-lg-0 mx-auto mt-2" role="group">
-                                                <input onclick='adjustAmount(false,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
+                                    <div class='col-lg-3 col-12 d-flex flex-column pt-lg-3'>
+                                    <div class='mt-lg-auto mx-lg-0 mx-auto mt-2 pt-lg-4 d-flex justify-content-center'>
+                                          <div class="btn-group" role="group">
+                                                <input aria-label='Decrease amount' onclick='adjustAmount(false,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
                                                 <label class="btn btn-outline-danger" for="decrease_book_ammount_${ data.query_result.detail[i].id }">-</label>
 
                                                 <input onchange='checkAmmount("${ data.query_result.detail[i].id }",true)' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
 
-                                                <input onclick='adjustAmount(true,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
+                                                <input aria-label='Increase amount' onclick='adjustAmount(true,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
                                                 <label class="btn btn-outline-success" for="increase_book_ammount_${ data.query_result.detail[i].id }">+</label>
                                           </div>
                                     </div>
-                                    <div class='col-lg-2 col-12'>
-                                          <div class='w-100 h-100 d-flex justify-content-lg-start justify-content-center mt-lg-0 my-2'>
-                                                <strong class='my-auto'>In stock:&nbsp;</strong>
+                                          <div class='d-flex mt-2 mb-lg-auto mx-auto'>
+                                                <strong class='my-auto text-nowrap'>In stock:&nbsp;</strong>
                                                 <strong class='my-auto' id='in_stock_${ data.query_result.detail[i].id }'>${ data.query_result.detail[i].inStock }</strong>
                                           </div>
                                     </div>
-                                    <div class='col-lg-1 col-12 d-flex'>
+                                    <div class='col-lg-2 col-12 d-flex justify-content-center'>
                                           <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",2)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>
@@ -428,21 +493,21 @@ function fetchPhysicalOrder(isFirstTime)
                               }
                               temp += `<div class='row my-1' name='physical_row' data-id='${ data.query_result.detail[data.query_result.detail.length - 1].id }'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
-                                          <a href="#" class='my-auto mx-auto'>
-                                                <img src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
+                                          <a href="/book/book-detail?id=${ data.query_result.detail[data.query_result.detail.length - 1].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
+                                                <img alt='${data.query_result.detail[data.query_result.detail.length - 1].name } ${ data.query_result.detail[data.query_result.detail.length - 1].edition} edition' src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
                                           <div class='d-flex flex-column justify-content-center px-5 mt-3'>
-                                                <strong class='fs-5 text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].name }</strong>
-                                                <strong class='text-md-start text-center'>${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition</strong>
-                                                <div class='fs-5 text-md-start text-center'>
+                                                <h6 class='fw-medium text-md-start text-center mb-0'>${ data.query_result.detail[data.query_result.detail.length - 1].name }</h6>
+                                                <p class='text-md-start text-center mb-0'>${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition</p>
+                                                <div class='text-md-start text-center'>
                                                       <p class='mb-0 ${ data.query_result.detail[data.query_result.detail.length - 1].discount ? 'text-decoration-line-through' : '' }'>$${ data.query_result.detail[data.query_result.detail.length - 1].price }</p>
                                                       ${ data.query_result.detail[data.query_result.detail.length - 1].discount ?
                                           `<div class='d-flex justify-content-center justify-content-md-start'>
                                                             <p>$${ parseFloat(data.query_result.detail[data.query_result.detail.length - 1].price * (100 - data.query_result.detail[data.query_result.detail.length - 1].discount) / 100.0).toFixed(2) }</p>
                                                             <div class='d-flex ms-2'>
-                                                                  <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                                                  <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
                                                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                                         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                                         <g id="SVGRepo_iconCarrier">
@@ -459,24 +524,24 @@ function fetchPhysicalOrder(isFirstTime)
                                                 </div>
                                           </div>
                                     </div>
-                                    <div class='col-lg-2 col-12 d-flex'>
+                                    <div class='col-lg-3 col-12 d-flex flex-column pt-lg-3'>
+                                    <div class='mt-lg-auto mx-lg-0 mx-auto mt-2 pt-lg-4 d-flex justify-content-center'>
                                           <div class="btn-group my-lg-auto mx-lg-0 mx-auto mt-2" role="group">
-                                                <input onclick='adjustAmount(false,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
+                                                <input aria-label='Decrease amount' onclick='adjustAmount(false,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
                                                 <label class="btn btn-outline-danger" for="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">-</label>
 
                                                 <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }",true)' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
 
-                                                <input onclick='adjustAmount(true,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
+                                                <input aria-label='Increase amount' onclick='adjustAmount(true,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
                                                 <label class="btn btn-outline-success" for="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">+</label>
                                           </div>
                                     </div>
-                                    <div class='col-lg-2 col-12'>
-                                          <div class='w-100 h-100 d-flex justify-content-lg-start justify-content-center mt-lg-0 my-2'>
-                                                <strong class='my-auto'>In stock:&nbsp;</strong>
+                                          <div class='d-flex mt-2 mb-lg-auto mx-auto'>
+                                                <strong class='my-auto text-nowrap'>In stock:&nbsp;</strong>
                                                 <strong class='my-auto' id='in_stock_${ data.query_result.detail[data.query_result.detail.length - 1].id }'>${ data.query_result.detail[data.query_result.detail.length - 1].inStock }</strong>
                                           </div>
                                     </div>
-                                    <div class='col-lg-1 col-12 d-flex'>
+                                    <div class='col-lg-2 col-12 d-flex justify-content-center'>
                                           <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",2)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>`;
@@ -674,59 +739,58 @@ function updateAmount(amount, id)
 
 function payOrder()
 {
-      if ($('input[name="paymentMethod"][value="1"]').is(':checked') || $('input[name="paymentMethod"][value="2"]').is(':checked'))
-      {
-            const deliveryAddress = encodeData($('#physicalDestination').val());
+      const deliveryAddress = encodeData($('#physicalDestination').val());
 
-            $.ajax({
-                  url: '/ajax_service/customer/cart/pay_order.php',
-                  method: 'POST',
-                  headers: {
-                        'X-CSRF-Token': CSRF_TOKEN
-                  },
-                  data: { deliveryAddress },
-                  dataType: 'json',
-                  success: function (data)
+      $.ajax({
+            url: '/ajax_service/customer/cart/pay_order.php',
+            method: 'POST',
+            headers: {
+                  'X-CSRF-Token': CSRF_TOKEN
+            },
+            data: { deliveryAddress },
+            dataType: 'json',
+            success: function (data)
+            {
+                  if (data.error)
                   {
-                        if (data.error)
-                        {
-                              $('#errorModal').modal('show');
-                              $('#error_message').text(data.error);
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(data.error);
 
-                              reEvalOrder(false);
-                        }
-                        else if (data.query_result)
-                        {
-                              fetchFileOrder();
-                              fetchPhysicalOrder(true);
-                              updateBillingDetail();
-                              $('#paymentSuccess').modal('show');
-                        }
-                  },
-
-                  error: function (err)
-                  {
-                        console.error(err);
-                        if (err.status >= 500)
-                        {
-                              $('#errorModal').modal('show');
-                              $('#error_message').text('Server encountered error!');
-                        } else
-                        {
-                              $('#errorModal').modal('show');
-                              $('#error_message').text(err.responseJSON.error);
-                        }
+                        reEvalOrder(false);
                   }
-            });
+                  else if (data.query_result)
+                  {
+                        fetchFileOrder();
+                        fetchPhysicalOrder(true);
+                        updateBillingDetail();
+                        $('#paymentSuccess').modal('show');
+                  }
+            },
 
-            $('#paymentModal').modal('hide');
+            error: function (err)
+            {
+                  console.error(err);
+                  if (err.status >= 500)
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text('Server encountered error!');
+                  } else
+                  {
+                        $('#errorModal').modal('show');
+                        $('#error_message').text(err.responseJSON.error);
+                  }
+            }
+      });
+}
 
-      } else if ($('input[name="paymentMethod"][value="1"]').is(':checked') && $('input[name="paymentMethod"][value="2"]').is(':checked'))
+function selectCardPayment(selected)
+{
+      if (selected)
+            $('#card_input').removeClass('none');
+      else
       {
-            $('#errorModal').modal('show');
-            $('#error_message').text('You can not choose both payment methods!');
-      } else
-      {
-            $('#noPaymentModal').modal('show');
+            $('#card_input').addClass('none');
+            $('#jcb-payment,#visa-payment,#mastercard-payment').prop('checked', false);
+            $('#card-holder-name,#card-number,#card-expiration,#card-cvv').val('');
       }
 }

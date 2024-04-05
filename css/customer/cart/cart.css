@@ -1,9 +1,9 @@
 .ammount_input {
-    width: 75px;
+    width: 70px;
 }
 
 .book_image {
-    width: 200px;
+    width: 120px;
 }
 
 
@@ -11,8 +11,23 @@
     width: 250px;
 }
 
+#cartForm {
+    width: 98%;
+    height: 98%;
+}
+
+.item-container {
+    height: 350px;
+}
+
 @media only screen and (max-width: 768px) {
     .payment {
         width: 200px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    .cart-container {
+        overflow-y: auto;
     }
 }
