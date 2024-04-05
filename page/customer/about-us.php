@@ -11,6 +11,7 @@
       <meta name="author" content="Nghia Duong">
       <meta name="description" content="Information about NQK Bookstore">
       <title>About Us</title>
+      <link rel="stylesheet" href="/css/about_us.css">
 </head>
 
 <body>
@@ -41,8 +42,12 @@
                   <p>Email: <strong>nqk.demo@gmail.com</strong></p>
                   <p>Phone: <strong>(+84)012-345-6789</strong></p>
                   <p>Address: <strong>268 Lý Thường Kiệt, Phường 14, Quận 10, Thành phố Hồ Chí Minh, Vietnam</strong></p>
-                  <div class='mb-3 flex-grow-1 container mx-0 px-0'>
-                        <iframe class='w-100 h-100 border border-1 rounded border-secondary' style='min-height:250px;max-width:1000px;' src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d489.93901869949366!2d106.65840844905175!3d10.772031193806711!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ec3c161a3fb%3A0xef77cd47a1cc691e!2sHo%20Chi%20Minh%20City%20University%20of%20Technology%20(HCMUT)!5e0!3m2!1sen!2sus!4v1712248396230!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                  <div class='mb-3 flex-grow-1 w-100 d-flex flex-column'>
+                        <iframe class='image border border-1 rounded border-secondary' src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d489.93901869949366!2d106.65840844905175!3d10.772031193806711!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ec3c161a3fb%3A0xef77cd47a1cc691e!2sHo%20Chi%20Minh%20City%20University%20of%20Technology%20(HCMUT)!5e0!3m2!1sen!2sus!4v1712248396230!5m2!1sen!2sus" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <figure class='image d-flex flex-column'>
+                              <img alt="HCMUT front gate" src='/image/front-gate.jpg' class='w-100 flex-grow-1 border-1 rounded border-secondary border mt-4'>
+                              <figcaption class='mx-auto fw-medium'>HCMUT front gate</figcaption>
+                        </figure>
                   </div>
             </div>
       </section>
