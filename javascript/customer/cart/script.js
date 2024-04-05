@@ -335,7 +335,7 @@ function fetchFileOrder()
                                     <div class='col-lg-2 col-12 d-flex'></div>
                                     <div class='col-lg-2 col-12'></div>
                                     <div class='col-lg-1 col-12 d-flex'>
-                                          <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-5 pointer text-danger mx-lg-0 mx-auto"></i>
+                                          <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>
                               <hr class='my-2'>`;
@@ -377,7 +377,7 @@ function fetchFileOrder()
                                     <div class='col-lg-2 col-12 d-flex'></div>
                                     <div class='col-lg-2 col-12'></div>
                                     <div class='col-lg-1 col-12 d-flex'>
-                                          <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-5 pointer text-danger mx-lg-0 mx-auto"></i>
+                                          <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>`;
 

@@ -41,7 +41,7 @@ if ($return_status_code === 400) {
                         <form class='bg-white border border-3 rounded m-auto p-3 d-flex flex-column' id='cartForm'>
                               <h1 class='mt-2 fs-2'>Shopping Cart</h1>
                               <hr>
-                              <div class='row flex-grow-1 cart-container overflow-hidden'>
+                              <div class='row flex-grow-1 overflow-hidden'>
                                     <div class='col-lg-8 col-12 d-flex flex-column'>
                                           <h4>File Copies</h4>
                                           <div class="w-100 bg-white border rounded border-2 overflow-y-auto overflow-x-hidden item-container" id='fileList'></div>
