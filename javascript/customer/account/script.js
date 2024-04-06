@@ -2,54 +2,82 @@ let mode = null, newImg = null;
 
 $(document).ready(function ()
 {
-      document.getElementById('btnradio1').addEventListener('change', function ()
+      document.getElementById('select-personal-info').addEventListener('click', function ()
       {
-            if (this.checked)
+            if (mode !== 1)
             {
                   $('#personalInfoForm').css('display', 'flex');
                   $('#passwordForm').css('display', 'none');
                   $('#historyPurchase').css('display', 'none');
                   $('#otherTab').css('display', 'none');
+
+                  $('p[name="select-tab"]').each(function ()
+                  {
+                        $(this).removeClass('selected');
+                  });
+                  $(this).addClass('selected');
+
                   mode = 1;
                   resetForm();
             }
       });
 
-      document.getElementById('btnradio2').addEventListener('change', function ()
+      document.getElementById('select-password').addEventListener('click', function ()
       {
-            if (this.checked)
+            if (mode !== 2)
             {
                   $('#personalInfoForm').css('display', 'none');
                   $('#passwordForm').css('display', 'flex');
                   $('#historyPurchase').css('display', 'none');
                   $('#otherTab').css('display', 'none');
+
+                  $('p[name="select-tab"]').each(function ()
+                  {
+                        $(this).removeClass('selected');
+                  });
+                  $(this).addClass('selected');
+
                   mode = 2;
                   resetForm();
                   $('#currentPasswordInput').focus();
             }
       });
 
-      document.getElementById('btnradio3').addEventListener('change', function ()
+      document.getElementById('select-purchases').addEventListener('click', function ()
       {
-            if (this.checked)
+            if (mode !== 3)
             {
                   $('#historyPurchase').css('display', 'flex');
                   $('#personalInfoForm').css('display', 'none');
                   $('#passwordForm').css('display', 'none');
                   $('#otherTab').css('display', 'none');
+
+                  $('p[name="select-tab"]').each(function ()
+                  {
+                        $(this).removeClass('selected');
+                  });
+                  $(this).addClass('selected');
+
                   mode = 3;
                   findOrder();
             }
       });
 
-      document.getElementById('btnradio4').addEventListener('change', function ()
+      document.getElementById('select-other').addEventListener('click', function ()
       {
-            if (this.checked)
+            if (mode !== 4)
             {
                   $('#otherTab').css('display', 'flex');
                   $('#historyPurchase').css('display', 'none');
                   $('#personalInfoForm').css('display', 'none');
                   $('#passwordForm').css('display', 'none');
+
+                  $('p[name="select-tab"]').each(function ()
+                  {
+                        $(this).removeClass('selected');
+                  });
+                  $(this).addClass('selected');
+
                   mode = 4;
             }
       });
@@ -550,17 +578,17 @@ function findOrder()
                                     <td class='align-middle'>$${ data.query_result[1][i].totalCost }</td>
                                     <td class='align-middle'>$${ data.query_result[1][i].totalDiscount }</td>
                                     <td class='align-middle col-4'>
-                                    <div class='d-flex flex-column books'>`;
+                                    <div class='d-flex flex-column books pe-3'>`;
 
                               for (let j = 0; j < data.query_result[1][i].books.length; j++)
-                                    temp += `<p class='my-2'>${ data.query_result[1][i].books[j].name } - ${ data.query_result[1][i].books[j].edition } edition</p>`;
+                                    temp += `<p class='my-2 text-nowrap'>${ data.query_result[1][i].books[j].name } - ${ data.query_result[1][i].books[j].edition } edition</p>`;
 
                               temp += '</div></td>'
 
                               $('#table_body').append(`
                               <tr>
                               ${ temp }
-                              <td class='align-middle'><button onclick='orderDetail(\"${ data.query_result[1][i].orderCode }\",\"${ data.query_result[1][i].purchaseTime }\",\"$${ data.query_result[1][i].totalCost }\",\"$${ data.query_result[1][i].totalDiscount }\")' class='btn btn-sm btn-info' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Order detail\"><i class=\"bi bi-info-circle text-white\"></i></button></td>
+                              <td class='align-middle'><button name='open-order-modal' onclick='orderDetail(\"${ data.query_result[1][i].orderCode }\",\"${ data.query_result[1][i].purchaseTime }\",\"$${ data.query_result[1][i].totalCost }\",\"$${ data.query_result[1][i].totalDiscount }\")' class='btn btn-sm btn-info' data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"Order detail\"><i class=\"bi bi-info-circle text-white\"></i></button></td>
                               </tr>
                               `);
                         }
@@ -800,4 +828,6 @@ async function orderDetail(code, time, price, discount)
       $('#emailInput').prop('disabled', true);
 
       $('#orderModal').modal('show');
+
+      $('div[role="tooltip"]').remove();
 }

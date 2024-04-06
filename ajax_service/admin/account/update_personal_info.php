@@ -132,7 +132,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               exit;
                         } else if (!isAgeValid($dob)) {
 
-                              http_response_code(400);
                               echo json_encode(['error' => 'You must be at least 18 years old!']);
                               exit;
                         }

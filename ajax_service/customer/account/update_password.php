@@ -102,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                   $password = $result['password'];
                   $email = $result['email'];
                   if (!verify_password($oldPassword, $password)) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Current password not correct!']);
                         $stmt->close();
                         $conn->close();

@@ -128,7 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         $result = $stmt->get_result();
                         $result = $result->fetch_assoc();
                         if ($result['result']) {
-                              http_response_code(400);
                               echo json_encode(['error' => 'Email has already been used!']);
                               $stmt->close();
                               $conn->rollback();
@@ -185,7 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         $result = $stmt->get_result();
                         $result = $result->fetch_assoc();
                         if ($result['result']) {
-                              http_response_code(400);
                               echo json_encode(['error' => 'Phone number has already been used!']);
                               $stmt->close();
                               $conn->rollback();

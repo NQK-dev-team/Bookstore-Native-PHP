@@ -281,7 +281,7 @@ insert into eventApply(eventID,bookID) values('E_DISCOUNT5','BOOK4'),('E_DISCOUN
 
 insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER1',SUBTIME(now(),'00:05:00'),true,253.92,115.95,'CUSTOMER1','YIHENYO7SZVT4MNQ'),
 ('ORDER2',SUBTIME(now(),'00:02:30'),true,19.19,8.79,'CUSTOMER1','RKZM1Y4KS5OKU7OG'),
-('ORDER3',null,false,420.09,239.77,'CUSTOMER1',null);
+('ORDER3',null,false,400.9,230.98,'CUSTOMER1',null);
 
 insert into physicalOrder values('ORDER1','211 Ly Thuong Kiet'),('ORDER3','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER1'),('ORDER2'),('ORDER3');
@@ -292,16 +292,14 @@ insert into physicalOrderContain(orderID,bookID,amount) values('ORDER3','BOOK4',
 
 insert into fileOrderContain(orderID,bookID) values('ORDER1','BOOK8'),('ORDER1','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER2','BOOK10'),('ORDER2','BOOK21');
-insert into fileOrderContain(orderID,bookID) values('ORDER3','BOOK10'),('ORDER3','BOOK21');
-insert into fileOrderContain(orderID,bookID) values('ORDER3','BOOK5'),('ORDER3','BOOK7');
 
 insert into discountApply(orderID,discountID) values('ORDER1','E_DISCOUNT1'),('ORDER1','E_DISCOUNT2'),('ORDER1','E_DISCOUNT4'),('ORDER1','R_DISCOUNT1');
 insert into discountApply(orderID,discountID) values('ORDER2','E_DISCOUNT1'),('ORDER2','R_DISCOUNT1');
-insert into discountApply(orderID,discountID) values('ORDER3','E_DISCOUNT2'),('ORDER3','E_DISCOUNT4'),('ORDER3','E_DISCOUNT1'),('ORDER3','R_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER3','E_DISCOUNT2'),('ORDER3','E_DISCOUNT4'),('ORDER3','R_DISCOUNT1');
 
 insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER4',SUBTIME(now(),'00:10:00'),true,259.11,110.76,'CUSTOMER2','B59VDRO7X0QI6NHH'),
 ('ORDER5',SUBTIME(now(),'00:07:30'),true,19.59,8.39,'CUSTOMER2','0CII886CCA8ZS18O'),
-('ORDER6',null,false,428.66,231.2,'CUSTOMER2',NULL);
+('ORDER6',null,false,409.08,222.8,'CUSTOMER2',NULL);
 
 insert into physicalOrder values('ORDER4','211 Ly Thuong Kiet'),('ORDER6','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER4'),('ORDER5'),('ORDER6');
@@ -312,15 +310,14 @@ insert into physicalOrderContain(orderID,bookID,amount) values('ORDER6','BOOK4',
 
 insert into fileOrderContain(orderID,bookID) values('ORDER4','BOOK8'),('ORDER4','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER5','BOOK10'),('ORDER5','BOOK21');
-insert into fileOrderContain(orderID,bookID) values('ORDER6','BOOK10'),('ORDER6','BOOK21');
 
 insert into discountApply(orderID,discountID) values('ORDER4','E_DISCOUNT1'),('ORDER4','E_DISCOUNT2'),('ORDER4','E_DISCOUNT4');
 insert into discountApply(orderID,discountID) values('ORDER5','E_DISCOUNT1');
-insert into discountApply(orderID,discountID) values('ORDER6','E_DISCOUNT2'),('ORDER6','E_DISCOUNT4'),('ORDER6','E_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER6','E_DISCOUNT2'),('ORDER6','E_DISCOUNT4');
 
 insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,customerID,orderCode) values('ORDER7',SUBTIME(now(),'00:15:00'),true,259.11,110.76,'CUSTOMER3','N7RJ593EYRVHKPED'),
 ('ORDER8',SUBTIME(now(),'00:01:30'),true,19.59,8.39,'CUSTOMER3','Y6ATT0B5BV3B7R8O'),
-('ORDER9',null,false,428.66,231.2,'CUSTOMER3',null);
+('ORDER9',null,false,409.08,222.8,'CUSTOMER3',null);
 
 insert into physicalOrder values('ORDER7','211 Ly Thuong Kiet'),('ORDER9','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER7'),('ORDER8'),('ORDER9');
@@ -331,8 +328,7 @@ insert into physicalOrderContain(orderID,bookID,amount) values('ORDER9','BOOK4',
 
 insert into fileOrderContain(orderID,bookID) values('ORDER7','BOOK8'),('ORDER7','BOOK1');
 insert into fileOrderContain(orderID,bookID) values('ORDER8','BOOK10'),('ORDER8','BOOK21');
-insert into fileOrderContain(orderID,bookID) values('ORDER9','BOOK10'),('ORDER9','BOOK21');
 
 insert into discountApply(orderID,discountID) values('ORDER7','E_DISCOUNT1'),('ORDER7','E_DISCOUNT2'),('ORDER7','E_DISCOUNT4');
 insert into discountApply(orderID,discountID) values('ORDER8','E_DISCOUNT1');
-insert into discountApply(orderID,discountID) values('ORDER9','E_DISCOUNT2'),('ORDER9','E_DISCOUNT4'),('ORDER9','E_DISCOUNT1');
+insert into discountApply(orderID,discountID) values('ORDER9','E_DISCOUNT2'),('ORDER9','E_DISCOUNT4');

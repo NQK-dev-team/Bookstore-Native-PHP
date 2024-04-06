@@ -79,6 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $result = $stmt->get_result();
                         while ($row = $result->fetch_assoc()) {
                               $row['purchaseTime'] = formatOrderTime($row['purchaseTime']);
+                              $row['orderCode'] = splitOrderCode($row['orderCode']);
                               $sub_stmt = $conn->prepare('select distinct combined.name,combined.edition from (
                               select book.name,book.edition from book join fileOrderContain on fileOrderContain.bookID=book.id where fileOrderContain.orderID=?
                               union

@@ -50,10 +50,19 @@ $(document).ready(function ()
       }, 10000);
 
       initToolTip();
+
+      $('#fileSection,#physicalSection').css('display', 'flex');
 });
 
 function placeOrder()
 {
+      if ($('#fileSection').css('display') === 'none' && $('#physicalSection').css('display') === 'none')
+      {
+            $('#errorModal').modal('show');
+            $('#error_message').text('Your cart is empty!');
+            return;
+      }
+
       const deliveryAddress = $('#physicalDestination').val();
 
       clearCustomValidity($(`#physicalDestination`).get(0));
@@ -124,6 +133,17 @@ function placeOrder()
             {
                   reportCustomValidity($(`#card-expiration`).get(0), "Please fill in your card expiration date!");
                   return;
+            }
+            else
+            {
+                  const selected = new Date($('#card-expiration').val());
+                  const current = new Date();
+
+                  if (selected.getFullYear() < current.getFullYear() || (selected.getFullYear() === current.getFullYear() && selected.getMonth() <= current.getMonth()))
+                  {
+                        reportCustomValidity($(`#card-expiration`).get(0), "Your card has expired!");
+                        return;
+                  }
             }
 
             clearCustomValidity($(`#card-cvv`).get(0));
@@ -295,6 +315,7 @@ function fetchFileOrder()
                         if (!Array.isArray(data.query_result) && data.query_result.detail.length)
                         {
                               $('#fileList').empty();
+                              $('#fileSection').css('display', 'flex');
 
                               let temp = '';
                               for (let i = 0; i < data.query_result.detail.length - 1; i++)
@@ -302,7 +323,7 @@ function fetchFileOrder()
                                     temp += `<div class='row my-1'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
                                           <a href="/book/book-detail?id=${ data.query_result.detail[i].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
-                                                <img alt='${data.query_result.detail[i].name } ${ data.query_result.detail[i].edition} edition' src="${ data.query_result.detail[i].imagePath }" class='book_image'>
+                                                <img alt='${ data.query_result.detail[i].name } ${ data.query_result.detail[i].edition } edition' src="${ data.query_result.detail[i].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
@@ -335,7 +356,7 @@ function fetchFileOrder()
                                     <div class='col-lg-2 col-12 d-flex'></div>
                                     <div class='col-lg-2 col-12'></div>
                                     <div class='col-lg-1 col-12 d-flex'>
-                                          <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-5 pointer text-danger mx-lg-0 mx-auto"></i>
+                                          <i onclick='openDeleteModal("${ data.query_result.detail[i].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>
                               <hr class='my-2'>`;
@@ -344,7 +365,7 @@ function fetchFileOrder()
                               temp += `<div class='row my-1'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
                                           <a href="/book/book-detail?id=${ data.query_result.detail[data.query_result.detail.length - 1].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
-                                                <img alt='${data.query_result.detail[data.query_result.detail.length - 1].name } ${ data.query_result.detail[data.query_result.detail.length - 1].edition} edition' src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
+                                                <img alt='${ data.query_result.detail[data.query_result.detail.length - 1].name } ${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition' src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
@@ -377,7 +398,7 @@ function fetchFileOrder()
                                     <div class='col-lg-2 col-12 d-flex'></div>
                                     <div class='col-lg-2 col-12'></div>
                                     <div class='col-lg-1 col-12 d-flex'>
-                                          <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-5 pointer text-danger mx-lg-0 mx-auto"></i>
+                                          <i onclick='openDeleteModal("${ data.query_result.detail[data.query_result.detail.length - 1].id }",1)' class="bi bi-trash3-fill my-lg-auto fs-4 pointer text-danger mx-lg-0 mx-auto"></i>
                                     </div>
                               </div>`;
 
@@ -386,6 +407,7 @@ function fetchFileOrder()
                         else
                         {
                               $('#fileList').empty();
+                              $('#fileSection').css('display', 'none');
                         }
                   }
             },
@@ -428,6 +450,7 @@ function fetchPhysicalOrder(isFirstTime)
                         {
                               $('#physicalList').empty();
                               $('#physicalDestination').prop('disabled', false);
+                              $('#physicalSection').css('display', 'flex');
 
                               if (isFirstTime)
                                     $('#physicalDestination').val(data.query_result.destinationAddress);
@@ -438,7 +461,7 @@ function fetchPhysicalOrder(isFirstTime)
                                     temp += `<div class='row my-1' name='physical_row' data-id='${ data.query_result.detail[i].id }'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
                                           <a href="/book/book-detail?id=${ data.query_result.detail[i].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
-                                                <img alt='${data.query_result.detail[i].name } ${ data.query_result.detail[i].edition} edition' src="${ data.query_result.detail[i].imagePath }" class='book_image'>
+                                                <img alt='${ data.query_result.detail[i].name } ${ data.query_result.detail[i].edition } edition' src="${ data.query_result.detail[i].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
@@ -494,7 +517,7 @@ function fetchPhysicalOrder(isFirstTime)
                               temp += `<div class='row my-1' name='physical_row' data-id='${ data.query_result.detail[data.query_result.detail.length - 1].id }'>
                                     <div class='col-lg-2 col-md-4 col-12 d-flex'>
                                           <a href="/book/book-detail?id=${ data.query_result.detail[data.query_result.detail.length - 1].id }" class='my-auto mx-auto' aria-label='Go to book detail page'>
-                                                <img alt='${data.query_result.detail[data.query_result.detail.length - 1].name } ${ data.query_result.detail[data.query_result.detail.length - 1].edition} edition' src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
+                                                <img alt='${ data.query_result.detail[data.query_result.detail.length - 1].name } ${ data.query_result.detail[data.query_result.detail.length - 1].edition } edition' src="${ data.query_result.detail[data.query_result.detail.length - 1].imagePath }" class='book_image'>
                                           </a>
                                     </div>
                                     <div class='col'>
@@ -552,6 +575,7 @@ function fetchPhysicalOrder(isFirstTime)
                         {
                               $('#physicalList').empty();
                               $('#physicalDestination').prop('disabled', true).val('');
+                              $('#physicalSection').css('display', 'none');
                         }
                   }
             },

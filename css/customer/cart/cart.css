@@ -17,17 +17,11 @@
 }
 
 .item-container {
-    height: 350px;
+    max-height: 350px;
 }
 
 @media only screen and (max-width: 768px) {
     .payment {
         width: 200px;
-    }
-}
-
-@media only screen and (max-width: 991px) {
-    .cart-container {
-        overflow-y: auto;
     }
 }
