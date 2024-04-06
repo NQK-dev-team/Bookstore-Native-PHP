@@ -12,7 +12,7 @@ $(document).ready(function() {
                 console.log("it ran");
                 // Clear the current list of books
                 $('#bookList').empty();
-                console.log("it ran");
+                console.log(books);
                 var html = '';
                 for (var i = 0; i < books.length; i++) {
                     if (i % 3 === 0) {
@@ -23,7 +23,7 @@ $(document).ready(function() {
                   html += `<div class="col-11 col-md-6 col-xl-4">`;
                   imagePath = `https://${window.location.host}/data/book/${books[i].pic} `;
                         html += '<div class="card w-75 mx-auto d-block">';
-                        html += `<a href="book-detail?bookID=${books[i].id}">`; 
+                        html += `<a href="book-detail?id=${books[i].bookID}">`; 
                        html += `<img src=" ${imagePath}" class="card-img-top" style="height: 28rem;" alt="...">`;
                            html += `<div class=\"card-body\">`;
                                html +=`<h5 class= "card-title"> Book: ${books[i].name} </h5>`;
@@ -89,7 +89,7 @@ $(document).ready(function() {
                   html += `<div class="col-11 col-md-6 col-xl-4">`;
                   imagePath = `https://${window.location.host}/data/book/${books[i].pic} `;
                         html += '<div class="card w-75 mx-auto d-block">';
-                        html += `<a href="book-detail?bookID=${books[i].id}">`; 
+                        html += `<a href="book-detail?id=${books[i].id}">`; 
                        html += `<img src=" ${imagePath}" class="card-img-top" style="height: 28rem;" alt="...">`;
                            html += `<div class=\"card-body\">`;
                                html +=`<h5 class= "card-title"> Book: ${books[i].name} </h5>`;
@@ -168,7 +168,7 @@ $(document).ready(function() {
                   html += `<div class="col-11 col-md-6 col-xl-4">`;
                   imagePath = `https://${window.location.host}/data/book/${books[i].pic} `;
                         html += '<div class="card w-75 mx-auto d-block">';
-                        html += `<a href="book-detail?bookID=${books[i].id}">`; 
+                        html += `<a href="book-detail?id=${books[i].id}">`; 
                        html += `<img src=" ${imagePath}" class="card-img-top" style="height: 28rem;" alt="...">`;
                            html += `<div class=\"card-body\">`;
                                html +=`<h5 class= "card-title"> Book: ${books[i].name} </h5>`;
@@ -238,7 +238,7 @@ $(document).ready(function() {
                   html += `<div class="col-11 col-md-6 col-xl-4">`;
                   imagePath = `https://${window.location.host}/data/book/${books[i].pic} `;
                         html += '<div class="card w-75 mx-auto d-block">';
-                        html += `<a href="book-detail?bookID=${books[i].id}">`; 
+                        html += `<a href="book-detail?id=${books[i].id}">`; 
                        html += `<img src=" ${imagePath}" class="card-img-top" style="height: 28rem;" alt="...">`;
                            html += `<div class=\"card-body\">`;
                                html +=`<h5 class= "card-title"> Book: ${books[i].name} </h5>`;
@@ -306,7 +306,7 @@ $(document).ready(function() {
                     html += `<div class="col-11 col-md-6 col-xl-4">`;
                     imagePath = `https://${window.location.host}/data/book/${books[i].pic} `;
                             html += '<div class="card w-75 mx-auto d-block">';
-                            html += `<a href="book-detail?bookID=${books[i].id}">`; 
+                            html += `<a href="book-detail?id=${books[i].id}">`; 
                         html += `<img src=" ${imagePath}" class="card-img-top" style="height: 28rem;" alt="...">`;
                             html += `<div class=\"card-body\">`;
                                 html +=`<h5 class= "card-title"> Book: ${books[i].name} </h5>`;
@@ -379,7 +379,7 @@ $(document).ready(function() {
                   html += `<div class="col-11 col-md-6 col-xl-4">`;
                   imagePath = `https://${window.location.host}/data/book/${books[i].pic} `;
                         html += '<div class="card w-75 mx-auto d-block">';
-                        html += `<a href="book-detail?bookID=${books[i].id}">`; 
+                        html += `<a href="book-detail?id=${books[i].id}">`; 
                        html += `<img src=" ${imagePath}" class="card-img-top" style="height: 28rem;" alt="...">`;
                            html += `<div class=\"card-body\">`;
                                html +=`<h5 class= "card-title"> Book: ${books[i].name} </h5>`;

@@ -22,7 +22,8 @@ if ($return_status_code === 400) {
       
             try {
                   // Get book id from URL
-                  $bookID = $_GET['bookID'];
+                  //$bookID = $_GET['bookID'];
+                  $bookID = $_GET['id'];
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
                   $stmt = $conn->prepare('WITH RankedBooks AS (

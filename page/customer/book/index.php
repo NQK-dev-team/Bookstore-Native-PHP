@@ -218,7 +218,7 @@ WHERE discount_rank = 1');
                         // $row["pic"] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row["pic"])) . "\"";
                         $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['pic']));
                               echo '<div class="card w-75 mx-auto d-block">';
-                              echo "<a href=\"book-detail?bookID=".normalizeURL(rawurlencode($row["id"]))."\">"; 
+                              echo "<a href=\"book-detail?id=".normalizeURL(rawurlencode($row["id"]))."\">"; 
                               echo '<img src="' . $imagePath . '" class="card-img-top" style="height: 28rem;" alt="...">';
                                     echo "<div class=\"card-body\">";
                                           echo "<h5 class=\"card-title\">"."Book: ".$row["name"]."</h5>";
