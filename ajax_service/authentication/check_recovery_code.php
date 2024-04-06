@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Validate code
                   if (!$code) {
+                        http_response_code(400);
                         echo json_encode(['error' => 'No recovery code provided!']);
                         exit;
                   } else {
@@ -31,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during recovery code format check!');
                         } else if ($matchResult === 0) {
+                              http_response_code(400);
                               echo json_encode(['error' => 'Invalid recovery code format!']);
                               exit;
                         }
