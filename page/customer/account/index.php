@@ -83,30 +83,79 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div class='d-flex w-100 h-100 flex-column'>
-                        <div class="btn-group block mx-auto mt-4" role="group" aria-label="Radio toggle button group" id='btn-grp'>
-                              <input type="radio" class="btn-check" name="btnradio" id="btnradio1" checked>
-                              <label class="btn btn-outline-primary" for="btnradio1">Personal Information</label>
-
-                              <input type="radio" class="btn-check" name="btnradio" id="btnradio3">
-                              <label class="btn btn-outline-primary" for="btnradio3">Purchases</label>
-
-                              <input type="radio" class="btn-check" name="btnradio" id="btnradio2">
-                              <label class="btn btn-outline-primary" for="btnradio2">Change Password</label>
-
-                              <input type="radio" class="btn-check" name="btnradio" id="btnradio4">
-                              <label class="btn btn-outline-primary" for="btnradio4">Other</label>
-                        </div>
-                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='historyPurchase'>
+                        <div class='block bg-white border border-3 rounded m-auto d-flex flex-column container-fluid'>
                               <div>
-                                    <h1 class='fs-3 ms-3 mt-3'>History Purchases</h1>
-                                    <hr class='mx-2'>
-                              </div>
-                              <div class='w-100 flex-grow-1 mb-2 d-flex flex-column'>
-                                    <div class='d-flex px-4'>
-                                          <p class='fw-medium'>Current Accummulated Points:&nbsp;</p>
-                                          <p id="current_point" class='text-success'></p>
+                                    <h1 class='mb-3 mt-3'>My account</h1>
+                                    <div class='d-flex overflow-x-auto'>
+                                          <p class='mb-2 pointer hover-tab selected text-nowrap' id='select-personal-info' name='select-tab'>Personal Information</p>
+                                          <p class='mb-2 ms-4 pointer hover-tab text-nowrap' id='select-purchases' name='select-tab'>Purchases</p>
+                                          <p class='mb-2 ms-4 pointer hover-tab text-nowrap' id='select-password' name='select-tab'>Change Password</p>
+                                          <p class='mb-2 ms-4 me-1 pointer hover-tab text-nowrap' id='select-other' name='select-tab'>Other</p>
                                     </div>
-                                    <div class='px-4'>
+                              </div>
+                              <hr>
+                              <form class='flex-column flex-grow-1' id='personalInfoForm'>
+                                    <div class='w-100 flex-grow-1 row m-0'>
+                                          <div class="col-lg-5 col-12 p-0">
+                                                <div class='w-100 d-flex flex-column h-100 justify-content-center'>
+                                                      <img class='custom_image w-100 mx-auto border border-2 rounded' id="userImage" alt="user image" data-initial-src="<?php if ($result['imagePath'])
+                                                                                                                                                                              echo "https://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($result['imagePath']));
+                                                                                                                                                                        else echo '/image/default_male.jpeg'; ?>">
+                                                      </img>
+                                                      <label class='btn btn-sm btn-light border border-dark mt-3 mx-auto'>
+                                                            <input accept='image/jpeg,image/png' id="imageInput" type='file' class='d-none' onchange="setNewImage(event)"></input>
+                                                            Browse
+                                                      </label>
+                                                      <p id="imageFileName" class='mx-auto mt-2'></p>
+                                                      <div class='mx-auto text-danger d-none' id="imgeFileError">
+                                                            <p class='text-danger'><i class="bi bi-exclamation-triangle"></i>&nbsp;</p>
+                                                            <p class='text-danger' id='imgeFileErrorMessage'></p>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div class="col-lg-7 col-12 p-0">
+                                                <div class='w-100 d-flex flex-column h-100'>
+                                                      <div class="mt-auto mb-2 px-lg-5 px-3">
+                                                            <label for="nameInput" class="form-label fw-medium">Name:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                            <input autocomplete="name" type="text" class="form-control" id="nameInput" data-initial-value="<?php echo $result['name']; ?>" placeholder="Enter name">
+                                                      </div>
+                                                      <div class="my-2 px-lg-5 px-3">
+                                                            <label for="emailInput" class="form-label fw-medium">Email:</label>
+                                                            <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled placeholder="Enter email address">
+                                                      </div>
+                                                      <div class="my-2 px-lg-5 px-3">
+                                                            <label for="phoneInput" class="form-label fw-medium">Phone:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                            <input maxlength="10" autocomplete="tel" type="tel" class="form-control" id="phoneInput" data-initial-value="<?php echo $result['phone']; ?>" placeholder="Enter phone number">
+                                                      </div>
+                                                      <div class="my-2 px-lg-5 px-3">
+                                                            <label for="dobInput" class="form-label fw-medium">Date Of Birth:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                            <input autocomplete="bday" type="date" class="form-control" id="dobInput" data-initial-value="<?php echo $result['dob']; ?>">
+                                                      </div>
+                                                      <div class="my-2 px-lg-5 px-3">
+                                                            <label for="genderInput" class="form-label fw-medium">Gender:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                            <select autocomplete="sex" class="form-select" aria-label="Select gender" id='genderInput' data-initial-value="<?php echo $result['gender']; ?>">
+                                                                  <option value=null>Choose your gender</option>
+                                                                  <option <?php if ($result['gender'] === 'M') echo 'selected'; ?> value="M">Male</option>
+                                                                  <option <?php if ($result['gender'] === 'F') echo 'selected'; ?> value="F">Female</option>
+                                                                  <option <?php if ($result['gender'] === 'O') echo 'selected'; ?> value="O">Other</option>
+                                                            </select>
+                                                      </div>
+                                                      <div class="mb-auto mt-2 px-lg-5 px-3">
+                                                            <label for="addressInput" class="form-label fw-medium">Address:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                            <input autocomplete="off" type="text" class="form-control" id="addressInput" data-initial-value="<?php echo $result['address']; ?>" placeholder="Enter address">
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class='mt-5'></div>
+                                    <hr class='mt-auto'>
+                                    <div class='d-flex justify-content-end pb-4 mb-5 pb-lg-0'>
+                                          <button class='btn btn-secondary me-2' type='button' onclick="resetForm()">Reset</button>
+                                          <button class='btn btn-primary ms-2' type='submit' onclick="saveChange()">Save Changes</button>
+                                    </div>
+                              </form>
+                              <div id='historyPurchase' class='flex-column'>
+                                    <div>
                                           <form class="d-flex align-items-center w-100 search_form mt-2" role="search" id="search_order_form">
                                                 <button title='search order' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                       <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">
@@ -124,8 +173,8 @@ if ($return_status_code === 400) {
                                           <label for="orderDateInput" class="form-label fw-medium mt-3">Order Date:</label>
                                           <input autocomplete="off" type="date" class="form-control search_form" id="orderDateInput" onchange='findOrder()'>
                                     </div>
-                                    <div class='w-100 flex-grow-1 mt-4 px-2 overflow-x-auto'>
-                                          <table class="table table-hover border border-2 table-bordered w-100">
+                                    <div class='w-100 flex-grow-1 my-4 overflow-x-auto hideBrowserScrollbar'>
+                                          <table class="table table-hover border border-2 table-bordered w-100 rounded mb-5">
                                                 <thead>
                                                       <tr>
                                                             <th scope="col">#</th>
@@ -142,13 +191,31 @@ if ($return_status_code === 400) {
                                           </table>
                                     </div>
                               </div>
-                        </div>
-                        <div class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='otherTab'>
-                              <div>
-                                    <h1 class='fs-3 ms-3 mt-3'>Other</h1>
-                                    <hr class='mx-2'>
-                              </div>
-                              <div class='w-100 flex-grow-1 mb-2 px-4'>
+                              <form class='flex-column flex-grow-1' id='passwordForm'>
+                                    <div class='flex-column w-100 d-flex'>
+                                          <label for="dummy_email" class='d-none'>Dummy Email (Should be hidden)</label>
+                                          <input type="email" autocomplete="email" id="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
+                                          <div class="my-2">
+                                                <label for="currentPasswordInput" class="form-label fw-medium">Current Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                <input val='' type="password" class="form-control" id="currentPasswordInput" placeholder="Enter current password" autocomplete="current-password">
+                                          </div>
+                                          <div class="my-2">
+                                                <label for="newPasswordInput" class="form-label fw-medium">New Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                <input val='' type="password" class="form-control" id="newPasswordInput" placeholder="Enter new password" autocomplete="new-password" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
+                                          </div>
+                                          <div class="my-2">
+                                                <label for="confirmPasswordInput" class="form-label fw-medium">Confirm New Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
+                                                <input val='' type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm new password" autocomplete="new-password">
+                                          </div>
+                                    </div>
+                                    <div class='mt-5'></div>
+                                    <hr class='mt-auto'>
+                                    <div class='d-flex justify-content-end pb-4 mb-5 pb-lg-0'>
+                                          <button class='btn btn-secondary me-2' type='reset'>Reset</button>
+                                          <button class='btn btn-primary ms-2' type='submit' onclick="saveChange()">Save Changes</button>
+                                    </div>
+                              </form>
+                              <div class='flex-column pb-5' id='otherTab'>
                                     <div>
                                           <p class='fw-medium mb-0'>Deactivate Account</p>
                                           <p>(You account will be disabled. To activate it, simply login)</p>
@@ -161,100 +228,6 @@ if ($return_status_code === 400) {
                                     </div>
                               </div>
                         </div>
-                        <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='passwordForm'>
-                              <div>
-                                    <h1 class='fs-3 ms-3 mt-3'>Change Password</h1>
-                                    <hr class='mx-2'>
-                              </div>
-                              <div class='flex-column w-100 flex-grow-1 d-flex'>
-                                    <label for="dummy_email" class='d-none'>Dummy Email (Should be hidden)</label>
-                                    <input type="email" autocomplete="email" id="dummy_email" value="<?php echo $result['email']; ?>" disabled readonly class='d-none'>
-                                    <div class="my-2 px-4">
-                                          <label for="currentPasswordInput" class="form-label fw-medium">Current Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                          <input val='' type="password" class="form-control" id="currentPasswordInput" placeholder="Enter current password" autocomplete="current-password">
-                                    </div>
-                                    <div class="my-2 px-4">
-                                          <label for="newPasswordInput" class="form-label fw-medium">New Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                          <input val='' type="password" class="form-control" id="newPasswordInput" placeholder="Enter new password" autocomplete="new-password" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
-                                    </div>
-                                    <div class="my-2 px-4">
-                                          <label for="confirmPasswordInput" class="form-label fw-medium">Confirm New Password:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                          <input val='' type="password" class="form-control" id="confirmPasswordInput" placeholder="Confirm new password" autocomplete="new-password">
-                                    </div>
-                              </div>
-                              <div>
-                                    <hr class='mx-2'>
-                                    <div class='d-flex justify-content-end me-2 mb-2'>
-                                          <button class='btn btn-secondary me-2' type='reset'>Reset</button>
-                                          <button class='btn btn-primary ms-2' type='submit' onclick="saveChange()">Save Changes</button>
-                                    </div>
-                              </div>
-                        </form>
-                        <form class='mt-4 block flex-grow-1 bg-white border border-1 rounded mx-auto mb-3 flex-column' id='personalInfoForm'>
-                              <div>
-                                    <h1 class='fs-3 ms-3 mt-3'>Personal Information</h1>
-                                    <hr class='mx-2'>
-                              </div>
-                              <div class='w-100 flex-grow-1 p-2 flex-column flex-lg-row d-flex'>
-                                    <div class="col-lg-5 col-12">
-                                          <div class='w-100 d-flex flex-column h-100 justify-content-center'>
-                                                <img class='custom_image w-100 mx-auto' id="userImage" alt="user image" data-initial-src="<?php if ($result['imagePath'])
-                                                                                                                                                echo "https://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($result['imagePath']));
-                                                                                                                                          else echo '/image/default_male.jpeg'; ?>">
-                                                </img>
-                                                <label class='btn btn-sm btn-light border border-dark mt-3 mx-auto'>
-                                                      <input accept='image/jpeg,image/png' id="imageInput" type='file' class='d-none' onchange="setNewImage(event)"></input>
-                                                      Browse
-                                                </label>
-                                                <p id="imageFileName" class='mx-auto mt-2'></p>
-                                                <div class='mx-auto text-danger d-none' id="imgeFileError">
-                                                      <p class='text-danger'><i class="bi bi-exclamation-triangle"></i>&nbsp;</p>
-                                                      <p class='text-danger' id='imgeFileErrorMessage'></p>
-                                                </div>
-                                          </div>
-                                    </div>
-                                    <div class="col-lg-7 col-12">
-                                          <div class='w-100 d-flex flex-column h-100'>
-                                                <div class="mt-auto mb-2 px-lg-5 px-3">
-                                                      <label for="nameInput" class="form-label fw-medium">Name:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                                      <input autocomplete="name" type="text" class="form-control" id="nameInput" data-initial-value="<?php echo $result['name']; ?>" placeholder="Enter name">
-                                                </div>
-                                                <div class="my-2 px-lg-5 px-3">
-                                                      <label for="emailInput" class="form-label fw-medium">Email:</label>
-                                                      <input readonly autocomplete="email" type="email" class="form-control" id="emailInput" data-initial-value="<?php echo $result['email']; ?>" disabled placeholder="Enter email address">
-                                                </div>
-                                                <div class="my-2 px-lg-5 px-3">
-                                                      <label for="phoneInput" class="form-label fw-medium">Phone:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                                      <input autocomplete="tel" type="tel" class="form-control" id="phoneInput" data-initial-value="<?php echo $result['phone']; ?>" placeholder="Enter phone number">
-                                                </div>
-                                                <div class="my-2 px-lg-5 px-3">
-                                                      <label for="dobInput" class="form-label fw-medium">Date Of Birth:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                                      <input autocomplete="bday" type="date" class="form-control" id="dobInput" data-initial-value="<?php echo $result['dob']; ?>">
-                                                </div>
-                                                <div class="my-2 px-lg-5 px-3">
-                                                      <label for="genderInput" class="form-label fw-medium">Gender:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                                      <select autocomplete="sex" class="form-select" aria-label="Select gender" id='genderInput' data-initial-value="<?php echo $result['gender']; ?>">
-                                                            <option value=null>Choose your gender</option>
-                                                            <option <?php if ($result['gender'] === 'M') echo 'selected'; ?> value="M">Male</option>
-                                                            <option <?php if ($result['gender'] === 'F') echo 'selected'; ?> value="F">Female</option>
-                                                            <option <?php if ($result['gender'] === 'O') echo 'selected'; ?> value="O">Other</option>
-                                                      </select>
-                                                </div>
-                                                <div class="mb-auto mt-2 px-lg-5 px-3">
-                                                      <label for="addressInput" class="form-label fw-medium">Address:<span class='fw-bold text-danger'>&nbsp;*</span></label>
-                                                      <input autocomplete="off" type="text" class="form-control" id="addressInput" data-initial-value="<?php echo $result['address']; ?>" placeholder="Enter address">
-                                                </div>
-                                          </div>
-                                    </div>
-                              </div>
-                              <div>
-                                    <hr class='mx-2'>
-                                    <div class='d-flex justify-content-end me-2 mb-2'>
-                                          <button class='btn btn-secondary me-2' type='button' onclick="resetForm()">Reset</button>
-                                          <button class='btn btn-primary ms-2' type='submit' onclick="saveChange()">Save Changes</button>
-                                    </div>
-                              </div>
-                        </form>
                   </div>
                   <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="modalLabel">
                         <div class="modal-dialog modal-dialog-centered">

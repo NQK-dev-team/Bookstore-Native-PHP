@@ -1,5 +1,6 @@
 .block {
-      width: 80%;
+      width: 95%;
+      height: 95%;
 }
 
 .custom_image {
@@ -32,7 +33,7 @@
 }
 
 .books {
-      max-height: 300px !important;
+      max-height: 250px !important;
       overflow: auto;
 }
 
@@ -54,6 +55,15 @@
       -webkit-line-clamp: 10;
       /* Number of lines to show before ellipsis */
       -webkit-box-orient: vertical;
+}
+
+.selected {
+      color: #007bff;
+      border-bottom: 1px solid #007bff;
+}
+
+.hover-tab:hover {
+      color: #007bff;
 }
 
 @media only screen and (max-width:767px) {
