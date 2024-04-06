@@ -266,8 +266,28 @@ WHERE discount_rank = 1');
                                           <input type="hidden" name="commentTime" value="'.date('Y-m-d H:i:s').'">
                                           
                                           <input type="hidden" name="bookID" value="'.$bookID.'">
-                                          <textarea name="content" ></textarea>
-                                          <button type="submit" name="commentSubmit">Submit</button>
+                                          <section style="background-color: #eee;">
+                                                <div class="container my-5 py-5">
+                                                      <div class="row d-flex justify-content-center">
+                                                            <div class="col-md-12 col-lg-10 col-xl-8">
+                                                                  <div class="card">
+                                                                        <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                                                                              <div class="d-flex flex-start w-100">
+
+                                                                                    <div class="form-outline w-100">
+                                                                                          <textarea name="content" class="form-control" id="textAreaExample1" rows="4" style="background: #fff;"></textarea>
+                                                                                          <label class="form-label" for="textAreaExample1">Message</label>
+                                                                                    </div>
+                                                                              </div>
+                                                                              <div class="float-end mt-2 pt-1">
+                                                                                    <button type="submit" name="commentSubmit" class="btn btn-primary btn-sm">Post comment</button>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </section>
                                     </form>';
                               }
                         getComment($conn, $bookID);

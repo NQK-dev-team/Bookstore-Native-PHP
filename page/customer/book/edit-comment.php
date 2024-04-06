@@ -86,7 +86,7 @@ $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port)
                                           <a
                                           name="back-to-book"
                                           class="btn btn-info text-light"
-                                          href="book-detail?bookID=' . $bookID . '"
+                                          href="book-detail?id=' . $bookID . '"
                                           role="button"
                                           >Back to book</a>
                                           

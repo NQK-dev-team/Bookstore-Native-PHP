@@ -19,21 +19,21 @@ function setComment($conn, $bookID) {
             $nextCommentIdx = 1;
         }
         $result = $conn->query("SELECT * FROM comment");
+        $found = false;
         while ($row = $result->fetch_assoc()) {
             if($row['customerID'] == $customerID && $row['bookID'] == $bookID){
                 $sql3 = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
-            $result3 = $conn->query($sql3);
-            break;
+                $result3 = $conn->query($sql3);
+                $found = true;
+                break;
+            }
         }
-        if($result->fetch_assoc() == null){
+
+        if(!$found){
             $sql2 = "INSERT INTO comment (customerID, bookID) VALUES ('$customerID', '$bookID')";
             $result2 = $conn->query($sql2);
             $sql3 = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
             $result3 = $conn->query($sql3);
-        }
-        // $sql2 = "INSERT INTO comment (customerID, bookID) VALUES ('$customerID', '$bookID')";
-        // $result2 = $conn->query($sql2);
-        
         }
     }
 }
