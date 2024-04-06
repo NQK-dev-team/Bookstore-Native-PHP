@@ -28,6 +28,22 @@ begin
 end//
 delimiter ;
 
+drop trigger if exists fileOrderContainBusinessConstraintInsertTrigger;
+delimiter //
+create trigger fileOrderContainBusinessConstraintInsertTrigger
+before insert on fileOrderContain
+for each row
+begin
+    declare customerID varchar(20);
+    
+    select customerOrder.customerID into customerID from customerOrder where id=new.orderID;
+    
+    if exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID and customerOrder.status=true and customerOrder.customerID=customerID where fileOrderContain.orderID!=new.orderID and fileOrderContain.bookID=new.bookID) then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This customer has already bought this book!';
+    end if;
+end//
+delimiter ;
+
 -- This trigger will delete the empty order
 -- drop trigger if exists fileOrderContainBusinessConstraintDeleteTrigger2;
 -- delimiter //

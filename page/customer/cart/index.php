@@ -43,15 +43,19 @@ if ($return_status_code === 400) {
                               <hr>
                               <div class='row flex-grow-1 overflow-hidden'>
                                     <div class='col-lg-8 col-12 d-flex flex-column'>
-                                          <h4>File Copies</h4>
-                                          <div class="w-100 bg-white border rounded border-2 overflow-y-auto overflow-x-hidden item-container" id='fileList'></div>
-
-                                          <h4 class='mt-3'>Physical Copies</h4>
-                                          <div class='mb-2'>
-                                                <label class='fw-bold form-label' for="physicalDestination">Delivery Address:&nbsp;</label>
-                                                <input id='physicalDestination' class='form-control border-2'></input>
+                                          <div class='flex-column' id='fileSection'>
+                                                <h4>File Copies</h4>
+                                                <div class="w-100 bg-white border rounded border-3 overflow-y-auto overflow-x-hidden item-container" id='fileList'></div>
                                           </div>
-                                          <div class="w-100 bg-white border rounded border-2 overflow-y-auto overflow-x-hidden mb-lg-4 item-container" id='physicalList'></div>
+
+                                          <div class='flex-column' id='physicalSection'>
+                                                <h4 class='mt-3'>Physical Copies</h4>
+                                                <div class='mb-2'>
+                                                      <label class='fw-bold form-label' for="physicalDestination">Delivery Address:&nbsp;</label>
+                                                      <input id='physicalDestination' class='form-control border-3'></input>
+                                                </div>
+                                                <div class="w-100 bg-white border rounded border-3 overflow-y-auto overflow-x-hidden mb-lg-4 item-container" id='physicalList'></div>
+                                          </div>
                                     </div>
                                     <div class='col-lg-4 col-12 mt-3 mt-lg-0'>
                                           <div class='border border-3 rounded py-2 px-3 mb-5'>
@@ -164,7 +168,7 @@ if ($return_status_code === 400) {
                                                                         <label for="card-expiration">Expiration</label>
                                                                   </div>
                                                                   <div class="form-floating ms-md-3 mt-3 mt-md-0">
-                                                                        <input type="password" class="form-control border-2" id="card-cvv" placeholder="" maxlength="3">
+                                                                        <input type="password" class="form-control border-2" id="card-cvv" placeholder="" maxlength="3" autocomplete="off">
                                                                         <label for="card-cvv">CVV</label>
                                                                   </div>
                                                             </div>
