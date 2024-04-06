@@ -77,6 +77,10 @@
       border-bottom: 2px solid rgb(255, 125, 0);
 }
 
+.card-img-top {
+      height: 350px;
+}
+
 @media only screen and (max-width:767px) {
 
       #slideNavigate,
@@ -91,6 +95,7 @@
 
       .card-img-top {
             width: 150px;
+            height: 250px;
       }
 
       .card p {
