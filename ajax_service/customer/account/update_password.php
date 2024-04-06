@@ -38,17 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                   $confirmPassword = sanitize(rawurldecode($_PUT['confirmPassword']));
 
                   if (!$oldPassword) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Current password not provided!']);
                         exit;
                   }
 
                   if (!$newPassword) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'New password not provided!']);
                         exit;
                   } else if (strlen($newPassword) < 8) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'New password must be at least 8 characters long!']);
                         exit;
                   } else {
@@ -56,18 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
-                              http_response_code(400);
                               echo json_encode(['error' => 'New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!']);
                               exit;
                         }
                   }
 
                   if (!$confirmPassword) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'No confirm new password provided!']);
                         exit;
                   } else if ($confirmPassword !== $newPassword) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Confirm new password does not match!']);
                         exit;
                   }
@@ -102,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                   $password = $result['password'];
                   $email = $result['email'];
                   if (!verify_password($oldPassword, $password)) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Current password not correct!']);
                         $stmt->close();
                         $conn->close();

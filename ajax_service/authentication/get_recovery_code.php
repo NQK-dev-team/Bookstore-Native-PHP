@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   // Validate email
                   if (!$email) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   }

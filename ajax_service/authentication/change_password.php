@@ -26,17 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $user_type = sanitize(rawurldecode($_POST['type']));
 
                   if (!$email) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'No email address provided!']);
                         exit;
                   }
 
                   if (!$password) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'No new password provided!']);
                         exit;
                   } else if (strlen($password) < 8) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'New password must be at least 8 characters long!']);
                         exit;
                   } else {
@@ -44,18 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if ($matchResult === false) {
                               throw new Exception('Error occurred during password format check!');
                         } else if ($matchResult === 0) {
-                              http_response_code(400);
                               echo json_encode(['error' => 'New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters!']);
                               exit;
                         }
                   }
 
                   if (!$confirmPassword) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'No confirm password provided!']);
                         exit;
                   } else if ($confirmPassword !== $password) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Confirm new password does not match!']);
                         exit;
                   }
@@ -89,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
 
                         if (abs($interval) > 300) {
-                              http_response_code(400);
+                              http_response_code(408);
                               echo json_encode(['error' => 'Password changing time exceeds 5 minutes time limit, please request another recovery code and try again!']);
                               exit;
                         }
