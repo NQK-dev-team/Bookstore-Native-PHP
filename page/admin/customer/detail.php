@@ -111,11 +111,8 @@ if ($return_status_code === 400) {
                                     <hr class='mx-2'>
                               </div>
                               <div class='w-100 flex-grow-1 mb-2 d-flex flex-column'>
-                                    <div class='d-flex px-4'>
-                                          <p class='fw-medium'>Current Accummulated Points:&nbsp;</p>
-                                          <p id="current_point" class='text-success'></p>
-                                    </div>
-                                    <div class='px-4'>
+                                    <p class='fw-medium px-2'>Current Accummulated Points:&nbsp;<span id="current_point" class='text-success'></span></p>
+                                    <div class='px-2'>
                                           <form class="d-flex align-items-center w-100 search_form mt-2" role="search" id="search_order_form">
                                                 <button title='search order' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
                                                       <svg fill="#000000" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#000000" stroke-width="1.568">

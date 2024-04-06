@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $interval = $current_time->getTimestamp() - $_SESSION['recovery_state_set_time']->getTimestamp();
 
                         if (abs($interval) > 300) {
-                              http_response_code(400);
+                              http_response_code(408);
                               echo json_encode(['error' => 'Password changing time exceeds 5 minutes time limit, please request another recovery code and try again!']);
                               exit;
                         }

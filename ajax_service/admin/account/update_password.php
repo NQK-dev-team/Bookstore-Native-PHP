@@ -67,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         echo json_encode(['error' => 'No confirm new password provided!']);
                         exit;
                   } else if ($confirmPassword !== $newPassword) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Confirm new password does not match!']);
                         exit;
                   }
@@ -102,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                   $password = $result['password'];
                   $email = $result['email'];
                   if (!verify_password($oldPassword, $password)) {
-                        http_response_code(400);
                         echo json_encode(['error' => 'Current password not correct!']);
                         $stmt->close();
                         $conn->close();

@@ -155,6 +155,7 @@ if ($return_status_code === 400) {
                                     </div>
                               </form>
                               <div id='historyPurchase' class='flex-column'>
+                                    <p class='fw-medium'>Current Accummulated Points:&nbsp;<span id="current_point" class='text-success'></span></p>
                                     <div>
                                           <form class="d-flex align-items-center w-100 search_form mt-2" role="search" id="search_order_form">
                                                 <button title='search order' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
