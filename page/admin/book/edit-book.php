@@ -12,7 +12,7 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
       unset($_SESSION['update_customer_id']);
-      
+
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
       if (isset($_GET['id'])) {
@@ -182,6 +182,33 @@ if ($return_status_code === 400) {
                         }
                   }
                   $stmt->close();
+
+                  $stmt = $conn->prepare('select exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=? and customerOrder.status=true) as result');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where fileOrderContain.bookID=? and customerOrder.status=true) as result` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->bind_param('s', $id);
+                  $isSuccess = $stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->rollback();
+                        $conn->close();
+                        exit;
+                  } else {
+                        $result = $stmt->get_result();
+                        $result = $result->fetch_assoc();
+                        $stmt->close();
+
+                        if ($result['result'] === 1)
+                              $query_result['fileCopy']['deletable'] = false;
+                        else
+                              $query_result['fileCopy']['deletable'] = true;
+                  }
                   $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
@@ -221,7 +248,7 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div class='w-100 h-100 d-flex'>
-                        <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
+                        <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column my-4'>
                               <h1 class='ms-xl-3 mt-2 mx-auto'>Edit Book</h1>
                               <div class="ms-auto me-3 mt-xl-3 mb-3 mb-xl-2 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
                                     <button class="btn btn-secondary ms-1" onclick="resetForm()" type='button'>Reset</button>
@@ -305,7 +332,7 @@ if ($return_status_code === 400) {
                                                                   </span>
                                                                   <div class="d-flex align-items-center mt-auto" id="btn_grp">
                                                                         <div class="d-flex align-items-center">
-                                                                              <?php if ($query_result['fileCopy']['filePath'])
+                                                                              <?php if ($query_result['fileCopy']['filePath'] && $query_result['fileCopy']['deletable'])
                                                                                     echo '<div class=\'me-3\'>
                                                                                     <input onchange="setRemoveFile(event)" type="checkbox" class="btn-check" id="btncheck1">
                                                                                     <label class="btn btn-outline-danger btn-sm" for="btncheck1">Remove file</label>

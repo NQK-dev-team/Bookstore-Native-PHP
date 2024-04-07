@@ -40,7 +40,7 @@ if ($return_status_code === 400) {
             ?>
             <section id="page">
                   <div class='w-100 h-100 d-flex'>
-                        <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column overflow-y-auto overflow-x-hidden'>
+                        <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column my-4'>
                               <h1 class='ms-xl-3 mt-2 mx-auto'>Add Book</h1>
                               <div class="ms-auto me-3 mt-xl-3 mb-3 mb-xl-2 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
                                     <button class="btn btn-secondary ms-1" onclick="resetForm()" type='button'>Reset</button>
