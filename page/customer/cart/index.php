@@ -232,7 +232,7 @@ if ($return_status_code === 400) {
                                           <p>You order has been purchased successfully!</p>
                                     </div>
                                     <div class="modal-footer">
-                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+                                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="$('#card-payment').prop('checked',true); selectCardPayment(true);">Confirm</button>
                                     </div>
                               </div>
                         </div>

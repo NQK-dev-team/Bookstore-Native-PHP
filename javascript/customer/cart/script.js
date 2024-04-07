@@ -814,7 +814,7 @@ function selectCardPayment(selected)
       else
       {
             $('#card_input').addClass('none');
-            $('#jcb-payment,#visa-payment,#mastercard-payment').prop('checked', false);
-            $('#card-holder-name,#card-number,#card-expiration,#card-cvv').val('');
       }
+      $('#jcb-payment,#visa-payment,#mastercard-payment').prop('checked', false);
+      $('#card-holder-name,#card-number,#card-expiration,#card-cvv').val('');
 }
