@@ -2,6 +2,7 @@
       width: 95%;
       max-width: 30rem;
       min-height: 400px;
+      z-index: 100;
 }
 
 .error_message {
@@ -23,6 +24,16 @@
 
 .used_error {
       display: none;
+}
+
+.background {
+      background-image: url('/image/bookstore-bg.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: blur(8px);
+      position: absolute;
+      height: 100%;
+      width: 100%;
 }
 
 #recovery_email_form {
