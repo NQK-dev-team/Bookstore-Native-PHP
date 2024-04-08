@@ -41,7 +41,7 @@ if ($return_status_code === 400) {
             <section id="page">
                   <div class='w-100 d-flex flex-column h-100'>
                         <h1 class='mx-auto mt-2'>Book Statistics</h1>
-                        <div class='mt-3 d-flex flex-md-row flex-column align-items-md-center container-fluid mb-3'>
+                        <div class='mt-3 d-flex flex-md-row flex-column align-items-md-center container-fluid'>
                               <div class='d-flex align-items-center'>
                                     <label for='startDateInput' class="me-2 form-label mb-0 fw-bold fs-5">Start</label>
                                     <input type="date" class="form-control w-auto pointer" id="startDateInput" aria-describedby="Start Date Input">
