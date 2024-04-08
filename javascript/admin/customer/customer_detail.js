@@ -309,10 +309,6 @@ function findOrder()
       const search = encodeData($('#search_order').val().replace('/-/g', ''));
       const date = encodeData($('#orderDateInput').val());
 
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
-
       $.ajax({
             url: '/ajax_service/admin/customer/get_order_list.php',
             method: 'GET',
@@ -323,14 +319,6 @@ function findOrder()
             dataType: 'json',
             success: function (data)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#nameInput').prop('disabled', true);
-                  $('#dobInput').prop('disabled', true);
-                  $('#genderInput').prop('disabled', true);
-                  $('#addressInput').prop('disabled', true);
-
                   if (data.error)
                   {
                         $('#errorModal').modal('show');
@@ -369,14 +357,6 @@ function findOrder()
 
             error: function (err)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#nameInput').prop('disabled', true);
-                  $('#dobInput').prop('disabled', true);
-                  $('#genderInput').prop('disabled', true);
-                  $('#addressInput').prop('disabled', true);
-
                   console.error(err);
                   if (err.status >= 500)
                   {
@@ -397,10 +377,6 @@ async function orderDetail(code, time, price, discount)
       $('#orderTime').text(time);
       $('#orderPrice').text(price);
       $('#orderDiscount').text(discount);
-
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
 
       let failed = false;
 
@@ -479,14 +455,6 @@ async function orderDetail(code, time, price, discount)
             error: function (err)
             {
                   failed = true;
-
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#nameInput').prop('disabled', true);
-                  $('#dobInput').prop('disabled', true);
-                  $('#genderInput').prop('disabled', true);
-                  $('#addressInput').prop('disabled', true);
 
                   console.error(err);
                   if (err.status >= 500)
@@ -578,14 +546,6 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#nameInput').prop('disabled', true);
-                  $('#dobInput').prop('disabled', true);
-                  $('#genderInput').prop('disabled', true);
-                  $('#addressInput').prop('disabled', true);
-
                   console.error(err);
                   if (err.status >= 500)
                   {
@@ -600,14 +560,6 @@ async function orderDetail(code, time, price, discount)
       });
 
       if (failed) return;
-
-      $('*').removeClass('wait');
-      $('button, input').prop('disabled', false);
-      $('a').removeClass('disable_link');
-      $('#nameInput').prop('disabled', true);
-      $('#dobInput').prop('disabled', true);
-      $('#genderInput').prop('disabled', true);
-      $('#addressInput').prop('disabled', true);
 
       $('#orderModal').modal('show');
 

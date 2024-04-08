@@ -58,7 +58,7 @@ function selectAllBookUpdateModal(e, type)
                         bookApply = [];
                         //selectAll = [];
                         $('#couponBookApply').val('');
-                        $('#couponBookApply').prop('disabled', true);
+                        $('#couponBookApply').prop('disabled', true).removeClass('pointer');
                   }
             }
             else if (!e.target.checked)
@@ -67,7 +67,7 @@ function selectAllBookUpdateModal(e, type)
                   {
                         bookApply = [...originalBookApply];
                         $('#couponBookApply').val(bookArr.length ? bookArr.join('\n') : '');
-                        $('#couponBookApply').prop('disabled', false);
+                        $('#couponBookApply').prop('disabled', false).addClass('pointer');
                   }
                   else
                   {
@@ -103,6 +103,10 @@ function acceptAnomalies(type, checked)
             bookApply = [];
             $('#couponBookApply').val('');
             $('#couponBookApply').prop('disabled', checked);
+            if (checked)
+                  $('#couponBookApply').removeClass('pointer');
+            else
+                  $('#couponBookApply').addClass('pointer');
             // if (checked)
             // {
             //       bookApply = [];
@@ -183,7 +187,7 @@ function openUpdateModal(id)
                                           <p class="form-label">Books Applied:</p>
                                           <input type="checkbox" class="btn-check" id="btncheck1" autocomplete="off" onclick="selectAllBookUpdateModal(event,1)" ${ data.query_result.applyForAll ? 'checked' : '' } data-default-check-state=${ data.query_result.applyForAll }>
                                           <label class="btn btn-outline-success btn-sm" for="btncheck1">All Books</label>
-                                          <textarea rows="5" readonly class="form-control pointer mt-2" id="couponBookApply" onclick="selectAllBookUpdateModal(null,2)" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
+                                          <textarea rows="5" readonly class="form-control ${ data.query_result.applyForAll ? '' : 'pointer' } mt-2" id="couponBookApply" onclick="selectAllBookUpdateModal(null,2)" ${ data.query_result.applyForAll ? 'disabled' : '' }>${ bookArr.length ? bookArr.join('\n') : '' }</textarea>
                                     </div>
                                     ${ new Date(data.query_result.startDate) <= new Date() ?
                                                 `<div class="form-check mt-3">

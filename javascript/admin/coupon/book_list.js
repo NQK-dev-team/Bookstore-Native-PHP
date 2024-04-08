@@ -215,13 +215,6 @@ function fetchBookList()
             return;
       }
 
-      const nextBtnDisabledProp = $('#book_next_button').prop('disabled');
-      const prevBtnDisabledProp = $('#book_prev_button').prop('disabled');
-
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
-
       $.ajax({
             url: '/ajax_service/admin/coupon/get_book_list.php',
             method: 'GET',
@@ -229,12 +222,6 @@ function fetchBookList()
             dataType: 'json',
             success: function (data)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#book_list_offset').prop('disabled', true);
-                  $('#couponBookApply').prop('disabled', $('#btncheck1').prop('checked'));
-
                   if (data.error)
                   {
                         $('#errorModal').modal('show');
@@ -330,14 +317,6 @@ function fetchBookList()
 
             error: function (err)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#book_next_button').prop('disabled', nextBtnDisabledProp);
-                  $('#book_prev_button').prop('disabled', prevBtnDisabledProp);
-                  $('#book_list_offset').prop('disabled', true);
-                  $('#couponBookApply').prop('disabled', $('#btncheck1').prop('checked'));
-
                   console.error(err);
                   if (err.status >= 500)
                   {
@@ -515,5 +494,9 @@ function clearForm()
       bookApply = [...originalBookApply];
       //selectAll = [];
       $('#couponBookApply').prop('disabled', ($('#btncheck1').attr('data-default-check-state') === 'true' || $('#btncheck1').attr('data-default-check-state') === '1'));
+      if ($('#couponBookApply').prop('disabled'))
+            $('#couponBookApply').removeClass('pointer');
+      else
+            $('#couponBookApply').addClass('pointer');
       $('#couponBookApply').val(textareaDefaultValue);
 }

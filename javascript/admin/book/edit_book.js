@@ -400,10 +400,6 @@ function submitForm()
       postData.append('pdf', newFile);
       postData.append('removeFile', removeFile);
 
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
-
       $.ajax({
             url: '/ajax_service/admin/book/update_book.php',
             method: 'POST',
@@ -416,10 +412,6 @@ function submitForm()
             dataType: 'json',
             success: function (data)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-
                   if (data.error)
                   {
                         $('#errorModal').modal('show');
@@ -497,10 +489,6 @@ function submitForm()
 
             error: function (err)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-
                   console.error(err);
                   if (err.status >= 500)
                   {

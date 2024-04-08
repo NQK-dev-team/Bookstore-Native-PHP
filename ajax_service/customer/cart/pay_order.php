@@ -273,8 +273,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $conn->commit();
 
-                  echo json_encode(['query_result' => true]);
-
                   $stmt = $conn->prepare('select email from appUser where id=?');
                   if (!$stmt) {
                         http_response_code(500);
@@ -362,6 +360,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   billing_mail($email, $orderCode, $purchaseTime, $totalDiscount, $totalCost, $fileOrder, $physicalOrder, $deliveryAddress);
 
                   $conn->close();
+
+                  echo json_encode(['query_result' => true]);
             } catch (Exception $e) {
                   http_response_code(500);
                   echo json_encode(['error' => $e->getMessage()]);

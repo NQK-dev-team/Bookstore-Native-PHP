@@ -765,6 +765,12 @@ function payOrder()
 {
       const deliveryAddress = encodeData($('#physicalDestination').val());
 
+      $('*').addClass('wait');
+      $('button, input').prop('disabled', true);
+      $('a').addClass('disable_link');
+
+      const disableProp = $('#physicalDestination').prop('disabled');
+
       $.ajax({
             url: '/ajax_service/customer/cart/pay_order.php',
             method: 'POST',
@@ -775,6 +781,11 @@ function payOrder()
             dataType: 'json',
             success: function (data)
             {
+                  $('*').removeClass('wait');
+                  $('button, input').prop('disabled', false);
+                  $('a').removeClass('disable_link');
+                  $('#physicalDestination').prop('disabled', disableProp);
+
                   if (data.error)
                   {
                         $('#errorModal').modal('show');
@@ -793,6 +804,11 @@ function payOrder()
 
             error: function (err)
             {
+                  $('*').removeClass('wait');
+                  $('button, input').prop('disabled', false);
+                  $('a').removeClass('disable_link');
+                  $('#physicalDestination').prop('disabled', disableProp);
+
                   console.error(err);
                   if (err.status >= 500)
                   {

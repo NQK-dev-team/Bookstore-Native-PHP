@@ -238,13 +238,6 @@ function fetchBookList()
             return;
       }
 
-      const nextBtnDisabledProp = $('#next_button').prop('disabled');
-      const prevBtnDisabledProp = $('#prev_button').prop('disabled');
-
-      $('*').addClass('wait');
-      $('button, input').prop('disabled', true);
-      $('a').addClass('disable_link');
-
       $.ajax({
             url: '/ajax_service/admin/book/retrieve_list.php',
             method: 'GET',
@@ -252,11 +245,6 @@ function fetchBookList()
             dataType: 'json',
             success: function (data)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#list_offset').prop('disabled', true);
-
                   if (data.error)
                   {
                         $('#errorModal').modal('show');
@@ -385,13 +373,6 @@ function fetchBookList()
 
             error: function (err)
             {
-                  $('*').removeClass('wait');
-                  $('button, input').prop('disabled', false);
-                  $('a').removeClass('disable_link');
-                  $('#next_button').prop('disabled', nextBtnDisabledProp);
-                  $('#prev_button').prop('disabled', prevBtnDisabledProp);
-                  $('#list_offset').prop('disabled', true);
-
                   console.error(err);
                   if (err.status >= 500)
                   {
