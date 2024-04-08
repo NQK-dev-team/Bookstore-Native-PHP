@@ -16,6 +16,8 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../tool/php/send_mail.php';
+require_once __DIR__ . '/../../../tool/php/formatter.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['deliveryAddress'])) {
@@ -271,8 +273,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $conn->commit();
 
-                  $conn->close();
                   echo json_encode(['query_result' => true]);
+
+                  $stmt = $conn->prepare('select email from appUser where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select email from appUser where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->bind_param('s', $_SESSION['id']);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $email = $stmt->get_result()->fetch_assoc()['email'];
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select orderCode,purchaseTime,totalCost,totalDiscount from customerOrder where id=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select orderCode,purchaseTime,totalCost,totalDiscount from customerOrder where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->bind_param('s', $orderID);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result()->fetch_assoc();
+                  $orderCode = splitOrderCode($result['orderCode']);
+                  $purchaseTime = $result['purchaseTime'];
+                  $totalCost = $result['totalCost'];
+                  $totalDiscount = $result['totalDiscount'];
+                  $stmt->close();
+
+                  billing_mail($email, $orderCode, $purchaseTime, $totalDiscount, $totalCost);
+
+                  $conn->close();
             } catch (Exception $e) {
                   http_response_code(500);
                   echo json_encode(['error' => $e->getMessage()]);

@@ -301,4 +301,42 @@ function phone_change($email, $phone)
             throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
       }
 }
+
+function billing_mail($email, $orderCode, $purchaseTime, $discount, $price)
+{
+      global $mail;
+
+      try {
+            $mail->clearAllRecipients();
+            $mail->addAddress($email);
+      } catch (Exception $e) {
+            throw new Exception('Failed to add email address: ' . $e->getMessage());
+      }
+
+      $mail->Subject = 'Order Purchased!'; {
+            $temp = "<div>
+            <h3>Thank you for purchasing, here is your order detail:</h3>
+            <div>
+            <p>Order: <strong>{$orderCode}</strong></p>
+            <p>Order Time: {$purchaseTime}</p>
+            <p>Total Discount: {$discount}</p>
+            <p>Total Price: <strong>{$price}</strong></p>
+            </div>
+      </div>";
+
+            $mail->Body = $temp;
+      } {
+            $temp = "Thank you for purchasing, here is your order detail:\n
+            Order: {$orderCode}\n
+            Order Time: {$purchaseTime}\n
+            Total Discount: {$discount}\n
+            Total Price: {$price}\n";
+
+            $mail->AltBody = $temp;
+      }
+
+      if (!$mail->send()) {
+            throw new Exception('Mailer Error: ' . $mail->ErrorInfo);
+      }
+}
 ?>
