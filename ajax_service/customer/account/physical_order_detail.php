@@ -118,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         }
                         $sub_stmt->close();
 
-                        unset($row['id']);
                         $finalResult[] = $row;
                   }
                   $stmt->close();
