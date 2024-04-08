@@ -302,7 +302,7 @@ function phone_change($email, $phone)
       }
 }
 
-function billing_mail($email, $orderCode, $purchaseTime, $discount, $price)
+function billing_mail($email, $orderCode, $purchaseTime, $discount, $price, $fileOrder, $physicalOrder, $deliveryAddress)
 {
       global $mail;
 
@@ -314,23 +314,62 @@ function billing_mail($email, $orderCode, $purchaseTime, $discount, $price)
       }
 
       $mail->Subject = 'Order Purchased!'; {
+            $fileTemp = '';
+            $physicalTemp = '';
+            if (count($fileOrder)) {
+                  $fileTemp = '<h3>File Order</h3>';
+                  foreach ($fileOrder as $order) {
+                        $fileTemp .= "<p>{$order}</p>";
+                  }
+            }
+            if (count($physicalOrder)) {
+                  $physicalTemp = "<h3>Physical Order</h3>
+                  <p>Delivery Address: <strong>{$deliveryAddress}</strong></p>";
+                  foreach ($physicalOrder as $order) {
+                        $physicalTemp .= "<p>{$order}</p>";
+                  }
+            }
+
             $temp = "<div>
             <h3>Thank you for purchasing, here is your order detail:</h3>
             <div>
             <p>Order: <strong>{$orderCode}</strong></p>
-            <p>Order Time: {$purchaseTime}</p>
-            <p>Total Discount: {$discount}</p>
-            <p>Total Price: <strong>{$price}</strong></p>
+            <p>Order Time: $purchaseTime</p>
+            <p>Total Discount: $$discount</p>
+            <p>Total Price: <strong>$$price</strong></p>
+            <hr>
+            {$fileTemp}
+            {$physicalTemp}
             </div>
       </div>";
 
             $mail->Body = $temp;
       } {
+            $fileTemp = '';
+            $physicalTemp = '';
+
+            if (count($fileOrder)) {
+                  $fileTemp = "File Order\n";
+                  foreach ($fileOrder as $order) {
+                        $fileTemp .= "$order\n";
+                  }
+            }
+            if (count($physicalOrder)) {
+                  $physicalTemp = "Physical Order\n
+                  Delivery Address: {$deliveryAddress}\n";
+                  foreach ($physicalOrder as $order) {
+                        $physicalTemp .= "$order\n";
+                  }
+            }
+
             $temp = "Thank you for purchasing, here is your order detail:\n
             Order: {$orderCode}\n
             Order Time: {$purchaseTime}\n
-            Total Discount: {$discount}\n
-            Total Price: {$price}\n";
+            Total Discount: $$discount\n
+            Total Price: $$price\n
+            ------------------------------\n
+            {$fileTemp}\n
+            {$physicalTemp}\n";
 
             $mail->AltBody = $temp;
       }

@@ -315,7 +315,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $totalDiscount = $result['totalDiscount'];
                   $stmt->close();
 
-                  billing_mail($email, $orderCode, $purchaseTime, $totalDiscount, $totalCost);
+                  $stmt = $conn->prepare('select name,edition from book join fileOrderContain on fileOrderContain.bookID=book.id where orderID=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select name,edition from book join fileOrderContain on fileOrderContain.bookID=book.id where orderID=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->bind_param('s', $orderID);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  $fileOrder = [];
+                  while ($row = $result->fetch_assoc()) {
+                        $fileOrder[] = $row['name'] . ' - ' . convertToOrdinal($row['edition']) . ' edition';
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare('select name,edition from book join physicalOrderContain on physicalOrderContain.bookID=book.id where orderID=?');
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select name,edition from book join physicalOrderContain on physicalOrderContain.bookID=book.id where orderID=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $stmt->bind_param('s', $orderID);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  $physicalOrder = [];
+                  while ($row = $result->fetch_assoc()) {
+                        $physicalOrder[] = $row['name'] . ' - ' . convertToOrdinal($row['edition']) . ' edition';
+                  }
+                  $stmt->close();
+
+                  billing_mail($email, $orderCode, $purchaseTime, $totalDiscount, $totalCost, $fileOrder, $physicalOrder, $deliveryAddress);
 
                   $conn->close();
             } catch (Exception $e) {
