@@ -346,12 +346,12 @@ if ($return_status_code === 400) {
                                                 <p id='orderTime'></p>
                                           </div>
                                           <div class='d-flex'>
-                                                <p class='fw-medium'>Total Price:&nbsp;</p>
-                                                <p id='orderPrice'></p>
-                                          </div>
-                                          <div class='d-flex'>
                                                 <p class='fw-medium'>Total Discount:&nbsp;</p>
                                                 <p id='orderDiscount'></p>
+                                          </div>
+                                          <div class='d-flex'>
+                                                <p class='fw-medium'>Total Price:&nbsp;</p>
+                                                <p id='orderPrice'></p>
                                           </div>
 
                                           <div class='mt-4'>
