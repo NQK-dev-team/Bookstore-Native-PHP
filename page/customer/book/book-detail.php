@@ -101,7 +101,7 @@ WHERE discount_rank = 1');
             <link rel="stylesheet" href="/css/preset_style.css">
             <!-- <link rel="stylesheet" href="../../css/customer/book/book-detail.css"> -->
             <meta name="author" content="Anh Khoa">
-            <meta name="description" content="Home page of NQK bookstore">
+            <meta name="description" content="Book detail page of NQK bookstore">
             <style>
                   .author {
                         color: gray;
@@ -155,6 +155,24 @@ WHERE discount_rank = 1');
                   .delete-form button:hover{
                        opacity: 1;
                   }
+                  .rating .bi {
+                        font-size: 2em;
+                        color: gray;
+                        cursor: pointer;
+                  }
+
+                  .rating .bi.bi-star-fill {
+                        color: gold;
+                  }
+                  .rating1 .bi {
+                        font-size: 2em;
+                        color: gray;
+                        cursor: pointer;
+                  }
+
+                  .rating1 .bi.bi-star-fill {
+                        color: gold;
+                  }
             </style>
             <title>Book detail</title>
       </head>
@@ -164,6 +182,7 @@ WHERE discount_rank = 1');
             require_once __DIR__ . '/../../../layout/customer/header.php';
             ?>
             <section id="page">
+                  
                   <?php
                   while ($book = $result->fetch_assoc()) {
                   if($bookID == $book['id']){
@@ -255,10 +274,22 @@ WHERE discount_rank = 1');
                                     echo '<div class="col-11"> ';
                                     echo '<p class="h5">Description: </p>';
                                     echo '<p class="h6 text-justify">' . $book['description'] . '</p>';
+
+                                    //rating test
+                                    echo ' <div class="rating">
+                                    <i class="bi bi-star" data-value="1" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="2" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="3" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="4" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="5" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                              </div>
+                              <div class="rating1" id="rating-holder">'.$book['id'].'
+                              </div>'; //rating test ends
                                     echo'</div>';
                               echo'</div>';
 
                               echo '<hr>';//break to separate book detail and comment section
+                              
                               //comment section
                               if(isset($_SESSION['id'])){
                               echo '<form method="POST" class="comment-input" action="'.setComment($conn, $bookID).'">
