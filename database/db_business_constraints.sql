@@ -185,7 +185,7 @@ create trigger ratingInsertTrigger2
 after insert on rating
 for each row
 begin
-	update book set avgRating=round((select total(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
+	update book set avgRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
 end//
 delimiter ;
 
@@ -196,7 +196,7 @@ create trigger ratingUpdateTrigger
 after update on rating
 for each row
 begin
-	update book set avgRating=round((select total(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
+	update book set avgRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
 end//
 delimiter ;
 -- ** End of rating **
