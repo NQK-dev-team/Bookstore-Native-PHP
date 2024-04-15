@@ -193,9 +193,20 @@ WHERE discount_rank = 1');
                         echo '<p class="h1">Book Detail</p>';
                         echo '<hr>';
                         echo'</div>';
-                              echo '<div class="row justify-content-center align-items-center g-2 m-3">
-                                    <div class="col-11 col-md-5 d-flex justify-content-center align-items-center">';
-                                    echo '<img src="' . $imagePath . '" class="card-img-top w-75 rounded" alt="..."> </div>';
+                              echo '<div class="row justify-content-center align-items-center g-2 m-3">';
+                                    echo '<div class="col-11 col-md-5 d-flex flex-column justify-content-center align-items-center">';
+                                    echo '<img src="' . $imagePath . '" class="card-img-top w-75 rounded" alt="...">';
+                                    echo '<div
+                                          name=""
+                                          id="add_to_cart"
+                                          class="btn btn-danger text-light mt-3"
+                                          href="#"
+                                          role="button"
+                                          data-book-id="' . $book['id'] . '"
+                                          data-user-id="' . $_SESSION['id'] . '"
+                                          >Add Digital Copy</div>';
+
+                                    echo '</div>'; //end col-11
                                     echo '<div class="col-11 col-md-7"> ';
                                     echo '<h2 class="display-4">' . $book['name'] . '</h2>';
                                     if($book["discount"] > 0){
@@ -237,29 +248,29 @@ WHERE discount_rank = 1');
                                     echo '<p class="h5 author">Author: ' . $book['authorName'] . '</p>';
                                     echo '<p class="h5">Publisher: ' . $book['publisher'] . '</p>';
                                     echo '<p class="h5">Publish date: ' . $book['publishDate'] . '</p>';
-                                  echo '<a
-                                          name=""
-                                          id="add_to_cart"
-                                          class="btn btn-primary text-light col-12 col-md-4 col-xxl-3 mt-3"
-                                          href="#"
-                                          role="button"
-                                          data-book-id="' . $book['id'] . '"
-                                          data-user-id="' . $_SESSION['id'] . '"
-                                          >Add Digital Copy</a>';
+
                                     echo '<p class="h5 mt-4 ">Amount of physical copy to buy: </p>';
                                     echo '<div class="col-12 col-md-4 col-xxl-3 mt-3">
-                                          <input
-                                                type="number"
-                                                id="quantity"
-                                                min="1"
-                                                value="1"
-                                                class="form-control mt-1"
-                                          >
+                                          <div class="input-group mt-1">
+                                                <div class="input-group-prepend">
+                                                      <button class="btn btn-outline-danger" type="button" id="button-decrease">-</button>
+                                                </div>
+                                                <input
+                                                      type="number"
+                                                      id="quantity"
+                                                      min="1"
+                                                      value="1"
+                                                      class="form-control"
+                                                >
+                                                <div class="input-group-append">
+                                                      <button class="btn btn-outline-success" type="button" id="button-increase">+</button>
+                                                </div>
+                                                </div>
                                           </div>
                                           <a
                                           name=""
                                           id="add_to_cart_physical"
-                                          class="btn btn-primary text-light col-12 col-md-4 col-xxl-3 mt-3"
+                                          class="btn btn-light text-danger col-12 col-md-4 col-xxl-3 mt-3 border border-danger"
                                           href="#"
                                           role="button"
                                           data-book-id="' . $book['id'] . '"
@@ -334,8 +345,8 @@ WHERE discount_rank = 1');
                   }
                   
             }
-            
                   ?>
+            
             </section>
             
             <?php

@@ -37,6 +37,18 @@ $('#add_to_cart_physical').on('click', function(event) {
     });
 });
 
+document.getElementById('button-decrease').addEventListener('click', function() {
+    var quantity = document.getElementById('quantity');
+    if (quantity.value > 1) {
+        quantity.value--;
+    }
+});
+
+document.getElementById('button-increase').addEventListener('click', function() {
+    var quantity = document.getElementById('quantity');
+    quantity.value++;
+});
+
 document.querySelectorAll('.rating .bi').forEach((star, index, starList) => {
     star.addEventListener('mouseover', function() {
         // Change this star and all previous stars to filled stars
