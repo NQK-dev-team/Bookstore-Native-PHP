@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                               } else if ($sub_result->num_rows === 1) {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
                                           $queryResult[$idx]['physicalCopy']['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
-                                          $queryResult[$idx]['physicalCopy']['inStock'] = $sub_row['inStock'] ? $sub_row['inStock'] : "N/A";
+                                          $queryResult[$idx]['physicalCopy']['inStock'] = $sub_row['inStock'];
                                     }
                               }
                               $sub_stmt->close();
