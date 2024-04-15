@@ -323,7 +323,7 @@ if ($return_status_code === 400) {
 
                                           <div class='mt-4'>
                                                 <div class='flex-column' id='fileCopyDisplay'>
-                                                      <h5>File Copies</h5>
+                                                      <h5>E-books</h5>
                                                       <div class="w-100 overflow-x-auto">
                                                             <table class="table table-hover border border-2 table-bordered w-100">
                                                                   <thead>
@@ -348,7 +348,7 @@ if ($return_status_code === 400) {
                                                       </div>
                                                 </div>
                                                 <div class='flex-column mt-3' id='physicalCopyDisplay'>
-                                                      <h5>Physical Copies</h5>
+                                                      <h5>Hardcovers</h5>
                                                       <p>
                                                             <span class='fw-medium'>Delivery Address:&nbsp;</span>
                                                             <span id='physicalDestination'></span>

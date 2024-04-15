@@ -107,28 +107,10 @@ create table rating(
     primary key(customerID,bookID),
     star double not null,
     check(star>=0 and star<=5),
+    comment text,
+    ratingTime datetime not null default CURRENT_TIMESTAMP,
     foreign key (customerID) references customer(id) on delete cascade on update cascade,
     foreign key (bookID) references book(id) on delete cascade on update cascade
-);
-
-create table comment(
-	customerID varchar(20),
-    bookID varchar(20),
-    primary key(customerID,bookID),
-    foreign key (customerID) references customer(id) on delete cascade on update cascade,
-    foreign key (bookID) references book(id) on delete cascade on update cascade
-);
-
-create table commentContent(
-	customerID varchar(20),
-    bookID varchar(20),
-    commentIdx int default 1, -- This only used to form a primary key, no further usage other than that.
-	check(commentIdx>=1),
-    primary key(customerID,bookID,commentIdx),
-    commentTime datetime not null,
-    content varchar(2000) not null,
-    foreign key (customerID) references comment(customerID) on delete cascade on update cascade,
-    foreign key (bookID) references comment(bookID) on delete cascade on update cascade
 );
 
 create table customerOrder(

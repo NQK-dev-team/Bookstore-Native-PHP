@@ -252,15 +252,13 @@ function fetchBookList()
                                     $('<div>').addClass('truncate').text(data.query_result[0][i].description))
                               );
 
-                              if (data.query_result[0][i].avgRating)
-                                    trElem.append($('<td>').addClass('align-middle col-1').append(
-                                          $(`<span class='text-nowrap'><span class='text-warning'>${ displayRatingStars(data.query_result[0][i].avgRating) }</span>&nbsp;(${ data.query_result[0][i].avgRating })</span>`)
-                                    ));
-                              else
-                                    trElem.append($('<td>').addClass('align-middle').text('N/A'));
+                              trElem.append($('<td>').addClass('align-middle col-1').append(
+                                    $(`<span class='text-nowrap'><span class='text-warning'>${ displayRatingStars(data.query_result[0][i].avgRating) }</span>&nbsp;(${ data.query_result[0][i].avgRating })</span>`)
+                              ));
+
                               trElem.append($('<td>').addClass('align-middle').addClass('col-1').append(
                                     $(`<div class="d-flex flex-column">`).append(
-                                          $(`<p class='text-nowrap'>Physical: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
+                                          $(`<p class='text-nowrap'>Hardcover: ${ data.query_result[0][i].physicalCopy.price } (in stock: ${ data.query_result[0][i].physicalCopy.inStock })</p>`)
                                     ).append(
                                           $(`<p class='text-nowrap'>E-book: ${ data.query_result[0][i].fileCopy.price } <a title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? "read PDF file" : 'no PDF file' }\" ${ data.query_result[0][i].fileCopy.filePath !== '' ? "target='_blank'" : '' } ${ data.query_result[0][i].fileCopy.filePath } alt='${ data.query_result[0][i].fileCopy.filePath !== '' ? 'PDF file' : 'No PDF file' }'>
                                           <i class=\"bi bi-file-earmark-fill text-secondary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" data-bs-title=\"${ data.query_result[0][i].fileCopy.filePath !== '' ? 'Read file' : 'No PDF file' }\"></i>

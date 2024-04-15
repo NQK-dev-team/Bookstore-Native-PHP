@@ -330,19 +330,19 @@ function submitForm()
 
       if (!((typeof physicalPrice === 'number' && !isNaN(physicalPrice) && physicalPrice > 0) || (typeof physicalPrice === 'string' && physicalPrice === '')))
       {
-            reportCustomValidity($('#physicalPriceInput').get(0), 'Physical copy price invalid!');
+            reportCustomValidity($('#physicalPriceInput').get(0), 'Hardcover price invalid!');
             return;
       }
 
       if (!((typeof inStock === 'number' && !isNaN(inStock) && inStock >= 0) || (typeof inStock === 'string' && inStock === '')))
       {
-            reportCustomValidity($('#inStockInput').get(0), 'Physical copy in stock invalid!');
+            reportCustomValidity($('#inStockInput').get(0), 'Hardcover in stock invalid!');
             return;
       }
 
       if (!((typeof filePrice === 'number' && !isNaN(filePrice) && filePrice > 0) || (typeof filePrice === 'string' && filePrice === '')))
       {
-            reportCustomValidity($('#filePriceInput').get(0), 'File copy price invalid!');
+            reportCustomValidity($('#filePriceInput').get(0), 'E-book price invalid!');
             return;
       }
 
