@@ -1,9 +1,25 @@
+document.getElementsByName('bookType').forEach((elem) => {
+    elem.addEventListener('change', function() {
+        if (this.value === 'ebook') {
+            document.getElementById('add_to_cart').style.display = 'block';
+            document.getElementById('Choose-physical').style.display = 'none';
+            document.getElementById('ebook-price').style.display = 'block';
+            document.getElementById('hardcover-price').style.display = 'none';
+        } else if (this.value === 'hardcover') {
+            document.getElementById('Choose-physical').style.display = 'block';
+            document.getElementById('add_to_cart').style.display = 'none';
+            document.getElementById('ebook-price').style.display = 'none';
+            document.getElementById('hardcover-price').style.display = 'block';
+        }
+    });
+});
+
 $('#add_to_cart').on('click', function(event) {
     event.preventDefault();
 
     var bookId = $(this).data('book-id');
     var userId = $(this).data('user-id');
-    alert('The book has been added to your cart.');
+    
     // Now you can use bookId and userId in your AJAX request or any other logic...
     console.log('Book ID:', bookId, 'User ID:', userId);
     $.ajax({
@@ -13,6 +29,13 @@ $('#add_to_cart').on('click', function(event) {
         success: function(response) {
             // Handle the response...
             console.log(response);
+            
+            if (response.includes("This customer has already bought this book!")) {
+                alert('You have already bought this book!');
+            }  
+            else {
+                alert('The book has been added to your cart.');
+            }
         }
     });
 });

@@ -176,6 +176,15 @@ WHERE discount_rank = 1');
                   .round{
                         border-radius: 20px;
                   }
+                  /* Hide the radio buttons */
+                  input[type="radio"] {
+                        
+                  }
+
+                  /* Style the labels */
+                  .btn-outline-primary {
+                  transition: box-shadow .3s ease;
+                  }
             </style>
             <title>Book detail</title>
       </head>
@@ -195,16 +204,7 @@ WHERE discount_rank = 1');
                         echo'</div>';
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">';
                                     echo '<div class="col-11 col-md-5 d-flex flex-column justify-content-center align-items-center">';
-                                    echo '<img src="' . $imagePath . '" class="card-img-top w-75 rounded" alt="...">';
-                                    echo '<div
-                                          name=""
-                                          id="add_to_cart"
-                                          class="btn btn-danger text-light mt-3"
-                                          href="#"
-                                          role="button"
-                                          data-book-id="' . $book['id'] . '"
-                                          data-user-id="' . $_SESSION['id'] . '"
-                                          >Add E-book Copy</div>';
+                                    echo '<img src="' . $imagePath . '" class="card-img-top w-50 rounded" alt="...">';
 
                                     echo '</div>'; //end col-11
                                     echo '<div class="col-11 col-md-7"> ';
@@ -239,15 +239,15 @@ WHERE discount_rank = 1');
                                           </svg> '.$book["discount"].'%</p>';
                                     }
                                     if($book["discount"] > 0){
-                                          echo '<p class="price h4">E-book price: <span style="text-decoration: line-through;">' . $book["filePrice"] . '$</span> ' .round($book["filePrice"] - $book["filePrice"] * $book["discount"] / 100, 2). '$</p>';
-                                          echo '<p class="price h4">Hardcover price: <span style="text-decoration: line-through;">' . $book["physicalPrice"] . '$</span> ' .round($book["physicalPrice"] - $book["physicalPrice"] * $book["discount"] / 100, 2). '$</p>';
+                                          echo '<p class="price h4" id="ebook-price" style="display: none;">E-book price: <span style="text-decoration: line-through;">' . $book["filePrice"] . '$</span> ' .round($book["filePrice"] - $book["filePrice"] * $book["discount"] / 100, 2). '$</p>';
+                                          echo '<p class="price h4" id="hardcover-price" style="display: none;">Hardcover price: <span style="text-decoration: line-through;">' . $book["physicalPrice"] . '$</span> ' .round($book["physicalPrice"] - $book["physicalPrice"] * $book["discount"] / 100, 2). '$</p>';
                                           }
                                           else {
-                                          echo "<p class=\"price h4\">"."E-book price: ".$book["filePrice"]."$"."</p>";
-                                          echo "<p class=\"price h4\">"."Hardcover price: ".$book["physicalPrice"]."$"."</p>";
+                                          echo '<p class="price h4" id="ebook-price" style="display: none;"> E-book price: '.$book["filePrice"].'$</p>';
+                                          echo '<p class="price h4" id="hardcover-price" style="display: none;"> Hardcover price: '.$book["physicalPrice"].'$</p>';
                                           }
-                                    echo '<span class="text-warning h3" id="avg-rating">'.displayRatingStars($book['star']).'</span>';
-                                                           echo "(".$book['star'].")";
+                                    echo '<div> <span class="text-warning h3" id="avg-rating">'.displayRatingStars($book['star']).'</span>';
+                                                           echo "(".$book['star'].") </div>";
 
                                     echo '<div id="rating-container" style="display: none;">';
                                     //rating test
@@ -265,10 +265,34 @@ WHERE discount_rank = 1');
                               //       <div id="rating-response"></div>';
                               //echo '</div>'; //rating test ends
 echo '</div>';//end reting-container
+                                    // echo '<div class="btn-group btn-group-toggle mt-3" data-toggle="buttons">
+                                    // <label class="btn btn-outline-primary">
+                                    //       <input type="radio" id="ebook" name="bookType" value="ebook"> E-book
+                                    // </label>
+                                    // <label class="btn btn-outline-primary">
+                                    //       <input type="radio" id="hardcover" name="bookType" value="hardcover"> Hardcover
+                                    // </label>
+                                    // </div>';
+                                    echo '<input type="radio" class="btn-check" name="bookType" id="ebook" value="ebook" autocomplete="off">
+                                    <label class="btn btn-outline-danger mt-3" for="ebook">E-book</label>
 
-                                    echo '<p class="h5 mt-4 ">Amount of physical copy to buy: </p>';
+                                    <input type="radio" id="hardcover" name="bookType" value="hardcover" class="btn-check ">
+                                    <label class="btn btn-outline-danger mt-3" for="hardcover">Hardcover</label>';
+                                     echo '<div
+                                          name=""
+                                          id="add_to_cart"
+                                          class="btn btn-outline-primary col-12 col-md-4 col-xxl-3 mt-3"
+                                          style="display: none;"
+                                          href="#"
+                                          role="button"
+                                          data-book-id="' . $book['id'] . '"
+                                          data-user-id="' . $_SESSION['id'] . '"
+                                          >Add E-book Copy</div>';//add to cart button for e-book
+                                    
+                                    echo '<div id="Choose-physical" style="display: none;">';
+                                    //echo '<p class="h5 mt-4 ">Amount of Hardcovers to buy: </p>';
                                     echo '<div class="col-12 col-md-4 col-xxl-3 mt-3">
-                                          <div class="input-group mt-1">
+                                          <div class="input-group mt-1" style="display: none;">
                                                 <div class="input-group-prepend">
                                                       <button class="btn btn-outline-danger" type="button" id="button-decrease">-</button>
                                                 </div>
@@ -287,13 +311,14 @@ echo '</div>';//end reting-container
                                           <a
                                           name=""
                                           id="add_to_cart_physical"
-                                          class="btn btn-light text-danger col-12 col-md-4 col-xxl-3 mt-3 border border-danger"
+                                          class="btn btn-outline-primary col-12 col-md-4 col-xxl-3 mt-3"
                                           href="#"
                                           role="button"
                                           data-book-id="' . $book['id'] . '"
                                           data-user-id="' . $_SESSION['id'] . '"
                                           >Add Hardcovers</a>';
 
+                                    echo '</div>';//end Choose physical
                                     echo '</div>';
                               echo'</div>';
                               echo '<div class="row justify-content-center align-items-center g-2 mt-3">';
