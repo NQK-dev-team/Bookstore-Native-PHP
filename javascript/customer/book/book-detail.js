@@ -56,16 +56,16 @@ document.querySelectorAll('.rating .bi').forEach((star, index, starList) => {
     const ratingHolder = document.getElementById('rating-holder');
     const bookId = this.getAttribute('data-book-id');
     const userId = this.getAttribute('data-user-id');
-
+    const ratingResponse = document.getElementById('rating-response');
     // Clear the rating holder
-    ratingHolder.innerHTML = '';
+    //ratingHolder.innerHTML = '';
 
     // Add the filled stars to the rating holder
-    for (let i = 0; i < rating; i++) {
-        const star = document.createElement('i');
-        star.className = 'bi bi-star-fill';
-        ratingHolder.appendChild(star);
-    }
+    // for (let i = 0; i < rating; i++) {
+    //     const star = document.createElement('i');
+    //     star.className = 'bi bi-star-fill';
+    //     ratingHolder.appendChild(star);
+    // }
         // Send the rating to the server
         $.ajax({
             url: '/ajax_service/customer/book/rating.php',
@@ -74,6 +74,17 @@ document.querySelectorAll('.rating .bi').forEach((star, index, starList) => {
             success: function(response) {
                 console.log(rating, bookId, userId);
                 console.log(response);
+                ratingResponse.innerHTML = response;
+                if (response.trim() === 'Rating saved successfully.') {
+                    ratingHolder.innerHTML = '';
+
+                    //Add the filled stars to the rating holder
+                    for (let i = 0; i < rating; i++) {
+                        const star = document.createElement('i');
+                        star.className = 'bi bi-star-fill';
+                        ratingHolder.appendChild(star);
+                    }
+                }
             },
             error: function(error) {
                 console.error('Error:', error);

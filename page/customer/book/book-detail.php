@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../../tool/php/role_check.php';
 require_once __DIR__ . '/../../../tool/php/login_check.php';
 require_once __DIR__ . '/../../../tool/php/ratingStars.php';
 require_once __DIR__ . '/../../../tool/php/comment.php';
+require_once __DIR__ . '/../../../ajax_service/customer/book/rating.php';
 
 $return_status_code = return_navigate_error();
 
@@ -272,19 +273,24 @@ WHERE discount_rank = 1');
 
                               echo '<div class="row justify-content-center align-items-center g-2 mt-3">';
                                     echo '<div class="col-11"> ';
-                                    echo '<p class="h5">Description: </p>';
-                                    echo '<p class="h6 text-justify">' . $book['description'] . '</p>';
 
                                     //rating test
                                     echo ' <div class="rating">
+                                    <span class="h5">Rate the book: </span>
                                     <i class="bi bi-star" data-value="1" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
                                     <i class="bi bi-star" data-value="2" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
                                     <i class="bi bi-star" data-value="3" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
                                     <i class="bi bi-star" data-value="4" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
                                     <i class="bi bi-star" data-value="5" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
                               </div>
-                              <div class="rating1" id="rating-holder">'.$book['id'].'
+                              <div class="rating1" >
+                                    <span class="h5">Your rating: </span>
+                                    <span id="rating-holder">'.GetRating($conn, $book['id'], $_SESSION['id']).' </span>
+                                    <div id="rating-response"></div>
                               </div>'; //rating test ends
+
+                                    echo '<p class="h5 mt-3">Description: </p>';
+                                    echo '<p class="h6 text-justify">' . $book['description'] . '</p>';
                                     echo'</div>';
                               echo'</div>';
 
