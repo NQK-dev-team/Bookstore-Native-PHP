@@ -41,35 +41,40 @@ CREATE TRIGGER avgRatingAfterInsertTrigger
 AFTER insert ON rating
 FOR EACH ROW
 BEGIN
-    DECLARE totalStar double default 0;
-    DECLARE totalRating int default 0;
-    DECLARE newAverageRating double default 0;
+    -- DECLARE totalStar double default 0;
+--     DECLARE totalRating int default 0;
+--     DECLARE newAverageRating double default 0;
 
-    SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = NEW.bookID;
+--     SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = NEW.bookID;
+--     
+--     IF totalRating > 0 THEN
+-- 		SET newAverageRating := totalStar / totalRating;
+--     END IF;
+--     UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
     
-    IF totalRating > 0 THEN
-		SET newAverageRating := totalStar / totalRating;
-    END IF;
-    UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
+    update book set avgRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
 END//
 DELIMITER ;
 
 drop trigger if exists avgRatingAfterUpdateTrigger;
 DELIMITER //
 CREATE TRIGGER avgRatingAfterUpdateTrigger
-AFTER update ON rating
+before update ON rating
 FOR EACH ROW
 BEGIN
-	DECLARE totalStar double default 0;
-    DECLARE totalRating int default 0;
-    DECLARE newAverageRating double default 0;
+	-- DECLARE totalStar double default 0;
+--     DECLARE totalRating int default 0;
+--     DECLARE newAverageRating double default 0;
 
-    SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = NEW.bookID;
-    
-    IF totalRating > 0 THEN
-		SET newAverageRating := totalStar / totalRating;
-    END IF;
-    UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
+--     SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = NEW.bookID;
+--     
+--     IF totalRating > 0 THEN
+-- 		SET newAverageRating := totalStar / totalRating;
+--     END IF;
+--     UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
+
+	update book set avgRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
+    set new.ratingTime=now();
 END//
 DELIMITER ;
 
@@ -79,15 +84,17 @@ CREATE TRIGGER avgRatingAfterDeleteTrigger
 AFTER delete ON rating
 FOR EACH ROW
 BEGIN
-	DECLARE totalStar double default 0;
-    DECLARE totalRating int default 0;
-    DECLARE newAverageRating double default 0;
+	-- DECLARE totalStar double default 0;
+--     DECLARE totalRating int default 0;
+--     DECLARE newAverageRating double default 0;
 
-    SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = old.bookID;
+--     SELECT COUNT(*), SUM(star) INTO totalRating, totalStar FROM rating WHERE rating.bookID = old.bookID;
+--     
+--     IF totalRating > 0 THEN
+-- 		SET newAverageRating := totalStar / totalRating;
+--     END IF;
+--     UPDATE book SET avgRating = newAverageRating WHERE book.id=old.bookID;
     
-    IF totalRating > 0 THEN
-		SET newAverageRating := totalStar / totalRating;
-    END IF;
-    UPDATE book SET avgRating = newAverageRating WHERE book.id=old.bookID;
+    update book set avgRating=round((select sum(star) from rating where rating.bookID=old.bookID)/(select count(*) from rating where rating.bookID=old.bookID),1) where book.id=old.bookID;
 END//
 DELIMITER ;
