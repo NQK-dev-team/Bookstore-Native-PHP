@@ -159,19 +159,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   if ($physicalPrice && (!is_numeric($physicalPrice) || $physicalPrice <= 0)) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Physical copy price invalid!']);
+                        echo json_encode(['error' => 'Hardcover price invalid!']);
                         exit;
                   }
 
                   if ($inStock && (!is_numeric($inStock) || $inStock < 0)) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'Physical copy in stock invalid!']);
+                        echo json_encode(['error' => 'Hardcover in stock invalid!']);
                         exit;
                   }
 
                   if ($filePrice && (!is_numeric($filePrice) || $filePrice <= 0)) {
                         http_response_code(400);
-                        echo json_encode(['error' => 'File copy price invalid!']);
+                        echo json_encode(['error' => 'E-book price invalid!']);
                         exit;
                   }
 

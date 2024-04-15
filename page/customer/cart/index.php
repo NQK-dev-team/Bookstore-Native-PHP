@@ -44,12 +44,12 @@ if ($return_status_code === 400) {
                               <div class='row flex-grow-1 overflow-hidden'>
                                     <div class='col-lg-8 col-12 d-flex flex-column'>
                                           <div class='flex-column mb-4' id='fileSection'>
-                                                <h4>File Copies</h4>
+                                                <h4>E-books</h4>
                                                 <div class="w-100 bg-white border rounded border-3 overflow-y-auto overflow-x-hidden item-container" id='fileList'></div>
                                           </div>
 
                                           <div class='flex-column' id='physicalSection'>
-                                                <h4>Physical Copies</h4>
+                                                <h4>Hardcovers</h4>
                                                 <div class='mb-2'>
                                                       <label class='fw-bold form-label' for="physicalDestination">Delivery Address:&nbsp;</label>
                                                       <input id='physicalDestination' class='form-control border-3'></input>
