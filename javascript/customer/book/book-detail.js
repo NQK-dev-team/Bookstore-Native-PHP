@@ -49,6 +49,24 @@ document.getElementById('button-increase').addEventListener('click', function() 
     quantity.value++;
 });
 
+document.getElementById('avg-rating').addEventListener('mouseover', function() {
+    document.getElementById('rating-container').style.display = 'block';
+});
+
+document.getElementById('avg-rating').addEventListener('mouseout', function() {
+    document.getElementById('rating-container').style.display = 'none';
+});
+
+document.getElementById('rating-container').addEventListener('mouseover', function() {
+    document.getElementById('rating-container').style.display = 'block';
+});
+
+document.getElementById('rating-container').addEventListener('mouseout', function() {
+    document.getElementById('rating-container').style.display = 'none';
+});
+
+
+
 document.querySelectorAll('.rating .bi').forEach((star, index, starList) => {
     star.addEventListener('mouseover', function() {
         // Change this star and all previous stars to filled stars

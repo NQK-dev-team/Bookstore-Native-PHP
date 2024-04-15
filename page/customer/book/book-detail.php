@@ -115,7 +115,6 @@ WHERE discount_rank = 1');
                         padding: 20px;
                         border: 1px solid #e6e6e6;
                         border-radius: 5px;
-                        background-color: hsl(0, 0%, 98%);
                         position: relative;
                   }
                   .comment-box p{
@@ -174,6 +173,9 @@ WHERE discount_rank = 1');
                   .rating1 .bi.bi-star-fill {
                         color: gold;
                   }
+                  .round{
+                        border-radius: 20px;
+                  }
             </style>
             <title>Book detail</title>
       </head>
@@ -188,10 +190,8 @@ WHERE discount_rank = 1');
                   while ($book = $result->fetch_assoc()) {
                   if($bookID == $book['id']){
                   $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($book['imagePath']));
-                        echo ' <div class="container">';
+                        echo ' <div class="container bg-light round">';
                         echo '<div class="row justify-content-center align-items-center g-2 mt-3">';
-                        echo '<p class="h1">Book Detail</p>';
-                        echo '<hr>';
                         echo'</div>';
                               echo '<div class="row justify-content-center align-items-center g-2 m-3">';
                                     echo '<div class="col-11 col-md-5 d-flex flex-column justify-content-center align-items-center">';
@@ -204,23 +204,11 @@ WHERE discount_rank = 1');
                                           role="button"
                                           data-book-id="' . $book['id'] . '"
                                           data-user-id="' . $_SESSION['id'] . '"
-                                          >Add Digital Copy</div>';
+                                          >Add E-book Copy</div>';
 
                                     echo '</div>'; //end col-11
                                     echo '<div class="col-11 col-md-7"> ';
-                                    echo '<h2 class="display-4">' . $book['name'] . '</h2>';
-                                    if($book["discount"] > 0){
-                                                echo '<p class="text-danger"> <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                      <path d="M3.9889 14.6604L2.46891 13.1404C1.84891 12.5204 1.84891 11.5004 2.46891 10.8804L3.9889 9.36039C4.2489 9.10039 4.4589 8.59038 4.4589 8.23038V6.08036C4.4589 5.20036 5.1789 4.48038 6.0589 4.48038H8.2089C8.5689 4.48038 9.0789 4.27041 9.3389 4.01041L10.8589 2.49039C11.4789 1.87039 12.4989 1.87039 13.1189 2.49039L14.6389 4.01041C14.8989 4.27041 15.4089 4.48038 15.7689 4.48038H17.9189C18.7989 4.48038 19.5189 5.20036 19.5189 6.08036V8.23038C19.5189 8.59038 19.7289 9.10039 19.9889 9.36039L21.5089 10.8804C22.1289 11.5004 22.1289 12.5204 21.5089 13.1404L19.9889 14.6604C19.7289 14.9204 19.5189 15.4304 19.5189 15.7904V17.9403C19.5189 18.8203 18.7989 19.5404 17.9189 19.5404H15.7689C15.4089 19.5404 14.8989 19.7504 14.6389 20.0104L13.1189 21.5304C12.4989 22.1504 11.4789 22.1504 10.8589 21.5304L9.3389 20.0104C9.0789 19.7504 8.5689 19.5404 8.2089 19.5404H6.0589C5.1789 19.5404 4.4589 18.8203 4.4589 17.9403V15.7904C4.4589 15.4204 4.2489 14.9104 3.9889 14.6604Z" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M9 15L15 9" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M14.4945 14.5H14.5035" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                      <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                </g>
-                                          </svg> '.$book["discount"].'%</p>';
-                                    }
+                                    echo '<h1>' . $book['name'] . '</h2>';
                                     if($book['edition'] == 1){
                                           echo '<p class="h6">' . $book['edition'] . 'rst edition</p>';
                                     }
@@ -234,20 +222,49 @@ WHERE discount_rank = 1');
                                     else{
                                           echo '<p class="h6">' . $book['edition'] . 'th edition</p>';
                                     }
-                                    if($book["discount"] > 0){
-                                          echo '<p class="price h4">E-book price: <span style="text-decoration: line-through;">' . $book["filePrice"] . '$</span> ' .round($book["filePrice"] - $book["filePrice"] * $book["discount"] / 100, 2). '$</p>';
-                                          echo '<p class="price h4">Physical price: <span style="text-decoration: line-through;">' . $book["physicalPrice"] . '$</span> ' .round($book["physicalPrice"] - $book["physicalPrice"] * $book["discount"] / 100, 2). '$</p>';
-                                          }
-                                          else {
-                                          echo "<p class=\"price h4\">"."E-book price: ".$book["filePrice"]."$"."</p>";
-                                          echo "<p class=\"price h4\">"."Physical price: ".$book["physicalPrice"]."$"."</p>";
-                                          }
-                                    echo '<span class="text-warning">'.displayRatingStars($book['star']).'</span>';
-                                                           echo "(".$book['star'].")";
                                     echo '<p class="h5 mt-3">ISBN: ' . $book['isbn'] . '</p>';
                                     echo '<p class="h5 author">Author: ' . $book['authorName'] . '</p>';
                                     echo '<p class="h5">Publisher: ' . $book['publisher'] . '</p>';
                                     echo '<p class="h5">Publish date: ' . $book['publishDate'] . '</p>';
+                                    if($book["discount"] > 0){
+                                                echo '<p class="text-danger"> <svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
+                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                <g id="SVGRepo_iconCarrier">
+                                                      <path d="M3.9889 14.6604L2.46891 13.1404C1.84891 12.5204 1.84891 11.5004 2.46891 10.8804L3.9889 9.36039C4.2489 9.10039 4.4589 8.59038 4.4589 8.23038V6.08036C4.4589 5.20036 5.1789 4.48038 6.0589 4.48038H8.2089C8.5689 4.48038 9.0789 4.27041 9.3389 4.01041L10.8589 2.49039C11.4789 1.87039 12.4989 1.87039 13.1189 2.49039L14.6389 4.01041C14.8989 4.27041 15.4089 4.48038 15.7689 4.48038H17.9189C18.7989 4.48038 19.5189 5.20036 19.5189 6.08036V8.23038C19.5189 8.59038 19.7289 9.10039 19.9889 9.36039L21.5089 10.8804C22.1289 11.5004 22.1289 12.5204 21.5089 13.1404L19.9889 14.6604C19.7289 14.9204 19.5189 15.4304 19.5189 15.7904V17.9403C19.5189 18.8203 18.7989 19.5404 17.9189 19.5404H15.7689C15.4089 19.5404 14.8989 19.7504 14.6389 20.0104L13.1189 21.5304C12.4989 22.1504 11.4789 22.1504 10.8589 21.5304L9.3389 20.0104C9.0789 19.7504 8.5689 19.5404 8.2089 19.5404H6.0589C5.1789 19.5404 4.4589 18.8203 4.4589 17.9403V15.7904C4.4589 15.4204 4.2489 14.9104 3.9889 14.6604Z" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M9 15L15 9" stroke="#ff0000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M14.4945 14.5H14.5035" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                      <path d="M9.49451 9.5H9.50349" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </g>
+                                          </svg> '.$book["discount"].'%</p>';
+                                    }
+                                    if($book["discount"] > 0){
+                                          echo '<p class="price h4">E-book price: <span style="text-decoration: line-through;">' . $book["filePrice"] . '$</span> ' .round($book["filePrice"] - $book["filePrice"] * $book["discount"] / 100, 2). '$</p>';
+                                          echo '<p class="price h4">Hardcover price: <span style="text-decoration: line-through;">' . $book["physicalPrice"] . '$</span> ' .round($book["physicalPrice"] - $book["physicalPrice"] * $book["discount"] / 100, 2). '$</p>';
+                                          }
+                                          else {
+                                          echo "<p class=\"price h4\">"."E-book price: ".$book["filePrice"]."$"."</p>";
+                                          echo "<p class=\"price h4\">"."Hardcover price: ".$book["physicalPrice"]."$"."</p>";
+                                          }
+                                    echo '<span class="text-warning h3" id="avg-rating">'.displayRatingStars($book['star']).'</span>';
+                                                           echo "(".$book['star'].")";
+
+                                    echo '<div id="rating-container" style="display: none;">';
+                                    //rating test
+                                    echo ' <div class="rating">
+                                    <span class="h5">Rate the book: </span>
+                                    <i class="bi bi-star" data-value="1" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="2" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="3" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="4" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                                    <i class="bi bi-star" data-value="5" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
+                              </div>';
+                              // echo '<div class="rating1" >
+                              //       <span class="h5">My rating: </span>
+                              //       <span id="rating-holder">'.GetRating($conn, $book['id'], $_SESSION['id']).' </span>
+                              //       <div id="rating-response"></div>';
+                              //echo '</div>'; //rating test ends
+echo '</div>';//end reting-container
 
                                     echo '<p class="h5 mt-4 ">Amount of physical copy to buy: </p>';
                                     echo '<div class="col-12 col-md-4 col-xxl-3 mt-3">
@@ -260,7 +277,7 @@ WHERE discount_rank = 1');
                                                       id="quantity"
                                                       min="1"
                                                       value="1"
-                                                      class="form-control"
+                                                      class="form-control text-center"
                                                 >
                                                 <div class="input-group-append">
                                                       <button class="btn btn-outline-success" type="button" id="button-increase">+</button>
@@ -275,30 +292,14 @@ WHERE discount_rank = 1');
                                           role="button"
                                           data-book-id="' . $book['id'] . '"
                                           data-user-id="' . $_SESSION['id'] . '"
-                                          >Add Physical Copies</a>';
+                                          >Add Hardcovers</a>';
 
                                     echo '</div>';
                               echo'</div>';
-
-                              
-
                               echo '<div class="row justify-content-center align-items-center g-2 mt-3">';
                                     echo '<div class="col-11"> ';
 
-                                    //rating test
-                                    echo ' <div class="rating">
-                                    <span class="h5">Rate the book: </span>
-                                    <i class="bi bi-star" data-value="1" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
-                                    <i class="bi bi-star" data-value="2" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
-                                    <i class="bi bi-star" data-value="3" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
-                                    <i class="bi bi-star" data-value="4" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
-                                    <i class="bi bi-star" data-value="5" data-book-id="'.$book['id'].'" data-user-id="'. $_SESSION['id'].'"></i>
-                              </div>
-                              <div class="rating1" >
-                                    <span class="h5">Your rating: </span>
-                                    <span id="rating-holder">'.GetRating($conn, $book['id'], $_SESSION['id']).' </span>
-                                    <div id="rating-response"></div>
-                              </div>'; //rating test ends
+                                    
 
                                     echo '<p class="h5 mt-3">Description: </p>';
                                     echo '<p class="h6 text-justify">' . $book['description'] . '</p>';
@@ -307,7 +308,12 @@ WHERE discount_rank = 1');
 
                               echo '<hr>';//break to separate book detail and comment section
                               
-                              //comment section
+                              
+                        echo '</div>'; 
+
+
+                        echo '<div class="container bg-light round">';
+                        //comment section
                               if(isset($_SESSION['id'])){
                               echo '<form method="POST" class="comment-input" action="'.setComment($conn, $bookID).'">
                                           <input type="hidden" name="customerID" value="'.$_SESSION['id'].'">
@@ -341,7 +347,7 @@ WHERE discount_rank = 1');
                         getComment($conn, $bookID);
                         //comment section ends
                         //var_dump($_SESSION);
-                        echo '</div>'; 
+                        echo '</div>';//end 2nd container
                   }
                   
             }
