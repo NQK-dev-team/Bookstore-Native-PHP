@@ -41,6 +41,10 @@ begin
     if exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID and customerOrder.status=true and customerOrder.customerID=customerID where fileOrderContain.orderID!=new.orderID and fileOrderContain.bookID=new.bookID) then
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This customer has already bought this book!';
     end if;
+    
+    if (select price from fileCopy where id=new.bookID) is null or (select filePath from fileCopy where id=new.bookID) is null then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This e-book is not available for purchase!';
+    end if;
 end//
 delimiter ;
 
@@ -86,6 +90,18 @@ for each row
 begin
     if (select customerOrder.status from customerOrder where customerOrder.id=old.orderID) then
             SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Can not update content of order that has been purchased!';
+    end if;
+end//
+delimiter ;
+
+drop trigger if exists physicalOrderContainBusinessConstraintInsertTrigger;
+delimiter //
+create trigger physicalOrderContainBusinessConstraintInsertTrigger
+before insert on physicalOrderContain
+for each row
+begin
+    if (select price from physicalCopy where id=new.bookID) is null or (select inStock from physicalCopy where id=new.bookID)=0 then
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'This hardcover is not available for purchase!';
     end if;
 end//
 delimiter ;

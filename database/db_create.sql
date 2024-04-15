@@ -96,7 +96,7 @@ create table physicalCopy(
 	id varchar(20) primary key,
     price double,
     check (price>0),
-	inStock int,
+	inStock int not null default 0,
     check(inStock>=0),
     foreign key (id) references book(id) on delete cascade on update cascade
 );
