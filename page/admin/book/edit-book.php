@@ -250,6 +250,7 @@ if ($return_status_code === 400) {
                   <div class='w-100 h-100 d-flex'>
                         <form onsubmit="confirmSubmitForm(event)" class='position-relative border border-1 rounded border-dark custom_container m-auto bg-white d-flex flex-column my-4'>
                               <h1 class='ms-xl-3 mt-2 mx-auto'>Edit Book</h1>
+                              <hr class='mx-3'>
                               <div class="ms-auto me-3 mt-xl-3 mb-3 mb-xl-2 mt-5 order-xl-1 order-2 button_group align-self-xl-end">
                                     <button class="btn btn-secondary ms-1" onclick="resetForm()" type='button'>Reset</button>
                                     <button class="btn btn-success me-1" type='submit' onclick="clearAllCustomValidity()">Save</button>
@@ -309,7 +310,7 @@ if ($return_status_code === 400) {
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">
                                                       <div class='col'>
-                                                            <label for="physicalPriceInput" class="form-label">Physical Copy Price ($):</label>
+                                                            <label for="physicalPriceInput" class="form-label">Hardcover Price ($):</label>
                                                             <input step="any" type="number" class="form-control" id="physicalPriceInput" value="<?php if ($query_result['physicalCopy']['price']) echo $query_result['physicalCopy']['price']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['price']) echo 'Enter price'; ?>">
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col">
