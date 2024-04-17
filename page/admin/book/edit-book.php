@@ -315,7 +315,7 @@ if ($return_status_code === 400) {
                                                       </div>
                                                       <div class="ms-md-5 mt-2 mt-md-0 col">
                                                             <label for="inStockInput" class="form-label">In Stock:</label>
-                                                            <input type="number" class="form-control" id="inStockInput" value="<?php if ($query_result['physicalCopy']['inStock']) echo $query_result['physicalCopy']['inStock']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['inStock']) echo 'Enter number'; ?>">
+                                                            <input type="number" class="form-control" id="inStockInput" value="<?php if ($query_result['physicalCopy']['inStock'] || $query_result['physicalCopy']['inStock'] === 0) echo $query_result['physicalCopy']['inStock']; ?>" placeholder="<?php if (!$query_result['physicalCopy']['inStock']) echo 'Enter number'; ?>">
                                                       </div>
                                                 </div>
                                                 <div class="mb-auto mt-2 px-xl-5 px-3 d-flex flex-md-row flex-column row">

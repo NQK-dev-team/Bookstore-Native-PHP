@@ -226,7 +226,7 @@ function submitForm()
       const publisher = encodeData($('#publisherInput').val());
       const publishDate = encodeData($('#publishDateInput').val());
       const physicalPrice = encodeData($('#physicalPriceInput').val()) === '' ? '' : parseFloat(encodeData($('#physicalPriceInput').val()));
-      const inStock = encodeData($('#inStockInput').val()) === '' ? '' : parseInt(encodeData($('#inStockInput').val()));
+      let inStock = encodeData($('#inStockInput').val()) === '' ? '' : parseInt(encodeData($('#inStockInput').val()));
       const filePrice = encodeData($('#filePriceInput').val()) === '' ? '' : parseFloat(encodeData($('#filePriceInput').val()));
       const description = encodeData($('#descriptionInput').val());
 
@@ -338,6 +338,10 @@ function submitForm()
       {
             reportCustomValidity($('#inStockInput').get(0), 'Hardcover in stock invalid!');
             return;
+      } else if (inStock === '')
+      {
+            inStock = 0;
+            $('#inStockInput').val(0);
       }
 
       if (!((typeof filePrice === 'number' && !isNaN(filePrice) && filePrice > 0) || (typeof filePrice === 'string' && filePrice === '')))
