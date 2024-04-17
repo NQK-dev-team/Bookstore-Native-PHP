@@ -495,12 +495,12 @@ function fetchPhysicalOrder(isFirstTime)
                                     <div class='mt-lg-auto mx-lg-0 mx-auto mt-2 pt-lg-4 d-flex justify-content-center'>
                                           <div class="btn-group" role="group">
                                                 <input aria-label='Decrease amount' onclick='adjustAmount(false,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
-                                                <label class="btn btn-outline-danger" for="decrease_book_ammount_${ data.query_result.detail[i].id }">-</label>
+                                                <label class="btn btn-secondary" for="decrease_book_ammount_${ data.query_result.detail[i].id }">-</label>
 
-                                                <input onchange='checkAmmount("${ data.query_result.detail[i].id }",true)' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
+                                                <input onchange='checkAmmount("${ data.query_result.detail[i].id }",true)' type="number" class="fw-bold ammount_input ps-2 border border-2 border-secondary" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
 
                                                 <input aria-label='Increase amount' onclick='adjustAmount(true,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
-                                                <label class="btn btn-outline-success" for="increase_book_ammount_${ data.query_result.detail[i].id }">+</label>
+                                                <label class="btn btn-secondary" for="increase_book_ammount_${ data.query_result.detail[i].id }">+</label>
                                           </div>
                                     </div>
                                           <div class='d-flex mt-2 mb-lg-auto mx-auto'>
@@ -551,12 +551,12 @@ function fetchPhysicalOrder(isFirstTime)
                                     <div class='mt-lg-auto mx-lg-0 mx-auto mt-2 pt-lg-4 d-flex justify-content-center'>
                                           <div class="btn-group my-lg-auto mx-lg-0 mx-auto mt-2" role="group">
                                                 <input aria-label='Decrease amount' onclick='adjustAmount(false,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
-                                                <label class="btn btn-outline-danger" for="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">-</label>
+                                                <label class="btn btn-secondary" for="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">-</label>
 
-                                                <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }",true)' type="number" class="fw-bold ammount_input ps-2" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
+                                                <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }",true)' type="number" class="fw-bold ammount_input ps-2 border border-2 border-secondary" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
 
                                                 <input aria-label='Increase amount' onclick='adjustAmount(true,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
-                                                <label class="btn btn-outline-success" for="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">+</label>
+                                                <label class="btn btn-secondary" for="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">+</label>
                                           </div>
                                     </div>
                                           <div class='d-flex mt-2 mb-lg-auto mx-auto'>
@@ -689,9 +689,22 @@ function removeBook()
 function adjustAmount(isIncrease, id)
 {
       if (isIncrease)
+      {
             $(`#book_ammount_${ id }`).val(parseInt($(`#book_ammount_${ id }`).val()) + 1);
+            const inStock = parseInt($(`#in_stock_${ id }`).text());
+            if (parseInt($(`#book_ammount_${ id }`).val()) > inStock)
+            {
+                  $(`#book_ammount_${ id }`).val(inStock);
+            }
+      }
       else
+      {
             $(`#book_ammount_${ id }`).val(parseInt($(`#book_ammount_${ id }`).val()) - 1);
+            if (parseInt($(`#book_ammount_${ id }`).val()) < 1)
+            {
+                  $(`#book_ammount_${ id }`).val(1);
+            }
+      }
 
       checkAmmount(id, true);
 }
@@ -702,7 +715,7 @@ function checkAmmount(id, update = false)
       const inStock = parseInt($(`#in_stock_${ id }`).text());
 
       clearCustomValidity($(`#book_ammount_${ id }`).get(0));
-
+      //console.log($(`#book_ammount_${ id }`).get(0));
       if (amount < 0)
       {
             reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be negative!");
