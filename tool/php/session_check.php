@@ -21,7 +21,7 @@ function check_session()
       }
 
       if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['id']) && isset($_SESSION['type']) && ($_SESSION['type'] === 'admin' || $_SESSION['type'] === 'customer')) {
-            if (verifyUserID($_SESSION['id']))
+            if (verifyUserID($_SESSION['id'], $_SESSION['type']))
                   return true;
             else {
                   $_SESSION = [];
