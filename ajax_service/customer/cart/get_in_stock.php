@@ -1,17 +1,5 @@
 
 <?php
-require_once __DIR__ . '/../../../tool/php/session_check.php';
-
-if (!check_session()) {
-      http_response_code(403);
-      echo json_encode(['error' => 'Not authorized!']);
-      exit;
-} else if ($_SESSION['type'] !== 'customer') {
-      http_response_code(400);
-      echo json_encode(['error' => 'Bad request!']);
-      exit;
-}
-
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
