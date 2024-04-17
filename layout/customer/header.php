@@ -32,7 +32,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link fs-5 text-nowrap" href="/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
-                                    } else {
+                                    } else if (check_session() && $_SESSION['type'] === 'customer') {
                                           echo '<li class="nav-item mx-2">
                                                       <a class="nav-link fs-5 text-nowrap" href="/cart/" id="cart_nav">Cart</a>
                                                 </li>';

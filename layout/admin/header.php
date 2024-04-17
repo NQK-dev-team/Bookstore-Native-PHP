@@ -38,7 +38,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/authentication/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
                                                 <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/authentication/">Coupon</a></li>';
-                                                else
+                                                else if (check_session() && $_SESSION['type'] === 'admin')
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/book/">Book</a></li>
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/category/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/customer/">Customer</a></li>
@@ -50,7 +50,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           <?php
                                           if (!check_session())
                                                 echo '<a id="statistic_nav" class="nav-link d-inline-block fs-5" href="/admin/authentication/">Statistic</a>';
-                                          else
+                                          else if (check_session() && $_SESSION['type'] === 'admin')
                                                 echo '<a id="statistic_nav" class="nav-link d-inline-block fs-5" href="/admin/statistic/">Statistic</a>';
                                           ?>
                                     </li>
@@ -62,7 +62,7 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                           echo '<li class="nav-item ms-2">
                                                       <a class="nav-link d-inline-block fs-5" href="/admin/authentication/" id="signin_nav">Sign in</a>
                                                 </li>';
-                                    } else {
+                                    } else if (check_session() && $_SESSION['type'] === 'admin') {
                                           echo "<li class=\"nav-item ms-2\">
                                                 <a class=\"nav-link d-inline-block fs-5\" href=\"/admin/account/\" id=\"profile_nav\">Account</a>
                                           </li>";
