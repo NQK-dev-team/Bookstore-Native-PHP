@@ -186,7 +186,7 @@ function updateInStock(id)
                         $('#errorModal').modal('show');
                         $('#error_message').text(data.error);
                   }
-                  else if (data.query_result)
+                  else
                   {
                         $(`#in_stock_${ id }`).text(data.query_result);
                         checkAmmount(id);
