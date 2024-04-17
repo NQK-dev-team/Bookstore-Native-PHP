@@ -691,19 +691,19 @@ function adjustAmount(isIncrease, id)
       if (isIncrease)
       {
             $(`#book_ammount_${ id }`).val(parseInt($(`#book_ammount_${ id }`).val()) + 1);
-            const inStock = parseInt($(`#in_stock_${ id }`).text());
-            if (parseInt($(`#book_ammount_${ id }`).val()) > inStock)
-            {
-                  $(`#book_ammount_${ id }`).val(inStock);
-            }
+            // const inStock = parseInt($(`#in_stock_${ id }`).text());
+            // if (parseInt($(`#book_ammount_${ id }`).val()) > inStock)
+            // {
+            //       $(`#book_ammount_${ id }`).val(inStock);
+            // }
       }
       else
       {
             $(`#book_ammount_${ id }`).val(parseInt($(`#book_ammount_${ id }`).val()) - 1);
-            if (parseInt($(`#book_ammount_${ id }`).val()) < 1)
-            {
-                  $(`#book_ammount_${ id }`).val(1);
-            }
+            // if (parseInt($(`#book_ammount_${ id }`).val()) < 1)
+            // {
+            //       $(`#book_ammount_${ id }`).val(1);
+            // }
       }
 
       checkAmmount(id, true);
@@ -714,25 +714,34 @@ function checkAmmount(id, update = false)
       const amount = parseInt($(`#book_ammount_${ id }`).val());
       const inStock = parseInt($(`#in_stock_${ id }`).text());
 
-      clearCustomValidity($(`#book_ammount_${ id }`).get(0));
-      //console.log($(`#book_ammount_${ id }`).get(0));
-      if (amount < 0)
+      // clearCustomValidity($(`#book_ammount_${ id }`).get(0));
+
+      // if (amount < 0)
+      // {
+      //       reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be negative!");
+      //       return;
+      // } else if (amount === 0)
+      // {
+      //       reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be zero!");
+      //       return;
+      // }
+      // else if (amount > inStock)
+      // {
+      //       reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount exceeds in stock amount!");
+      //       return;
+      // }
+
+      if (amount < 1)
       {
-            reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be negative!");
-            return;
-      } else if (amount === 0)
-      {
-            reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be zero!");
-            return;
+            $(`#book_ammount_${ id }`).val(1);
       }
       else if (amount > inStock)
       {
-            reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount exceeds in stock amount!");
-            return;
+            $(`#book_ammount_${ id }`).val(inStock);
       }
 
       if (update)
-            updateAmount(amount, id);
+            updateAmount(parseInt($(`#book_ammount_${ id }`).val()), id);
 }
 
 function updateAmount(amount, id)
