@@ -731,7 +731,7 @@ function checkAmmount(id, update = false)
       //       return;
       // }
 
-      if (amount < 1)
+      if (amount < 1 && inStock >= 1)
       {
             $(`#book_ammount_${ id }`).val(1);
       }
