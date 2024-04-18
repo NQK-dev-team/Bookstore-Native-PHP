@@ -61,30 +61,30 @@ function adjustAmount(isIncrease)
     checkAmmount();
 }
 
-function checkAmmount()
+function checkAmmount(flag = false)
 {
     const amount = parseInt($(`#book_ammount`).val());
     const inStock = parseInt($(`#in_stock`).text());
 
-    // clearCustomValidity($(`#book_ammount`).get(0));
+    if (flag)
+    {
+        clearCustomValidity($(`#book_ammount`).get(0));
 
-    // if (amount < 0)
-    // {
-    //     reportCustomValidity($(`#book_ammount`).get(0), "Book amount can not be negative!");
-    //     $('#addToCartBtn').prop('disabled', true);
-    //     return;
-    // } else if (amount === 0)
-    // {
-    //     reportCustomValidity($(`#book_ammount`).get(0), "Book amount can not be zero!");
-    //     $('#addToCartBtn').prop('disabled', true);
-    //     return;
-    // }
-    // else if (amount > inStock)
-    // {
-    //     reportCustomValidity($(`#book_ammount`).get(0), "Book amount exceeds in stock amount!");
-    //     $('#addToCartBtn').prop('disabled', true);
-    //     return;
-    // }
+        if (amount < 0)
+        {
+            reportCustomValidity($(`#book_ammount`).get(0), "Book amount can not be negative!");
+            return;
+        } else if (amount === 0)
+        {
+            reportCustomValidity($(`#book_ammount`).get(0), "Book amount can not be zero!");
+            return;
+        }
+        else if (amount > inStock)
+        {
+            reportCustomValidity($(`#book_ammount`).get(0), "Book amount exceeds in stock amount!");
+            return;
+        }
+    }
 
     if (amount < 1 && inStock >= 1)
     {
@@ -114,7 +114,7 @@ function checkInStock()
             else
             {
                 $(`#in_stock`).text(data.query_result);
-                checkAmmount();
+                checkAmmount(true);
             }
         },
 
