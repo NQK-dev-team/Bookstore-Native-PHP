@@ -2,7 +2,7 @@ let deleteID = null, refreshList = null;
 let pause = false;
 
 
-$(document).ready(function ()
+$(document).ready(async function ()
 {
       $('#errorModal').on('hidden.bs.modal', function ()
       {
@@ -29,13 +29,18 @@ $(document).ready(function ()
       //       pause = false;
       // });
 
-      reEvalOrder(true);
+      await reEvalOrder(true);
 
-      fetchFileOrder();
+      await fetchFileOrder();
 
-      fetchPhysicalOrder(true);
+      await fetchPhysicalOrder(true);
 
-      updateBillingDetail();
+      await updateBillingDetail();
+
+      $('div[name="physical_row"]').each(function ()
+      {
+            updateInStock($(this).data('id'));
+      });
 
       setInterval(() =>
       {
@@ -79,7 +84,7 @@ function placeOrder()
       {
             const id = $(this).data('id');
 
-            checkAmmount(id);
+            checkAmmount(id, true);
 
             if ($(`#book_ammount_${ id }`).get(0).validationMessage)
             {
@@ -189,7 +194,7 @@ function updateInStock(id)
                   else
                   {
                         $(`#in_stock_${ id }`).text(data.query_result);
-                        checkAmmount(id);
+                        checkAmmount(id, true);
                   }
             },
 
@@ -209,9 +214,9 @@ function updateInStock(id)
       });
 }
 
-function reEvalOrder(isFirstTime)
+async function reEvalOrder(isFirstTime)
 {
-      $.ajax({
+      await $.ajax({
             url: '/ajax_service/customer/cart/re_eval_order.php',
             method: 'GET',
             headers: {
@@ -251,9 +256,9 @@ function reEvalOrder(isFirstTime)
       });
 }
 
-function updateBillingDetail()
+async function updateBillingDetail()
 {
-      $.ajax({
+      await $.ajax({
             url: '/ajax_service/customer/cart/get_bill_detail.php',
             method: 'GET',
             headers: {
@@ -294,9 +299,9 @@ function updateBillingDetail()
       });
 }
 
-function fetchFileOrder()
+async function fetchFileOrder()
 {
-      $.ajax({
+      await $.ajax({
             url: '/ajax_service/customer/cart/get_file_order.php',
             method: 'GET',
             headers: {
@@ -428,9 +433,9 @@ function fetchFileOrder()
       });
 }
 
-function fetchPhysicalOrder(isFirstTime)
+async function fetchPhysicalOrder(isFirstTime)
 {
-      $.ajax({
+      await $.ajax({
             url: '/ajax_service/customer/cart/get_physical_order.php',
             method: 'GET',
             headers: {
@@ -497,7 +502,7 @@ function fetchPhysicalOrder(isFirstTime)
                                                 <input aria-label='Decrease amount' onclick='adjustAmount(false,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
                                                 <label class="btn btn-secondary" for="decrease_book_ammount_${ data.query_result.detail[i].id }">-</label>
 
-                                                <input onchange='checkAmmount("${ data.query_result.detail[i].id }",true)' type="number" class="fw-bold ammount_input ps-2 border border-2 border-secondary" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
+                                                <input onchange='checkAmmount("${ data.query_result.detail[i].id }",false,true)' type="number" class="fw-bold ammount_input ps-2 border border-2 border-secondary" id="book_ammount_${ data.query_result.detail[i].id }" autocomplete="off" value="${ data.query_result.detail[i].amount }" min="1" max="${ data.query_result.detail[i].inStock }">
 
                                                 <input aria-label='Increase amount' onclick='adjustAmount(true,"${ data.query_result.detail[i].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[i].id }" autocomplete="off">
                                                 <label class="btn btn-secondary" for="increase_book_ammount_${ data.query_result.detail[i].id }">+</label>
@@ -553,7 +558,7 @@ function fetchPhysicalOrder(isFirstTime)
                                                 <input aria-label='Decrease amount' onclick='adjustAmount(false,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
                                                 <label class="btn btn-secondary" for="decrease_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">-</label>
 
-                                                <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }",true)' type="number" class="fw-bold ammount_input ps-2 border border-2 border-secondary" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
+                                                <input onchange='checkAmmount("${ data.query_result.detail[data.query_result.detail.length - 1].id }",false,true)' type="number" class="fw-bold ammount_input ps-2 border border-2 border-secondary" id="book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off" value="${ data.query_result.detail[data.query_result.detail.length - 1].amount }" min="1" max="${ data.query_result.detail[data.query_result.detail.length - 1].inStock }">
 
                                                 <input aria-label='Increase amount' onclick='adjustAmount(true,"${ data.query_result.detail[data.query_result.detail.length - 1].id }")' type="button" class="btn-check" id="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }" autocomplete="off">
                                                 <label class="btn btn-secondary" for="increase_book_ammount_${ data.query_result.detail[data.query_result.detail.length - 1].id }">+</label>
@@ -706,30 +711,33 @@ function adjustAmount(isIncrease, id)
             // }
       }
 
-      checkAmmount(id, true);
+      checkAmmount(id, false, true);
 }
 
-function checkAmmount(id, update = false)
+function checkAmmount(id, errorFlag, update = false)
 {
       const amount = parseInt($(`#book_ammount_${ id }`).val());
       const inStock = parseInt($(`#in_stock_${ id }`).text());
 
-      // clearCustomValidity($(`#book_ammount_${ id }`).get(0));
+      if (errorFlag)
+      {
+            clearCustomValidity($(`#book_ammount_${ id }`).get(0));
 
-      // if (amount < 0)
-      // {
-      //       reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be negative!");
-      //       return;
-      // } else if (amount === 0)
-      // {
-      //       reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be zero!");
-      //       return;
-      // }
-      // else if (amount > inStock)
-      // {
-      //       reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount exceeds in stock amount!");
-      //       return;
-      // }
+            if (amount < 0)
+            {
+                  reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be negative!");
+                  return;
+            } else if (amount === 0)
+            {
+                  reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount can not be zero!");
+                  return;
+            }
+            else if (amount > inStock)
+            {
+                  reportCustomValidity($(`#book_ammount_${ id }`).get(0), "Book amount exceeds in stock amount!");
+                  return;
+            }
+      }
 
       if (amount < 1 && inStock >= 1)
       {
