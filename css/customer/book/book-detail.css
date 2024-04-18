@@ -1,23 +1,33 @@
-.comment-box{
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #e6e6e6;
-    border-radius: 5px;
-    background-color: hsl(0, 0%, 98%);
+.text-justify {
+    text-align: justify;
 }
-.comment-box p{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    line-height: 16px;
-    color: #282828;
-    font-weight: 100;
-    position: relative;
+
+.img-size {
+    max-width: 350px;
 }
-.edit-btn {
-    position: absolute;
-    top: 0px;
-    right: 0px;
+
+.customBtn {
+    border: 1px solid black;
 }
-.test {
-    font-size: 50px;
+
+.ammount_input {
+    width: 60px;
+}
+
+input[type="radio"]:checked+label {
+    border: 1px solid rgb(255, 72, 0) !important;
+    color: rgb(255, 72, 0) !important;
+    font-weight: bold;
+}
+
+@media (max-width: 767px) {
+    .img-size {
+        max-width: 250px;
     }
+}
+
+@media (max-width: 991px) {
+    .img-size {
+        max-width: 300px;
+    }
+}

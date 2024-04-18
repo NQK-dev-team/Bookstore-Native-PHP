@@ -163,16 +163,16 @@ INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK30', 'CAT
 INSERT INTO `bookstore`.`belong` (`bookID`, `categoryID`) VALUES ('BOOK31', 'CATEGORY2');
 
 -- Insert `physical copy`
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '29.99', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK1', '29.99', '2');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2', '39.99', '14');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK3', '49.99', '14');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK4', '59.99', '32');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK5', '15.99', '15');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK6', '29.99', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK6', '29.99', '1');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK7', '39.99', '15');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK8', '49.99', '18');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK9', '59.99', '11');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK10', '15.99', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK10', '15.99', '1');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK11', '29.99', '25');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK12', '39.99', '19');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK13', '49.99', '4');
@@ -191,7 +191,7 @@ INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK2
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK26', '29.99', '24');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK27', '39.99', '14');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK28', '49.99', '19');
-INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK29', '59.99', '0');
+INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK29', '59.99', '1');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK30', '15.99', '15');
 INSERT INTO `bookstore`.`physicalcopy` (`id`, `price`, `inStock`) VALUES ('BOOK31', '29.99', '18');
 
@@ -286,8 +286,7 @@ insert into customerOrder(id,purchaseTime,status,totalCost,totalDiscount,custome
 insert into physicalOrder values('ORDER1','211 Ly Thuong Kiet'),('ORDER3','211 Ly Thuong Kiet');
 insert into fileOrder values('ORDER1'),('ORDER2'),('ORDER3');
 
-insert into physicalOrderContain(orderID,bookID,amount) values('ORDER1','BOOK4',1),('ORDER1','BOOK5',2),
-('ORDER1','BOOK6',3),('ORDER1','BOOK7',1),('ORDER1','BOOK21',4);
+insert into physicalOrderContain(orderID,bookID,amount) values('ORDER1','BOOK4',1),('ORDER1','BOOK5',2),('ORDER1','BOOK6',3),('ORDER1','BOOK7',1),('ORDER1','BOOK21',4);
 insert into physicalOrderContain(orderID,bookID,amount) values('ORDER3','BOOK4',10),('ORDER3','BOOK5',2);
 
 insert into fileOrderContain(orderID,bookID) values('ORDER1','BOOK8'),('ORDER1','BOOK1');

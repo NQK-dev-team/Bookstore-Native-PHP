@@ -18,7 +18,7 @@ require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (isset($_POST['id'], $_POST['amount'])) {
+  if (isset($_POST['id'])) {
     try {
       if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
         http_response_code(403);
@@ -27,13 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
 
       $bookID = sanitize(rawurldecode($_POST['id']));
-      $amount = sanitize(rawurldecode($_POST['amount']));
-
-      if (!is_numeric($amount) || is_nan($amount) || $amount <= 0) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Book amount invalid!']);
-        exit;
-      }
 
       $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
 
@@ -44,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
       }
 
-      $stmt = $conn->prepare("SELECT * FROM physicalCopy WHERE id=?");
+      $stmt = $conn->prepare("SELECT * FROM fileCopy WHERE id=?");
       if (!$stmt) {
         http_response_code(500);
-        echo json_encode(['error' => 'Query `SELECT * FROM physicalCopy WHERE id=?` preparation failed!']);
+        echo json_encode(['error' => 'Query `SELECT * FROM fileCopy WHERE id=?` preparation failed!']);
         exit;
       }
       $stmt->bind_param("s", $bookID);
@@ -70,15 +63,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       $conn->begin_transaction();
 
-      $stmt = $conn->prepare('call addPhysicalToCart(?,?,?)');
+      $stmt = $conn->prepare("call addFileToCart(?,?)");
       if (!$stmt) {
         http_response_code(500);
-        echo json_encode(['error' => 'Query `call addPhysicalToCart(?,?,?)` preparation failed!']);
+        echo json_encode(['error' => 'Query `call addFileToCart(?,?)` preparation failed!']);
         $conn->rollback();
         $conn->close();
         exit;
       }
-      $stmt->bind_param("sss", $_SESSION['id'], $bookID, $amount);
+      $stmt->bind_param("ss", $_SESSION['id'], $bookID);
       if (!$stmt->execute()) {
         http_response_code(500);
         echo json_encode(['error' => $stmt->error]);
@@ -88,7 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
       }
       $stmt->close();
+
       $conn->commit();
+
       $conn->close();
       echo json_encode(['query_result' => true]);
     } catch (Exception $e) {

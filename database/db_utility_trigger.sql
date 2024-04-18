@@ -27,6 +27,19 @@ begin
 end//
 delimiter ;
 
+drop trigger if exists customerOrderInsertUltilityTrigger;
+delimiter //
+create trigger customerOrderInsertUltilityTrigger
+before insert on customerOrder
+for each row
+begin
+    declare counter int default 0;
+    select cast(substr(id,6) as unsigned) into counter from customerOrder ORDER BY cast(substr(id,6) as unsigned) DESC LIMIT 1;
+    set counter=counter+1;
+    set new.id=concat('ORDER',counter);
+end//
+delimiter ;
+
 -- ********************************************************************************************
 -- ********************************************************************************************
 -- ********************************************************************************************

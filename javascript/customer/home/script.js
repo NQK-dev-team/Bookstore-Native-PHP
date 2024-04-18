@@ -438,7 +438,11 @@ function getPublishers()
                   else if (data.query_result)
                   {
                         if (data.query_result.length === 0)
+                        {
                               $('#topPublisherPanel').css('display', 'none');
+                              $('#publisherList').empty();
+                              return;
+                        }
 
                         let temp = '';
                         for (let i = 0; i < data.query_result.length; i++)
@@ -606,7 +610,11 @@ function getCategories()
                   else if (data.query_result)
                   {
                         if (data.query_result.length === 0)
+                        {
                               $('#topCategoryPanel').css('display', 'none');
+                              $('#categoryList').empty();
+                              return;
+                        }
 
                         let temp = '';
                         for (let i = 0; i < data.query_result.length; i++)

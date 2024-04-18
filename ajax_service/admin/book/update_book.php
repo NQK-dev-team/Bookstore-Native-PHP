@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             isset($_POST['physicalPrice']) &&
             isset($_POST['filePrice']) &&
             isset($_POST['inStock']) &&
-            isset($_POST['removeFile']) 
+            isset($_POST['removeFile'])
       ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {

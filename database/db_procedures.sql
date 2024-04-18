@@ -473,3 +473,60 @@ begin
     end if;
 end//
 delimiter ;
+
+drop procedure if exists addFileToCart;
+delimiter //
+create procedure addFileToCart(
+	in customerID varchar(20),
+    in bookID varchar(20)
+)
+begin
+	declare orderID varchar(20) default null;
+    
+    select id into orderID from customerOrder where customerOrder.status=false and customerOrder.customerID=customerID;
+    
+    if orderID is null then
+		insert into customerOrder(customerID) values(customerID);
+        select id into orderID from customerOrder where customerOrder.status=false and customerOrder.customerID=customerID;
+    end if;
+    
+    if not exists(select * from fileOrder where id=orderID) then
+		insert into fileOrder(id) values(orderID);
+    end if;
+    
+    insert into fileOrderContain(orderID,bookID) values(orderID,bookID);
+end//
+delimiter ;
+
+drop procedure if exists addPhysicalToCart;
+delimiter //
+create procedure addPhysicalToCart(
+	in customerID varchar(20),
+    in bookID varchar(20),
+    in amount int
+)
+begin
+	declare orderID varchar(20) default null;
+    
+    select id into orderID from customerOrder where customerOrder.status=false and customerOrder.customerID=customerID;
+    
+    if orderID is null then
+		insert into customerOrder(customerID) values(customerID);
+        select id into orderID from customerOrder where customerOrder.status=false and customerOrder.customerID=customerID;
+    end if;
+    
+    if not exists(select * from physicalOrder where id=orderID) then
+		begin
+			declare address varchar(1000) default null;
+            select appUser.address into address from appUser where appUser.id=customerID;
+            insert into physicalOrder(id,destinationAddress) values(orderID,address);
+        end;
+    end if;
+    
+    if not exists(select * from physicalOrderContain where physicalOrderContain.orderID=orderID and physicalOrderContain.bookID=bookID) then
+		insert into physicalOrderContain(orderID,bookID,amount) values(orderID,bookID,amount);
+    else
+		update physicalOrderContain set physicalOrderContain.amount=physicalOrderContain.amount+amount where physicalOrderContain.orderID=orderID and physicalOrderContain.bookID=bookID;
+    end if;
+end//
+delimiter ;

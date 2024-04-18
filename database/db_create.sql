@@ -117,9 +117,9 @@ create table customerOrder(
 	id varchar(20) primary key,
     purchaseTime datetime,
     status boolean not null default false, -- true means the order has been purchased, false means not
-    totalCost double not null, -- cost after using discount coupons
+    totalCost double not null default 0, -- cost after using discount coupons
     check(totalCost>=0),
-    totalDiscount double not null,
+    totalDiscount double not null default 0,
     check(totalDiscount>=0),
     customerID varchar(20) not null,
     orderCode varchar(16) unique,
