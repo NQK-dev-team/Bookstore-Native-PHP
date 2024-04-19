@@ -208,7 +208,8 @@ if ($return_status_code === 400) {
             ?>
             <link rel="stylesheet" href="/css/preset_style.css">
             <link rel="stylesheet" href="/css/customer/book/book-detail.css">
-            <meta name="author" content="Anh Khoa, Nghia Duong">
+            <meta name="page creator" content="Anh Khoa, Nghia Duong">
+            <meta name="book author" content="<?php echo $bAuthor; ?>">
             <meta name="book name" content="<?php echo $bName; ?>">
             <meta name="description" content="<?php echo $bDescription; ?>">
             <title><?php echo $bName; ?></title>
