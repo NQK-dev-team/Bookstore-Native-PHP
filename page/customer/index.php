@@ -97,6 +97,9 @@ if ($return_status_code === 400) {
                                           <div class='col-lg-7 d-lg-block d-none py-3' id='bestSellerList2'>
                                           </div>
                                     </div>
+                                    <div class='bg-white d-flex pb-3'>
+                                          <a class='btn moreBtn mx-auto' href='/book/?select=sale'>Browse More</a>
+                                    </div>
                               </div>
                         </div>
                         <div class='container-lg p-2 my-4' id='topCategoryPanel'>
