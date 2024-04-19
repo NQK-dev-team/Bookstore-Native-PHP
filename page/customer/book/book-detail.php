@@ -224,7 +224,7 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../../layout/customer/header.php';
             ?>
             <section id="page" class='position-relative'>
-                  <div class="toast-container position-absolute top-0 end-0 p-3" id='toasts_container'>
+                  <div class="toast-container position-absolute top-0 end-0 p-3 h-100 overflow-y-auto hideBrowserScrollbar" id='toasts_container'>
                   </div>
                   <div class="container bg-light rounded p-3 mt-3">
                         <div class="row justify-content-center align-items-center">
