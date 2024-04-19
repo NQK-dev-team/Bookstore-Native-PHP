@@ -1,5 +1,9 @@
 
 $(document).ready(function() {
+
+                  
+
+
     $('#category').change(function() {
         var category = $(this).val();
 
@@ -435,14 +439,43 @@ $(document).ready(function() {
         e.preventDefault();
         var page = $(this).text();
 
-        if (page === '«') {
+        if (page === '<') {
             currentPage = Math.max(1, currentPage - 1);
-        } else if (page === '»') {
+        } else if (page === '>') {
             currentPage += 1; // You might want to check if you're at the last page here
         } else {
             currentPage = parseInt(page);
         }
 
         fetchBooks();
+    });
+
+    // Initial fetch
+    fetchBooks();
+
+        document.getElementById('showMore').addEventListener('click', function() {
+        var hiddenItems = document.getElementsByClassName('hidden');
+        for (var i = 0; i < hiddenItems.length; i++) {
+            if (hiddenItems[i].style.display === 'list-item') {
+                hiddenItems[i].style.display = 'none';
+            } else {
+                hiddenItems[i].style.display = 'list-item';
+            }
+        }
+
+        // Change the text and arrow of the link
+        if (this.textContent === 'Show more (+)') {
+            this.textContent = 'Show less (-)';
+        } else {
+            this.textContent = 'Show more (+)';
+        }
+    });
+        document.getElementById('toggleButton').addEventListener('click', function() {
+        var hideableElement = document.getElementById('hideable');
+        if (hideableElement.style.display === "none") {
+            hideableElement.style.display = "block";
+        } else {
+            hideableElement.style.display = "none";
+        }
     });
 });

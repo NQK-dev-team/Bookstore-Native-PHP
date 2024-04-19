@@ -20,10 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select id,name,edition,imagePath from book where publisher=? and book.status=true order by book.name,book.edition,book.id');
+                  $stmt = $conn->prepare('select bookID as id,name,edition,imagePath from (
+select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
+union
+select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
+) as combined join book on book.id=combined.bookID and book.status=true and publisher=? group by bookID order by sum(combined.totalSold) desc,name,edition,id limit 10');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select id,name,edition,imagePath from book where publisher=? and book.status=true order by book.name,book.edition,book.id` preparation failed!']);
+                        echo json_encode(['error' => 'Query `select bookID as id,name,edition,imagePath from (
+select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
+union
+select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
+) as combined join book on book.id=combined.bookID and book.status=true and publisher=? group by bookID order by sum(combined.totalSold) desc,name,edition,id limit 10` preparation failed!']);
                         $conn->close();
                         exit;
                   }

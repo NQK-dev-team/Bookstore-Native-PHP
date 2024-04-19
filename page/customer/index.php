@@ -49,7 +49,7 @@ if ($return_status_code === 400) {
                                                       <p class='bg-dark text-white p-2 rounded mb-0 timer' id='seconds'></p>
                                                 </div>
                                           </div>
-                                          <a aria-label="view more discounted books" id='learn_more_sales' href='/book/?select=sale' class='text-decoration-none ms-auto fs-5 d-flex align-items-center'>More<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <a aria-label="view more discounted books" id='learn_more_sales' href='/book/?select=discount' class='text-decoration-none ms-auto fs-5 d-flex align-items-center'>More<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                       <g id="SVGRepo_iconCarrier">
@@ -100,7 +100,7 @@ if ($return_status_code === 400) {
                               </div>
                         </div>
                         <div class='container-lg p-2 my-4' id='topCategoryPanel'>
-                              <div class='mx-3 bg-white rounded pb-3'>
+                              <div class='mx-3 bg-white rounded pb-3 d-flex flex-column'>
                                     <div class='mb-0 text-center p-3 d-flex justify-content-center align-items-center'>
                                           <h4><svg width="28px" height="28px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -144,10 +144,11 @@ if ($return_status_code === 400) {
                                           <div class='mx-md-4 d-flex overflow-x-auto hideBrowserScrollbar' id='bookList1'>
                                           </div>
                                     </div>
+                                    <button class='btn moreBtn mx-auto mt-4' onclick="viewMoreCategoryBook()">Browse More</button>
                               </div>
                         </div>
                         <div class='container-lg p-2 my-4' id='topPublisherPanel'>
-                              <div class='mx-3 bg-white rounded pb-3'>
+                              <div class='mx-3 bg-white rounded pb-3 d-flex flex-column'>
                                     <div class='mb-0 text-center p-3 d-flex justify-content-center align-items-center'>
                                           <h4><img alt='Icon' src='/image/stonk.png' style="height:28px;width:28px;">&nbsp;Top Publishers</h4>
                                     </div>
@@ -182,6 +183,7 @@ if ($return_status_code === 400) {
                                           <div class='mx-md-4 d-flex overflow-x-auto hideBrowserScrollbar' id='bookList'>
                                           </div>
                                     </div>
+                                    <button class='btn moreBtn mx-auto mt-4' onclick="viewMorePublisherBook()">Browse More</button>
                               </div>
                         </div>
                         <div class=" modal fade" id="errorModal" tabindex="-1" aria-labelledby="Error modal">
