@@ -6,22 +6,27 @@
     width: 120px;
 }
 
-
-.payment {
-    width: 250px;
+.customizeButton {
+    border-radius: 10px !important;
+    height: 55px;
 }
+
+
+/* .payment {
+    width: 250px;
+} */
 
 #cartForm {
     width: 98%;
     height: 98%;
 }
 
-.item-container {
+/* .item-container {
     max-height: 350px;
-}
+} */
 
 @media only screen and (max-width: 768px) {
-    .payment {
+    /* .payment {
         width: 200px;
-    }
+    } */
 }
