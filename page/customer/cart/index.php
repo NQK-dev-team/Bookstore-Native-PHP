@@ -12,7 +12,6 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../error/403.php';
 } else {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-      require_once __DIR__ . '/../../../config/paypal.php';
 ?>
 
       <!DOCTYPE html>
@@ -133,7 +132,7 @@ if ($return_status_code === 400) {
             <script src="/tool/js/encoder.js"></script>
             <script src="/tool/js/input_validity.js"></script>
             <script src="/tool/js/tool_tip.js"></script>
-            <script src="https://www.paypal.com/sdk/js?client-id=<?php echo $CLIENT_ID; ?>&currency=USD"></script>
+            <script src="https://www.paypal.com/sdk/js?client-id=AeJzcuBeYdWuSATJhEg4Y6VELgzJlgrjby07Upgt5V88gwHWeFeeBdJi121zROOe0MaOIvQ6ACBvG0Km&currency=USD"></script>
             <script>
                   paypal.Buttons({
                         style: {
