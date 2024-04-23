@@ -456,6 +456,7 @@ function getPublishers()
                         }
                         $('#publisherList').append(temp);
 
+                        current_publisher = data.query_result[0].publisher;
                         getPublisherBook(data.query_result[0].publisher);
                   }
             },
@@ -628,6 +629,7 @@ function getCategories()
                         }
                         $('#categoryList').append(temp);
 
+                        current_category = data.query_result[0].name;
                         getCategoryBook(data.query_result[0].name);
                   }
             },
@@ -764,4 +766,14 @@ function getCategoryBook(name)
                   }
             }
       });
+}
+
+function viewMorePublisherBook()
+{
+      window.location.href = `/book/?publisher=${ encodeData(current_publisher) }`;
+}
+
+function viewMoreCategoryBook()
+{
+      window.location.href = `/book/?category=${ encodeData(current_category) }`;
 }

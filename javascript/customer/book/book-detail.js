@@ -153,8 +153,7 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    $('#liveToast').remove();
-                    $('#toasts_container').append(`<div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                               <div class="toast-header bg-warning-subtle">
                                     <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Notice</strong>
                                     <small>Just now</small>
@@ -164,8 +163,9 @@ async function addToCart()
                                     You have already bought this E-book!
                               </div>
                         </div>`);
+                    $('#toasts_container').append(divVar);
 
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance($('#liveToast').get(0));
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
                     toastBootstrap.show();
                     buyable = false;
                 }
@@ -202,8 +202,7 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    $('#liveToast2').remove();
-                    $('#toasts_container').append(`<div id="liveToast2" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                               <div class="toast-header bg-warning-subtle">
                                     <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Notice</strong>
                                     <small>Just now</small>
@@ -213,8 +212,9 @@ async function addToCart()
                                     This E-book has already been added to your cart!
                               </div>
                         </div>`);
+                    $('#toasts_container').append(divVar);
 
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance($('#liveToast2').get(0));
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
                     toastBootstrap.show();
                     buyable = false;
                 }
@@ -254,8 +254,7 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    $('#liveToast1').remove();
-                    $('#toasts_container').append(`<div id="liveToast1" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                               <div class="toast-header bg-warning-subtle">
                                     <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Success</strong>
                                     <small>Just now</small>
@@ -265,8 +264,9 @@ async function addToCart()
                                     E-book added to cart!
                               </div>
                         </div>`);
+                    $('#toasts_container').append(divVar);
 
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance($('#liveToast1').get(0));
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
                     toastBootstrap.show();
                 }
             },
@@ -308,8 +308,7 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    $('#liveToast1').remove();
-                    $('#toasts_container').append(`<div id="liveToast1" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                               <div class="toast-header bg-warning-subtle">
                                     <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Success</strong>
                                     <small>Just now</small>
@@ -319,8 +318,9 @@ async function addToCart()
                                     Hardcover added to cart!
                               </div>
                         </div>`);
+                    $('#toasts_container').append(divVar);
 
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance($('#liveToast1').get(0));
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
                     toastBootstrap.show();
                 }
             },

@@ -30,7 +30,7 @@
                                     <img title='Mastercard payment method' src='/image/mastercard.jpg' class='payment_method_footer rounded border bg-white ms-sm-1 mt-1 mt-sm-0'>
                               </div>
                               <div class='d-flex flex-column flex-sm-row align-items-center justify-content-center mt-1'>
-                                    <img title='JCB payment method' src='/image/jcb.png' class='payment_method_footer rounded border border-1 border-white bg-white me-sm-1 mb-1 mb-sm-0'>
+                                    <img title='American Express payment method' src='/image/AE.png' class='payment_method_footer rounded border border-1 border-white bg-white me-sm-1 mb-1 mb-sm-0'>
                                     <svg class='payment_method_footer rounded border bg-white ms-sm-1 mt-1 mt-sm-0' version="1.1" id="Layer_1" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 780 501" enable-background="new 0 0 780 501" xml:space="preserve" fill="#000000">
                                           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
