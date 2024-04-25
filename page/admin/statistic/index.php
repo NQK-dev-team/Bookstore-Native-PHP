@@ -51,15 +51,15 @@ if ($return_status_code === 400) {
                                     <input type="date" class="form-control w-auto pointer" id="endDateInput" aria-describedby="End Date Input">
                               </div>
                               <div>
-                                    <button class='btn btn-sm mt-2 mt-md-0 btn-success' onclick="selectBookEntry(); getCategoryChart();">Get Statistics</button>
+                                    <button class='btn btn-sm mt-2 mt-md-0 btn-success' onclick="selectBookEntry(); getCategoryChart();">Set Period</button>
                               </div>
                         </div>
                         <div class='container-fluid'>
-                              <h3 class='mt-4'>Sale By Category</h3>
+                              <h3 class='mt-4'>Sales By Category</h3>
                               <div class='w-100 overflow-auto mt-3'>
                                     <canvas id='category_chart'></canvas>
                               </div>
-                              <h3 class='mt-4'>Detail Book Sale</h3>
+                              <h3 class='mt-4'>Detail Book Sales</h3>
                               <div class='mt-2 d-flex align-items-center'>
                                     <form class="d-flex align-items-center w-100 search_form mt-2" role="search" id="search_book_form">
                                           <button title='submit search form' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">
@@ -72,10 +72,10 @@ if ($return_status_code === 400) {
                                                 </svg>
                                           </button>
 
-                                          <input id="search_book" class="form-control me-2" type="search" placeholder="Search by book name, author or ISBN number" aria-label="Search">
+                                          <input id="search_book" class="form-control me-2" type="search" placeholder="Search book by name or ISBN number" aria-label="Search">
                                     </form>
                               </div>
-                              <div class="mt-2">
+                              <div class="mt-2 d-flex flex-md-row flex-column">
                                     <div class="d-flex align-items-center">
                                           <p class="mb-0 me-2">Category</p>
                                           <div>
@@ -83,7 +83,7 @@ if ($return_status_code === 400) {
                                                       <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                                                             Select category
                                                       </button>
-                                                      <ul class="dropdown-menu dropdownCategory">
+                                                      <ul class="dropdown-menu dropdown-width">
                                                             <li class="container">
                                                                   <form id='searchCategoryForm'>
                                                                         <input class="form-control" id="categoryInput" type="text" placeholder="Search...">
@@ -91,6 +91,48 @@ if ($return_status_code === 400) {
                                                             </li>
                                                             <li>
                                                                   <ul class='categories w-100 container mt-2' id='category_list'>
+                                                                  </ul>
+                                                            </li>
+                                                      </ul>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="d-flex align-items-center ms-md-3 mt-2 mt-md-0">
+                                          <p class="mb-0 me-2">Author</p>
+                                          <div>
+                                                <div class="dropdown" id='authorDropDown'>
+                                                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                            Select author
+                                                      </button>
+                                                      <ul class="dropdown-menu dropdown-width">
+                                                            <li class="container">
+                                                                  <form id='searchAuthorForm'>
+                                                                        <input class="form-control" id="authorInput" type="text" placeholder="Search...">
+                                                                  </form>
+                                                            </li>
+                                                            <li>
+                                                                  <ul class='authors w-100 container mt-2' id='author_list'>
+                                                                  </ul>
+                                                            </li>
+                                                      </ul>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="d-flex align-items-center ms-md-3 mt-2 mt-md-0">
+                                          <p class="mb-0 me-2">Publisher</p>
+                                          <div>
+                                                <div class="dropdown" id='publisherDropDown'>
+                                                      <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                                            Select publisher
+                                                      </button>
+                                                      <ul class="dropdown-menu dropdown-width">
+                                                            <li class="container">
+                                                                  <form id='searchPublisherForm'>
+                                                                        <input class="form-control" id="publisherInput" type="text" placeholder="Search...">
+                                                                  </form>
+                                                            </li>
+                                                            <li>
+                                                                  <ul class='publishers w-100 container mt-2' id='publisher_list'>
                                                                   </ul>
                                                             </li>
                                                       </ul>
@@ -127,7 +169,6 @@ if ($return_status_code === 400) {
                                                       <th scope="col">Name</th>
                                                       <th scope="col">Edition</th>
                                                       <th scope="col">ISBN-13</th>
-                                                      <th scope="col" class='text-nowrap'>Age Restriction</th>
                                                       <th scope="col">Author</th>
                                                       <th scope="col">Category</th>
                                                       <th scope="col">Publisher</th>

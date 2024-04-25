@@ -293,7 +293,7 @@ if ($return_status_code === 400) {
                                                       <small class="form-text text-muted">You can enter multiple authors with each seperated by comma</small>
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">
-                                                      <label for="categoryInput" class="form-label">Category:</label>
+                                                      <label for="categoryInput" class="form-label">Category:<span class='fw-bold text-danger'>&nbsp;*</span></label>
                                                       <textarea readonly onclick="openCategoryModal()" rows="4" class="form-control pointer" id="categoryInput"><?php echo implode("\n", $query_result['category']); ?></textarea>
                                                 </div>
                                                 <div class="my-2 px-xl-5 px-3">

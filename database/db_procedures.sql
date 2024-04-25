@@ -450,30 +450,6 @@ begin
 end//
 delimiter ;
 
-drop procedure if exists getDiscountBooks;
-delimiter //
-create procedure getDiscountBooks()
-begin
-	declare eventID varchar(20) default null;
-    
-    select combined.id into eventID from (
-	select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
-	union
-	select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
-	) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1;
-    
-    if eventID is not null then
-		select discount,startDate,endDate from eventDiscount where id=eventID;
-    end if;
-    
-    if eventID is not null and (select applyForAll from eventDiscount where id=eventID) then
-		select id,name,edition,imagePath from book order by name,edition,id limit 10;
-    elseif eventID is not null and not(select applyForAll from eventDiscount where id=eventID) then
-		select book.id,name,edition,imagePath from book join eventApply on eventApply.bookID=book.id and eventApply.eventID=eventID order by name,edition,id limit 10;
-    end if;
-end//
-delimiter ;
-
 drop procedure if exists addFileToCart;
 delimiter //
 create procedure addFileToCart(

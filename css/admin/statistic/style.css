@@ -32,16 +32,18 @@
       overflow-y: auto;
 }
 
-.dropdownCategory {
+.dropdown-width {
       width: 350px;
 }
 
-.categories {
+.categories,
+.authors,
+.publishers {
       max-height: 250px;
       overflow-y: auto;
 }
 
-.categoryHover:hover {
+.dropdownHover:hover {
       background-color: #adadad;
 }
 
@@ -50,13 +52,13 @@
 }
 
 @media only screen and (max-width:500px) {
-      .dropdownCategory {
+      .dropdown-width {
             width: 300px;
       }
 }
 
 @media only screen and (max-width:320px) {
-      .dropdownCategory {
+      .dropdown-width {
             width: 250px;
       }
 }

@@ -222,7 +222,7 @@ function submitForm()
       const edition = encodeData($('#editionInput').val()) === '' ? '' : parseInt(encodeData($('#editionInput').val()));
       const isbn = encodeData($('#isbnInput').val().replace(/-/g, ''));
       const author = $('#authorInput').val() !== '' ? (($('#authorInput').val().split(',')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
-      const category = encodeData($('#categoryInput').val());//$('#categoryInput').val() !== '' ? (($('#categoryInput').val().split(';')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';
+      const category = $('#categoryInput').val() !== '' ? (($('#categoryInput').val().split('\n')).filter(str => str.trim() !== '')).map(str => encodeData(str)) : '';// encodeData($('#categoryInput').val());
       const publisher = encodeData($('#publisherInput').val());
       const publishDate = encodeData($('#publishDateInput').val());
       const physicalPrice = encodeData($('#physicalPriceInput').val()) === '' ? '' : parseFloat(encodeData($('#physicalPriceInput').val()));
@@ -290,6 +290,13 @@ function submitForm()
       else if (author.findIndex(elem => elem.length > 255) !== -1)
       {
             reportCustomValidity($('#authorInput').get(0), 'Author name must be at most 255 characters long or less!');
+            return;
+      }
+
+      if (category.length === 0)
+      {
+            $('#errorModal').modal('show');
+            $('#error_message').text('Book must belong to at least one category!');
             return;
       }
 

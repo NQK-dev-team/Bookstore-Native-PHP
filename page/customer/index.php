@@ -37,18 +37,7 @@ if ($return_status_code === 400) {
                         <div class='w-100 sales' id='salePanel'>
                               <div class='container-lg p-2'>
                                     <div class='mx-3 bg-white rounded mt-3 py-2 px-2 px-sm-3 d-flex align-items-center'>
-                                          <div class='d-flex'>
-                                                <img alt='Icon' src='/image/flash_sale.png' class='flash_sale_image'>
-                                                <div class='ms-3 d-flex align-items-center'>
-                                                      <p class='bg-dark text-white p-2 rounded mb-0 timer' id='days'></p>
-                                                      <p class='mb-0 fs-5 text-dark mx-1'>:</p>
-                                                      <p class='bg-dark text-white p-2 rounded mb-0 timer' id='hours'></p>
-                                                      <p class='mb-0 fs-5 text-dark mx-1'>:</p>
-                                                      <p class='bg-dark text-white p-2 rounded mb-0 timer' id='minutes'></p>
-                                                      <p class='mb-0 fs-5 text-dark mx-1'>:</p>
-                                                      <p class='bg-dark text-white p-2 rounded mb-0 timer' id='seconds'></p>
-                                                </div>
-                                          </div>
+                                          <img alt='Icon' src='/image/flash_sale.png' class='flash_sale_image'>
                                           <a aria-label="view more discounted books" id='learn_more_sales' href='/book/?select=discount' class='text-decoration-none ms-auto fs-5 d-flex align-items-center'>More<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                       <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                       <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -98,7 +87,7 @@ if ($return_status_code === 400) {
                                           </div>
                                     </div>
                                     <div class='bg-white d-flex pb-3'>
-                                          <a class='btn moreBtn mx-auto' href='/book/?select=sale'>Browse More</a>
+                                          <a class='btn moreBtn mx-auto' href='/book/?select=sales'>Browse More</a>
                                     </div>
                               </div>
                         </div>

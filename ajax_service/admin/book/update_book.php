@@ -121,6 +121,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                   }
 
+                  if (!count($category)) {
+                        http_response_code(400);
+                        echo json_encode(['error' => 'Book must belong to at least one category!']);
+                        exit;
+                  } 
+
                   if (!$publisher) {
                         http_response_code(400);
                         echo json_encode(['error' => 'Publisher is empty!']);

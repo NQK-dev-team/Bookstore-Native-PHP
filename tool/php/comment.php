@@ -5,65 +5,48 @@ function setComment($conn, $bookID) {
         // echo "Comment submitted";
         $customerID = $_POST['customerID'];
         $bookID = $_POST['bookID'];
-        $commentTime = $_POST['commentTime'];
+        $ratingTime = $_POST['ratingTime'];
         $content = $_POST['content'];
-        // $commentIdx = $_POST['commentIdx'];
+        $alert = "<script>alert('You haven't rated this book yet.')</script>";
+            echo $alert;
+        $sql_check = "SELECT comment FROM rating WHERE customerID = '$customerID' AND bookID = '$bookID'";
+        $result_check = $conn->query($sql_check);
 
-        //commentIDx
-        $sql1 = "SELECT MAX(commentIdx) AS maxCommentIdx FROM commentcontent WHERE bookID = '$bookID'";
-        $result1 = $conn->query($sql1);
-        if ($result1->num_rows > 0) {
-            $row = $result1->fetch_assoc();
-            $nextCommentIdx = $row['maxCommentIdx'] + 1;
+        if ($result_check->num_rows > 0) {
+            $sql_update = "UPDATE rating SET ratingTime = '$ratingTime', comment = '$content' WHERE customerID = '$customerID' AND bookID = '$bookID'";
+            $result_update = $conn->query($sql_update);
+            
         } else {
-            $nextCommentIdx = 1;
+            $alert = "<script>alert('You haven't rated this book yet.')</script>";
+            echo $alert;
         }
-        $result = $conn->query("SELECT * FROM comment");
-        $found = false;
-        while ($row = $result->fetch_assoc()) {
-            if($row['customerID'] == $customerID && $row['bookID'] == $bookID){
-                $sql3 = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
-                $result3 = $conn->query($sql3);
-                $found = true;
-                break;
-            }
-        }
-
-        if(!$found){
-            $sql2 = "INSERT INTO comment (customerID, bookID) VALUES ('$customerID', '$bookID')";
-            $result2 = $conn->query($sql2);
-            $sql3 = "INSERT INTO commentcontent (customerID, bookID, commentIdx, commentTime, content) VALUES ('$customerID', '$bookID', '$nextCommentIdx', '$commentTime', '$content')";
-            $result3 = $conn->query($sql3);
         }
     }
-}
 function getComment($conn, $bookID) {
-    $sql = "SELECT * FROM commentcontent WHERE bookID = '$bookID'";
+    $sql = "SELECT * FROM rating WHERE bookID = '$bookID' LIMIT 10000 OFFSET 5 ";
     $result = $conn->query($sql);
     while ($row = $result->fetch_assoc()) {
         echo '<div class="comment-box"><p>';
-            echo $row['customerID']."<br>";
-            echo $row['commentTime']."<br>";
-            echo nl2br($row['content']."<br><br>");
+        echo "<span style='font-weight: 600; font-size: 15px; color: black'>" . $row['customerID'] . "</span>";
+        echo '<div class="rating1" >
+            <span id="rating-holder">'.GetRating($conn, $bookID, $_SESSION['id']).' </span>
+            <div id="rating-response"></div>';
+        echo '</div>';
+        echo '<span style=" opacity: 0.6; font-style: italic; font-size: 12px;">' . date('Y-m-d H:i', strtotime($row['ratingTime'])) . '</span><br><br>';
+        echo nl2br($row['comment']."<br><br>");
         echo '</p>';
         if($_SESSION['id'] == $row['customerID']){
-            echo '<form class="edit-form" method="POST" action="edit-comment.php">
+        echo '
+            <form class="delete-form" method="POST" action="'.deleteComments($conn).'">
             <input type="hidden" name="customerID" value="'.$row['customerID'].'">
-            <input type="hidden" name="commentIdx" value="'.$row['commentIdx'].'">
-            <input type="hidden" name="commentTime" value="'.$row['commentTime'].'">
             <input type="hidden" name="bookID" value="'.$bookID.'">
-            <input type="hidden" name="content" value="'.$row['content'].'">
-            <button name="edit">Edit</button>
-        </form>
-        <form class="delete-form" method="POST" action="'.deleteComments($conn).'">
-            <input type="hidden" name="customerID" value="'.$row['customerID'].'">
-            <input type="hidden" name="commentIdx" value="'.$row['commentIdx'].'">
-            <input type="hidden" name="bookID" value="'.$bookID.'">
-            <button type="submit" name="deleteComment" onclick="if(confirm(\'Are you sure you want to delete this comment?\')) { this.form.submit(); location.reload(); } else {return false;}">Delete</button>
-        </form>';
+            <button type="submit" name="deleteComment" onclick="return confirm(\'Are you sure you want to delete this comment?\');">
+            <i class="fas fa-trash-alt"></i> 
+            </button>
+            </form>';
         }
         echo '</div>';
-    }
+        };
 }
 
 function editComment($conn) {
@@ -82,11 +65,10 @@ function editComment($conn) {
 function deleteComments($conn) {
     if (isset($_POST['deleteComment'])){
         // echo "Comment submitted";
-        $customerID = $_POST['customerID'];
+        $customerID = $_POST['customerID']; 
         $bookID = $_POST['bookID'];
-        $commentIdx = $_POST['commentIdx'];
 
-        $sql = "Delete FROM commentcontent WHERE customerID = '$customerID' AND bookID = '$bookID' AND commentIdx = '$commentIdx'";
+        $sql = "Delete FROM rating WHERE customerID = '$customerID' AND bookID = '$bookID'";
         $result = $conn->query($sql);
     }
 }

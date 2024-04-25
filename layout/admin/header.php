@@ -37,12 +37,14 @@ require_once __DIR__ . '../../../tool/php/session_check.php';
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/authentication/">Book</a></li>
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/authentication/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/authentication/">Customer</a></li>
-                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/authentication/">Coupon</a></li>';
+                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/authentication/">Coupon</a></li>
+                                                <li><a id="manage_dropdown_5" class="dropdown-item" href="/admin/authentication/">Request</a></li>';
                                                 else if (check_session() && $_SESSION['type'] === 'admin')
                                                       echo '<li><a id="manage_dropdown_1" class="dropdown-item" href="/admin/book/">Book</a></li>
                                                 <li><a id="manage_dropdown_2" class="dropdown-item" href="/admin/category/">Category</a></li>
                                                 <li><a id="manage_dropdown_3" class="dropdown-item" href="/admin/customer/">Customer</a></li>
-                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/coupon/">Coupon</a></li>';
+                                                <li><a id="manage_dropdown_4" class="dropdown-item" href="/admin/coupon/">Coupon</a></li>
+                                                <li><a id="manage_dropdown_5" class="dropdown-item" href="/admin/request/">Request</a></li>';
                                                 ?>
                                           </ul>
                                     </li>

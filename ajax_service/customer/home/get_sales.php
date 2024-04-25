@@ -16,10 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   exit;
             }
 
-            $stmt = $conn->prepare('call getDiscountBooks()');
+            $stmt = $conn->prepare('select book.id,name,edition,imagePath from book join (select book.id as bookID,coalesce(max(result.discount),0) as discount from book left join (select combined.bookID,combined.discount from (
+						select distinct book.id as bookID, discount.id,eventDiscount.discount,1 as cardinal from book,eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct eventApply.bookID, discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id) as result on result.bookID=book.id group by book.id order by book.id) as result on result.bookID=book.id where result.discount!=0 order by result.discount desc limit 10;');
             if (!$stmt) {
                   http_response_code(500);
-                  echo json_encode(['error' => 'Query `call getDiscountBooks()` preparation failed!']);
+                  echo json_encode(['error' => 'Query `select book.id,name,edition,imagePath from book join (select book.id as bookID,coalesce(max(result.discount),0) as discount from book left join (select combined.bookID,combined.discount from (
+						select distinct book.id as bookID, discount.id,eventDiscount.discount,1 as cardinal from book,eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct eventApply.bookID, discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id) as result on result.bookID=book.id group by book.id order by book.id) as result on result.bookID=book.id where result.discount!=0 order by result.discount desc limit 10;` preparation failed!']);
                   $conn->close();
                   exit;
             }
@@ -30,120 +38,135 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $conn->close();
             }
 
-            $eventDetail = [];
+            $result = $stmt->get_result();
+
             $queryResult = [];
 
-            if ($stmt->more_results()) {
-                  $result = $stmt->get_result();
-                  if ($result->num_rows === 1) {
-                        $row = $result->fetch_assoc();
-                        $row['startDate'] = $row['startDate'] . ' 00:00:00';
-                        $row['endDate'] = $row['endDate'] . ' 23:59:59';
-                        $eventDetail = $row;
+            $idx = 0;
+            while ($row = $result->fetch_assoc()) {
+                  $host = $_SERVER['HTTP_HOST'];
+                  $row['imagePath'] = "https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+                  $row['edition'] = convertToOrdinal($row['edition']);
+                  $queryResult[] = $row;
+
+                  $id = $row['id'];
+
+                  $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
+                  if (!$sub_stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select authorName from author where bookID=? order by authorName,authorIdx` preparation failed!']);
+                        $conn->close();
+                        exit;
                   }
-
-                  $result->free();
-                  $stmt->next_result();
-                  $result = $stmt->get_result();
-
-                  while ($row = $result->fetch_assoc()) {
-                        $queryResult[] = $row;
+                  $sub_stmt->bind_param('s', $id);
+                  $isSuccess = $sub_stmt->execute();
+                  if (!$isSuccess) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $sub_stmt->error]);
+                        $sub_stmt->close();
+                        $stmt->close();
+                        $conn->close();
+                        exit;
                   }
-                  $result->free();
-                  $stmt->close();
-
-                  foreach ($queryResult as $idx => &$row) {
-                        $host = $_SERVER['HTTP_HOST'];
-                        $row['imagePath'] = "https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
-                        $row['edition'] = convertToOrdinal($row['edition']);
-
-                        $id = $row['id'];
-
-                        $sub_stmt = $conn->prepare('select authorName from author where bookID=? order by authorName,authorIdx');
-                        if (!$sub_stmt) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Query `select authorName from author where bookID=? order by authorName,authorIdx` preparation failed!']);
-                              $conn->close();
-                              exit;
+                  $sub_result = $sub_stmt->get_result();
+                  if ($sub_result->num_rows === 0) {
+                        $queryResult[$idx]['author'] = [];
+                  } else {
+                        while ($sub_row = $sub_result->fetch_assoc()) {
+                              $queryResult[$idx]['author'][] = $sub_row['authorName'];
                         }
-                        $sub_stmt->bind_param('s', $id);
-                        $isSuccess = $sub_stmt->execute();
-                        if (!$isSuccess) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $sub_stmt->error]);
-                              $sub_stmt->close();
-                              $stmt->close();
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows === 0) {
-                              $row['author'] = [];
-                        } else {
-                              while ($sub_row = $sub_result->fetch_assoc()) {
-                                    $row['author'][] = $sub_row['authorName'];
-                              }
-                        }
-                        $sub_stmt->close();
-
-                        $sub_stmt = $conn->prepare('select price from physicalCopy where id=?');
-                        if (!$sub_stmt) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Query `select price from physicalCopy where id=?` preparation failed!']);
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_stmt->bind_param('s', $id);
-                        if (!$sub_stmt->execute()) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $sub_stmt->error]);
-                              $sub_stmt->close();
-                              $stmt->close();
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows === 0) {
-                              $row['physicalPrice'] = null;
-                        } else {
-                              $sub_row = $sub_result->fetch_assoc();
-                              $row['physicalPrice'] = $sub_row['price'];
-                        }
-                        $sub_stmt->close();
-
-                        $sub_stmt = $conn->prepare('select price from fileCopy where id=?');
-                        if (!$sub_stmt) {
-                              http_response_code(500);
-                              echo json_encode(['error' => 'Query `select price from fileCopy where id=?` preparation failed!']);
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_stmt->bind_param('s', $id);
-                        if (!$sub_stmt->execute()) {
-                              http_response_code(500);
-                              echo json_encode(['error' => $sub_stmt->error]);
-                              $sub_stmt->close();
-                              $stmt->close();
-                              $conn->close();
-                              exit;
-                        }
-                        $sub_result = $sub_stmt->get_result();
-                        if ($sub_result->num_rows === 0) {
-                              $row['filePrice'] = null;
-                        } else {
-                              $sub_row = $sub_result->fetch_assoc();
-                              $row['filePrice'] = $sub_row['price'];
-                        }
-                        $sub_stmt->close();
                   }
+                  $sub_stmt->close();
+
+                  $sub_stmt = $conn->prepare('select price from physicalCopy where id=?');
+                  if (!$sub_stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select price from physicalCopy where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_stmt->bind_param('s', $id);
+                  if (!$sub_stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $sub_stmt->error]);
+                        $sub_stmt->close();
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_result = $sub_stmt->get_result();
+                  if ($sub_result->num_rows === 0) {
+                        $queryResult[$idx]['physicalPrice'] = null;
+                  } else {
+                        $sub_row = $sub_result->fetch_assoc();
+                        $queryResult[$idx]['physicalPrice'] = $sub_row['price'];
+                  }
+                  $sub_stmt->close();
+
+                  $sub_stmt = $conn->prepare('select price from fileCopy where id=?');
+                  if (!$sub_stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select price from fileCopy where id=?` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_stmt->bind_param('s', $id);
+                  if (!$sub_stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $sub_stmt->error]);
+                        $sub_stmt->close();
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_result = $sub_stmt->get_result();
+                  if ($sub_result->num_rows === 0) {
+                        $queryResult[$idx]['filePrice'] = null;
+                  } else {
+                        $sub_row = $sub_result->fetch_assoc();
+                        $queryResult[$idx]['filePrice'] = $sub_row['price'];
+                  }
+                  $sub_stmt->close();
+
+                  $sub_stmt = $conn->prepare('select combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1');
+
+                  if (!$sub_stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `select combined.discount from (
+						select distinct discount.id,eventDiscount.discount,1 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
+                        union
+                        select distinct discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate() and eventApply.bookID=?
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id limit 1` preparation failed!']);
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_stmt->bind_param('s', $id);
+                  if (!$sub_stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $sub_stmt->error]);
+                        $sub_stmt->close();
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $sub_result = $sub_stmt->get_result();
+                  if ($sub_result->num_rows === 0) {
+                        $queryResult[$idx]['discount'] = null;
+                  } else {
+                        $sub_row = $sub_result->fetch_assoc();
+                        $queryResult[$idx]['discount'] = $sub_row['discount'];
+                  }
+                  $sub_stmt->close();
+
+                  $idx++;
             }
-
+            $stmt->close();
             $conn->close();
-
-            if (count($eventDetail) === 0 || count($queryResult) === 0)
-                  echo json_encode(['query_result' => []]);
-            else
-                  echo json_encode(['query_result' => [$eventDetail, $queryResult]]);
+            echo json_encode(['query_result' => $queryResult]);
       } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(['error' => $e->getMessage()]);

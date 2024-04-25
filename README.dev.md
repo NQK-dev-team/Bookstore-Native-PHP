@@ -15,6 +15,7 @@
 **Step 1:** Open window powershell as administrator<br><br>
 **Step 2:** Type `choco install mkcert`<br><br>
 **Step 3:** Type `mkcert -install`<br><br>
+
 ###### For others OSes visit `https://github.com/FiloSottile/mkcert` for specific installation steps<br><br>
 
 ### Set up SMTP Gmail server
@@ -45,15 +46,17 @@ Step 5.3: `Add arguments (optional):` value will be the `delete_account.php` fil
 **Step 7:** At `Conditions` tab check `Start the task only if the computer is on AC power` and uncheck `Stop if the computer switches to battery power` (the second field is optional)<br><br>
 **Step 8:** At `Settings` check these fields: `Allows task to be run on demand`, `Run task as soon as possible after a scheduled start is missed`, `Stop the task if it runs longer than:` (2 hours or any value), `If the running task does not end when requested, force it to stop`, `If the task is not scheduled to run again, delete it after:` (30 days or any value), `If the task is already running, then the following rule applies:` (Do not start a new instance)<br><br>
 **Step 9:** Save the config<br><br>
+
 ###### For other OSes, you can look up on the internet for the set up steps<br><br>
 
-### Steps to config apache server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
+### Steps to config the web server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
 
 **Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).<br><br>
-**Step 2:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [your_ip_address]` (`your_ip_address` is optional. This step is only used for development, production must not use this step)<br><br>
-**Step 3:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`<br><br>
-**Step 4:** Locate the apache server installation directory (for example `C:\xampp\apache`)<br><br>
-**Step 5:** Check for modules and includes, open `httpd.conf` file from the `conf` directory of your apache installation directory, and uncomment these groups if they are commented
+**Step 2:** Create a `.env` file base on `.env.example` file and set up your own values.<br><br>
+**Step 3:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [your_ip_address]` (`your_ip_address` is optional. This step is only used for development, production must not use this step)<br><br>
+**Step 4:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`<br><br>
+**Step 5:** Locate the apache server installation directory (for example `C:\xampp\apache`)<br><br>
+**Step 6:** Check for modules and includes, open `httpd.conf` file from the `conf` directory of your apache installation directory, and uncomment these groups if they are commented
 
 ```
 LoadModule log_config_module modules/mod_log_config.so
@@ -72,7 +75,7 @@ SSLRandomSeed connect builtin
 
 <br>
 
-**Step 6:** Add virtual host, open `httpd-vhosts.conf` file from the `conf\extra` directory of your apache installation directory, add the following lines
+**Step 7:** Add virtual host, open `httpd-vhosts.conf` file from the `conf\extra` directory of your apache installation directory, add the following lines
 
 ```
 <VirtualHost *:443>
@@ -220,9 +223,9 @@ ServerAlias https://www.test.bookstore.com
 </VirtualHost>
 ```
 
-Replace `C:\example_path` with the directory of this project in your machine to finish setting up this step.<br>
+Replace `C:\example_path` with the directory of this project in your machine and `<your email address>` with your designated email address to finish setting up this step.<br>
 
-**Step 7:** Update Hosts File, open this file at this path `C:\Windows\System32\drivers\etc\hosts` (usually the case) as an administrator and add these lines at the bottom of the file
+**Step 8:** Update Hosts File, open this file at this path `C:\Windows\System32\drivers\etc\hosts` (usually the case) as an administrator and add these lines at the bottom of the file
 
 ```
 # Map www.demo.bookstore.com to localhost
@@ -234,6 +237,5 @@ Replace `C:\example_path` with the directory of this project in your machine to 
 ```
 
 This only apply for development stage, production stage should skip this<br><br>
-**Step 8:** Create a `.env` file at the root directory of the project and add environment variables to it (based on `.env.example` file)<br><br>
 **Step 9:** Restart apache server (by using XAMPP for example)<br><br>
 **Step 10:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]<br><br>

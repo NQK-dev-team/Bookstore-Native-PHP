@@ -3,7 +3,7 @@ drop schema if exists bookstore;
 create schema bookstore;
 
 use bookstore;
-
+                              
 -- Important --
 SET @nullVar = NULL;
 
@@ -208,3 +208,10 @@ create table eventApply(
     foreign key (eventID) references eventDiscount(id) on delete cascade on update cascade,
     foreign key (bookID) references book(id) on delete cascade on update cascade
 ); -- Used to tell which books are discounted by the discount event that has `applyForAll` set to false
+
+create table request(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(255) not null,
+    author varchar(1000) not null,
+    requestTime datetime not null default now()
+);

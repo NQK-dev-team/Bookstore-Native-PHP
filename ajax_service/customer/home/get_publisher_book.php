@@ -20,18 +20,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select bookID as id,name,edition,imagePath from (
+                  $stmt = $conn->prepare('select book.id,book.name,book.edition,book.imagePath,coalesce(totalSold,0) as totalSold from book left join (select bookID, sum(totalSold) as totalSold from (
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
-) as combined join book on book.id=combined.bookID and book.status=true and publisher=? group by bookID order by sum(combined.totalSold) desc,name,edition,id limit 10');
+) as combined group by bookID order by totalSold desc,bookID) as superCombined on book.id=superCombined.bookID where book.status=true and publisher=? order by totalSold desc,book.name,book.edition limit 10;');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select bookID as id,name,edition,imagePath from (
+                        echo json_encode(['error' => 'Query `select book.id,book.name,book.edition,book.imagePath,coalesce(totalSold,0) as totalSold from book left join (select bookID, sum(totalSold) as totalSold from (
 select bookID,sum(amount) as totalSold from physicalOrderContain join customerOrder on customerOrder.id=physicalOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
 union
 select bookID,count(*) as totalSold from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=true and week(purchaseTime,1)=week(curdate(),1) group by bookID
-) as combined join book on book.id=combined.bookID and book.status=true and publisher=? group by bookID order by sum(combined.totalSold) desc,name,edition,id limit 10` preparation failed!']);
+) as combined group by bookID order by totalSold desc,bookID) as superCombined on book.id=superCombined.bookID where book.status=true and publisher=? order by totalSold desc,book.name,book.edition limit 10;` preparation failed!']);
                         $conn->close();
                         exit;
                   }
@@ -48,6 +48,7 @@ select bookID,count(*) as totalSold from fileOrderContain join customerOrder on 
                   $idx = 0;
                   while ($row = $result->fetch_assoc()) {
                         $host = $_SERVER['HTTP_HOST'];
+                        unset($row['totalSold']);
                         $row['imagePath'] = "https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
                         $row['edition'] = convertToOrdinal($row['edition']);
                         $queryResult[] = $row;

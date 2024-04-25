@@ -33,8 +33,6 @@ $(document).ready(function ()
 
       getBestSeller();
 
-      adjustViewMore();
-
       getCategories();
 
       getPublishers();
@@ -44,33 +42,8 @@ $(document).ready(function ()
             checkOverflow(0);
             checkOverflow(1);
             checkOverflow(2);
-            adjustViewMore();
       });
 });
-
-function adjustViewMore()
-{
-      if (window.innerWidth >= 768)
-      {
-            $('#learn_more_sales').html(`More<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                      <g id="SVGRepo_iconCarrier">
-                                                            <path d="M9.71069 18.2929C10.1012 18.6834 10.7344 18.6834 11.1249 18.2929L16.0123 13.4006C16.7927 12.6195 16.7924 11.3537 16.0117 10.5729L11.1213 5.68254C10.7308 5.29202 10.0976 5.29202 9.70708 5.68254C9.31655 6.07307 9.31655 6.70623 9.70708 7.09676L13.8927 11.2824C14.2833 11.6729 14.2833 12.3061 13.8927 12.6966L9.71069 16.8787C9.32016 17.2692 9.32016 17.9023 9.71069 18.2929Z" fill="#007bff"></path>
-                                                      </g>
-                                                </svg>`);
-      }
-      else
-      {
-            $('#learn_more_sales').html(`<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                      <g id="SVGRepo_iconCarrier">
-                                                            <path d="M9.71069 18.2929C10.1012 18.6834 10.7344 18.6834 11.1249 18.2929L16.0123 13.4006C16.7927 12.6195 16.7924 11.3537 16.0117 10.5729L11.1213 5.68254C10.7308 5.29202 10.0976 5.29202 9.70708 5.68254C9.31655 6.07307 9.31655 6.70623 9.70708 7.09676L13.8927 11.2824C14.2833 11.6729 14.2833 12.3061 13.8927 12.6966L9.71069 16.8787C9.32016 17.2692 9.32016 17.9023 9.71069 18.2929Z" fill="#007bff"></path>
-                                                      </g>
-                                                </svg>`);
-      }
-}
 
 function checkOverflow(mode)
 {
@@ -173,65 +146,65 @@ function getSales()
                         }
 
                         let temp = '';
-                        for (let i = 0; i < data.query_result[1].length; i++)
+                        for (let i = 0; i < data.query_result.length; i++)
                         {
                               if (i === 0)
-                                    temp += `<a class='bg-white card p-2 text-decoration-none me-sm-3 me-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
-                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
+                                    temp += `<a class='bg-white card p-2 text-decoration-none me-sm-3 me-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                                <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition image'>
                                                 <div class="card-body p-1 pt-2">
-                                                      <h5 class="card-title">${ data.query_result[1][i].name }</h5>
-                                                      <p class="card-text">${ data.query_result[1][i].edition } edition</p>
-                                                      <p class="card-text">Author: ${ data.query_result[1][i].author.join(', ') } edition</p>
-                                                      <span class='bg-danger p-1 rounded text-white'>-${ data.query_result[0].discount }%</span>
+                                                      <h5 class="card-title">${ data.query_result[i].name }</h5>
+                                                      <p class="card-text">${ data.query_result[i].edition } edition</p>
+                                                      <p class="card-text">Author: ${ data.query_result[i].author.join(', ') } edition</p>
+                                                      <span class='bg-danger p-1 rounded text-white'>-${ data.query_result[i].discount }%</span>
                                                       <div class='d-flex mt-3'>
                                                             <p class='text-nowrap'>Hardcover:</p>
-                                                            <p class='${ data.query_result[1][i].physicalPrice && data.query_result[0].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[1][i].physicalPrice ? '$' + data.query_result[1][i].physicalPrice : 'N/A' }</p>
-                                                            ${ data.query_result[1][i].physicalPrice && data.query_result[0].discount ? `<p class='fw-medium'>$${ (data.query_result[1][i].physicalPrice * (100.0 - data.query_result[0].discount) / 100).toFixed(2) }</p>` : '' }
+                                                            <p class='${ data.query_result[i].physicalPrice && data.query_result[i].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[i].physicalPrice ? '$' + data.query_result[i].physicalPrice : 'N/A' }</p>
+                                                            ${ data.query_result[i].physicalPrice && data.query_result[i].discount ? `<p class='fw-medium'>$${ (data.query_result[i].physicalPrice * (100.0 - data.query_result[i].discount) / 100).toFixed(2) }</p>` : '' }
                                                       </div>
                                                      <div class='d-flex'>
                                                             <p class='text-nowrap'>E-book:</p>
-                                                            <p class='${ data.query_result[1][i].filePrice && data.query_result[0].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[1][i].filePrice ? '$' + data.query_result[1][i].filePrice : 'N/A' }</p>
-                                                            ${ data.query_result[1][i].filePrice && data.query_result[0].discount ? `<p class='fw-medium'>$${ (data.query_result[1][i].filePrice * (100.0 - data.query_result[0].discount) / 100).toFixed(2) }</p>` : '' }
+                                                            <p class='${ data.query_result[i].filePrice && data.query_result[i].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[i].filePrice ? '$' + data.query_result[i].filePrice : 'N/A' }</p>
+                                                            ${ data.query_result[i].filePrice && data.query_result[i].discount ? `<p class='fw-medium'>$${ (data.query_result[i].filePrice * (100.0 - data.query_result[i].discount) / 100).toFixed(2) }</p>` : '' }
                                                       </div>
                                                 </div>
                                           </a>`;
                               else if (i === data.query_result.length - 1)
-                                    temp += `<a class='bg-white card p-2 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
-                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
+                                    temp += `<a class='bg-white card p-2 text-decoration-none ms-sm-3 ms-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                                <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition image'>
                                                 <div class="card-body p-1 pt-2">
-                                                      <h5 class="card-title">${ data.query_result[1][i].name }</h5>
-                                                      <p class="card-text">${ data.query_result[1][i].edition } edition</p>
-                                                      <p class="card-text">Author: ${ data.query_result[1][i].author.join(', ') } edition</p>
-                                                      <span class='bg-danger p-1 rounded text-white'>-${ data.query_result[0].discount }%</span>
+                                                      <h5 class="card-title">${ data.query_result[i].name }</h5>
+                                                      <p class="card-text">${ data.query_result[i].edition } edition</p>
+                                                      <p class="card-text">Author: ${ data.query_result[i].author.join(', ') } edition</p>
+                                                      <span class='bg-danger p-1 rounded text-white'>-${ data.query_result[i].discount }%</span>
                                                       <div class='d-flex mt-3'>
                                                             <p class='text-nowrap'>Hardcover:</p>
-                                                            <p class='${ data.query_result[1][i].physicalPrice && data.query_result[0].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[1][i].physicalPrice ? '$' + data.query_result[1][i].physicalPrice : 'N/A' }</p>
-                                                            ${ data.query_result[1][i].physicalPrice && data.query_result[0].discount ? `<p class='fw-medium'>$${ (data.query_result[1][i].physicalPrice * (100.0 - data.query_result[0].discount) / 100).toFixed(2) }</p>` : '' }
+                                                            <p class='${ data.query_result[i].physicalPrice && data.query_result[i].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[i].physicalPrice ? '$' + data.query_result[i].physicalPrice : 'N/A' }</p>
+                                                            ${ data.query_result[i].physicalPrice && data.query_result[i].discount ? `<p class='fw-medium'>$${ (data.query_result[i].physicalPrice * (100.0 - data.query_result[i].discount) / 100).toFixed(2) }</p>` : '' }
                                                       </div>
                                                      <div class='d-flex'>
                                                             <p class='text-nowrap'>E-book:</p>
-                                                            <p class='${ data.query_result[1][i].filePrice && data.query_result[0].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[1][i].filePrice ? '$' + data.query_result[1][i].filePrice : 'N/A' }</p>
-                                                            ${ data.query_result[1][i].filePrice && data.query_result[0].discount ? `<p class='fw-medium'>$${ (data.query_result[1][i].filePrice * (100.0 - data.query_result[0].discount) / 100).toFixed(2) }</p>` : '' }
+                                                            <p class='${ data.query_result[i].filePrice && data.query_result[i].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[i].filePrice ? '$' + data.query_result[i].filePrice : 'N/A' }</p>
+                                                            ${ data.query_result[i].filePrice && data.query_result[i].discount ? `<p class='fw-medium'>$${ (data.query_result[i].filePrice * (100.0 - data.query_result[i].discount) / 100).toFixed(2) }</p>` : '' }
                                                       </div>
                                                 </div>
                                           </a>`;
                               else
-                                    temp += `<a class='bg-white card p-2 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?id=${ data.query_result[1][i].id }'>
-                                                <img class="card-img-top" src="${ data.query_result[1][i].imagePath }" alt='${ data.query_result[1][i].name } ${ data.query_result[1][i].edition } edition image'>
+                                    temp += `<a class='bg-white card p-2 text-decoration-none mx-sm-3 mx-2' href='/book/book-detail?id=${ data.query_result[i].id }'>
+                                                <img class="card-img-top" src="${ data.query_result[i].imagePath }" alt='${ data.query_result[i].name } ${ data.query_result[i].edition } edition image'>
                                                 <div class="card-body p-1 pt-2">
-                                                      <h5 class="card-title">${ data.query_result[1][i].name }</h5>
-                                                      <p class="card-text">${ data.query_result[1][i].edition } edition</p>
-                                                      <p class="card-text">Author: ${ data.query_result[1][i].author.join(', ') } edition</p>
-                                                      <span class='bg-danger p-1 rounded text-white'>-${ data.query_result[0].discount }%</span>
+                                                      <h5 class="card-title">${ data.query_result[i].name }</h5>
+                                                      <p class="card-text">${ data.query_result[i].edition } edition</p>
+                                                      <p class="card-text">Author: ${ data.query_result[i].author.join(', ') } edition</p>
+                                                      <span class='bg-danger p-1 rounded text-white'>-${ data.query_result[i].discount }%</span>
                                                       <div class='d-flex mt-3'>
                                                             <p class='text-nowrap'>Hardcover:</p>
-                                                            <p class='${ data.query_result[1][i].physicalPrice && data.query_result[0].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[1][i].physicalPrice ? '$' + data.query_result[1][i].physicalPrice : 'N/A' }</p>
-                                                            ${ data.query_result[1][i].physicalPrice && data.query_result[0].discount ? `<p class='fw-medium'>$${ (data.query_result[1][i].physicalPrice * (100.0 - data.query_result[0].discount) / 100).toFixed(2) }</p>` : '' }
+                                                            <p class='${ data.query_result[i].physicalPrice && data.query_result[i].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[i].physicalPrice ? '$' + data.query_result[i].physicalPrice : 'N/A' }</p>
+                                                            ${ data.query_result[i].physicalPrice && data.query_result[i].discount ? `<p class='fw-medium'>$${ (data.query_result[i].physicalPrice * (100.0 - data.query_result[i].discount) / 100).toFixed(2) }</p>` : '' }
                                                       </div>
                                                      <div class='d-flex'>
                                                             <p class='text-nowrap'>E-book:</p>
-                                                            <p class='${ data.query_result[1][i].filePrice && data.query_result[0].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[1][i].filePrice ? '$' + data.query_result[1][i].filePrice : 'N/A' }</p>
-                                                            ${ data.query_result[1][i].filePrice && data.query_result[0].discount ? `<p class='fw-medium'>$${ (data.query_result[1][i].filePrice * (100.0 - data.query_result[0].discount) / 100).toFixed(2) }</p>` : '' }
+                                                            <p class='${ data.query_result[i].filePrice && data.query_result[i].discount ? 'text-decoration-line-through' : '' } mx-2 fw-medium'>${ data.query_result[i].filePrice ? '$' + data.query_result[i].filePrice : 'N/A' }</p>
+                                                            ${ data.query_result[i].filePrice && data.query_result[i].discount ? `<p class='fw-medium'>$${ (data.query_result[i].filePrice * (100.0 - data.query_result[i].discount) / 100).toFixed(2) }</p>` : '' }
                                                       </div>
                                                 </div>
                                           </a>`;
@@ -239,12 +212,12 @@ function getSales()
                         $('#saleList').append(temp);
                         checkOverflow(0);
 
-                        updateTimer(data.query_result[0].endDate);
+                        // updateTimer(data.query_result[i].endDate);
 
-                        setInterval(function ()
-                        {
-                              updateTimer(data.query_result[0].endDate);
-                        }, 1000);
+                        // setInterval(function ()
+                        // {
+                        //       updateTimer(data.query_result[i].endDate);
+                        // }, 1000);
                   }
             },
 
@@ -264,22 +237,22 @@ function getSales()
       });
 }
 
-function updateTimer(endDate)
-{
-      const currentTime = new Date();
-      const targetDate = new Date(endDate);
-      const difference = targetDate - currentTime;
+// function updateTimer(endDate)
+// {
+//       const currentTime = new Date();
+//       const targetDate = new Date(endDate);
+//       const difference = targetDate - currentTime;
 
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+//       const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+//       const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+//       const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-      document.getElementById("days").innerText = days;
-      document.getElementById("hours").innerText = hours;
-      document.getElementById("minutes").innerText = minutes;
-      document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
-}
+//       document.getElementById("days").innerText = days;
+//       document.getElementById("hours").innerText = hours;
+//       document.getElementById("minutes").innerText = minutes;
+//       document.getElementById("seconds").innerText = seconds < 10 ? '0' + seconds : seconds;
+// }
 
 function getBestSeller()
 {
@@ -456,8 +429,8 @@ function getPublishers()
                         }
                         $('#publisherList').append(temp);
 
-                        current_publisher = data.query_result[0].publisher;
-                        getPublisherBook(data.query_result[0].publisher);
+                        current_publisher = data.query_result[i].publisher;
+                        getPublisherBook(data.query_result[i].publisher);
                   }
             },
 
@@ -629,8 +602,8 @@ function getCategories()
                         }
                         $('#categoryList').append(temp);
 
-                        current_category = data.query_result[0].name;
-                        getCategoryBook(data.query_result[0].name);
+                        current_category = data.query_result[i].name;
+                        getCategoryBook(data.query_result[i].name);
                   }
             },
 
