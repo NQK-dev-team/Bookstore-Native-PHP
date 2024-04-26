@@ -322,7 +322,7 @@ function changePersonalInfo()
                   $('a').removeClass('disable_link');
                   $('#emailInput').prop('disabled', true);
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -419,7 +419,7 @@ function changePassword()
                   $('a').removeClass('disable_link');
                   $('#emailInput').prop('disabled', true);
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -471,7 +471,7 @@ function deactivateAccount()
                   $('a').removeClass('disable_link');
                   $('#emailInput').prop('disabled', true);
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -523,7 +523,7 @@ function deleteAccount()
                   $('a').removeClass('disable_link');
                   $('#emailInput').prop('disabled', true);
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -590,7 +590,7 @@ function findOrder()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -689,7 +689,7 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -779,7 +779,7 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

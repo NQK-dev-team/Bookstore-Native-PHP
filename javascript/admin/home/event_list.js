@@ -104,7 +104,7 @@ function fetchCouponList()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

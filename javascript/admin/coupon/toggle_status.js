@@ -57,7 +57,7 @@ function activateCoupon()
             },
             error: function (err)
             {
-                  console.error(err);
+                  
 
                   if (err.status >= 500)
                   {
@@ -117,7 +117,7 @@ function deactivateCoupon()
             },
             error: function (err)
             {
-                  console.error(err);
+                  
 
                   if (err.status >= 500)
                   {

@@ -153,7 +153,7 @@ function getCategory(search)
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -500,7 +500,7 @@ function submitForm()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

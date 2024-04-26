@@ -41,7 +41,7 @@ function deleteCategory()
             },
             error: function (err)
             {
-                  console.error(err);
+                  
 
                   if (err.status >= 500)
                   {

@@ -121,7 +121,7 @@ function updateInStock(id)
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -163,7 +163,7 @@ async function reEvalOrder(isFirstTime)
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -206,7 +206,7 @@ async function updateBillingDetail()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -340,7 +340,7 @@ async function fetchFileOrder()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -508,7 +508,7 @@ async function fetchPhysicalOrder(isFirstTime)
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -557,7 +557,7 @@ function removeBook()
 
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -596,7 +596,7 @@ function removeBook()
 
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -698,7 +698,7 @@ function updateAmount(amount, id)
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -760,7 +760,7 @@ function payOrder()
                   $('a').removeClass('disable_link');
                   $('#physicalDestination').prop('disabled', disableProp);
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

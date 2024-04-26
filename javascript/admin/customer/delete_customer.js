@@ -64,7 +64,7 @@ function deleteCustomer()
                   $('#prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#list_offset').prop('disabled', true);
 
-                  console.error(err);
+                  
 
                   if (err.status >= 500)
                   {

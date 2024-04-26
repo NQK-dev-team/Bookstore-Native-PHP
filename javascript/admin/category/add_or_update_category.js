@@ -53,7 +53,7 @@ function openEditModal(id)
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -124,7 +124,7 @@ function updateCategory()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -188,7 +188,7 @@ function addCategory()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

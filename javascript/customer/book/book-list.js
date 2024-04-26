@@ -109,7 +109,7 @@ function fetchCategoryList()
         },
         error: function (err)
         {
-            console.error(err);
+            
             if (err.status >= 500)
             {
                 $('#errorModal').modal('show');
@@ -169,7 +169,7 @@ function fetchAuthorList()
         },
         error: function (err)
         {
-            console.error(err);
+            
             if (err.status >= 500)
             {
                 $('#errorModal').modal('show');
@@ -230,7 +230,7 @@ function fetchPublisherList()
         },
         error: function (err)
         {
-            console.error(err);
+            
             if (err.status >= 500)
             {
                 $('#errorModal').modal('show');
@@ -354,7 +354,7 @@ function fetchBook()
         },
         error: function (err)
         {
-            console.error(err);
+            
             if (err.status >= 500)
             {
                 $('#errorModal').modal('show');
@@ -419,7 +419,7 @@ function addNewBook()
         },
         error: function (err)
         {
-            console.error(err);
+            
             if (err.status >= 500)
             {
                 $('#errorModal').modal('show');

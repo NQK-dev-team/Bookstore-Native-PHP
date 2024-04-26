@@ -192,7 +192,7 @@ function changeCustomerInfo()
                   $('#newPasswordInput').val('');
                   $('#confirmPasswordInput').val('');
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -290,7 +290,7 @@ function changePassword()
                   $('#newPasswordInput').val('');
                   $('#confirmPasswordInput').val('');
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -357,7 +357,7 @@ function findOrder()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -456,7 +456,7 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -546,7 +546,7 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

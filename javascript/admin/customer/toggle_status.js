@@ -65,7 +65,7 @@ function deactivateCustomer()
                   $('#prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#list_offset').prop('disabled', true);
 
-                  console.error(err);
+                  
 
                   if (err.status >= 500)
                   {
@@ -127,7 +127,7 @@ function activateCustomer()
                   $('#prev_button').prop('disabled', prevBtnDisabledProp);
                   $('#list_offset').prop('disabled', true);
 
-                  console.error(err);
+                  
 
                   if (err.status >= 500)
                   {

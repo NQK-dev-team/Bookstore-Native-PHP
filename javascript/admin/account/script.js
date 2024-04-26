@@ -238,7 +238,7 @@ function changePersonalInfo()
                   $('a').removeClass('disable_link');
                   $('#emailInput').prop('disabled', true);
 
-                  console.error(err);
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -335,7 +335,7 @@ function changePassword()
                   $('a').removeClass('disable_link');
                   $('#emailInput').prop('disabled', true);
 
-                  console.error(err);
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

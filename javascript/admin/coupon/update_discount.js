@@ -202,7 +202,7 @@ function openUpdateModal(id)
 
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -254,7 +254,7 @@ function openUpdateModal(id)
 
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -306,7 +306,7 @@ function openUpdateModal(id)
 
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -418,7 +418,7 @@ function updateCoupon()
                   },
                   error: function (err)
                   {
-                        console.error(err);
+                        
 
                         if (err.status >= 500)
                         {
@@ -501,7 +501,7 @@ function updateCoupon()
                   },
                   error: function (err)
                   {
-                        console.error(err);
+                        
 
                         if (err.status >= 500)
                         {
@@ -584,7 +584,7 @@ function updateCoupon()
                   },
                   error: function (err)
                   {
-                        console.error(err);
+                        
 
                         if (err.status >= 500)
                         {

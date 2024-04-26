@@ -181,7 +181,7 @@ function signUpHandler(event)
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#error_message_content').text('Server encountered error!');
@@ -220,7 +220,7 @@ function checkPhoneUsed()
             },
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#error_message_content').text('Server encountered error!');
@@ -261,7 +261,7 @@ function checkEmailUsed(isRefEmail)
                   },
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#error_message_content').text('Server encountered error!');
@@ -306,7 +306,7 @@ function checkEmailUsed(isRefEmail)
                   },
                   error: function (err)
                   {
-                        console.error(err);
+                        
                         if (err.status >= 500)
                         {
                               $('#error_message_content').text('Server encountered error!');

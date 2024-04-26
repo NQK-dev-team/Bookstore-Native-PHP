@@ -104,7 +104,7 @@ $(document).ready(function ()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -143,7 +143,7 @@ $(document).ready(function ()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -182,7 +182,7 @@ $(document).ready(function ()
 
             error: function (err)
             {
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -413,7 +413,7 @@ function fetchBookList()
                   $('#book_next_button').prop('disabled', nextBtnDisabledProp);
                   $('#book_prev_button').prop('disabled', prevBtnDisabledProp);
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

@@ -62,7 +62,7 @@ function loginHandler(e, user_type)
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
 
-                  console.error(err);
+                  
                   if (err.status >= 500)
                   {
                         $('#error_message_content').text('Server encountered error!');
