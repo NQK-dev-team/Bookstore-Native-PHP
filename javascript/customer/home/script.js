@@ -223,7 +223,7 @@ function getSales()
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -367,7 +367,7 @@ function getBestSeller()
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -429,14 +429,14 @@ function getPublishers()
                         }
                         $('#publisherList').append(temp);
 
-                        current_publisher = data.query_result[i].publisher;
-                        getPublisherBook(data.query_result[i].publisher);
+                        current_publisher = data.query_result[0].publisher;
+                        getPublisherBook(data.query_result[0].publisher);
                   }
             },
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -554,7 +554,7 @@ function getPublisherBook(name)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -602,14 +602,14 @@ function getCategories()
                         }
                         $('#categoryList').append(temp);
 
-                        current_category = data.query_result[i].name;
-                        getCategoryBook(data.query_result[i].name);
+                        current_category = data.query_result[0].name;
+                        getCategoryBook(data.query_result[0].name);
                   }
             },
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -727,7 +727,7 @@ function getCategoryBook(name)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

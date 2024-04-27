@@ -224,7 +224,38 @@ function changePersonalInfo()
                         $('#addressInput').data('initial-value', $('#addressInput').val());
                         $('#dobInput').data('initial-value', $('#dobInput').val());
                         $('#genderInput').data('initial-value', $('#genderInput').val());
-                        $('#userImage').data('initial-src', $('#userImage').prop('src'));
+                        if ($('#userImage').prop('src').includes($('#userImage').data('initial-src')))
+                        {
+                              if ($('#userImage').data('initial-src').includes('default_male.jpeg') || $('#userImage').data('initial-src').includes('default_female.jpg') || $('#userImage').data('initial-src').includes('default_other.png'))
+                              {
+                                    if (gender === 'M')
+                                    {
+                                          let temp = $('#userImage').prop('src').replace("default_female.jpg", "default_male.jpeg");
+                                          temp = temp.replace("default_other.png", "default_male.jpeg");
+
+                                          $('#userImage').data('initial-src', temp);
+                                          $('#userImage').prop('src', temp);
+                                    }
+                                    else if (gender === 'F')
+                                    {
+                                          let temp = $('#userImage').prop('src').replace("default_male.jpeg", "default_female.jpg");
+                                          temp = temp.replace("default_other.png", "default_female.jpg");
+
+                                          $('#userImage').data('initial-src', temp);
+                                          $('#userImage').prop('src', temp);
+                                    }
+                                    else if (gender === 'O')
+                                    {
+                                          let temp = $('#userImage').prop('src').replace("default_male.jpeg", "default_other.png");
+                                          temp = temp.replace("default_female.jpg", "default_other.png");
+
+                                          $('#userImage').data('initial-src', temp);
+                                          $('#userImage').prop('src', temp);
+                                    }
+                              }
+                        }
+                        else
+                              $('#userImage').data('initial-src', $('#userImage').prop('src'));
                         $('#imageFileName').text('');
                         $('#imageInput').val('');
                         newImg = null;

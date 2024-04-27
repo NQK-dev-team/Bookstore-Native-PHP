@@ -105,7 +105,7 @@ create table rating(
 	customerID varchar(20),
     bookID varchar(20),
     primary key(customerID,bookID),
-    star double not null,
+    star int not null,
     check(star>=0 and star<=5),
     comment text,
     ratingTime datetime not null default CURRENT_TIMESTAMP,

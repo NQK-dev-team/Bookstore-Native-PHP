@@ -44,10 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
       }
 
-      $stmt = $conn->prepare("SELECT * FROM physicalCopy WHERE id=?");
+      $stmt = $conn->prepare("SELECT * FROM physicalCopy join book on book.id=physicalCopy.id WHERE book.id=? and book.status=true");
       if (!$stmt) {
         http_response_code(500);
-        echo json_encode(['error' => 'Query `SELECT * FROM physicalCopy WHERE id=?` preparation failed!']);
+        echo json_encode(['error' => 'Query `SELECT * FROM physicalCopy join book on book.id=physicalCopy.id WHERE book.id=? and book.status=true` preparation failed!']);
         exit;
       }
       $stmt->bind_param("s", $bookID);

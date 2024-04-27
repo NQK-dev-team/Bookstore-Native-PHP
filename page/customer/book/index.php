@@ -80,7 +80,7 @@ if ($return_status_code === 400) {
                                                       </select>
                                                 </div>
                                                 <div class='ms-sm-3 mt-3 mt-sm-0'>
-                                                      <select onchange="fetchBook()" id='listLimit' class="form-select pointer" aria-label="Select number of books per page">
+                                                      <select id='listLimit' class="form-select pointer" aria-label="Select number of books per page">
                                                             <option value="12" selected>12 books</option>
                                                             <option value="24">24 books</option>
                                                             <option value="48">48 books</option>
@@ -98,6 +98,7 @@ if ($return_status_code === 400) {
                                           </div>
                                           <div class="btn-group d-none d-xl-inline-flex ms-3">
                                                 <button onclick="adJustOffset(false)" name="previous" type="button" class="btn btn-light fw-medium border border-1 border-secondary">&lt;</button>
+                                                <button type="button" class="btn btn-light fw-medium border border-1 border-secondary" disabled name="offset"></button>
                                                 <button onclick="adJustOffset(true)" name="next" type="button" class="btn btn-light fw-medium border border-1 border-secondary">&gt;</button>
                                           </div>
                                     </div>
@@ -106,6 +107,7 @@ if ($return_status_code === 400) {
                                     <div class='mx-auto mb-3 mt-auto'>
                                           <div class="btn-group mt-3">
                                                 <button onclick="adJustOffset(false)" name="previous" type="button" class="btn btn-light fw-medium border border-1 border-secondary">&lt;</button>
+                                                <button type="button" class="btn btn-light fw-medium border border-1 border-secondary" disabled name="offset"></button>
                                                 <button onclick="adJustOffset(true)" name="next" type="button" class="btn btn-light fw-medium border border-1 border-secondary">&gt;</button>
                                           </div>
                                     </div>

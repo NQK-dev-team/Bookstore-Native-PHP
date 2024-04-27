@@ -1,4 +1,8 @@
 let mode = null, interval = null;
+let ratingFilter = null;
+let rating = null;
+const limit = 5;
+let showAll = false;
 
 $(document).ready(function ()
 {
@@ -36,19 +40,68 @@ $(document).ready(function ()
             }, 10000);
         }
     });
-    $(".btn-primary").click(function(){
-        $(".collapse").collapse('toggle');
-    });
-});
 
-function toggleButtonText() {
-    var button = document.getElementById('toggleButton');
-    if (button.textContent === "Show all comments") {
-          button.textContent = "Show less comments";
-    } else {
-          button.textContent = "Show all comments";
-    }
-    }
+    $('#ratingForm').submit(function (e)
+    {
+        e.preventDefault();
+        if (rating === null)
+        {
+            $('#errorModal').modal('show');
+            $('#error_message').text('Please rate the product!');
+            return;
+        }
+
+        const comment = $('#comment').val();
+        $.ajax({
+            url: '/ajax_service/customer/book/submit_rating.php',
+            method: 'POST',
+            data: { id: encodeData(bookID), rating: encodeData(rating), comment: encodeData(comment) },
+            headers: {
+                'X-CSRF-Token': CSRF_TOKEN
+            },
+            dataType: 'json',
+            success: function (data)
+            {
+                if (data.error)
+                {
+                    $('#errorModal').modal('show');
+                    $('#error_message').text(data.error);
+                }
+                if (data.query_result)
+                {
+                    $('#customMessage').text('Rating submitted!');
+                    $('#customModal').modal('show');
+                    originalRating = rating;
+                    originalComment = comment;
+                    fetchRatings();
+                    $('#deleteBtn').css('display', 'inline-block');
+                }
+            },
+
+            error: function (err)
+            {
+
+                if (err.status >= 500)
+                {
+                    $('#errorModal').modal('show');
+                    $('#error_message').text('Server encountered error!');
+                } else
+                {
+                    $('#errorModal').modal('show');
+                    $('#error_message').text(err.responseJSON.error);
+                }
+            }
+        });
+    });
+
+    rating = originalRating;
+
+    resetRatingForm();
+
+    ratingFilter = 'all';
+
+    fetchRatings();
+});
 
 function adjustAmount(isIncrease)
 {
@@ -132,7 +185,7 @@ function checkInStock()
 
         error: function (err)
         {
-            console.error(err);
+
             if (err.status >= 500)
             {
                 $('#errorModal').modal('show');
@@ -165,27 +218,15 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                              <div class="toast-header bg-warning-subtle">
-                                    <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Notice</strong>
-                                    <small>Just now</small>
-                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                              </div>
-                              <div class="toast-body bg-warning-subtle">
-                                    You have already bought this E-book!
-                              </div>
-                        </div>`);
-                    $('#toasts_container').append(divVar);
-
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
-                    toastBootstrap.show();
+                    $('#customMessage').text('You have already bought this E-book!');
+                    $('#customModal').modal('show');
                     buyable = false;
                 }
             },
 
             error: function (err)
             {
-                console.error(err);
+
                 if (err.status >= 500)
                 {
                     $('#errorModal').modal('show');
@@ -214,27 +255,15 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                              <div class="toast-header bg-warning-subtle">
-                                    <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Notice</strong>
-                                    <small>Just now</small>
-                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                              </div>
-                              <div class="toast-body bg-warning-subtle">
-                                    This E-book has already been added to your cart!
-                              </div>
-                        </div>`);
-                    $('#toasts_container').append(divVar);
-
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
-                    toastBootstrap.show();
+                    $('#customMessage').text('This E-book has already been added to your cart!');
+                    $('#customModal').modal('show');
                     buyable = false;
                 }
             },
 
             error: function (err)
             {
-                console.error(err);
+
                 if (err.status >= 500)
                 {
                     $('#errorModal').modal('show');
@@ -266,26 +295,14 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                              <div class="toast-header bg-warning-subtle">
-                                    <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Success</strong>
-                                    <small>Just now</small>
-                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                              </div>
-                              <div class="toast-body bg-warning-subtle">
-                                    E-book added to cart!
-                              </div>
-                        </div>`);
-                    $('#toasts_container').append(divVar);
-
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
-                    toastBootstrap.show();
+                    $('#customMessage').text('E-book added to cart!');
+                    $('#customModal').modal('show');
                 }
             },
 
             error: function (err)
             {
-                console.error(err);
+
                 if (err.status >= 500)
                 {
                     $('#errorModal').modal('show');
@@ -320,26 +337,14 @@ async function addToCart()
                 }
                 if (data.query_result)
                 {
-                    const divVar = $(`<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                              <div class="toast-header bg-warning-subtle">
-                                    <strong class="me-auto"><i class="bi bi-bell fs-5"></i> Success</strong>
-                                    <small>Just now</small>
-                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                              </div>
-                              <div class="toast-body bg-warning-subtle">
-                                    Hardcover added to cart!
-                              </div>
-                        </div>`);
-                    $('#toasts_container').append(divVar);
-
-                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(divVar[0]);
-                    toastBootstrap.show();
+                    $('#customMessage').text('Hardcover added to cart!');
+                    $('#customModal').modal('show');
                 }
             },
 
             error: function (err)
             {
-                console.error(err);
+
                 if (err.status >= 500)
                 {
                     $('#errorModal').modal('show');
@@ -354,96 +359,232 @@ async function addToCart()
     }
 }
 
-document.querySelectorAll('.rating .bi').forEach((star, index, starList) => {
-    star.addEventListener('mouseover', function() {
-        // Change this star and all previous stars to filled stars
-        for (let i = 0; i <= index; i++) {
-            starList[i].classList.remove('bi-star');
-            starList[i].classList.add('bi-star-fill');
-        }
-        // Change all next stars to empty stars
-        for (let i = index + 1; i < starList.length; i++) {
-            starList[i].classList.remove('bi-star-fill');
-            starList[i].classList.add('bi-star');
-        }
-    });
-
-    star.addEventListener('click', function() {
-    const rating = this.getAttribute('data-value');
-    const ratingHolder = document.getElementById('rating-holder');
-    const bookId = this.getAttribute('data-book-id');
-    const userId = this.getAttribute('data-user-id');
-    const ratingResponse = document.getElementById('rating-response');
-    // Clear the rating holder
-    //ratingHolder.innerHTML = '';
-
-    // Add the filled stars to the rating holder
-    // for (let i = 0; i < rating; i++) {
-    //     const star = document.createElement('i');
-    //     star.className = 'bi bi-star-fill';
-    //     ratingHolder.appendChild(star);
-    // }
-        // Send the rating to the server
-        $.ajax({
-            url: '/ajax_service/customer/book/rating.php',
-            type: 'POST',
-            data: { rating: rating, book_id: bookId, user_id: userId },
-            success: function(response) {
-                console.log(rating, bookId, userId);
-                console.log(response);
-                ratingResponse.innerHTML = response;
-                if (response.trim() === 'Rating saved successfully.') {
-                    ratingHolder.innerHTML = '';
-
-                    //Add the filled stars to the rating holder
-                    for (let i = 0; i < rating; i++) {
-                        const star = document.createElement('i');
-                        star.className = 'bi bi-star-fill';
-                        ratingHolder.appendChild(star);
-                    }
-                }
-            },
-            error: function(error) {
-                console.error('Error:', error);
-                
-            }
-        });
-    });
-});
-
-
-
-// Reset stars to empty when mouse leaves the rating div
-document.querySelector('.rating').addEventListener('mouseleave', function() {
-    document.querySelectorAll('.rating .bi').forEach(star => {
-        star.classList.remove('bi-star-fill');
-        star.classList.add('bi-star');
-    });
-});
-
-function checkAmmount() {
-        const amount = parseInt($('#quantity').val());
-        const inStock = parseInt($('#inStock').text());
-
-        // console.log('Amount:', amount);
-        // console.log('In stock:', inStock);
-        // console.log($('#quantity').get(0));
-
-        clearCustomValidity($('#quantity').get(0));
-
-        if (amount < 0) {
-            alert('Book amount can not be negative!');
-            return;
-        } else if (amount === 0) {
-            alert('Book amount cannot be zero!');
-            return;
-        } else if (amount > inStock) {
-            reportCustomValidity($('#quantity').get(0), "Book amount exceeds in stock amount!");
-            // var input = $('#quantity').get(0);
-            // input.setCustomValidity('Book amount exceeds in stock amount!');
-            //alert('Book amount exceeds in stock amount!');
-            console.log('Amount > inStock');
-            return;
-        }
+function setRatingFilter(e, filterOption)
+{
+    if (e.target.checked)
+    {
+        ratingFilter = filterOption;
+        showAll = false;
+        fetchRatings();
     }
-    
+}
+
+function selectRatingFilter(e)
+{
+    ratingFilter = e.target.value;
+    showAll = false;
+    fetchRatings();
+}
+
+function setRating(e, value)
+{
+    if (e.target.checked)
+    {
+        rating = value;
+    }
+}
+
+async function fetchRatings()
+{
+    await getBookRating();
+
+    $.ajax({
+        url: '/ajax_service/customer/book/get_ratings.php',
+        method: 'GET',
+        data: { id: encodeData(bookID), rating: encodeData(ratingFilter), limit: encodeData(limit), showAll: encodeData(showAll) },
+        dataType: 'json',
+        success: function (data)
+        {
+            if (data.error)
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text(data.error);
+            }
+            else if (data.query_result)
+            {
+                if (showAll)
+                {
+                    $('#showBtn').empty();
+                    $('#showBtn').append(`<button onclick='showAll=false; fetchRatings()' class='border-0 bg-white'>Show Less <i class="bi bi-chevron-up"></i></button>`);
+                }
+                else
+                {
+                    $('#showBtn').empty();
+                    $('#showBtn').append(`<button onclick='showAll=true; fetchRatings()' class='border-0 bg-white'>Show All <i class="bi bi-chevron-down"></i></button>`);
+                }
+
+                if (data.query_result[0].length)
+                    $('#showBtn').css('display', 'inline-block');
+                else
+                    $('#showBtn').css('display', 'none');
+
+                if (limit >= data.query_result[1])
+                    $('#showBtn').css('display', 'none');
+                else
+                    $('#showBtn').css('display', 'inline-block');
+
+                let temp = ``;
+
+                $('#ratingList').empty();
+
+                for (let i = 0; i < data.query_result[0].length; i++)
+                {
+                    temp += `<div class='borderBottom py-3'>
+                                          <div class='d-flex'>
+                                                <img alt='User profile image' src='${ data.query_result[0][i].imagePath }' class='ratingImage'>
+                                                <div class='ms-2'>
+                                                      <p class='mb-0 fw-medium'>${ data.query_result[0][i].name }</p>
+                                                      <div class='text-warning'>${ displayRatingStars(data.query_result[0][i].star) }</div>
+                                                      <small class='text-secondary'>${ data.query_result[0][i].ratingTime }</small>
+                                                      <p class='mt-3'>${ data.query_result[0][i].comment }</p>
+                                                </div>
+                                          </div>
+                                    </div>`;
+                }
+                $('#ratingList').append(temp);
+            }
+        },
+        error: function (err)
+        {
+
+            if (err.status >= 500)
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text('Server encountered error!');
+            } else
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text(err.responseJSON.error);
+            }
+        }
+    })
+}
+
+function resetRatingForm()
+{
+    if (originalRating === 1)
+    {
+        $('#1-star').prop('checked', true);
+    }
+    else if (originalRating === 2)
+    {
+        $('#2-stars').prop('checked', true);
+    }
+    else if (originalRating === 3)
+    {
+        $('#3-stars').prop('checked', true);
+    }
+    else if (originalRating === 4)
+    {
+        $('#4-stars').prop('checked', true);
+    }
+    else if (originalRating === 5)
+    {
+        $('#5-stars').prop('checked', true);
+    } else
+    {
+        $('#1-star').prop('checked', false);
+        $('#2-stars').prop('checked', false);
+        $('#3-stars').prop('checked', false);
+        $('#4-stars').prop('checked', false);
+        $('#5-stars').prop('checked', false);
+    }
+
+    $('#comment').val(originalComment);
+}
+
+async function getBookRating()
+{
+    await $.ajax({
+        url: '/ajax_service/customer/book/get_book_rating.php',
+        method: 'GET',
+        data: { id: encodeData(bookID) },
+        dataType: 'json',
+        success: function (data)
+        {
+            if (data.error)
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text(data.error);
+            }
+            else if (data.query_result)
+            {
+                $('#bookAvgRating').empty();
+                $('#bookAvgRating').append(`<span class="text-warning fw-medium">${ displayRatingStars(data.query_result[0]) }</span>(${ data.query_result[0] })`);
+                $('#avgRating').text(data.query_result[0]);
+                $('#avgRatingPanel').empty();
+                $('#avgRatingPanel').append(displayRatingStars(data.query_result[0]));
+                $('#totalRatings').text('(' + data.query_result[1] + ')');
+                if (data.query_result[1] === 0)
+                {
+                    $('#noRating').css('display', 'block');
+                    $('#showBtn').css('display', 'none');
+                }
+                else
+                {
+                    $('#noRating').css('display', 'none');
+                    $('#showBtn').css('display', 'inline-block');
+                }
+            }
+        },
+        error: function (err)
+        {
+
+            if (err.status >= 500)
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text('Server encountered error!');
+            } else
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text(err.responseJSON.error);
+            }
+        }
+    })
+}
+
+function deleteRating()
+{
+    $.ajax({
+        url: '/ajax_service/customer/book/delete_rating.php',
+        method: 'DELETE',
+        data: { id: encodeData(bookID) },
+        headers: {
+            'X-CSRF-Token': CSRF_TOKEN
+        },
+        dataType: 'json',
+        success: function (data)
+        {
+            if (data.error)
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text(data.error);
+            }
+            if (data.query_result)
+            {
+                $('#customMessage').text('Rating deleted!');
+                $('#customModal').modal('show');
+                fetchRatings();
+                $('#deleteBtn').css('display', 'none');
+                originalRating = null;
+                rating = null;
+                originalComment = '';
+                resetRatingForm();
+            }
+        },
+
+        error: function (err)
+        {
+
+            if (err.status >= 500)
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text('Server encountered error!');
+            } else
+            {
+                $('#errorModal').modal('show');
+                $('#error_message').text(err.responseJSON.error);
+            }
+        }
+    });
+}

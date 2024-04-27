@@ -29,10 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $stmt = $conn->prepare('select exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=false and fileOrderContain.bookID=? and customerOrder.customerID=?) as result');
+                  $stmt = $conn->prepare('select exists(
+                        select * from fileOrderContain
+                        join customerOrder on customerOrder.id=fileOrderContain.orderID
+                        join book on fileOrderContain.bookID=book.id and book.status=true
+                        where customerOrder.status=false and fileOrderContain.bookID=? and customerOrder.customerID=?
+                        ) as result');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `select exists(select * from fileOrderContain join customerOrder on customerOrder.id=fileOrderContain.orderID where customerOrder.status=false and fileOrderContain.bookID=? and customerOrder.customerID=?) as result` preparation failed!']);
+                        echo json_encode(['error' => 'Query `select exists(
+                        select * from fileOrderContain
+                        join customerOrder on customerOrder.id=fileOrderContain.orderID
+                        join book on fileOrderContain.bookID=book.id and book.status=true
+                        where customerOrder.status=false and fileOrderContain.bookID=? and customerOrder.customerID=?
+                        ) as result` preparation failed!']);
                         exit;
                   }
                   $stmt->bind_param('ss', $id, $_SESSION['id']);

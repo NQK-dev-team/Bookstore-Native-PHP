@@ -24,7 +24,8 @@ function check_session()
             if (verifyUserID($_SESSION['id'], $_SESSION['type']))
                   return true;
             else {
-                  $_SESSION = [];
+                  session_destroy();
+                  //$_SESSION = [];
                   return false;
             }
       } else return false;

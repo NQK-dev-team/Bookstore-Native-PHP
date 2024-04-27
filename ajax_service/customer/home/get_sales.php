@@ -20,14 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 						select distinct book.id as bookID, discount.id,eventDiscount.discount,1 as cardinal from book,eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct eventApply.bookID, discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
-                    ) as combined order by combined.discount desc,combined.cardinal,combined.id) as result on result.bookID=book.id group by book.id order by book.id) as result on result.bookID=book.id where result.discount!=0 order by result.discount desc limit 10;');
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id) as result on result.bookID=book.id group by book.id order by book.id) as result on result.bookID=book.id where result.discount!=0 and book.status=true order by result.discount desc limit 10;');
             if (!$stmt) {
                   http_response_code(500);
                   echo json_encode(['error' => 'Query `select book.id,name,edition,imagePath from book join (select book.id as bookID,coalesce(max(result.discount),0) as discount from book left join (select combined.bookID,combined.discount from (
 						select distinct book.id as bookID, discount.id,eventDiscount.discount,1 as cardinal from book,eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true where eventDiscount.applyForAll=true and eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
                         union
                         select distinct eventApply.bookID, discount.id,eventDiscount.discount,2 as cardinal from eventDiscount join discount on discount.id=eventDiscount.id and discount.status=true join eventApply on eventDiscount.applyForAll=false and eventDiscount.id=eventApply.eventID where eventDiscount.startDate<=curdate() and eventDiscount.endDate>=curdate()
-                    ) as combined order by combined.discount desc,combined.cardinal,combined.id) as result on result.bookID=book.id group by book.id order by book.id) as result on result.bookID=book.id where result.discount!=0 order by result.discount desc limit 10;` preparation failed!']);
+                    ) as combined order by combined.discount desc,combined.cardinal,combined.id) as result on result.bookID=book.id group by book.id order by book.id) as result on result.bookID=book.id where result.discount!=0 and book.status=true order by result.discount desc limit 10;` preparation failed!']);
                   $conn->close();
                   exit;
             }

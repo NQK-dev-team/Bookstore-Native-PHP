@@ -184,7 +184,14 @@ if ($return_status_code === 400) {
                                           <div class='w-100 d-flex flex-column h-100 justify-content-center'>
                                                 <img class='custom_image w-100 mx-auto' id="userImage" alt="User image" data-initial-src="<?php if ($result['imagePath'])
                                                                                                                                                 echo "https://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($result['imagePath']));
-                                                                                                                                          else echo '/image/default_male.jpeg'; ?>">
+                                                                                                                                          else {
+                                                                                                                                                if ($result['gender'] === 'M')
+                                                                                                                                                      echo '/image/default_male.jpeg';
+                                                                                                                                                else if ($result['gender'] === 'F')
+                                                                                                                                                      echo '/image/default_female.jpg';
+                                                                                                                                                else if ($result['gender'] === 'O')
+                                                                                                                                                      echo '/image/default_other.png';
+                                                                                                                                          } ?>">
                                                 </img>
                                           </div>
                                     </div>
