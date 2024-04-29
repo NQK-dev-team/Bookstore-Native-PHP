@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../config/db_connection.php';
 require_once __DIR__ . '/../../tool/php/password.php';
 require_once __DIR__ . '/../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../tool/php/send_mail.php';
+require_once __DIR__ . '/../../tool/php/check_https.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['type'])) {
@@ -13,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'lifetime' => 3 * 24 * 60 * 60,
                         'path' => '/',
                         'domain' => '',
-                        'secure' => true,
+                        'secure' => isSecure(),
                         'httponly' => true,
                         'samesite' => 'Strict'
                   ])) throw new Exception('Error occurred during setting up session attributes!');

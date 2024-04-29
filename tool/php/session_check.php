@@ -1,6 +1,7 @@
 
 <?php
 require_once __DIR__ . '/verify_user_id.php';
+require_once __DIR__ . '/check_https.php';
 
 function check_session()
 {
@@ -11,7 +12,7 @@ function check_session()
                   'lifetime' => 3 * 24 * 60 * 60,
                   'path' => '/',
                   'domain' => '',
-                  'secure' => true,
+                  'secure' => isSecure(),
                   'httponly' => true,
                   'samesite' => 'Strict'
             ])) return false;
