@@ -14,6 +14,7 @@ if ($return_status_code === 400) {
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
       require_once __DIR__ . '/../../../config/db_connection.php';
       require_once __DIR__ . '/../../../tool/php/converter.php';
+      require_once __DIR__ . '/../../../tool/php/check_https.php';
 
       try {
             // Connect to MySQL
@@ -99,7 +100,7 @@ if ($return_status_code === 400) {
                                           <div class="col-lg-5 col-12 p-0">
                                                 <div class='w-100 d-flex flex-column h-100 justify-content-center'>
                                                       <img class='custom_image w-100 mx-auto border border-2 rounded' id="userImage" alt="user image" data-initial-src="<?php if ($result['imagePath'])
-                                                                                                                                                                              echo "https://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($result['imagePath']));
+                                                                                                                                                                              echo (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($result['imagePath']));
                                                                                                                                                                         else {
                                                                                                                                                                               if ($result['gender'] === 'M')
                                                                                                                                                                                     echo '/image/default_male.jpeg';

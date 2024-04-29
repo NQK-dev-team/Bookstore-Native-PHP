@@ -4,6 +4,8 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
+require_once __DIR__ . '/../../../tool/php/check_https.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['name'])) {
@@ -48,7 +50,7 @@ select bookID,count(*) as totalSold from fileOrderContain join customerOrder on 
                   $idx = 0;
                   while ($row = $result->fetch_assoc()) {
                         $host = $_SERVER['HTTP_HOST'];
-                        $row['imagePath'] = "https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+                        $row['imagePath'] = (isSecure() ? 'https' : 'http') . "://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
                         $row['edition'] = convertToOrdinal($row['edition']);
                         $queryResult[] = $row;
 

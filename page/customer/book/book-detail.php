@@ -18,6 +18,7 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../../tool/php/formatter.php';
             require_once __DIR__ . '/../../../tool/php/sanitizer.php';
             require_once __DIR__ . '/../../../tool/php/ratingStars.php';
+            require_once __DIR__ . '/../../../tool/php/check_https.php';
 
             try {
                   $bookID = sanitize(rawurldecode($_GET['id']));
@@ -55,7 +56,7 @@ if ($return_status_code === 400) {
                   }
                   while ($book = $result->fetch_assoc()) {
                         if ($bookID == $book['id']) {
-                              $imagePath = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($book['imagePath']));
+                              $imagePath = (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($book['imagePath']));
                               $bName = $book['name'];
                               $bEdition = convertToOrdinal($book['edition']);
                               $bISBN = $book['isbn'];

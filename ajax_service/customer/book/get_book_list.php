@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
+require_once __DIR__ . '/../../../tool/php/check_https.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['search'], $_GET['category'], $_GET['author'], $_GET['publisher'], $_GET['limit'], $_GET['offset'], $_GET['mode'])) {
@@ -417,7 +418,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   while ($row = $result->fetch_assoc()) {
                         unset($row['price']);
                         $host = $_SERVER['HTTP_HOST'];
-                        $row['imagePath'] = "https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+                        $row['imagePath'] = (isSecure() ? 'https' : 'http') . "://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
                         $row['edition'] = convertToOrdinal($row['edition']);
                         $queryResult[] = $row;
 

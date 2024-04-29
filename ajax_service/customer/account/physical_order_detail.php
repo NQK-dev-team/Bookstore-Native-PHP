@@ -17,6 +17,7 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+require_once __DIR__ . '/../../../tool/php/check_https.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['code'])) {
@@ -70,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $row['isbn'] = formatISBN($row['isbn']);
                         $row['publishDate'] = MDYDateFormat($row['publishDate']);
                         $row['edition'] = convertToOrdinal($row['edition']);
-                        $row['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
+                        $row['imagePath'] = (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['imagePath']));
 
                         $sub_stmt = $conn->prepare('select authorName from author join book on author.bookID=book.id where author.bookID=?');
                         if (!$sub_stmt) {

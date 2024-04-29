@@ -20,6 +20,7 @@ if ($return_status_code === 400) {
             require_once __DIR__ . '/../../../tool/php/sanitizer.php';
             require_once __DIR__ . '/../../../tool/php/formatter.php';
             require_once __DIR__ . '/../../../tool/php/converter.php';
+            require_once __DIR__ . '/../../../tool/php/check_https.php';
 
             try {
                   $id = sanitize(rawurldecode($_GET['id']));
@@ -64,7 +65,7 @@ if ($return_status_code === 400) {
                         } else {
                               $result = $result->fetch_assoc();
                               $result['isbn'] = formatISBN($result['isbn']);
-                              $result['imagePath'] = "src=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"";
+                              $result['imagePath'] = "src=\"" . (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($result['imagePath'])) . "\"";
                               $query_result = $result;
                         }
                   }
@@ -176,7 +177,7 @@ if ($return_status_code === 400) {
                               $query_result['fileCopy'] = [];
                         } else {
                               $row = $result->fetch_assoc();
-                              $row['filePath'] = $row['filePath'] ? "href=\"https://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
+                              $row['filePath'] = $row['filePath'] ? "href=\"" . (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/book/" . normalizeURL(rawurlencode($row['filePath'])) . "\"" : '';
                               $query_result['fileCopy']['price'] = $row['price'];
                               $query_result['fileCopy']['filePath'] = $row['filePath'];
                         }

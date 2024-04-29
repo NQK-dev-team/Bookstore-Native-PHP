@@ -11,6 +11,7 @@ if (!check_session() || (check_session() && $_SESSION['type'] !== 'admin')) {
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
+require_once __DIR__ . '/../../../tool/php/check_https.php';
 
 // Include Composer's autoloader
 require_once __DIR__ . '/../../../vendor/autoload.php';
@@ -125,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'Book must belong to at least one category!']);
                         exit;
-                  } 
+                  }
 
                   if (!$publisher) {
                         http_response_code(400);
@@ -718,7 +719,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                           exit;
                                     }
                                     $stmt->close();
-                                    $queryResult = "https://{$_SERVER['HTTP_HOST']}/data/book/$pdfFile";
+                                    $queryResult = (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/book/$pdfFile";
                               }
                         }
                   } else if ($removeFile) {

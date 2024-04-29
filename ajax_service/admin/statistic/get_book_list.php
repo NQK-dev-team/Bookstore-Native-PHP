@@ -12,6 +12,7 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
+require_once __DIR__ . '/../../../tool/php/check_https.php';
 
 // Include Composer's autoloader
 require_once __DIR__ . '/../../../vendor/autoload.php';
@@ -166,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         $idx = 0;
                         while ($row = $result->fetch_assoc()) {
                               $host = $_SERVER['HTTP_HOST'];
-                              $row['imagePath'] = "src=\"https://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
+                              $row['imagePath'] = "src=\"" . (isSecure() ? 'https' : 'http') . "://$host/data/book/" . normalizeURL(rawurlencode($row['imagePath'])) . "\"";
                               $row['edition'] = convertToOrdinal($row['edition']);
                               $row['isbn'] = formatISBN($row['isbn']);
                               $row['publishDate'] = MDYDateFormat($row['publishDate']);
@@ -305,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $queryResult[$idx]['fileCopy'] = [];
                               } else if ($sub_result->num_rows === 1) {
                                     while ($sub_row = $sub_result->fetch_assoc()) {
-                                          $sub_row['filePath'] = $sub_row['filePath'] ? "href=\"https://$host/data/book/" . normalizeURL(rawurlencode($sub_row['filePath'])) . "\"" : '';
+                                          $sub_row['filePath'] = $sub_row['filePath'] ? "href=\"" . (isSecure() ? 'https' : 'http') . "://$host/data/book/" . normalizeURL(rawurlencode($sub_row['filePath'])) . "\"" : '';
 
                                           $queryResult[$idx]['fileCopy']['price'] = $sub_row['price'] ? "\${$sub_row['price']}" : "N/A";
                                           $queryResult[$idx]['fileCopy']['filePath'] = $sub_row['filePath'];

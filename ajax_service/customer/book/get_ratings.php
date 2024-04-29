@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../tool/php/converter.php';
 require_once __DIR__ . '/../../../tool/php/formatter.php';
+require_once __DIR__ . '/../../../tool/php/check_https.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['id'], $_GET['rating'], $_GET['limit'], $_GET['showAll'])) {
@@ -180,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                                     $row['imagePath'] = '/image/default_other.png';
                               }
                         } else
-                              $row['imagePath'] = "https://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($row['imagePath']));
+                              $row['imagePath'] = (isSecure() ? 'https' : 'http') . "://{$_SERVER['HTTP_HOST']}/data/user/customer/" . normalizeURL(rawurlencode($row['imagePath']));
                         unset($row['gender']);
                         $row['ratingTime'] = formatOrderTime($row['ratingTime']);
                         $ratings[] = $row;
