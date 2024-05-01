@@ -16,7 +16,7 @@ require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 require_once __DIR__ . '/../../../tool/php/check_https.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['code'])) {
+      if (isset($_GET['code']) && isset($_GET['id'])) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                         http_response_code(403);
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         exit;
                   }
 
-                  $id = $_SESSION['update_customer_id'];
+                  $id = sanitize(rawurldecode($_GET['id']));
                   $code = sanitize(rawurldecode(str_replace('-', '', $_GET['code'])));
 
                   // Connect to MySQL

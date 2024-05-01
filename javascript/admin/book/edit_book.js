@@ -153,7 +153,7 @@ function getCategory(search)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -396,6 +396,7 @@ function submitForm()
       }
 
       const postData = new FormData();
+      postData.append('id', encodeData(bookID));
       postData.append('name', name);
       postData.append('edition', edition);
       postData.append('isbn', isbn);
@@ -500,7 +501,7 @@ function submitForm()
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

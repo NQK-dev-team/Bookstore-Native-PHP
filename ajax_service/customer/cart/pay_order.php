@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $get_inStock_stmt->free_result();
 
                         if ($inStock < $amount) {
-                              echo json_encode(['error' => 'Not enough stock for ' . $name . ' - ' . $edition]);
+                              echo json_encode(['error' => 'Not enough stock for ' . $name . ' - ' . $edition . ' edition!']);
                               $stmt->close();
                               $get_amount_stmt->close();
                               $get_inStock_stmt->close();

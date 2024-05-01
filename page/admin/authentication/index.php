@@ -4,8 +4,6 @@ require_once __DIR__ . '../../../../tool/php/session_check.php';
 if (check_session()) {
       header('Location: /admin/');
 }
-unset($_SESSION['update_book_id']);
-unset($_SESSION['update_customer_id']);
 ?>
 
 <!DOCTYPE html>

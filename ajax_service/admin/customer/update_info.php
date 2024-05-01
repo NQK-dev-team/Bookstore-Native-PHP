@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
       parse_str(file_get_contents('php://input'), $_PUT);
       if (
             isset($_PUT['email']) &&
-            isset($_PUT['phone'])
+            isset($_PUT['phone']) &&
+            isset($_PUT['id'])
       ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
@@ -26,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
 
-                  $id = $_SESSION['update_customer_id'];
+                  $id = sanitize(rawurldecode($_PUT['id']));
                   $email = sanitize(rawurldecode($_PUT['email']));
                   $phone = sanitize(rawurldecode($_PUT['phone']));
 

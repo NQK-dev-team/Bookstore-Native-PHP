@@ -11,7 +11,6 @@ if ($return_status_code === 400) {
       http_response_code(403);
       require_once __DIR__ . '/../../../error/403.php';
 } else if ($return_status_code === 200) {
-      unset($_SESSION['update_customer_id']);
 
       require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
 
@@ -24,8 +23,6 @@ if ($return_status_code === 400) {
 
             try {
                   $id = sanitize(rawurldecode($_GET['id']));
-
-                  $_SESSION['update_book_id'] = $id;
 
                   // Connect to MySQL
                   $conn = mysqli_connect($db_host, $db_user, $db_password, $db_database, $db_port);
@@ -240,6 +237,7 @@ if ($return_status_code === 400) {
             <?php storeToken(); ?>
             <script>
                   let originalCategory = `<?php echo implode("\n", $query_result['category']); ?>`;
+                  const bookID = '<?php echo $id; ?>';
             </script>
       </head>
 

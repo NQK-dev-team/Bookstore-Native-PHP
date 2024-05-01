@@ -151,7 +151,7 @@ function changeCustomerInfo()
       $.ajax({
             url: '/ajax_service/admin/customer/update_info.php',
             method: 'PUT',
-            data: { email, phone },
+            data: { email, phone, id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -192,7 +192,7 @@ function changeCustomerInfo()
                   $('#newPasswordInput').val('');
                   $('#confirmPasswordInput').val('');
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -249,7 +249,7 @@ function changePassword()
       $.ajax({
             url: '/ajax_service/admin/customer/update_password.php',
             method: 'PUT',
-            data: { newPassword, confirmPassword },
+            data: { newPassword, confirmPassword, id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -290,7 +290,7 @@ function changePassword()
                   $('#newPasswordInput').val('');
                   $('#confirmPasswordInput').val('');
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -312,7 +312,7 @@ function findOrder()
       $.ajax({
             url: '/ajax_service/admin/customer/get_order_list.php',
             method: 'GET',
-            data: { code: search, date: date },
+            data: { code: search, date: date, id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -330,7 +330,7 @@ function findOrder()
                         $('#current_ref').text(data.query_result[0].refNumber);
                         $('#loyalty_discount').text(data.query_result[0].loyaltyDiscount + '%');
                         $('#ref_discount').text(data.query_result[0].refDiscount + '%');
-                        
+
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[1].length; i++)
                         {
@@ -361,7 +361,7 @@ function findOrder()
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -387,7 +387,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/admin/customer/file_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: code.replace('/-/g', ''), id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -409,7 +409,7 @@ async function orderDetail(code, time, price, discount)
                               {
                                     let temp = '';
                                     temp += `<td class='align-middle'>${ i + 1 }</td>`
-                                    temp += `<td class='align-middle'><a href="/admin/book/edit-book?id=${ data.query_result[i].id}" alt="Go to book detail"><img src="${ data.query_result[i].imagePath }" alt=\"Book image\" class=\"book_image\"></img></a></td>`;
+                                    temp += `<td class='align-middle'><a href="/admin/book/edit-book?id=${ data.query_result[i].id }" alt="Go to book detail"><img src="${ data.query_result[i].imagePath }" alt=\"Book image\" class=\"book_image\"></img></a></td>`;
                                     temp += `<td class=\"col-2 align-middle\">${ data.query_result[i].name }</td>`;
                                     temp += `<td class=\"align-middle\">${ data.query_result[i].edition }</td>`;
                                     temp += `<td class=\"align-middle text-nowrap\">${ data.query_result[i].isbn }</td>`;
@@ -460,7 +460,7 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -478,7 +478,7 @@ async function orderDetail(code, time, price, discount)
       await $.ajax({
             url: '/ajax_service/admin/customer/physical_order_detail.php',
             method: 'GET',
-            data: { code: code.replace('/-/g', '') },
+            data: { code: code.replace('/-/g', ''), id: encodeData(customerID) },
             headers: {
                   'X-CSRF-Token': CSRF_TOKEN
             },
@@ -550,7 +550,7 @@ async function orderDetail(code, time, price, discount)
             {
                   failed = true;
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');

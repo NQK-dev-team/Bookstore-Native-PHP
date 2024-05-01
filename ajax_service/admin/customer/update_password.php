@@ -18,7 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
       parse_str(file_get_contents('php://input'), $_PUT);
       if (
             isset($_PUT['newPassword']) &&
-            isset($_PUT['confirmPassword'])
+            isset($_PUT['confirmPassword']) &&
+            isset($_PUT['id'])
       ) {
             try {
                   if (!isset($_SERVER['HTTP_X_CSRF_TOKEN']) || !checkToken($_SERVER['HTTP_X_CSRF_TOKEN'])) {
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
                         exit;
                   }
 
-                  $id = $_SESSION['update_customer_id'];
+                  $id = sanitize(rawurldecode($_PUT['id']));
                   $newPassword = sanitize(rawurldecode($_PUT['newPassword']));
                   $confirmPassword = sanitize(rawurldecode($_PUT['confirmPassword']));
 

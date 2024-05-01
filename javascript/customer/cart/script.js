@@ -7,6 +7,7 @@ $(document).ready(async function ()
       $('#errorModal').on('hidden.bs.modal', function ()
       {
             $('#error_message').text('');
+            pause = false;
       });
 
       $("#cartForm").submit(function (e)
@@ -24,10 +25,10 @@ $(document).ready(async function ()
             refreshList = null;
       });
 
-      // $('#paymentSuccess').on('hidden.bs.modal', function ()
-      // {
-      //       pause = false;
-      // });
+      $('#paymentSuccess').on('hidden.bs.modal', function ()
+      {
+            pause = false;
+      });
 
       await reEvalOrder(true);
 
@@ -121,7 +122,7 @@ function updateInStock(id)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -163,7 +164,7 @@ async function reEvalOrder(isFirstTime)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -206,7 +207,7 @@ async function updateBillingDetail()
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -340,7 +341,7 @@ async function fetchFileOrder()
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -508,7 +509,7 @@ async function fetchPhysicalOrder(isFirstTime)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -557,7 +558,7 @@ function removeBook()
 
                   error: function (err)
                   {
-                        
+
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -596,7 +597,7 @@ function removeBook()
 
                   error: function (err)
                   {
-                        
+
                         if (err.status >= 500)
                         {
                               $('#errorModal').modal('show');
@@ -698,7 +699,7 @@ function updateAmount(amount, id)
 
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
@@ -760,7 +761,7 @@ function payOrder()
                   $('a').removeClass('disable_link');
                   $('#physicalDestination').prop('disabled', disableProp);
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#errorModal').modal('show');
