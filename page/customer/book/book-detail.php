@@ -272,6 +272,9 @@ if ($return_status_code === 400) {
                   let originalRating = <?php echo $userStar; ?>;
                   let originalComment = '<?php echo $userComment; ?>';
             </script>
+            <?php
+            require_once __DIR__ . '/../../../head_element/google_analytic.php';
+            ?>
       </head>
 
       <body>

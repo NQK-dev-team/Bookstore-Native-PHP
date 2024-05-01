@@ -21,6 +21,9 @@ unset($_SESSION['update_book_id']);
       <meta name="description" content="Login to NQK bookstore as a customer">
       <title>Login</title>
       <link rel="stylesheet" href="/css/authentication/style.css">
+      <?php
+      require_once __DIR__ . '/../../../head_element/google_analytic.php';
+      ?>
 </head>
 
 <body>

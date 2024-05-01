@@ -25,6 +25,9 @@ if ($return_status_code === 400) {
             <meta name="page creator" content="Anh Khoa, Nghia Duong">
             <meta name="description" content="Browse book list of NQK bookstore">
             <title>Browse Books</title>
+            <?php
+            require_once __DIR__ . '/../../../head_element/google_analytic.php';
+            ?>
       </head>
 
       <body>

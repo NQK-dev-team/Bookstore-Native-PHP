@@ -26,6 +26,9 @@ if ($return_status_code === 400) {
             <meta name="description" content="Home page of NQK bookstore">
             <title>Home</title>
             <link rel="stylesheet" href="/css/customer/home/style.css">
+            <?php
+            require_once __DIR__ . '/../../head_element/google_analytic.php';
+            ?>
       </head>
 
       <body>

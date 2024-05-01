@@ -19,6 +19,9 @@ unset($_SESSION['update_book_id']);
       <meta name="description" content="Recover lost customer account of NQK Bookstore">
       <title>Recovery</title>
       <link rel="stylesheet" href="/css/authentication/style.css">
+      <?php
+      require_once __DIR__ . '/../../../head_element/google_analytic.php';
+      ?>
 </head>
 
 <body>

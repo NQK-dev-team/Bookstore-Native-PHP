@@ -76,6 +76,9 @@ if ($return_status_code === 400) {
             <title>Manage Personal Info</title>
             <?php storeToken(); ?>
             <link rel="stylesheet" href="/css/customer/account/style.css">
+            <?php
+            require_once __DIR__ . '/../../../head_element/google_analytic.php';
+            ?>
       </head>
 
       <body>

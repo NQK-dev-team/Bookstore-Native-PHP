@@ -11,6 +11,9 @@
       <meta name="author" content="Nghia Duong">
       <meta name="description" content="NQK Bookstore privacy policy">
       <title>Privacy Policy</title>
+      <?php
+      require_once __DIR__ . '/../../head_element/google_analytic.php';
+      ?>
 </head>
 
 <body>

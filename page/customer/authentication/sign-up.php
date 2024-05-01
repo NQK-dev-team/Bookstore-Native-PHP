@@ -19,6 +19,9 @@ unset($_SESSION['update_book_id']);
       <meta name="description" content="Sign up as a new customer to use NQK bookstore's services">
       <title>Sign up</title>
       <link rel="stylesheet" href="/css/authentication/style.css">
+      <?php
+      require_once __DIR__ . '/../../../head_element/google_analytic.php';
+      ?>
 </head>
 
 <body>
@@ -125,7 +128,7 @@ unset($_SESSION['update_book_id']);
                                     <input autocomplete="new-password" type="password" class="form-control" id="confirmPassword" placeholder="Enter password" name="confirmPassword">
                               </div>
                               <div class="form-group mt-3">
-                                    <label for="inputRefEmail" class="fs-4 fw-medium">Refferer email</label>
+                                    <label for="inputRefEmail" class="fs-4 fw-medium">Referral email</label>
                                     <input onchange="checkEmailUsed(true)" autocomplete="email" type="email" class="form-control" id="inputRefEmail" placeholder="Enter email" name="refEmail">
                                     <div class="mt-2 align-items-center used_error" id="ref_email_error">
                                           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ff0000">
@@ -135,7 +138,7 @@ unset($_SESSION['update_book_id']);
                                                       <path d="M12 16H12.01M12 8V12M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#ff0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                 </g>
                                           </svg>
-                                          <p class="ms-1 text-danger mb-0 fw-medium">Referrer email not found or invalid!</p>
+                                          <p class="ms-1 text-danger mb-0 fw-medium">Referral email not found or invalid!</p>
                                     </div>
                               </div>
                               <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>

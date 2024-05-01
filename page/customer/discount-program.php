@@ -92,6 +92,9 @@ $conn->close();
       <meta name="author" content="Nghia Duong">
       <meta name="description" content="NQK Bookstore discount program">
       <title>Discount Program</title>
+      <?php
+      require_once __DIR__ . '/../../head_element/google_analytic.php';
+      ?>
 </head>
 
 <body>

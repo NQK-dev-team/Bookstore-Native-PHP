@@ -12,6 +12,9 @@
       <meta name="description" content="Information about NQK Bookstore">
       <title>About Us</title>
       <link rel="stylesheet" href="/css/about_us.css">
+      <?php
+      require_once __DIR__ . '/../../head_element/google_analytic.php';
+      ?>
 </head>
 
 <body>

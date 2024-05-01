@@ -52,7 +52,7 @@ Step 5.3: `Add arguments (optional):` value will be the `delete_account.php` fil
 
 **Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).<br><br>
 **Step 2:** Create a `.env` file base on `.env.example` file and set up your own values.<br><br>
-**Step 3:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com www.test.bookstore.com [your_ip_address]` (`your_ip_address` is optional. This step is only used for development, production must not use this step)<br><br>
+**Step 3:** Create a self-signed SSL certificate, go to `cert` directory by typing `cd cert` in the terminal and then type in this line `mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1 ::1 www.demo.bookstore.com [your_ip_address]` (`your_ip_address` is optional. This step is only used for development, production must not use this step)<br><br>
 **Step 4:** Create three log files named `error.log`, `access.log` and `ssl_request.log` in `C:\example_path\log`<br><br>
 **Step 5:** Locate the apache server installation directory (for example `C:\xampp\apache`)<br><br>
 **Step 6:** Check for modules and includes, open `httpd.conf` file from the `conf` directory of your apache installation directory, and uncomment these groups if they are commented
@@ -81,7 +81,6 @@ SSLRandomSeed connect builtin
 ServerAdmin <your email address>
 DocumentRoot "C:\example_path"
 ServerName https://www.demo.bookstore.com
-ServerAlias https://www.test.bookstore.com
 
     SSLEngine on
     SSLCertificateFile "C:\example_path\cert\cert.pem"
@@ -230,11 +229,8 @@ Replace `C:\example_path` with the directory of this project in your machine and
 # Map www.demo.bookstore.com to localhost
 127.0.0.1 www.demo.bookstore.com
 ::1 www.demo.bookstore.com
-# Map www.test.bookstore.com to localhost
-127.0.0.1 www.test.bookstore.com
-::1 www.test.bookstore.com
 ```
 
 This only apply for development stage, production stage should skip this<br><br>
 **Step 9:** Restart apache server (by using XAMPP for example)<br><br>
-**Step 10:** Go to https://www.demo.bookstore.com, https://www.test.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]<br><br>
+**Step 10:** Go to https://www.demo.bookstore.com, https://localhost, https://127.0.0.1 or https://[::1]<br><br>
