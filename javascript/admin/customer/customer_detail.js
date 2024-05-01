@@ -326,7 +326,11 @@ function findOrder()
                   }
                   else if (data.query_result)
                   {
-                        $('#current_point').text(data.query_result[0]);
+                        $('#current_point').text(data.query_result[0].point);
+                        $('#current_ref').text(data.query_result[0].refNumber);
+                        $('#loyalty_discount').text(data.query_result[0].loyaltyDiscount ? (data.query_result[0].loyaltyDiscount + '%') : data.query_result[0].loyaltyDiscount);
+                        $('#ref_discount').text(data.query_result[0].refDiscount ? (data.query_result[0].refDiscount + '%') : data.query_result[0].refDiscount);
+                        
                         $('#table_body').empty();
                         for (let i = 0; i < data.query_result[1].length; i++)
                         {

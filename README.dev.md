@@ -45,11 +45,10 @@ Step 5.3: `Add arguments (optional):` value will be the `delete_account.php` fil
 **Step 6:** Repeate step 5 but replace with the `discount_notify.php` file at step 5.3<br><br>
 **Step 7:** At `Conditions` tab check `Start the task only if the computer is on AC power` and uncheck `Stop if the computer switches to battery power` (the second field is optional)<br><br>
 **Step 8:** At `Settings` check these fields: `Allows task to be run on demand`, `Run task as soon as possible after a scheduled start is missed`, `Stop the task if it runs longer than:` (2 hours or any value), `If the running task does not end when requested, force it to stop`, `If the task is not scheduled to run again, delete it after:` (30 days or any value), `If the task is already running, then the following rule applies:` (Do not start a new instance)<br><br>
-**Step 9:** Save the config<br><br>
-
+**Step 9:** Save the config<br>
 ###### For other OSes, you can look up on the internet for the set up steps<br><br>
 
-### Steps to config the web server before running LOCALLY ONLY (apply for Windows OS, other OSes can be achieved with the same procedure):
+### Steps to config the web server before running (apply for Windows OS, other OSes can be achieved with the same procedure):
 
 **Step 1:** Fetch the source code of this repository to your local machine (example path will be `C:\example_path` for better demonstation).<br><br>
 **Step 2:** Create a `.env` file base on `.env.example` file and set up your own values.<br><br>

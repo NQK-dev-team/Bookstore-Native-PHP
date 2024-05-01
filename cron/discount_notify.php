@@ -20,20 +20,20 @@ try {
 
       if (!$conn) {
             $logMessage = $currentDateTime . " - MySQL Connection Failed!\n";
-            file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+            file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
             exit;
       }
 
       $stmt = $conn->prepare("select discount.id,discount,name,applyForAll from eventDiscount join discount on discount.id=eventDiscount.id where status=true and startDate<=curdate() and not isNotify");
       if (!$stmt) {
             $logMessage = $currentDateTime . " - MySQL Query `select discount.id,discount,name,applyForAll from eventDiscount join discount on discount.id=eventDiscount.id where status=true and startDate<=curdate() and not isNotify` Preparation Failed!\n";
-            file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+            file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
             exit;
       }
       $isSuccess = $stmt->execute();
       if (!$isSuccess) {
             $logMessage = $currentDateTime . " - MySQL Query Error: {$stmt->error}\n";
-            file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+            file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
             exit;
       }
       $result = $stmt->get_result();
@@ -43,13 +43,13 @@ try {
       $stmt2 = $conn->prepare('select email from appUser join customer on customer.id=appUser.id where status=true and email is not null and phone is not null and deleteTime is null');
       if (!$stmt2) {
             $logMessage = $currentDateTime . " - MySQL Query `select email from appUser join customer on customer.id=appUser.id where status=true and email is not null and phone is not null and deleteTime is null` Preparation Failed!\n";
-            file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+            file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
             exit;
       }
       $isSuccess = $stmt2->execute();
       if (!$isSuccess) {
             $logMessage = $currentDateTime . " - MySQL Query Error: {$stmt2->error}\n";
-            file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+            file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
             exit;
       }
       $result2 = $stmt2->get_result();
@@ -64,19 +64,19 @@ try {
                   $stmt = $conn->prepare('select name,edition from book join eventApply on eventApply.bookID=book.id where eventApply.eventID=?');
                   if (!$stmt) {
                         $logMessage = $currentDateTime . " - MySQL Query `select name,edition from book join eventApply on eventApply.bookID=book.id where eventApply.eventID=?` Preparation Failed!\n";
-                        file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+                        file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
                         exit;
                   }
                   $stmt->bind_param('s', $discount['id']);
                   $isSuccess = $stmt->execute();
                   if (!$isSuccess) {
                         $logMessage = $currentDateTime . " - MySQL Query Error: {$stmt->error}\n";
-                        file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+                        file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
                         exit;
                   }
                   $result3 = $stmt->get_result();
                   while ($row = $result3->fetch_assoc()) {
-                        $books[] = $row['name'] . ' - ' . convertToOrdinal($row['edition']) .' edition';
+                        $books[] = $row['name'] . ' - ' . convertToOrdinal($row['edition']) . ' edition';
                   }
                   $stmt->close();
             }
@@ -87,14 +87,14 @@ try {
             $stmt = $conn->prepare('update eventDiscount set isNotify=true where id=?');
             if (!$stmt) {
                   $logMessage = $currentDateTime . " - MySQL Query `update eventDiscount set isNotify=true where id=?` Preparation Failed!\n";
-                  file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+                  file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
                   exit;
             }
             $stmt->bind_param('s', $discount['id']);
             $isSuccess = $stmt->execute();
             if (!$isSuccess) {
                   $logMessage = $currentDateTime . " - MySQL Query Error: {$stmt->error}\n";
-                  file_put_contents(__DIR__ . '\discount_notify.log', $logMessage, FILE_APPEND);
+                  file_put_contents(__DIR__ . '/discount_notify.log', $logMessage, FILE_APPEND);
                   exit;
             }
             $stmt->close();
@@ -102,8 +102,8 @@ try {
 
       $conn->close();
 
-      file_put_contents(__DIR__ . '\discount_notify.log', $currentDateTime . " - Task terminated, {$totalEvent} event(s) notified to {$totalCustomer} customer(s)!\n", FILE_APPEND);
+      file_put_contents(__DIR__ . '/discount_notify.log', $currentDateTime . " - Task terminated, {$totalEvent} event(s) notified to {$totalCustomer} customer(s)!\n", FILE_APPEND);
 } catch (Exception $e) {
-      file_put_contents('./discount_notify.log', $e->getMessage(), FILE_APPEND);
+      file_put_contents(__DIR__ . '/discount_notify.log', $e->getMessage(), FILE_APPEND);
 }
 ?>

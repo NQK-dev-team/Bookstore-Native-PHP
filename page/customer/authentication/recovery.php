@@ -74,8 +74,7 @@ unset($_SESSION['update_book_id']);
                                     <input autocomplete="one-time-code" type="text" class="form-control" id="inputRecoveryCode" placeholder="Enter recovery code" name="recoveryCode">
                               </div>
                               <div class="d-flex align-items-center mt-3">
-                                    <p>Didn't receive the code?</p>
-                                    <p class="text-primary ms-2 pointer" onclick="requestRecoveryCode()">Request another</p>
+                                    <p>Didn't receive the code? <span class="text-primary pointer" onclick="requestRecoveryCode()">Request another</span></p>
                               </div>
                               <button type="button" class="btn btn-outline-secondary btn-sm mx-auto" onclick="changeEmail()">Change email</button>
                               <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>

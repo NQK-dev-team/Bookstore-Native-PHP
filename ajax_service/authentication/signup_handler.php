@@ -105,6 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         http_response_code(400);
                         echo json_encode(['error' => 'Email must be 255 characters long or less!']);
                         exit;
+                  } else if ($email === $_ENV['SMTP_USER']) {
+                        http_response_code(403);
+                        echo json_encode(['error' => 'This email has been used by the store!']);
+                        exit;
                   }
 
                   if (!$password) {

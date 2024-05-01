@@ -59,6 +59,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   $point = $stmt->get_result()->fetch_assoc()['point'];
                   $stmt->close();
 
+                  $stmt = $conn->prepare("SELECT discount from customerDiscount where point<=? order by point desc limit 1");
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `SELECT discount from customerDiscount where point<=? order by point desc limit 1` preparation failed!']);
+                        exit;
+                  }
+                  $stmt->bind_param('s', $point);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows == 0) {
+                        $loyaltyDiscount = 0;
+                  } else {
+                        $loyaltyDiscount = $result->fetch_assoc()['discount'];
+                  }
+                  $stmt->close();
+
+                  $stmt = $conn->prepare("SELECT count(*) as result from customer where referrer=?");
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `SELECT count(*) as result from customer where referrer=?` preparation failed!']);
+                        exit;
+                  }
+                  $stmt->bind_param('s', $_SESSION['id']);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $refNumber = $stmt->get_result()->fetch_assoc()['result'];
+                  $stmt->close();
+
+                  $stmt = $conn->prepare("SELECT discount from referrerDiscount where numberOfPeople<=? order by numberOfPeople desc limit 1");
+                  if (!$stmt) {
+                        http_response_code(500);
+                        echo json_encode(['error' => 'Query `SELECT discount from referrerDiscount where numberOfPeople<=? order by numberOfPeople desc limit 1` preparation failed!']);
+                        exit;
+                  }
+                  $stmt->bind_param('s', $refNumber);
+                  if (!$stmt->execute()) {
+                        http_response_code(500);
+                        echo json_encode(['error' => $stmt->error]);
+                        $stmt->close();
+                        $conn->close();
+                        exit;
+                  }
+                  $result = $stmt->get_result();
+                  if ($result->num_rows == 0) {
+                        $refDiscount = 0;
+                  } else {
+                        $refDiscount = $result->fetch_assoc()['discount'];
+                  }
+                  $stmt->close();
+
                   $orders = [];
 
                   if ($date) {
@@ -152,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   }
 
                   $conn->close();
-                  echo json_encode(['query_result' => [$point, $orders]]);
+                  echo json_encode(['query_result' => [['point' => $point, 'loyaltyDiscount' => $loyaltyDiscount, 'refNumber' => $refNumber, 'refDiscount' => $refDiscount], $orders]]);
             } catch (Exception $e) {
                   http_response_code(500);
                   echo json_encode(['error' => $e->getMessage()]);

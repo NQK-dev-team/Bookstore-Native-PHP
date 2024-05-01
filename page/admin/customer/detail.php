@@ -112,7 +112,12 @@ if ($return_status_code === 400) {
                                     <hr class='mx-2'>
                               </div>
                               <div class='w-100 flex-grow-1 mb-2 d-flex flex-column'>
-                                    <p class='fw-medium px-2'>Current Accummulated Points:&nbsp;<span id="current_point" class='text-success'></span></p>
+                                    <div class='px-2'>
+                                          <p>Current Accummulated Points:&nbsp;<span id="current_point" class='fw-bold'></span></p>
+                                          <p>Loyalty Discount:&nbsp;<span id="loyalty_discount" class='fw-bold'></span></p>
+                                          <p>User Referenced:&nbsp;<span id="current_ref" class='fw-bold'></span></p>
+                                          <p>Referrer Discount:&nbsp;<span id="ref_discount" class='fw-bold'></span></p>
+                                    </div>
                                     <div class='px-2'>
                                           <form class="d-flex align-items-center w-100 search_form mt-2" role="search" id="search_order_form">
                                                 <button title='search order' class="p-0 border-0 position-absolute bg-transparent mb-1 ms-2" type="submit">

@@ -447,6 +447,7 @@ begin
     end while;
     
     update customerOrder set status=true,purchaseTime=now(),orderCode=code where id=orderID;
+    update customer join customerOrder on customerOrder.customerID=customer.id set customer.point=customer.point+round(customerOrder.totalCost*(select pointConversionRate from pointConfig)/100.0,2) where customerOrder.id=orderID;
 end//
 delimiter ;
 

@@ -1,3 +1,7 @@
+-- ONLY USE THIS FILE WHEN YOU HAVE ROOT ACCESS TO MYSQL DATABASE
+-----------------------------------------------------------------
+-----------------------------------------------------------------
+
 use bookstore;
 
 SET GLOBAL event_scheduler = on;
