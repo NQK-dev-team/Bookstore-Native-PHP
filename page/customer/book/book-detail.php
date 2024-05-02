@@ -186,6 +186,9 @@ if ($return_status_code === 400) {
                   $bDiscount = $discount['discount'];
                   $stmt->close();
 
+                  $userStar = 'null';
+                  $userComment = '';
+
                   if (check_session() && $_SESSION['type'] === 'customer') {
                         $canRate = false;
 
@@ -228,8 +231,6 @@ if ($return_status_code === 400) {
                               $conn->close();
                               exit;
                         }
-                        $userStar = 'null';
-                        $userComment = '';
                         $result = $stmt->get_result();
                         if ($result->num_rows === 1) {
                               $result = $result->fetch_assoc();
