@@ -64,8 +64,15 @@ BEGIN
 -- 		SET newAverageRating := totalStar / totalRating;
 --     END IF;
 --     UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
+    declare newRating double default null;
     
-    update book set avgRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=new.bookID;
+    set newRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1);
+    
+    if newRating is null then
+		set newRating=0;
+    end if;
+    
+    update book set avgRating=newRating where book.id=new.bookID;
 END//
 DELIMITER ;
 
@@ -108,7 +115,15 @@ BEGIN
 --     END IF;
 --     UPDATE book SET avgRating = newAverageRating WHERE book.id=new.bookID;
 
-	update book set avgRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1) where book.id=old.bookID;
+	declare newRating double default null;
+    
+    set newRating=round((select sum(star) from rating where rating.bookID=new.bookID)/(select count(*) from rating where rating.bookID=new.bookID),1);
+
+	if newRating is null then
+		set newRating=0;
+    end if;
+
+	update book set avgRating=newRating where book.id=old.bookID;
     -- set new.ratingTime=now();
 END//
 DELIMITER ;

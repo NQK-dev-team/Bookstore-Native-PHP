@@ -58,7 +58,7 @@ create table book(
     edition int not null,
     unique(name,edition),
     isbn varchar(13) not null unique,
-    avgRating double default 0,
+    avgRating double not null default 0,
     check(avgRating>=0 and avgRating<=5),
     publisher varchar(255) not null,
     publishDate date not null,
