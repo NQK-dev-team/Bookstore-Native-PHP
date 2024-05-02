@@ -1,6 +1,6 @@
 $(document).ready(() =>
 {
-      const location = window.location.href;
+      const location = window.location.pathname;
 
       if (location.includes('/admin/book') || location.includes('/admin/customer') || location.includes('/admin/coupon') || location.includes('/admin/category') || location.includes('/admin/request'))
       {
