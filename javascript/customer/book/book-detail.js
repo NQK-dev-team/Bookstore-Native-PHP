@@ -510,10 +510,11 @@ async function getBookRating()
             else if (data.query_result)
             {
                 $('#bookAvgRating').empty();
-                $('#bookAvgRating').append(`<span class="text-warning fw-medium">${ displayRatingStars(data.query_result[0]) }</span>(${ data.query_result[0] })`);
-                $('#avgRating').text(data.query_result[0]);
+                const temp = data.query_result[0] ? data.query_result[0] : 0;
+                $('#bookAvgRating').append(`<span class="text-warning fw-medium">${ displayRatingStars(temp) }</span>(${ temp })`);
+                $('#avgRating').text(temp);
                 $('#avgRatingPanel').empty();
-                $('#avgRatingPanel').append(displayRatingStars(data.query_result[0]));
+                $('#avgRatingPanel').append(displayRatingStars(temp));
                 $('#totalRatings').text('(' + data.query_result[1] + ')');
                 if (data.query_result[1] === 0)
                 {
