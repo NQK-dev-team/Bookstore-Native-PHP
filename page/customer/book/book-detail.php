@@ -466,7 +466,7 @@ if ($return_status_code === 400) {
                               <div id='ratingList'>
                               </div>
                               <div class='mx-auto mt-3' id='showBtn'>
-                                    <button onclick='showAll=true; fetchRatings()' class='border-0 bg-white'>Show All <i class="bi bi-chevron-down"></i></button>
+                                    <button onclick='showAll=true; fetchRatings()' class='border-0 bg-light'>Show All <i class="bi bi-chevron-down"></i></button>
                               </div>
                         </div>
                   </div>
