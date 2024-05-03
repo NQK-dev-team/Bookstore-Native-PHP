@@ -1,12 +1,1 @@
-function encodeData(param)
-{
-      if (typeof param !== 'string') return param;
-
-      // Remove leading and trailing whitespaces
-      param = param.trim();
-
-      // Replace special characters
-      param = encodeURIComponent(param);
-
-      return param;
-}
+(function (_0x43f2a8, _0x55bf24) { var _0x443f0e = _0x14dc, _0x4d1afd = _0x43f2a8(); while (!![]) { try { var _0x170180 = parseInt(_0x443f0e(0x1ab)) / 0x1 * (parseInt(_0x443f0e(0x1b0)) / 0x2) + parseInt(_0x443f0e(0x1a9)) / 0x3 + -parseInt(_0x443f0e(0x1ad)) / 0x4 * (parseInt(_0x443f0e(0x1af)) / 0x5) + -parseInt(_0x443f0e(0x1aa)) / 0x6 + parseInt(_0x443f0e(0x1ac)) / 0x7 + -parseInt(_0x443f0e(0x1b3)) / 0x8 + parseInt(_0x443f0e(0x1ae)) / 0x9 * (parseInt(_0x443f0e(0x1b1)) / 0xa); if (_0x170180 === _0x55bf24) break; else _0x4d1afd['push'](_0x4d1afd['shift']()); } catch (_0x2b4db0) { _0x4d1afd['push'](_0x4d1afd['shift']()); } } }(_0x44c3, 0x772e4)); function _0x44c3() { var _0x29fb64 = ['57946JjsUmH', '1913852iaWRta', '144nhejXT', '10ScmqSn', '6VfPnoq', '782120qydVlG', 'string', '1629616GtxOmL', 'trim', '365193JdVqMd', '2654490RMwesm', '236602lmyCQo']; _0x44c3 = function () { return _0x29fb64; }; return _0x44c3(); } function _0x14dc(_0x40be81, _0x2bd37b) { var _0x44c380 = _0x44c3(); return _0x14dc = function (_0x14dc59, _0x27b619) { _0x14dc59 = _0x14dc59 - 0x1a8; var _0x876ec2 = _0x44c380[_0x14dc59]; return _0x876ec2; }, _0x14dc(_0x40be81, _0x2bd37b); } function encodeData(_0x153f7f) { var _0x45f60d = _0x14dc; return _0x45f60d(0x1b2) != typeof _0x153f7f ? _0x153f7f : (_0x153f7f = _0x153f7f[_0x45f60d(0x1a8)](), _0x153f7f = encodeURIComponent(_0x153f7f)); }
