@@ -47,7 +47,7 @@ if (check_session()) header('Location: /admin/');
                                     <label for="inputEmail" class="fs-4 fw-medium">Email</label>
                                     <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" name="email" autocomplete="email">
                               </div>
-                              <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
+                              <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/admin/authentication/">Back to login</a>
                               <div class="mt-auto my-3 mx-auto">
                                     <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Continue</button>
                               </div>
@@ -76,7 +76,7 @@ if (check_session()) header('Location: /admin/');
                                     <p>Didn't receive the code? <span class="text-primary pointer" onclick="requestRecoveryCode()">Request another</span></p>
                               </div>
                               <button type="button" class="btn btn-outline-secondary btn-sm mx-auto" onclick="changeEmail()">Change email</button>
-                              <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
+                              <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/admin/authentication/">Back to login</a>
                               <div class="mt-auto my-3 mx-auto">
                                     <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Continue</button>
                               </div>
@@ -98,6 +98,7 @@ if (check_session()) header('Location: /admin/');
                                     <hr>
                               </div>
                               <div class="form-group">
+                                    <input type="email" name="email" value="..." autocomplete="email" style="display: none;">
                                     <label for="inputNewPassword" class="fs-4 fw-medium">New password</label>
                                     <input autocomplete="new-password" type="password" class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
                               </div>
@@ -106,7 +107,7 @@ if (check_session()) header('Location: /admin/');
                                     <input autocomplete="new-password" type="password" class="form-control" id="inputConfirmNewPassword" placeholder="Confirm new password" name="confirmNewPassword">
                               </div>
                               <button type="button" class="btn btn-outline-secondary btn-sm mx-auto mt-3" onclick="backToGetCode()">Back to recovery code</button>
-                              <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/authentication/">Back to login</a>
+                              <a class="mx-auto mt-2 text-primary text-decoration-none mb-2" href="/admin/authentication/">Back to login</a>
                               <div class="mt-auto my-3 mx-auto">
                                     <button type="submit" class="btn btn-primary" onclick="clearAllCustomValidity()">Finish</button>
                               </div>

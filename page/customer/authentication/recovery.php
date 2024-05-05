@@ -102,6 +102,7 @@ unset($_SESSION['update_book_id']);
                                     <hr>
                               </div>
                               <div class="form-group">
+                                    <input type="email" name="email" value="..." autocomplete="email" style="display: none;">
                                     <label for="inputNewPassword" class="fs-4 fw-medium">New password</label>
                                     <input autocomplete="new-password" type="password" class="form-control" id="inputNewPassword" placeholder="Enter new password" name="newPassword" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="New password must contain at least one uppercase letter, one lowercase letter, one number, one special character and is within 8 to 72 characters">
                               </div>

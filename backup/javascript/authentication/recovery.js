@@ -3,7 +3,10 @@ $(document).ready(function ()
       // Attach a function to execute when the modal is fully hidden
       $('#passwordChangeModal').on('hidden.bs.modal', function ()
       {
-            window.location.href = "/authentication/";
+            if (window.location.pathname.includes('/admin'))
+                  window.location.pathname = "/admin/authentication/";
+            else
+                  window.location.pathname = "/authentication/";
       });
 
       initToolTip();
@@ -64,7 +67,7 @@ function enterEmail(e, user_type)
                   $('button, a, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#error_message_content_1').text('Server encountered error!');
@@ -125,7 +128,7 @@ function requestRecoveryCode()
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#error_message_content_2').text('Server encountered error!');
@@ -196,7 +199,7 @@ function enterCode(e)
             },
             error: function (err)
             {
-                  
+
                   if (err.status >= 500)
                   {
                         $('#error_message_content_2').text('Server encountered error!');
@@ -294,7 +297,7 @@ function changePassword(e, user_type)
                   $('button, input').prop('disabled', false);
                   $('a').removeClass('disable_link');
 
-                  
+
                   if (err.status >= 500)
                   {
                         $('#error_message_content_3').text('Server encountered error!');
