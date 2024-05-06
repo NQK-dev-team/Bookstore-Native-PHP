@@ -7,9 +7,9 @@ cert/*
 session/*
 !session/.gitkeep
 
-data/file/*
-!data/file/.gitkeep
-!data/file/demo/
+data/book/*
+!data/book/.gitkeep
+!data/book/demo/
 
 data/user/admin/*
 !data/user/admin/.gitkeep

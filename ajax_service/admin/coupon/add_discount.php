@@ -12,7 +12,6 @@ require_once __DIR__ . '/../../../tool/php/sanitizer.php';
 require_once __DIR__ . '/../../../config/db_connection.php';
 require_once __DIR__ . '/../../../tool/php/delete_directory.php';
 require_once __DIR__ . '/../../../tool/php/anti_csrf.php';
-require_once __DIR__ . '/../../../tool/php/notify_event.php';
 
 // Include Composer's autoloader
 require_once __DIR__ . '/../../../vendor/autoload.php';

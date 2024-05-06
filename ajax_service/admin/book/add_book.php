@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   $edition = sanitize(rawurldecode($_POST['edition']));
                   $isbn = sanitize(str_replace('-', '', rawurldecode($_POST['isbn'])));
                   $author =  $_POST['author'] ? array_map('map', explode(',', $_POST['author'])) : [];
-                  $category = $_POST['category'] ? array_map('map', explode("\n", rawurldecode($_POST['category']))) : [];
+                  $category = $_POST['category'] ? array_map('map', explode(",", rawurldecode($_POST['category']))) : [];
                   $publisher = sanitize(rawurldecode($_POST['publisher']));
                   $publishDate = sanitize(rawurldecode($_POST['publishDate']));
                   $description = sanitize(rawurldecode($_POST['description'])) ? sanitize(rawurldecode($_POST['description'])) : null;
@@ -304,10 +304,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                   $pdfFile = isset($_FILES['pdf']) ? "{$name}-{$currentDateTime}.pdf" : null;
 
-                  $stmt = $conn->prepare('call addBook(?,?,?,?,?,?,?,?,?,?,?,?)');
+                  $stmt = $conn->prepare('call addBook(?,?,?,?,?,?,?,?,?,?,?)');
                   if (!$stmt) {
                         http_response_code(500);
-                        echo json_encode(['error' => 'Query `call addBook(?,?,?,?,?,?,?,?,?,?,?)` preparation failed!']);
+                        echo json_encode(['error' => 'Query `call addBook(?,?,?,?,?,?,?,?,?,?)` preparation failed!']);
                         $conn->close();
                         exit;
                   }
