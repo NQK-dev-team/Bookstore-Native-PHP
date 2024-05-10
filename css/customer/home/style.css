@@ -2,6 +2,8 @@
       background-image: url('/image/sale_bg.jpg');
       display: flex;
       flex-direction: column;
+      background-repeat: no-repeat;
+      background-size: cover;
 }
 
 .sales>* {
