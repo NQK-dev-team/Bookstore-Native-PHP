@@ -182,8 +182,11 @@ if ($return_status_code === 400) {
                         exit;
                   }
                   $result = $stmt->get_result();
-                  $discount = $result->fetch_assoc();
-                  $bDiscount = $discount['discount'];
+                  if($result->num_rows===1)
+                  {
+                    $discount = $result->fetch_assoc();
+                    $bDiscount = $discount['discount'];
+                  }
                   $stmt->close();
 
                   $userStar = 'null';
