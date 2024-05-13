@@ -182,6 +182,7 @@ if ($return_status_code === 400) {
                         exit;
                   }
                   $result = $stmt->get_result();
+                  $bDiscount=0;
                   if($result->num_rows===1)
                   {
                     $discount = $result->fetch_assoc();
