@@ -1,3 +1,7 @@
+.slide-button-div{
+    z-index:100 !important; 
+}
+
 .sales {
       background-image: url('/image/sale_bg.jpg');
       display: flex;
