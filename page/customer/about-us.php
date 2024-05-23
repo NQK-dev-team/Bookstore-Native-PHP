@@ -52,6 +52,8 @@
                               <figcaption class='mx-auto fw-medium'>HCMUT front gate</figcaption>
                         </figure>
                   </div>
+                  <h4>3. Disclaimer</h4>
+                  <p>This website is for learning purpose only, no commercial usage intended!</p>
             </div>
       </section>
       <?php
