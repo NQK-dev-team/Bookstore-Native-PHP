@@ -165,7 +165,7 @@ if ($return_status_code === 400) {
                                           <button class='btn btn-primary ms-2' type='submit' onclick="saveChange()">Save Changes</button>
                                     </div>
                               </form>
-                              <div id='historyPurchase' class='flex-column'>
+                              <div id='historyPurchase' class='flex-column overflow-auto'>
                                     <p>Current Accummulated Points:&nbsp;<span id="current_point" class='fw-bold'></span></p>
                                     <p>Loyalty Discount:&nbsp;<span id="loyalty_discount" class='fw-bold'></span></p>
                                     <p>User Referenced:&nbsp;<span id="current_ref" class='fw-bold'></span></p>
@@ -189,7 +189,7 @@ if ($return_status_code === 400) {
                                           <input autocomplete="off" type="date" class="form-control search_form" id="orderDateInput" onchange='findOrder()'>
                                     </div>
                                     <div class='w-100 flex-grow-1 my-4 overflow-x-auto hideBrowserScrollbar'>
-                                          <table class="table table-hover border border-2 table-bordered w-100 rounded mb-5">
+                                          <table class="table table-hover border border-2 table-bordered w-100 rounded">
                                                 <thead>
                                                       <tr>
                                                             <th scope="col">#</th>
