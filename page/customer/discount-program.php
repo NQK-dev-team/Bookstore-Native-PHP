@@ -142,7 +142,7 @@ $conn->close();
                                     <tr>
                                           <th scope="col">#</th>
                                           <th scope="col">Name</th>
-                                          <th scope="col">Point</th>
+                                          <th scope="col">Number of People</th>
                                           <th scope="col">Discount</th>
                                     </tr>
                               </thead>
